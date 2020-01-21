@@ -1,4 +1,4 @@
-# The Traits Database Project [![Build Status](https://travis-ci.org/rafelafrance/traiter.svg?branch=master)](https://travis-ci.org/rafelafrance/traiter)
+# The Traits Database Project [![Build Status](https://travis-ci.org/rafelafrance/traiter_efloras.svg?branch=master)](https://travis-ci.org/rafelafrance/traiter_efloras)
 
 ## All right, what's this all about then?
 **Challenge**: Extract trait information from unstructured or semi-structured natural history field notations. That is, if I'm given text like:
