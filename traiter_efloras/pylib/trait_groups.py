@@ -1,7 +1,7 @@
 """The trait groups and what is being parsed for each."""
 
 import regex
-from junk.util import FLAGS
+from traiter_efloras.pylib.util import FLAGS
 from traiter_efloras.parsers.plant_size import LEAF_SIZE, PETIOLE_SIZE
 from traiter_efloras.parsers.plant_size import PETAL_SIZE, CALYX_SIZE
 from traiter_efloras.parsers.plant_size import SEPAL_SIZE, FLOWER_SIZE

@@ -8,6 +8,8 @@ import inflect
 
 FLAGS = regex.VERBOSE | regex.IGNORECASE
 
+BATCH_SIZE = 1_000_000  # How many records to work with at a time
+
 RAW_DIR = Path('.') / 'data' / 'raw'
 EFLORAS_NA_FAMILIES = RAW_DIR / 'eFlora_family_list.csv'
 

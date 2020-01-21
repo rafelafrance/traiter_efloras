@@ -1,8 +1,8 @@
 """Read data from a CSV file."""
 
 import pandas as pd
-from junk import util
-from junk import db
+from traiter_efloras.pylib import util
+from traiter_efloras.pylib import db
 
 
 def read(args):
