@@ -1,0 +1,51 @@
+# Editors
+.ropeproject/
+.spyproject/
+.vscode/
+.idea/
+.mypy_cache/
+
+# Environment
+.env
+venv/
+.venv/
+
+# Python
+*.pyc
+*.swp
+__pycache__
+.ipynb_checkpoints/
+
+# docs
+docs/old/
+admin/
+
+# data
+output/
+!output/.gitkeep
+
+data/
+!data/.gitkeep
+!data/*.csv
+
+# Temp files
+temp/
+junk*
+
+# Test
+.coverage
+.cache
+.hypothesis
+.pytest_cache/
+
+# R
+.Rhistory
+.RData
+
+# Other code
+args/
+src/
+
+# Experiments
+transformers/
+notebooks/
