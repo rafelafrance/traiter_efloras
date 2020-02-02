@@ -2,7 +2,7 @@
 
 import regex
 from traiter.vocabulary import Vocabulary, FIRST, LOWEST
-from traiter_efloras.pylib import util
+from efloras.pylib import util
 
 VOCAB = Vocabulary()
 

@@ -6,7 +6,7 @@ from collections import namedtuple, deque
 from datetime import datetime
 import regex
 from jinja2 import Environment, FileSystemLoader
-import traiter_efloras.pylib.trait_groups as tg
+import efloras.pylib.trait_groups as tg
 
 
 # CSS colors

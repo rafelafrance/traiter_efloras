@@ -1,9 +1,9 @@
 """Test the plant color trait parser."""
 
 import unittest
-from traiter_efloras.pylib.trait import Trait
-from traiter_efloras.parsers.plant_color import HYPANTHIUM_COLOR, COROLLA_COLOR
-from traiter_efloras.parsers.plant_color import PETAL_COLOR, SEPAL_COLOR
+from efloras.pylib.trait import Trait
+from efloras.parsers.plant_color import HYPANTHIUM_COLOR, COROLLA_COLOR
+from efloras.parsers.plant_color import PETAL_COLOR, SEPAL_COLOR
 
 
 class TestPlantColor(unittest.TestCase):

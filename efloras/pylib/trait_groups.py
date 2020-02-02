@@ -1,20 +1,20 @@
 """The trait groups and what is being parsed for each."""
 
 import regex
-from traiter_efloras.pylib.util import FLAGS
-from traiter_efloras.parsers.plant_size import LEAF_SIZE, PETIOLE_SIZE
-from traiter_efloras.parsers.plant_size import PETAL_SIZE, CALYX_SIZE
-from traiter_efloras.parsers.plant_size import SEPAL_SIZE, FLOWER_SIZE
-from traiter_efloras.parsers.plant_size import HYPANTHIUM_SIZE, COROLLA_SIZE
-from traiter_efloras.parsers.plant_shape import LEAF_SHAPE, PETIOLE_SHAPE
-from traiter_efloras.parsers.plant_shape import PETAL_SHAPE, CAYLX_SHAPE
-from traiter_efloras.parsers.plant_shape import FLOWER_SHAPE, HYPANTHIUM_SHAPE
-from traiter_efloras.parsers.plant_shape import COROLLA_SHAPE, SEPAL_SHAPE
-from traiter_efloras.parsers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
-from traiter_efloras.parsers.plant_color import SEPAL_COLOR, PETAL_COLOR
-from traiter_efloras.parsers.plant_color import CAYLX_COLOR, COROLLA_COLOR
+from efloras.pylib.util import FLAGS
+from efloras.parsers.plant_size import LEAF_SIZE, PETIOLE_SIZE
+from efloras.parsers.plant_size import PETAL_SIZE, CALYX_SIZE
+from efloras.parsers.plant_size import SEPAL_SIZE, FLOWER_SIZE
+from efloras.parsers.plant_size import HYPANTHIUM_SIZE, COROLLA_SIZE
+from efloras.parsers.plant_shape import LEAF_SHAPE, PETIOLE_SHAPE
+from efloras.parsers.plant_shape import PETAL_SHAPE, CAYLX_SHAPE
+from efloras.parsers.plant_shape import FLOWER_SHAPE, HYPANTHIUM_SHAPE
+from efloras.parsers.plant_shape import COROLLA_SHAPE, SEPAL_SHAPE
+from efloras.parsers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
+from efloras.parsers.plant_color import SEPAL_COLOR, PETAL_COLOR
+from efloras.parsers.plant_color import CAYLX_COLOR, COROLLA_COLOR
 
-# from pylib.traiter_efloras.parsers.plant_count import SEPAL_COUNT
+# from pylib.efloras.parsers.plant_count import SEPAL_COUNT
 
 TRAIT_GROUPS = {
     '2n': [],

@@ -1,6 +1,6 @@
 """Build a trait parse result."""
 
-from traiter_efloras.pylib.util import DotDict, as_list, squash
+from efloras.pylib.util import DotDict, as_list, squash
 
 
 class Trait(DotDict):

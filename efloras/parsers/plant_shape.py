@@ -5,9 +5,9 @@ from typing import Any
 from traiter.token import Token
 from traiter.vocabulary import Vocabulary
 from traiter.parser import Parser
-from traiter_efloras.parsers.base import Base
-from traiter_efloras.pylib.trait import Trait
-import traiter_efloras.pylib.shared_patterns as patterns
+from efloras.parsers.base import Base
+from efloras.pylib.trait import Trait
+import efloras.pylib.shared_patterns as patterns
 
 VOCAB = Vocabulary(patterns.VOCAB)
 

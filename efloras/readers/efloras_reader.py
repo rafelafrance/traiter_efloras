@@ -5,8 +5,8 @@ from collections import defaultdict
 import regex
 from lxml import html
 import pandas as pd
-import traiter_efloras.pylib.util as util
-import traiter_efloras.pylib.trait_groups as tg
+import efloras.pylib.util as util
+import efloras.pylib.trait_groups as tg
 
 TAXA = {}
 

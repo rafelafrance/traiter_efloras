@@ -11,7 +11,7 @@ import textwrap
 import urllib.request
 import regex
 from lxml import html
-from traiter_efloras.pylib import util
+from efloras.pylib import util
 
 LINK = regex.compile(
     r'.*florataxon\.aspx\?flora_id=1&taxon_id=(?P<taxon_id>\d+)',
@@ -19,7 +19,7 @@ LINK = regex.compile(
 
 
 def efloras(family_name, taxon_id, parents):
-    """Get a family of taxa from the traiter_efloras web site."""
+    """Get a family of taxa from the efloras web site."""
     parents.add(taxon_id)
 
     path = util.RAW_DIR / family_name / f'taxon_id_{taxon_id}.html'

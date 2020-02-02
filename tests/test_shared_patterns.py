@@ -3,7 +3,7 @@
 import unittest
 from traiter.parser import Parser
 from traiter.token import Token
-from traiter_efloras.pylib.shared_patterns import VOCAB
+from efloras.pylib.shared_patterns import VOCAB
 
 
 def nop(token):

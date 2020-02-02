@@ -3,9 +3,9 @@
 from typing import Any
 from traiter.vocabulary import Vocabulary
 from traiter.token import Token
-from traiter_efloras.parsers.base import Base
-from traiter_efloras.pylib.trait import Trait
-import traiter_efloras.pylib.shared_patterns as patterns
+from efloras.parsers.base import Base
+from efloras.pylib.trait import Trait
+import efloras.pylib.shared_patterns as patterns
 
 
 def convert(token: Token) -> Any:

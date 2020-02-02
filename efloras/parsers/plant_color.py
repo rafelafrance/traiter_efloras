@@ -5,10 +5,10 @@ from typing import Any
 import regex
 from traiter.token import Token
 from traiter.vocabulary import Vocabulary
-from traiter_efloras.pylib.trait import Trait
-import traiter_efloras.pylib.util as util
-from traiter_efloras.parsers.base import Base
-import traiter_efloras.pylib.shared_patterns as patterns
+from efloras.pylib.trait import Trait
+import efloras.pylib.util as util
+from efloras.parsers.base import Base
+import efloras.pylib.shared_patterns as patterns
 
 VOCAB = Vocabulary(patterns.VOCAB)
 

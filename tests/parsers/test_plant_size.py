@@ -1,10 +1,10 @@
 """Test plant size trait parsers."""
 
 import unittest
-from traiter_efloras.pylib.trait import Trait
-from traiter_efloras.parsers.plant_size import LEAF_SIZE, PETIOLE_SIZE
-from traiter_efloras.parsers.plant_size import PETAL_SIZE, SEPAL_SIZE
-from traiter_efloras.parsers.plant_size import FLOWER_SIZE, HYPANTHIUM_SIZE
+from efloras.pylib.trait import Trait
+from efloras.parsers.plant_size import LEAF_SIZE, PETIOLE_SIZE
+from efloras.parsers.plant_size import PETAL_SIZE, SEPAL_SIZE
+from efloras.parsers.plant_size import FLOWER_SIZE, HYPANTHIUM_SIZE
 
 
 # pylint: disable=too-many-public-methods
