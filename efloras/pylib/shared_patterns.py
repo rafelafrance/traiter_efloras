@@ -9,9 +9,9 @@ VOCAB = Vocabulary()
 
 # Chars that may be a token
 VOCAB.part('slash', r' [/] ', capture=False)
-VOCAB.part('dash', r' (?: – | - ) ', capture=False)
-VOCAB.part('open', r' [(\[] ', capture=False)
-VOCAB.part('close', r' [)\]] ', capture=False)
+VOCAB.part('dash', r' \p{Pd} ', capture=False)
+VOCAB.part('open', r' \p{Ps} ', capture=False)
+VOCAB.part('close', r' \p{Pe} ', capture=False)
 VOCAB.part('x', r' [x×] ', capture=False)
 VOCAB.part('quest', r' [?] ')
 VOCAB.part('comma', r' [,] ', capture=False, priority=LOWEST)

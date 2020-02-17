@@ -4,6 +4,7 @@
 .vscode/
 .idea/
 .mypy_cache/
+.~lock.*
 
 # Environment
 .env

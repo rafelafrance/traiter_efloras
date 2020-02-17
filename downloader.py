@@ -11,7 +11,8 @@ import textwrap
 import urllib.request
 import regex
 from lxml import html
-from efloras.pylib import util
+from pylib import util
+
 
 LINK = regex.compile(
     r'.*florataxon\.aspx\?flora_id=1&taxon_id=(?P<taxon_id>\d+)',

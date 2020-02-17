@@ -2,13 +2,13 @@
 
 import copy
 from typing import Any
-from efloras.pylib.convert_units import convert as convert_units
-from efloras.pylib.trait import Trait
 from traiter.token import Token
 from traiter.vocabulary import Vocabulary
+from efloras.pylib.convert_units import convert as convert_units
+from efloras.pylib.trait import Trait
 import efloras.pylib.util as util
-from efloras.parsers.base import Base
 from efloras.pylib.shared_patterns import VOCAB, part_phrase
+from efloras.parsers.base import Base
 
 
 def convert(token: Token) -> Any:

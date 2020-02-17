@@ -7,13 +7,13 @@ from traiter.token import Token
 from traiter.vocabulary import Vocabulary
 from efloras.pylib.trait import Trait
 import efloras.pylib.util as util
-from efloras.parsers.base import Base
 import efloras.pylib.shared_patterns as patterns
+from efloras.parsers.base import Base
 
 VOCAB = Vocabulary(patterns.VOCAB)
 
 VOCAB.term('color', r"""
-    black(ish)? blue(ish)? brown brownish
+    black(ish)? blue(ish)? brown(ish)?
     cream cream-yellow creamy
     crimson
     glaucous-pink gold golden golden-yellow gray gray-green green greenish
