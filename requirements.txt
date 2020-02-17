@@ -4,9 +4,7 @@ lxml==4.5.0
 MarkupSafe==1.1.1
 numpy==1.18.1
 pandas==1.0.1
-pkg-resources==0.0.0
 python-dateutil==2.8.1
 pytz==2019.3
 regex==2020.1.8
 six==1.14.0
--e git+https://github.com/rafelafrance/traiter.git@b13e9aa19c3f76493dd8df828ab266c6cce6e805#egg=traiter

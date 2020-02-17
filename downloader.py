@@ -11,7 +11,7 @@ import textwrap
 import urllib.request
 import regex
 from lxml import html
-from pylib import util
+from efloras.pylib import util
 
 
 LINK = regex.compile(
