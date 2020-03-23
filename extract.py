@@ -32,7 +32,7 @@ def parse_traits(args, families):
         sys.exit()
 
     df = INPUT_FORMATS[args.input_format](args, families)
-    OUTPUT_FORMATS[args.output_format](args, families, df)
+    OUTPUT_FORMATS[args.output_format](args, df)
 
 
 def parse_args(families):
@@ -49,7 +49,7 @@ def parse_args(families):
         help="""Which family to extract.""")
 
     arg_parser.add_argument(
-        '--trait', '-t', default='',
+        '--trait', '-t', action='append',
         help="""The traits to extract.""")
 
     arg_parser.add_argument(

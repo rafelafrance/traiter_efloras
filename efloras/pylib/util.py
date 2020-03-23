@@ -38,6 +38,11 @@ def as_list(values):
     return values if isinstance(values, (list, tuple, set)) else [values]
 
 
+def as_tuple(values):
+    """Convert values to a tuple."""
+    return values if isinstance(values, tuple) else tuple(values)
+
+
 def ordinal(i):
     """Convert the digit to an ordinal value: 1->1st, 2->2nd, etc."""
     return INFLECT.ordinal(i)

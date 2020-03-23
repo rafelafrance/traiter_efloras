@@ -4,15 +4,21 @@ import sys
 from collections import defaultdict
 import regex
 from lxml import html
+from lxml.etree import tostring
 import pandas as pd
+import efloras.pylib.db as db
 import efloras.pylib.util as util
 import efloras.pylib.trait_groups as tg
 
-TAXA = {}
+TAXON_SEEN = {}
+VALID_TAXON = set()
+TAXON_RANKS = set()
 
 
 def efloras_reader(args, families):
     """Parse all pages for the given families."""
+    get_valid_taxa()
+    get_taxon_ranks()
     rows = []
     for family in args.family:
         name = families[family]['name']
@@ -22,6 +28,26 @@ def efloras_reader(args, families):
             rows.append(row)
     df = pd.DataFrame(rows)
     return df
+
+
+def get_valid_taxa():
+    """Get valid taxa names."""
+    global VALID_TAXON
+    with db.connect() as cxn:
+        VALID_TAXON = {n
+                       for t in db.select_taxa(cxn)
+                       for n in t[0].lower().split()}
+
+
+def get_taxon_ranks():
+    """Get taxon ranks."""
+    global TAXON_RANKS
+    with db.connect() as cxn:
+        TAXON_RANKS = {r[0].lower() for r in db.select_taxon_names(cxn)}
+    TAXON_RANKS.add('subfam.')
+    TAXON_RANKS.add('sect.')
+    TAXON_RANKS.add('×')
+    TAXON_RANKS.add('x')
 
 
 def parse_efloras_page(args, path, family):
@@ -40,16 +66,16 @@ def parse_efloras_page(args, path, family):
     if para is not None:
         check_trait_groups(para)
         row['text'] = text
-        row = {**row, **parse_trait_groups(args, text)}
+        row = {**row, **parse_traits(args, text)}
     return row
 
 
 def check_taxon(taxon, path):
     """Make sure the taxon parse is reasonable."""
-    if taxon in TAXA:
-        print(f'Previously on {TAXA[taxon]}')
+    if taxon in TAXON_SEEN:
+        print(f'Taxon "{taxon}" in both {TAXON_SEEN[taxon]} & {path}')
         sys.exit()
-    TAXA[taxon] = path
+    TAXON_SEEN[taxon] = path
 
 
 def get_efloras_page(path):
@@ -59,10 +85,31 @@ def get_efloras_page(path):
     return html.fromstring(page)
 
 
+# TODO: Move this logic to a new-style parser
 def get_taxon(page):
     """Get the taxon description."""
     taxon_id = 'lblTaxonDesc'
-    taxon = page.xpath(f'//*[@id="{taxon_id}"]/b/text()')
+    # taxon = page.xpath(f'//*[@id="{taxon_id}"]/b/text()')
+    frag = page.xpath(f'//*[@id="{taxon_id}"]')[0]
+    match = regex.match(b'(.*?)<p>', tostring(frag), flags=regex.DOTALL)
+    words = match.group(1).decode() + '</span>'
+    words = html.fromstring(words).text_content().split()
+    taxon = []
+    next_word = False
+    for word in words:
+        word = regex.sub(
+            r'\p{Open_Punctuation}|\p{Close_Punctuation}', '', word)
+        norm = word.lower()
+        if next_word:
+            taxon.append(word)
+            next_word = False
+        elif norm in TAXON_RANKS:
+            next_word = True
+        elif norm in VALID_TAXON:
+            taxon.append(word)
+        elif norm[0] in ('×', ):
+            taxon.append(word)
+
     taxon = ' '.join(taxon)
     return taxon
 
@@ -97,22 +144,34 @@ def check_trait_groups(para):  # , text):
         sys.exit(f'Found new trait group: {diff}')
 
 
-def parse_trait_groups(args, text):
-    """Parse each trait group."""
+def parse_traits(args, text):
+    """Parse each trait."""
     traits = defaultdict(list)
+
+    arg_traits = set(args.trait)
+
+    # Find the sections of text that may hold traits. The sections start with
+    # a keyword and extend up to the next keyword.
     slices = [(m.start(), m.end()) for m in tg.TRAIT_GROUPS_RE.finditer(text)]
     slices.append((-1, -1))
+
+    # Loop over all of the sections
     for i, (start, end) in enumerate(slices[:-1]):
         after, _ = slices[i + 1]
-        trait_group = text[start:end].lower()
+        trait_name = text[start:end].lower()
         group_data = text[start:after]
-        parser_group = [g for g in tg.TRAIT_GROUPS.get(trait_group)
-                        if args.trait in g.name]
-        for parser in parser_group:
+
+        # Certain traits are associated with each keyword. We want to get the
+        # intersection of the user selected traits with that section.
+        parsers = {t for t in tg.TRAIT_GROUPS.get(trait_name)
+                   if t.name in arg_traits}
+
+        # Now we parse all of the intersecting traits
+        for parser in parsers:
             parses = parser.parse(group_data)
             if parses:
                 for parse in parses:
-                    setattr(parse, 'trait_group', trait_group)
+                    setattr(parse, 'trait_group', trait_name)
                     parse.start += start
                     parse.end += start
                 traits[parser.name] += parses

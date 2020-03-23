@@ -16,8 +16,9 @@ COLORS = cycle(CLASSES)
 Cut = namedtuple('Cut', 'pos open len id end type')
 
 
-def html_writer(args, families, df):
+def html_writer(args, df):
     """Output the data frame."""
+    families = df['family'].unique()
     pattern = regex.compile(r'data/raw/\w+/(.+)\.html')
     df['link'] = df['path'].str.replace(pattern, r'\1')
     df = df.fillna('')

@@ -1,12 +1,13 @@
 """Common functions for dealing with the database."""
 
 import sqlite3
+from pathlib import Path
 
-RAW_TABLE = 'raw'
-RAW_ID = 'raw_id'
+ITIS_DB = Path('.') / 'data' / 'itis' / 'ITIS.sqlite'
+PLANTAE = 3
 
 
-def connect(path: str) -> sqlite3.Connection:
+def connect(path: str = ITIS_DB) -> sqlite3.Connection:
     """Connect to an SQLite database."""
     cxn = sqlite3.connect(path)
 
@@ -17,10 +18,19 @@ def connect(path: str) -> sqlite3.Connection:
     return cxn
 
 
-def select_raw(cxn: sqlite3.Connection,
-               limit: int = 0,
-               offset: int = 0) -> sqlite3.Cursor:
-    """Get raw records."""
-    clause = f'LIMIT {limit}' if limit else ''
-    clause += f' OFFSET {offset}' if offset else ''
-    return cxn.execute(f'SELECT * FROM {RAW_TABLE} {clause};')
+def select_taxa(cxn: sqlite3.Connection) -> sqlite3.Cursor:
+    """Get taxonomic names."""
+    return cxn.execute(
+        """SELECT complete_name
+             FROM taxonomic_units
+            WHERE kingdom_id = ?;""",
+        (PLANTAE, ))
+
+
+def select_taxon_names(cxn: sqlite3.Connection) -> sqlite3.Cursor:
+    """Get taxonomic names."""
+    return cxn.execute(
+        """SELECT rank_name
+             FROM taxon_unit_types 
+            WHERE kingdom_id = ?;""",
+        (PLANTAE, ))
