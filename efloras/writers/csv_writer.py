@@ -70,6 +70,10 @@ def merge_duplicates(args, df):
             for i, dupe in enumerate(dupes.values(), 1):
                 # Pivot fields for each extract
                 for field, value in dupe.items():
+                    if field == 'location':
+                        value = [{k: v for k, v in loc} for loc in value]
+                    else:
+                        value = util.flatten(value)
                     new_row[f'{header}_{field}_{i}'] = util.squash(value)
 
         new_data.append(new_row)
