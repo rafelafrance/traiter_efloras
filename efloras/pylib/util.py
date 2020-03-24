@@ -29,8 +29,8 @@ def shorten(text):
 
 
 def squash(values):
-    """Squash a list to a single value is its length is one."""
-    return values if len(values) != 1 else values[0]
+    """Squash a list to a single value if its length is one."""
+    return values if len(values) != 1 else values.pop()
 
 
 def as_list(values):
@@ -41,6 +41,11 @@ def as_list(values):
 def as_tuple(values):
     """Convert values to a tuple."""
     return values if isinstance(values, tuple) else tuple(values)
+
+
+def as_member(values):
+    """Convert values to set members (hashable)."""
+    return tuple(values) if isinstance(values, (list, set)) else values
 
 
 def ordinal(i):

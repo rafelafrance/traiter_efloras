@@ -1,19 +1,17 @@
 """Write the output to a CSV file."""
 
+from collections import defaultdict
+import pandas as pd
 import efloras.pylib.util as util
 
 
-def csv_writer(args, df):  # pylint: disable=unused-argument
+def csv_writer(args, df):
     """Output the data frame."""
-    data = df.fillna('').to_dict('records')
-    print(df.columns)
-    print(args)
-    data = merge_duplicates(args, data)
-    # df.to_csv(args.output_file, index=False)
-    # rows = [x.to_dict() for i, x in df.iterrows()]
+    df = merge_duplicates(args, df)
+    df.to_csv(args.output_file, index=False)
 
 
-def merge_duplicates(args, data):
+def merge_duplicates(args, df):
     """Merge duplicate extracts.
 
     If the same trait value is extracted multiple times then we merge those
@@ -32,9 +30,12 @@ def merge_duplicates(args, data):
          "color_2: {"value": "blue", "location": {"start": 30, "end": 34}}
         ]
     """
-    LOCATION = ['start', 'end', 'trait_group']
-    KEYS = ['value', 'part']
-    SKIP = LOCATION + KEYS
+    data = df.fillna('').to_dict('records')
+
+    LOCATION = ('start', 'end', 'trait_group')
+    KEY = ('value', 'part')
+
+    new_data = []
 
     for row in data:
         new_row = {}
@@ -46,64 +47,39 @@ def merge_duplicates(args, data):
                 new_row[header] = cell
                 continue
 
-            dupes = {}
+            dupes = defaultdict(lambda: defaultdict(set))
 
             # Loop thru list of trait parses in the cell & merge duplicates
             for trait in cell:
 
-                # Get location values. These get merged into a single column
-                location = {k: v for k, v in trait.items() if k in LOCATION}
+                # The unique value
+                unique = tuple(util.as_tuple(sorted(util.as_list(v)))
+                               for k, v in trait.items() if k in KEY)
 
-                # Get everthing else. These are kept as separate columns
-                fields = {k: v for k, v in trait.items() if k not in LOCATION}
+                # Merge locations into a single field
+                location = tuple((k, v) for k, v in trait.items()
+                                 if k in LOCATION)
+                dupes[unique]['location'].add(location)
 
-                # We consider this a unique value
-                key = tuple((
-                    util.as_tuple(trait['value']),
-                    trait.get('part', '')))
+                # Add other values
+                for key, value in trait.items():
+                    if key not in LOCATION:
+                        dupes[unique][key].add(util.as_member(value))
 
-                if dupe := dupes.get(key):
-                    dupe['location'].append(location)
-                    # for key, value in fields.items():
-                else:
-                    dupes[key]['location'] = [location]
-                    dupes[key] = fields
+            # Pivot the separate extracts
+            for i, dupe in enumerate(dupes.values(), 1):
+                # Pivot fields for each extract
+                for field, value in dupe.items():
+                    new_row[f'{header}_{field}_{i}'] = util.squash(value)
 
-            values = []
+        new_data.append(new_row)
 
-    return data
+    df = pd.DataFrame(new_data)
 
-# import regex
-# import pandas as pd
-# # from pylib.all_traits import TRAITS
-# from pylib.writers.base_writer import BaseWriter
-#
-#
-# class CsvWriter(BaseWriter):
-#     """Write the lib output to a file."""
-#
-#     def __init__(self, args):
-#         """Build the writer."""
-#         super().__init__(args)
-#         self.columns = args.extra_field
-#         self.columns += args.search_field
-#       self.columns += sorted({f for fds in args.as_is.values() for f in fds})
-#
-#     def start(self):
-#         """Start the report."""
-#         self.rows = []
-#
-#     def record(self, raw_record, parsed_record):
-#         """Output a row to the file."""
-#         self.progress()
-#
-#         row = {c: raw_record.get(c, '') for c in self.columns}
-#
-#         self.rows.append(row)
-#
-#     def end(self):
-#         """End the report."""
-#         df = pd.DataFrame(self.rows)
-#         df.rename(columns=lambda x: regex.sub(r'^.+?:\s*', '', x),
-#               inplace=True)
-#         df.to_csv(self.args.output_file, index=False)
+    column = df.pop('text')
+    df.insert(len(df.columns), 'text', column)
+
+    column = df.pop('path')
+    df.insert(len(df.columns), 'path', column)
+
+    return df

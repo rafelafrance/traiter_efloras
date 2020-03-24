@@ -13,8 +13,7 @@ from efloras.parsers.plant_shape import COROLLA_SHAPE, SEPAL_SHAPE
 from efloras.parsers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
 from efloras.parsers.plant_color import SEPAL_COLOR, PETAL_COLOR
 from efloras.parsers.plant_color import CAYLX_COLOR, COROLLA_COLOR
-
-# from pylib.efloras.parsers.plant_count import SEPAL_COUNT
+# from efloras.parsers.plant_count import SEPAL_COUNT
 
 TRAIT_GROUPS = {
     '2n': [],
