@@ -5,7 +5,7 @@
 import sys
 import argparse
 import textwrap
-import efloras.pylib.util as util
+import efloras.pylib.family_util as futil
 import efloras.pylib.trait_groups as tg
 from efloras.writers.html_writer import html_writer
 from efloras.writers.csv_writer import csv_writer
@@ -23,7 +23,7 @@ OUTPUT_FORMATS = {
 def parse_traits(args, families):
     """Perform actions based on the arguments."""
     if args.list_families:
-        util.print_families(families)
+        futil.print_families(families)
         sys.exit()
 
     if args.list_traits:
@@ -85,6 +85,6 @@ def parse_args(families):
 
 
 if __name__ == '__main__':
-    FAMILIES = {k: v for k, v in util.get_families().items() if v['count']}
+    FAMILIES = {k: v for k, v in futil.get_families().items() if v['count']}
     ARGS = parse_args(FAMILIES)
     parse_traits(ARGS, FAMILIES)

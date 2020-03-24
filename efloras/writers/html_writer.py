@@ -1,11 +1,12 @@
 """Write output to an HTML file."""
 
+import re
 import html
 from itertools import cycle
 from collections import namedtuple, deque
 from datetime import datetime
-import regex
 from jinja2 import Environment, FileSystemLoader
+import efloras.pylib.family_util as futil
 import efloras.pylib.trait_groups as tg
 
 
@@ -18,10 +19,11 @@ Cut = namedtuple('Cut', 'pos open len id end type')
 
 def html_writer(args, df):
     """Output the data frame."""
-    families = df['family'].unique()
-    pattern = regex.compile(r'data/raw/\w+/(.+)\.html')
-    df['link'] = df['path'].str.replace(pattern, r'\1')
     df = df.fillna('')
+    families = df['family'].unique()
+
+    pattern = re.compile(r'data/\w+/taxon_id_(\d+)\.html')
+    df['link'] = df['path'].str.replace(pattern, futil.LINK)
     other_cols = [c for c in df.columns if c not in tg.TRAIT_NAMES]
 
     trait_cols = sorted([c for c in df.columns if c in tg.TRAIT_NAMES])
@@ -46,7 +48,7 @@ def html_writer(args, df):
         format_text(trait_cols, row, tags, colors)
 
     env = Environment(
-        loader=FileSystemLoader('./pylib/writers/templates'),
+        loader=FileSystemLoader('./efloras/writers/templates'),
         autoescape=True)
 
     template = env.get_template('html_writer.html').render(
@@ -86,8 +88,10 @@ def format_traits(trait_cols, row):
         parses = []
         for parse in row[old]:
             attrs = []
-            for key, value in parse.__dict__.items():
-                if key not in ['start', 'end', 'trait_group']:
+            for key, value in parse.items():
+                if key == 'value':
+                    value = ', '.join(value)
+                if key not in ['start', 'end', 'trait_group', 'raw_value']:
                     attrs.append(f'<b>{key}</b>:&nbsp;{value}')
             parses.append('<br/>'.join(attrs))
         row[new] = '<hr/>'.join(parses)
