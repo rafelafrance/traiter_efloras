@@ -44,7 +44,7 @@ def efloras(family_name, taxon_id, parents, flora_id=1):
             efloras(family_name, match.group('taxon_id'), parents)
 
 
-def parse_args():
+def parse_args(flora_ids):
     """Process command-line arguments."""
     description = """Download data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
@@ -58,8 +58,19 @@ def parse_args():
         help="""Which family to download.""")
 
     arg_parser.add_argument(
-        '--list-families', '-l', action='store_true',
-        help="""Print a list of families available for download.""")
+        '--flora-id', '--id', '-F', type=int, default=1,
+        choices=[i[0] for i in flora_ids],
+        help="""Which flora ID to download. Default 1.""")
+
+    arg_parser.add_argument(
+        '--list-flora-ids', '-l', action='store_true',
+        help="""List flora IDs and exit.""")
+
+    arg_parser.add_argument(
+        '--search', '-s',
+        help="""Search the families list for one that matches the string.
+            The patterns will match either the family name or the florna name.
+            You may use '*' and '?' wildcards for pattern matching.""")
 
     args = arg_parser.parse_args()
 
@@ -72,10 +83,14 @@ def parse_args():
     return args
 
 
-def main(args, families):
+def main(args, families, flora_ids):
     """Perform actions based on the arguments."""
-    if args.list_families:
-        futil.print_families(families)
+    if args.list_flora_ids:
+        futil.print_flora_ids(flora_ids)
+        sys.exit()
+
+    if args.search:
+        futil.search_families(args, families)
         sys.exit()
 
     for family in args.family:
@@ -87,5 +102,6 @@ def main(args, families):
 
 if __name__ == "__main__":
     FAMILIES = futil.get_families()
-    ARGS = parse_args()
-    main(ARGS, FAMILIES)
+    FLORA_IDS = futil.get_flora_ids()
+    ARGS = parse_args(FLORA_IDS)
+    main(ARGS, FAMILIES, FLORA_IDS)
