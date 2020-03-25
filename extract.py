@@ -52,6 +52,12 @@ def parse_args(families):
         '--trait', '-t', action='append',
         help="""The traits to extract.""")
 
+    flora_ids = futil.get_flora_ids()
+    arg_parser.add_argument(
+        '--flora-id', '--id', '-F', type=int, default=1,
+        choices=[k for k in flora_ids.keys()],
+        help="""Which flora ID to download. Default 1.""")
+
     arg_parser.add_argument(
         '--input-format', '-I', default='efloras',
         choices=INPUT_FORMATS.keys(),
@@ -66,7 +72,7 @@ def parse_args(families):
         help="""Output the result in this format. The default is "csv".""")
 
     arg_parser.add_argument(
-        '--list-families', '-F', action='store_true',
+        '--list-families', '-l', action='store_true',
         help="""List families available to extract and exit.""")
 
     arg_parser.add_argument(
@@ -76,7 +82,7 @@ def parse_args(families):
     args = arg_parser.parse_args()
 
     if args.family:
-        args.family = [x.lower() for x in args.family]
+        args.family = {(x.lower(), args.flora_id) for x in args.family}
         for family in args.family:
             if family not in families:
                 sys.exit(f'"{family}" has not been downloaded')

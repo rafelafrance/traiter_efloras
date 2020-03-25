@@ -55,6 +55,7 @@ def html_writer(args, df):
         now=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
         args=args,
         families=families,
+        flora_ids=futil.get_flora_ids(),
         headers=trait_headers,
         traits=trait_cols.values(),
         rows=rows)

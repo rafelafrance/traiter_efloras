@@ -3,11 +3,10 @@
 import csv
 from datetime import datetime
 import regex
-import pandas as pd
 import efloras.pylib.util as util
 
 
-EFLORAS_FAMILIES = util.RAW_DIR / 'eFloras_family_list.csv'
+EFLORAS_FAMILIES = util.DATA_DIR / 'eFloras_family_list.csv'
 
 
 FLORA_ID = 1
@@ -25,7 +24,7 @@ def get_families():
 
             times = {'created': '', 'modified': '', 'count': 0}
 
-            path = util.RAW_DIR / f"{family['family']}_{family['flora_id']}"
+            path = util.DATA_DIR / f"{family['family']}_{family['flora_id']}"
             if path.exists():
                 times['count'] = len(list(path.glob('**/*.html')))
                 if times['count']:
@@ -35,7 +34,7 @@ def get_families():
                     times['modified'] = datetime.fromtimestamp(
                         stat.st_mtime).strftime('%Y-%m-%d %H:%M')
 
-            key = (family['family'].lower(), family['flora_id'])
+            key = (family['family'].lower(), int(family['flora_id']))
             families[key] = {**family, **times}
 
     return families
@@ -96,9 +95,11 @@ def search_families(args, families):
 
 def get_flora_ids():
     """Get a list of flora IDs."""
-    df = pd.read_csv(EFLORAS_FAMILIES)
-    df['keys'] = df.apply(lambda r: (r['flora_id'], r['flora_name']), axis=1)
-    return sorted(df['keys'].unique())
+    flora_ids = {}
+    with open(EFLORAS_FAMILIES) as in_file:
+        for family in csv.DictReader(in_file):
+            flora_ids[int(family['flora_id'])] = family['flora_name']
+    return flora_ids
 
 
 def print_flora_ids(flora_ids):
@@ -107,5 +108,5 @@ def print_flora_ids(flora_ids):
 
     print(template.format('Flora ID', 'Name'))
 
-    for fid in flora_ids:
-        print(template.format(fid[0], fid[1]))
+    for fid, name in flora_ids.items():
+        print(template.format(fid, name))

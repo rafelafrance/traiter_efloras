@@ -24,10 +24,18 @@ h2 {
 
 table {
   border-collapse: collapse;
+  border: 1px solid black;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #f0f0f0;
 }
 
 td, th {
-  border: 1px solid #999;
+  border: 1px solid #f0f0f0;
   padding: 0.5rem;
   text-align: left;
 }
@@ -53,4 +61,8 @@ td, th {
 
 .text {
   min-width: 340px;
+}
+
+.smaller {
+    font-size: small;
 }

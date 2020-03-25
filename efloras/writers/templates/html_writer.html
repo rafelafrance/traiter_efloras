@@ -24,7 +24,10 @@
   <tbody>
     {% for row in rows %}
     <tr>
-      <td>{{ row.family.capitalize() }}</td>
+      <td>
+        {{ row.family[0].capitalize() }}<hr/>
+        <span class="smaller">({{ flora_ids[row.family[1]] }})</span>
+      </td>
       <td>
         <a href="http://{{ row.link }}"
             target="_blank" rel="noopener noreferrer">

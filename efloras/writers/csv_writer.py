@@ -3,10 +3,14 @@
 from collections import defaultdict
 import pandas as pd
 import efloras.pylib.util as util
+import efloras.pylib.family_util as futil
 
 
 def csv_writer(args, df):
     """Output the data frame."""
+    flora_ids = futil.get_flora_ids()
+    df['flora_name'] = df['family'].apply(lambda f: flora_ids[f[1]])
+    df['family'] = df['family'].apply(lambda f: f[0])
     df = merge_duplicates(args, df)
     df.to_csv(args.output_file, index=False)
 
@@ -28,7 +32,6 @@ def merge_duplicates(args, df):
                 {"start": 10, "end": 13},
                 {"start": 20, "end": 23}]},
          "color_2: {"value": "blue", "location": {"start": 30, "end": 34}}
-        ]
     """
     data = df.fillna('').to_dict('records')
 

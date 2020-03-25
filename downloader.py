@@ -24,7 +24,7 @@ def efloras(family_name, taxon_id, parents, flora_id):
     """Get a family of taxa from the efloras web site."""
     parents.add(taxon_id)
 
-    path = util.RAW_DIR / family_name / f'taxon_id_{taxon_id}.html'
+    path = util.DATA_DIR / family_name / f'taxon_id_{taxon_id}.html'
     url = ('http://www.efloras.org/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
@@ -60,7 +60,7 @@ def parse_args(flora_ids):
 
     arg_parser.add_argument(
         '--flora-id', '--id', '-F', type=int, default=1,
-        choices=[i[0] for i in flora_ids],
+        choices=[k for k in flora_ids.keys()],
         help="""Which flora ID to download. Default 1.""")
 
     arg_parser.add_argument(
@@ -97,7 +97,7 @@ def main(args, families, flora_ids):
     for family in args.family:
         family_name = FAMILIES[family]['name']
         taxon_id = FAMILIES[family]['taxon_id']
-        os.makedirs(util.RAW_DIR / family_name, exist_ok=True)
+        os.makedirs(util.DATA_DIR / family_name, exist_ok=True)
         efloras(family_name, taxon_id, set(), args.flora_id)
 
 

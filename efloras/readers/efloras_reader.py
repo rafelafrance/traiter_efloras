@@ -21,8 +21,8 @@ def efloras_reader(args, families):
     get_taxon_ranks()
     rows = []
     for family in args.family:
-        name = families[family]['name']
-        root = util.RAW_DIR / f'{name}'
+        name = families[family]['family']
+        root = util.DATA_DIR / f'{name}_{args.flora_id}'
         for path in root.glob('**/*.html'):
             row = parse_efloras_page(args, path, family)
             rows.append(row)
@@ -85,7 +85,7 @@ def get_efloras_page(path):
     return html.fromstring(page)
 
 
-# TODO: Move this logic to a new-style parser
+# TODO: Move this logic to a new-style trait parser
 def get_taxon(page):
     """Get the taxon description."""
     taxon_id = 'lblTaxonDesc'
