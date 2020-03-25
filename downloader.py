@@ -20,12 +20,13 @@ LINK = regex.compile(
     regex.VERBOSE | regex.IGNORECASE)
 
 
-def efloras(family_name, taxon_id, parents, flora_id=1):
+def efloras(family_name, taxon_id, parents, flora_id):
     """Get a family of taxa from the efloras web site."""
     parents.add(taxon_id)
 
     path = util.RAW_DIR / family_name / f'taxon_id_{taxon_id}.html'
-    url = ('http://www.efloras.org/florataxon.aspx?flora_id=1'
+    url = ('http://www.efloras.org/florataxon.aspx'
+           f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
 
     print(f'Downloading: {url}')
@@ -41,7 +42,7 @@ def efloras(family_name, taxon_id, parents, flora_id=1):
         href = link.attrib.get('href', '')
         match = LINK.match(href)
         if match and match.group('taxon_id') not in parents:
-            efloras(family_name, match.group('taxon_id'), parents)
+            efloras(family_name, match.group('taxon_id'), parents, flora_id)
 
 
 def parse_args(flora_ids):
@@ -97,7 +98,7 @@ def main(args, families, flora_ids):
         family_name = FAMILIES[family]['name']
         taxon_id = FAMILIES[family]['taxon_id']
         os.makedirs(util.RAW_DIR / family_name, exist_ok=True)
-        efloras(family_name, taxon_id, set())
+        efloras(family_name, taxon_id, set(), args.flora_id)
 
 
 if __name__ == "__main__":
