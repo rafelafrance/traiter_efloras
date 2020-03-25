@@ -8,6 +8,7 @@ from lxml.etree import tostring
 import pandas as pd
 import efloras.pylib.db as db
 import efloras.pylib.util as util
+import efloras.pylib.family_util as futil
 import efloras.pylib.trait_groups as tg
 
 TAXON_SEEN = {}
@@ -20,9 +21,12 @@ def efloras_reader(args, families):
     get_valid_taxa()
     get_taxon_ranks()
     rows = []
-    for family in args.family:
-        name = families[family]['family']
-        root = util.DATA_DIR / f'{name}_{args.flora_id}'
+    combos = futil.get_family_flora_ids(args, families)
+    for key in combos:
+        family = families[key]
+        name = family['family']
+        flora_id = family['flora_id']
+        root = util.DATA_DIR / f'{name}_{flora_id}'
         for path in root.glob('**/*.html'):
             row = parse_efloras_page(args, path, family)
             rows.append(row)
@@ -57,7 +61,7 @@ def parse_efloras_page(args, path, family):
     check_taxon(taxon, path)
 
     row = {
-        'family': family,
+        'family': (family['family'], int(family['flora_id'])),
         'taxon': taxon,
         'path': str(path),
         'text': ''}

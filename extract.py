@@ -20,8 +20,10 @@ OUTPUT_FORMATS = {
     'html': html_writer}
 
 
-def parse_traits(args, families):
+def main(args):
     """Perform actions based on the arguments."""
+    families = {k: v for k, v in futil.get_families().items() if v['count']}
+
     if args.list_families:
         futil.print_families(families)
         sys.exit()
@@ -31,11 +33,24 @@ def parse_traits(args, families):
             print(trait)
         sys.exit()
 
+    if not futil.check_family_flora_ids(args, families):
+        sys.exit(1)
+
+    if not (traits := tg.expand_traits(args)):
+        print(f'No traits match: {" or ".join(args.trait)}.')
+        sys.exit(1)
+    setattr(args, 'trait', traits)
+
+    parse_traits(args, families)
+
+
+def parse_traits(args, families):
+    """Perform actions based on the arguments."""
     df = INPUT_FORMATS[args.input_format](args, families)
     OUTPUT_FORMATS[args.output_format](args, df)
 
 
-def parse_args(families):
+def parse_args():
     """Process command-line arguments."""
     description = """Download data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
@@ -54,8 +69,8 @@ def parse_args(families):
 
     flora_ids = futil.get_flora_ids()
     arg_parser.add_argument(
-        '--flora-id', '--id', '-F', type=int, default=1,
-        choices=[k for k in flora_ids.keys()],
+        '--flora-id', '--id', '-F', action='append',
+        choices=[str(k) for k in flora_ids.keys()],
         help="""Which flora ID to download. Default 1.""")
 
     arg_parser.add_argument(
@@ -82,15 +97,14 @@ def parse_args(families):
     args = arg_parser.parse_args()
 
     if args.family:
-        args.family = {(x.lower(), args.flora_id) for x in args.family}
-        for family in args.family:
-            if family not in families:
-                sys.exit(f'"{family}" has not been downloaded')
+        args.family = [f.lower() for f in args.family]
+
+    if args.flora_id:
+        args.flora_id = [int(i) for i in args.flora_id]
 
     return args
 
 
 if __name__ == '__main__':
-    FAMILIES = {k: v for k, v in futil.get_families().items() if v['count']}
-    ARGS = parse_args(FAMILIES)
-    parse_traits(ARGS, FAMILIES)
+    ARGS = parse_args()
+    main(ARGS)

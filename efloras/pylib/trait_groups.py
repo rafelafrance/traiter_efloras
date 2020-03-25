@@ -168,3 +168,14 @@ TRAIT_GROUPS_RE = regex.compile(
     flags=FLAGS)
 
 TRAIT_NAMES = sorted({t.name for g in TRAIT_GROUPS.values() for t in g})
+
+
+def expand_traits(args):
+    """Expand traits using wildcards in given as arguments."""
+    traits = set()
+    for trait in args.trait:
+        pattern = trait.replace('*', '.*').replace('?', '.?')
+        pattern = regex.compile(pattern, regex.IGNORECASE)
+        hits = {n for n in TRAIT_NAMES if pattern.search(n)}
+        traits |= hits
+    return sorted(traits)

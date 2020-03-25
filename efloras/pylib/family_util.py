@@ -2,6 +2,7 @@
 
 import csv
 from datetime import datetime
+from itertools import product
 import regex
 import efloras.pylib.util as util
 
@@ -110,3 +111,33 @@ def print_flora_ids(flora_ids):
 
     for fid, name in flora_ids.items():
         print(template.format(fid, name))
+
+
+def get_family_flora_ids(args, families):
+    """Get family and flora ID combinations."""
+    return [c for c in product(args.family, args.flora_id)
+            if c in families]
+
+
+def check_family_flora_ids(args, families):
+    """Validate family and flora ID combinations."""
+    combos = get_family_flora_ids(args, families)
+
+    flora = {i: False for i in args.flora_id}
+    fams = {f: False for f in args.family}
+    for combo in combos:
+        fams[combo[0]] = True
+        flora[combo[1]] = True
+
+    ok = True
+    for fam, hit in fams.items():
+        if not hit:
+            ok = False
+            print(f'Family "{fam}" is not being used.')
+
+    for id_, hit in flora.items():
+        if not hit:
+            ok = False
+            print(f'Flora ID "{id_}" is not being used.')
+
+    return ok

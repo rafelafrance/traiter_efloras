@@ -83,6 +83,9 @@ def merge_duplicates(args, df):
 
     df = pd.DataFrame(new_data)
 
+    column = df.pop('flora_name')
+    df.insert(0, 'flora_name', column)
+
     column = df.pop('text')
     df.insert(len(df.columns), 'text', column)
 
