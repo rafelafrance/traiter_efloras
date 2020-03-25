@@ -16,7 +16,7 @@ from efloras.pylib import family_util as futil
 
 
 LINK = regex.compile(
-    r'.*florataxon\.aspx\?flora_id=1&taxon_id=(?P<taxon_id>\d+)',
+    r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
     regex.VERBOSE | regex.IGNORECASE)
 
 
@@ -24,7 +24,8 @@ def efloras(family_name, taxon_id, parents, flora_id):
     """Get a family of taxa from the efloras web site."""
     parents.add(taxon_id)
 
-    path = util.DATA_DIR / family_name / f'taxon_id_{taxon_id}.html'
+    taxon_dir = f'{family_name}_{flora_id}'
+    path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}.html'
     url = ('http://www.efloras.org/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
@@ -70,7 +71,7 @@ def parse_args(flora_ids):
     arg_parser.add_argument(
         '--search', '-s',
         help="""Search the families list for one that matches the string.
-            The patterns will match either the family name or the florna name.
+            The patterns will match either the family name or the flora name.
             You may use '*' and '?' wildcards for pattern matching.""")
 
     args = arg_parser.parse_args()
@@ -78,8 +79,8 @@ def parse_args(flora_ids):
     if args.family:
         args.family = [x.lower() for x in args.family]
         for family in args.family:
-            if family not in FAMILIES:
-                sys.exit(f'"{family}" is not available.')
+            if (family, args.flora_id) not in FAMILIES:
+                sys.exit(f'"{family}" is not in flora {args.flora_id}.')
 
     return args
 
@@ -95,9 +96,11 @@ def main(args, families, flora_ids):
         sys.exit()
 
     for family in args.family:
-        family_name = FAMILIES[family]['name']
-        taxon_id = FAMILIES[family]['taxon_id']
-        os.makedirs(util.DATA_DIR / family_name, exist_ok=True)
+        key = (family, args.flora_id)
+        family_name = FAMILIES[key]['family']
+        taxon_id = FAMILIES[key]['taxon_id']
+        dir_ = f'{family_name}_{args.flora_id}'
+        os.makedirs(util.DATA_DIR / dir_, exist_ok=True)
         efloras(family_name, taxon_id, set(), args.flora_id)
 
 
