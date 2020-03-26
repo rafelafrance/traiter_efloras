@@ -8,9 +8,11 @@ import efloras.pylib.family_util as futil
 
 def csv_writer(args, df):
     """Output the data frame."""
+    # Split the family name/flora ID into separate columns
     flora_ids = futil.get_flora_ids()
     df['flora_name'] = df['family'].apply(lambda f: flora_ids[f[1]])
     df['family'] = df['family'].apply(lambda f: f[0])
+
     df = merge_duplicates(args, df)
     df.to_csv(args.output_file, index=False)
 
@@ -81,6 +83,7 @@ def merge_duplicates(args, df):
 
         new_data.append(new_row)
 
+    # Build a dataframe and move some columns
     df = pd.DataFrame(new_data)
 
     column = df.pop('flora_name')

@@ -15,13 +15,18 @@ from efloras.pylib import util
 from efloras.pylib import family_util as futil
 
 
-LINK = regex.compile(
-    r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
-    regex.VERBOSE | regex.IGNORECASE)
+# Don't hit the site too hard
+SLEEP_MID = 20
+SLEEP_RADIUS = 5
+SLEEP_RANGE = (SLEEP_MID - SLEEP_RADIUS, SLEEP_MID + SLEEP_RADIUS)
 
 
-def efloras(family_name, taxon_id, parents, flora_id):
+def efloras(family_name, flora_id, taxon_id, parents):
     """Get a family of taxa from the efloras web site."""
+    lower_link = regex.compile(
+        r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
+        regex.VERBOSE | regex.IGNORECASE)
+
     parents.add(taxon_id)
 
     taxon_dir = f'{family_name}_{flora_id}'
@@ -34,16 +39,70 @@ def efloras(family_name, taxon_id, parents, flora_id):
 
     if not path.exists():
         urllib.request.urlretrieve(url, path)
-        time.sleep(random.randint(10, 20))  # 15 sec +/- 5 sec
+        time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
 
     with open(path) as in_file:
         page = html.fromstring(in_file.read())
 
     for link in page.xpath('//a'):
         href = link.attrib.get('href', '')
-        match = LINK.match(href)
+        match = lower_link.match(href)
         if match and match.group('taxon_id') not in parents:
-            efloras(family_name, match.group('taxon_id'), parents, flora_id)
+            efloras(family_name, flora_id, match.group('taxon_id'), parents)
+
+
+def family_tree(family_name, flora_id, taxon_id, parents):
+    """Get to the pages via the family links."""
+    page_link = regex.compile(
+        r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
+        regex.VERBOSE | regex.IGNORECASE)
+
+    parents.add(taxon_id)
+
+    page = tree_page(family_name, flora_id, taxon_id, parents)
+
+    for anchor in page.xpath('//a'):
+        href = anchor.attrib.get('href', '')
+        match = page_link.search(href)
+        if match and match.group('taxon_id') not in parents:
+            num = match.group('page')
+            tree_page(family_name, flora_id, taxon_id, parents, page=num)
+
+
+def tree_page(family_name, flora_id, taxon_id, parents, page=1):
+    """Get a family tree page."""
+    lower_link = regex.compile(
+        r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
+        regex.VERBOSE | regex.IGNORECASE)
+
+    taxon_dir = f'tree_{family_name}_{flora_id}'
+    path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}.html'
+    if page > 1:
+        path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}_{page}.html'
+
+    url = ('http://www.efloras.org/browse.aspx'
+           f'?flora_id={flora_id}'
+           f'&start_taxon_id={taxon_id}')
+    if page > 1:
+        url += f'&page={page}'
+
+    print(f'Downloading: {url}')
+
+    if not path.exists():
+        urllib.request.urlretrieve(url, path)
+        time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+
+    with open(path) as in_file:
+        page = html.fromstring(in_file.read())
+
+    for link in page.xpath('//a'):
+        href = link.attrib.get('href', '')
+        match = lower_link.search(href)
+        if match and match.group('taxon_id') not in parents:
+            family_tree(
+                family_name, flora_id, match.group('taxon_id'), parents)
+
+    return page
 
 
 def parse_args(flora_ids):
@@ -67,6 +126,10 @@ def parse_args(flora_ids):
     arg_parser.add_argument(
         '--list-flora-ids', '-l', action='store_true',
         help="""List flora IDs and exit.""")
+
+    arg_parser.add_argument(
+        '--family-tree', '-t', action='store_true',
+        help="""Get the family tree.""")
 
     arg_parser.add_argument(
         '--search', '-s',
@@ -99,9 +162,14 @@ def main(args, families, flora_ids):
         key = (family, args.flora_id)
         family_name = FAMILIES[key]['family']
         taxon_id = FAMILIES[key]['taxon_id']
-        dir_ = f'{family_name}_{args.flora_id}'
-        os.makedirs(util.DATA_DIR / dir_, exist_ok=True)
-        efloras(family_name, taxon_id, set(), args.flora_id)
+        if args.family_tree:
+            dir_ = f'tree_{family_name}_{args.flora_id}'
+            os.makedirs(util.DATA_DIR / dir_, exist_ok=True)
+            family_tree(family_name, args.flora_id, taxon_id, set())
+        else:
+            dir_ = f'{family_name}_{args.flora_id}'
+            os.makedirs(util.DATA_DIR / dir_, exist_ok=True)
+            efloras(family_name, args.flora_id, taxon_id, set())
 
 
 if __name__ == "__main__":
