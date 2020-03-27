@@ -52,7 +52,7 @@ def parse_traits(args, families):
 
 def parse_args():
     """Process command-line arguments."""
-    description = """Download data from the eFloras website."""
+    description = """Parse data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         allow_abbrev=True,
         formatter_class=argparse.RawDescriptionHelpFormatter,

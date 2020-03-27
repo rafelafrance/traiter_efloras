@@ -23,6 +23,7 @@ SLEEP_RANGE = (SLEEP_MID - SLEEP_RADIUS, SLEEP_MID + SLEEP_RADIUS)
 
 def efloras(family_name, flora_id, taxon_id, parents):
     """Get a family of taxa from the efloras web site."""
+    # http://www.efloras.org/florataxon.aspx?flora_id=1&taxon_id=10041
     lower_link = regex.compile(
         r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
         regex.VERBOSE | regex.IGNORECASE)
@@ -53,8 +54,10 @@ def efloras(family_name, flora_id, taxon_id, parents):
 
 def family_tree(family_name, flora_id, taxon_id, parents):
     """Get to the pages via the family links."""
+    # http://www.efloras.org/browse.aspx?flora_id=1&page=2
     page_link = regex.compile(
-        r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
+        (r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)'
+         r'&page=(?P<page>\d+)'),
         regex.VERBOSE | regex.IGNORECASE)
 
     parents.add(taxon_id)
@@ -64,12 +67,16 @@ def family_tree(family_name, flora_id, taxon_id, parents):
     for anchor in page.xpath('//a'):
         href = anchor.attrib.get('href', '')
         match = page_link.search(href)
-        if match and match.group('taxon_id') not in parents:
-            num = match.group('page')
-            tree_page(family_name, flora_id, taxon_id, parents, page=num)
+        if match:
+            page_no = int(match.group('page'))
+            name = f'{taxon_id}_{page_no}'
+            if name not in parents:
+                parents.add(name)
+                tree_page(
+                    family_name, flora_id, taxon_id, parents, page_no=page_no)
 
 
-def tree_page(family_name, flora_id, taxon_id, parents, page=1):
+def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
     """Get a family tree page."""
     lower_link = regex.compile(
         r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
@@ -77,14 +84,15 @@ def tree_page(family_name, flora_id, taxon_id, parents, page=1):
 
     taxon_dir = f'tree_{family_name}_{flora_id}'
     path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}.html'
-    if page > 1:
-        path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}_{page}.html'
+    if page_no > 1:
+        page_name = f'taxon_id_{taxon_id}_{page_no}.html'
+        path = util.DATA_DIR / taxon_dir / page_name
 
     url = ('http://www.efloras.org/browse.aspx'
            f'?flora_id={flora_id}'
            f'&start_taxon_id={taxon_id}')
-    if page > 1:
-        url += f'&page={page}'
+    if page_no > 1:
+        url += f'&page={page_no}'
 
     print(f'Downloading: {url}')
 
