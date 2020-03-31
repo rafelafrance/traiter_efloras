@@ -6,7 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import efloras.pylib.util as util
 import efloras.pylib.family_util as futil
-import efloras.pylib.all_rulers as ar
+import efloras.rulers.all as ar
 
 
 def efloras_ruler(args, families):

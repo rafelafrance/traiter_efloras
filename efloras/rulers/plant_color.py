@@ -4,7 +4,7 @@ from traiter.new.rules.literals import Literals
 from .base import Base
 
 
-COLORS = Literals(literals=["""
+COLORS = Literals(aux='color', literals=[[c] for c in """
     black blackish blue blueish brown brownish
     cream cream-yellow creamy crimson
     glaucous-pink gold golden golden-yellow gray gray-green green greenish
@@ -23,7 +23,7 @@ COLORS = Literals(literals=["""
     yellow yellowish
     """.split()])
 
-PREFIXES = Literals(literals=["""
+LEADERS = Literals(aux='leader', literals=[[p] for p in """
     bright brighter
     dark darker deep deeper 
     light lighter
@@ -34,7 +34,7 @@ PREFIXES = Literals(literals=["""
     usually
     """.split() + ['usually', 'not']])
 
-SUFFIXES = Literals(literals=["""
+FOLLOWERS = Literals(aux='follower', literals=[[s] for s in """
     lined lines longitudinal
     mottled
     spot spots spotted stripe striped stripes
@@ -81,13 +81,16 @@ RENAME = {
     }
 
 PATTERNS = [
-    [Literals(literals=[COLORS])],
+    [COLORS],
     ]
 
 
 def parser(plant_part):
     """Build a parser for the flower part."""
-    return Base(f'{plant_part}_color', PATTERNS)
+    patterns = PATTERNS
+    for pattern in PATTERNS:
+        pass
+    return Base(f'{plant_part}_color', patterns)
 
 
 FLOWER_COLOR = parser('flower')

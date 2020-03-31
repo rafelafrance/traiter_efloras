@@ -6,7 +6,7 @@ import sys
 import argparse
 import textwrap
 import efloras.pylib.family_util as futil
-import efloras.pylib.trait_groups as tg
+import efloras.rulers.all as rall
 from efloras.writers.html_writer import html_writer
 from efloras.writers.csv_writer import csv_writer
 from efloras.readers.efloras_ruler import efloras_ruler
@@ -29,14 +29,14 @@ def main(args):
         sys.exit()
 
     if args.list_traits:
-        for trait in tg.TRAIT_NAMES:
+        for trait in rall.TRAIT_NAMES:
             print(trait)
         sys.exit()
 
     if not futil.check_family_flora_ids(args, families):
         sys.exit(1)
 
-    if not (traits := tg.expand_traits(args)):
+    if not (traits := rall.expand_traits(args)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)

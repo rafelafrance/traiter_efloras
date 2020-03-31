@@ -2,7 +2,7 @@
 
 import regex
 from efloras.pylib.util import FLAGS
-from efloras.rulers.plant_color import FLOWER_COLOR
+from efloras.rulers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
 
 
 ALL_RULERS = {
@@ -37,6 +37,7 @@ ALL_RULERS = {
         ],
     'flowers': [
         FLOWER_COLOR,
+        HYPANTHIUM_COLOR,
         # FLOWER_SHAPE, FLOWER_SIZE, FLOWER_COLOR,
         # HYPANTHIUM_SHAPE, HYPANTHIUM_SIZE, HYPANTHIUM_COLOR,
         # SEPAL_SIZE, SEPAL_SHAPE, SEPAL_COLOR,
