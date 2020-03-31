@@ -26,7 +26,7 @@ def efloras_reader(args, families):
         family = families[key]
         name = family['family']
         flora_id = family['flora_id']
-        root = util.DATA_DIR / f'{name}_{flora_id}'
+        root = util.DATA_DIR / 'treatments' / f'{name}_{flora_id}'
         for path in root.glob('**/*.html'):
             row = parse_efloras_page(args, path, family)
             rows.append(row)

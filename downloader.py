@@ -11,7 +11,6 @@ import textwrap
 import urllib.request
 import regex
 from lxml import html
-from efloras.pylib import util
 from efloras.pylib import family_util as futil
 
 
@@ -21,42 +20,74 @@ SLEEP_RADIUS = 5
 SLEEP_RANGE = (SLEEP_MID - SLEEP_RADIUS, SLEEP_MID + SLEEP_RADIUS)
 
 
-def efloras(family_name, flora_id, taxon_id, parents):
-    """Get a family of taxa from the efloras web site."""
-    # http://www.efloras.org/florataxon.aspx?flora_id=1&taxon_id=10041
-    lower_link = regex.compile(
+def main(args, families, flora_ids):
+    """Perform actions based on the arguments."""
+    if args.list_flora_ids:
+        futil.print_flora_ids(flora_ids)
+        sys.exit()
+
+    if args.search:
+        futil.search_families(args, families)
+        sys.exit()
+
+    for family in args.family:
+        key = (family, args.flora_id)
+        family_name = FAMILIES[key]['family']
+        taxon_id = FAMILIES[key]['taxon_id']
+
+        dir_ = futil.tree_dir(args.flora_id, family_name)
+        os.makedirs(dir_, exist_ok=True)
+
+        dir_ = futil.treatment_dir(args.flora_id, family_name)
+        os.makedirs(dir_, exist_ok=True)
+
+        download(family_name, args.flora_id, taxon_id)
+
+
+def download(family_name, flora_id, taxon_id):
+    """Download the family tree and then treatments."""
+    family_tree(family_name, flora_id, taxon_id, set())
+
+    tree_dir = futil.tree_dir(flora_id, family_name)
+    for path in tree_dir.glob('*.html'):
+        with open(path) as in_file:
+            page = html.fromstring(in_file.read())
+        get_treatements(flora_id, family_name, page)
+
+
+def get_treatements(flora_id, family_name, page):
+    """Get the treatment files in the tree."""
+    treatement = regex.compile(
         r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
         regex.VERBOSE | regex.IGNORECASE)
 
-    parents.add(taxon_id)
+    for anchor in page.iterlinks():
+        link = anchor[2]
+        if match := treatement.match(link):
+            taxon_id = match.group('taxon_id')
+            get_treatement(flora_id, family_name, taxon_id)
 
-    taxon_dir = f'{family_name}_{flora_id}'
-    path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}.html'
+
+def get_treatement(flora_id, family_name, taxon_id):
+    """Get one treatment file in the tree."""
+    path = futil.treatment_file(flora_id, family_name, taxon_id)
     url = ('http://www.efloras.org/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
 
-    print(f'Downloading: {url}')
+    print(f'Treatment: {url}')
 
     if not path.exists():
         urllib.request.urlretrieve(url, path)
         time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
-
-    with open(path) as in_file:
-        page = html.fromstring(in_file.read())
-
-    for link in page.xpath('//a'):
-        href = link.attrib.get('href', '')
-        match = lower_link.match(href)
-        if match and match.group('taxon_id') not in parents:
-            efloras(family_name, flora_id, match.group('taxon_id'), parents)
 
 
 def family_tree(family_name, flora_id, taxon_id, parents):
     """Get to the pages via the family links."""
     # http://www.efloras.org/browse.aspx?flora_id=1&page=2
     page_link = regex.compile(
-        (r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)'
+        (r'browse\.aspx\?flora_id=\d+'
+         r'&start_taxon_id=(?P<taxon_id>\d+)'
          r'&page=(?P<page>\d+)'),
         regex.VERBOSE | regex.IGNORECASE)
 
@@ -82,11 +113,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
         r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
         regex.VERBOSE | regex.IGNORECASE)
 
-    taxon_dir = f'tree_{family_name}_{flora_id}'
-    path = util.DATA_DIR / taxon_dir / f'taxon_id_{taxon_id}.html'
-    if page_no > 1:
-        page_name = f'taxon_id_{taxon_id}_{page_no}.html'
-        path = util.DATA_DIR / taxon_dir / page_name
+    path = futil.tree_file(flora_id, family_name, taxon_id, page_no)
 
     url = ('http://www.efloras.org/browse.aspx'
            f'?flora_id={flora_id}'
@@ -94,7 +121,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
     if page_no > 1:
         url += f'&page={page_no}'
 
-    print(f'Downloading: {url}')
+    print(f'Tree: {url}')
 
     if not path.exists():
         urllib.request.urlretrieve(url, path)
@@ -136,10 +163,6 @@ def parse_args(flora_ids):
         help="""List flora IDs and exit.""")
 
     arg_parser.add_argument(
-        '--family-tree', '-t', action='store_true',
-        help="""Get the family tree.""")
-
-    arg_parser.add_argument(
         '--search', '-s',
         help="""Search the families list for one that matches the string.
             The patterns will match either the family name or the flora name.
@@ -154,30 +177,6 @@ def parse_args(flora_ids):
                 sys.exit(f'"{family}" is not in flora {args.flora_id}.')
 
     return args
-
-
-def main(args, families, flora_ids):
-    """Perform actions based on the arguments."""
-    if args.list_flora_ids:
-        futil.print_flora_ids(flora_ids)
-        sys.exit()
-
-    if args.search:
-        futil.search_families(args, families)
-        sys.exit()
-
-    for family in args.family:
-        key = (family, args.flora_id)
-        family_name = FAMILIES[key]['family']
-        taxon_id = FAMILIES[key]['taxon_id']
-        if args.family_tree:
-            dir_ = f'tree_{family_name}_{args.flora_id}'
-            os.makedirs(util.DATA_DIR / dir_, exist_ok=True)
-            family_tree(family_name, args.flora_id, taxon_id, set())
-        else:
-            dir_ = f'{family_name}_{args.flora_id}'
-            os.makedirs(util.DATA_DIR / dir_, exist_ok=True)
-            efloras(family_name, args.flora_id, taxon_id, set())
 
 
 if __name__ == "__main__":

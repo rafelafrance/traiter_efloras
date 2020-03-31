@@ -15,6 +15,42 @@ LINK = ('www.efloras.org/florataxon.aspx?'
         rf'flora_id={FLORA_ID}&taxon_id=\1')
 
 
+def family_dir(flora_id, family_name):
+    """Build the family directory name."""
+    taxon_dir = f'{family_name}_{flora_id}'
+    return util.DATA_DIR / 'eFloras' / taxon_dir
+
+
+def taxon_file(taxon_id, page_no=1):
+    """Build the taxon file name."""
+    file_name = f'taxon_id_{taxon_id}.html'
+    if page_no > 1:
+        file_name = f'taxon_id_{taxon_id}_{page_no}.html'
+    return file_name
+
+
+def tree_dir(flora_id, family_name):
+    """Build the family tree directory name."""
+    return family_dir(flora_id, family_name) / 'tree'
+
+
+def treatment_dir(flora_id, family_name):
+    """Build the treatment directory name."""
+    return family_dir(flora_id, family_name) / 'treatments'
+
+
+def tree_file(flora_id, family_name, taxon_id, page_no=1):
+    """Build the family tree directory name."""
+    root = tree_dir(flora_id, family_name)
+    return root / taxon_file(taxon_id, page_no)
+
+
+def treatment_file(flora_id, family_name, taxon_id, page_no=1):
+    """Build the treatment directory name."""
+    root = treatment_dir(flora_id, family_name)
+    return root / taxon_file(taxon_id, page_no)
+
+
 def get_families():
     """Get a list of all families in the eFloras North American catalog."""
     families = {}
