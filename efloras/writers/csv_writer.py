@@ -37,8 +37,8 @@ def merge_duplicates(args, df):
     """
     data = df.fillna('').to_dict('records')
 
-    LOCATION = ('start', 'end', 'trait_group')
-    KEY = ('value', 'part')
+    location_fields = ('start', 'end', 'trait_group')
+    key_fields = ('value', 'part')
 
     new_data = []
 
@@ -59,16 +59,16 @@ def merge_duplicates(args, df):
 
                 # The unique value
                 unique = tuple(util.as_tuple(sorted(util.as_list(v)))
-                               for k, v in trait.items() if k in KEY)
+                               for k, v in trait.items() if k in key_fields)
 
                 # Merge locations into a single field
                 location = tuple((k, v) for k, v in trait.items()
-                                 if k in LOCATION)
+                                 if k in location_fields)
                 dupes[unique]['location'].add(location)
 
                 # Add other values
                 for key, value in trait.items():
-                    if key not in LOCATION:
+                    if key not in location_fields:
                         dupes[unique][key].add(util.as_member(value))
 
             # Pivot the separate extracts

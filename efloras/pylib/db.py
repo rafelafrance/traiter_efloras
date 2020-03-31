@@ -31,6 +31,6 @@ def select_taxon_names(cxn: sqlite3.Connection) -> sqlite3.Cursor:
     """Get taxonomic names."""
     return cxn.execute(
         """SELECT rank_name
-             FROM taxon_unit_types 
+             FROM taxon_unit_types
             WHERE kingdom_id = ?;""",
         (PLANTAE, ))
