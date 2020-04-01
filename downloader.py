@@ -2,17 +2,18 @@
 
 """Build and run a wget command."""
 
-import os
-import sys
-import time
-import random
 import argparse
+import os
+import random
+import sys
 import textwrap
+import time
 import urllib.request
+
 import regex
 from lxml import html
-from efloras.pylib import family_util as futil
 
+from efloras.pylib import family_util as futil
 
 # Don't hit the site too hard
 SLEEP_MID = 20

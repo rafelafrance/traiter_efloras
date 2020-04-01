@@ -12,7 +12,6 @@ import efloras.pylib.util as util
 from efloras.parsers.base import Base
 from efloras.pylib.trait import Trait
 
-
 VOCAB = Vocabulary(patterns.VOCAB)
 
 VOCAB.term('color', r"""
@@ -108,7 +107,7 @@ def normalize(value: str) -> str:
     parts = []
     has_color = False
     for part in regex.split(
-            rf'\s+ | {VOCAB["dash"].pattern}', value, flags=util.FLAGS):
+        rf'\s+ | {VOCAB["dash"].pattern}', value, flags=util.FLAGS):
         if VOCAB['color'].regexp.search(part):
             parts.append(RENAME.get(part, part))
             has_color = True

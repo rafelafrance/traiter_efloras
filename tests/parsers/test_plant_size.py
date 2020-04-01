@@ -3,7 +3,8 @@
 import unittest
 
 from efloras.parsers.plant_size import FLOWER_SIZE, HYPANTHIUM_SIZE, \
-    LEAF_SIZE, PETAL_SIZE, PETIOLE_SIZE, SEPAL_SIZE, SEED_SIZE
+    LEAF_SIZE, \
+    PETAL_SIZE, PETIOLE_SIZE, SEED_SIZE, SEPAL_SIZE
 from efloras.pylib.trait import Trait
 
 

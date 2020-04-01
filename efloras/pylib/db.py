@@ -24,7 +24,7 @@ def select_taxa(cxn: sqlite3.Connection) -> sqlite3.Cursor:
         """SELECT complete_name
              FROM taxonomic_units
             WHERE kingdom_id = ?;""",
-        (PLANTAE, ))
+        (PLANTAE,))
 
 
 def select_taxon_names(cxn: sqlite3.Connection) -> sqlite3.Cursor:
@@ -33,4 +33,4 @@ def select_taxon_names(cxn: sqlite3.Connection) -> sqlite3.Cursor:
         """SELECT rank_name
              FROM taxon_unit_types
             WHERE kingdom_id = ?;""",
-        (PLANTAE, ))
+        (PLANTAE,))

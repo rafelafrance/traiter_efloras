@@ -1,8 +1,10 @@
 """Test shared patterns for plant parsers."""
 
 import unittest
+
 from traiter.parser import Parser
 from traiter.token import Token
+
 from efloras.pylib.shared_patterns import VOCAB
 
 

@@ -2,15 +2,15 @@
 
 """Parse extracted efloras web pages."""
 
-import sys
 import argparse
+import sys
 import textwrap
+
 import efloras.pylib.family_util as futil
 import efloras.pylib.trait_groups as tg
-from efloras.writers.html_writer import html_writer
-from efloras.writers.csv_writer import csv_writer
 from efloras.readers.efloras_reader import efloras_reader
-
+from efloras.writers.csv_writer import csv_writer
+from efloras.writers.html_writer import html_writer
 
 INPUT_FORMATS = {
     'efloras': efloras_reader}

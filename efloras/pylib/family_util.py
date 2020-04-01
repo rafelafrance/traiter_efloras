@@ -3,12 +3,12 @@
 import csv
 from datetime import datetime
 from itertools import product
+
 import regex
+
 import efloras.pylib.util as util
 
-
 EFLORAS_FAMILIES = util.DATA_DIR / 'eFloras_family_list.csv'
-
 
 FLORA_ID = 1
 LINK = ('www.efloras.org/florataxon.aspx?'
@@ -119,7 +119,7 @@ def search_families(args, families):
 
     for family in families.values():
         if (pattern.search(family['family'])
-                or pattern.search(family['flora_name'])):
+            or pattern.search(family['flora_name'])):
             print(template.format(
                 family['family'],
                 family['taxon_id'],

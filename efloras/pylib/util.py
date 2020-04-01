@@ -1,8 +1,9 @@
 """Holds misc functions and constants."""
 
 from pathlib import Path
-import regex
+
 import inflect
+import regex
 
 FLAGS = regex.VERBOSE | regex.IGNORECASE
 

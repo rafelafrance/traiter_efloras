@@ -1,9 +1,11 @@
 """Write the output to a CSV file."""
 
 from collections import defaultdict
+
 import pandas as pd
-import efloras.pylib.util as util
+
 import efloras.pylib.family_util as futil
+import efloras.pylib.util as util
 
 
 def csv_writer(args, df):

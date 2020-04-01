@@ -7,7 +7,6 @@ from efloras.pylib import util
 
 VOCAB = Vocabulary()
 
-
 # Chars that may be a token
 VOCAB.part('slash', r' [/] ', capture=False)
 VOCAB.part('dash', r' \p{Pd} ', capture=False)
@@ -79,7 +78,6 @@ VOCAB.part('month_name', """
     )
     (?! [a-z] )
     """, capture=False)
-
 
 SEX = r'staminate | pistillate'
 VOCAB.term('sex', SEX)

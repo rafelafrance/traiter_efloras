@@ -1,9 +1,10 @@
 """Test plant shape trait notations."""
 
 import unittest
+
+from efloras.parsers.plant_shape import HYPANTHIUM_SHAPE, LEAF_SHAPE, \
+    PETIOLE_SHAPE, SEPAL_SHAPE
 from efloras.pylib.trait import Trait
-from efloras.parsers.plant_shape import LEAF_SHAPE, PETIOLE_SHAPE
-from efloras.parsers.plant_shape import HYPANTHIUM_SHAPE, SEPAL_SHAPE
 
 
 # pylint: disable=too-many-public-methods
@@ -11,28 +12,28 @@ class TestPlantShape(unittest.TestCase):
     """Test plant shape trait notations."""
 
     def test_parse_01(self):
-        """TODO."""
+        """It normalizes shapes."""
         self.assertEqual(
             LEAF_SHAPE.parse('leaf suborbiculate'),
             [Trait(start=0, end=18, part='leaf', value=['orbicular'],
                    raw_value='suborbiculate')])
 
     def test_parse_02(self):
-        """TODO."""
+        """It normalizes shapes."""
         self.assertEqual(
             LEAF_SHAPE.parse('leaf ovate-suborbicular'),
             [Trait(start=0, end=23, part='leaf', value=['ovate-orbicular'],
                    raw_value='ovate-suborbicular')])
 
     def test_parse_03(self):
-        """TODO."""
+        """It gets petiolule shapes."""
         self.assertEqual(
             PETIOLE_SHAPE.parse('petiolule 3–12 mm, narrowly oblanceolate,'),
             [Trait(start=0, end=40, part='petiolule', value=['oblanceolate'],
                    raw_value='narrowly oblanceolate')])
 
     def test_parse_04(self):
-        """TODO."""
+        """It gets multiple shape values."""
         self.assertEqual(
             LEAF_SHAPE.parse(
                 'Leaves ; blade ovate or orbiculate to '
@@ -43,7 +44,7 @@ class TestPlantShape(unittest.TestCase):
                              'suborbiculate or reniform')])
 
     def test_parse_05(self):
-        """TODO."""
+        """It gets mutiple values separated by small words."""
         self.assertEqual(
             LEAF_SHAPE.parse(
                 'Leaves: blade ovate or elongate-ovate to '
@@ -55,14 +56,14 @@ class TestPlantShape(unittest.TestCase):
                              'lanceolate-ovate or ovate-triangular')])
 
     def test_parse_06(self):
-        """TODO."""
+        """It normalizes (removes) shape leader words."""
         self.assertEqual(
             LEAF_SHAPE.parse('Leaves: blade broadly to shallowly triangular'),
             [Trait(start=8, end=45, part='blade', value=['triangular'],
                    raw_value='broadly to shallowly triangular')])
 
     def test_parse_07(self):
-        """TODO."""
+        """It normalizes multiple shape values."""
         self.assertEqual(
             LEAF_SHAPE.parse(
                 '; blade sometimes white-mottled abaxially, suborbiculate to '
@@ -73,13 +74,13 @@ class TestPlantShape(unittest.TestCase):
                              'broadly ovate, depressed-ovate, or reniform')])
 
     def test_parse_08(self):
-        """TODO."""
+        """It does not get lobe values."""
         self.assertEqual(
             LEAF_SHAPE.parse('blade deeply pedately 3-lobed'),
             [])
 
     def test_parse_09(self):
-        """TODO."""
+        """It gets values separated from the atom key by many words."""
         self.assertEqual(
             LEAF_SHAPE.parse(
                 'blade <sometimes white-spotted at vein junctions>, '
@@ -91,13 +92,13 @@ class TestPlantShape(unittest.TestCase):
                              'or reniform')])
 
     def test_parse_10(self):
-        """TODO."""
+        """It does not get a lobe shape in place of a leaf shape."""
         self.assertEqual(
             LEAF_SHAPE.parse('Leaf blades 2–7 cm wide, lobe apex rounded'),
             [])
 
     def test_parse_11(self):
-        """TODO."""
+        """It spearates leaf and lobe shapes."""
         self.assertEqual(
             LEAF_SHAPE.parse('Leaf blades mostly orbiculate, '
                              'deeply to shallowly lobed,'),
@@ -240,7 +241,7 @@ class TestPlantShape(unittest.TestCase):
             [])
 
     def test_parse_26(self):
-        """TODO."""
+        """It gets mutilple location notations."""
         self.assertEqual(
             LEAF_SHAPE.parse('Leaves in basal rosette and cauline'),
             [Trait(start=0, end=35, part='leaves',

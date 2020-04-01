@@ -2,14 +2,16 @@
 
 import sys
 from collections import defaultdict
+
+import pandas as pd
 import regex
 from lxml import html
 from lxml.etree import tostring
-import pandas as pd
+
 import efloras.pylib.db as db
-import efloras.pylib.util as util
 import efloras.pylib.family_util as futil
 import efloras.pylib.trait_groups as tg
+import efloras.pylib.util as util
 
 TAXON_SEEN = {}
 VALID_TAXON = set()
@@ -111,7 +113,7 @@ def get_taxon(page):
             next_word = True
         elif norm in VALID_TAXON:
             taxon.append(word)
-        elif norm[0] in ('×', ):
+        elif norm[0] in ('×',):
             taxon.append(word)
 
     taxon = ' '.join(taxon)

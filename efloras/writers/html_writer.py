@@ -1,14 +1,15 @@
 """Write output to an HTML file."""
 
-import re
 import html
-from itertools import cycle
-from collections import namedtuple, deque
+import re
+from collections import deque, namedtuple
 from datetime import datetime
+from itertools import cycle
+
 from jinja2 import Environment, FileSystemLoader
+
 import efloras.pylib.family_util as futil
 import efloras.pylib.trait_groups as tg
-
 
 # CSS colors
 CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
@@ -135,7 +136,7 @@ def insert_markup(text, cuts, tags):
         # Add an open tag
         if cut.open:
             parts.append(tags[(cut.type, True)])  # Add tag to output
-            stack.appendleft(cut)                 # Prepend open cut to stack
+            stack.appendleft(cut)  # Prepend open cut to stack
 
         # Close tags are more complicated. We have to search for the
         # matching open tag on the stack & remove it. We also need to
@@ -184,22 +185,22 @@ def append_endpoints(cuts, cut_id, start, end, tag_type):
     The same logic applies to the ID field. We push later tags outward:
     [open_cut(id=-2), open_cut(id=-1), close_cut(id=1), close_cut(id=2)]
     """
-    cut_id += 1            # Absolute value is the ID
+    cut_id += 1  # Absolute value is the ID
     trait_len = end - start
 
     cuts.append(Cut(
         pos=start,
-        open=True,              # Close tags come before open tags
-        len=-trait_len,         # Longest tags open first
-        id=-cut_id,             # Force an order. Push open tags leftward
+        open=True,  # Close tags come before open tags
+        len=-trait_len,  # Longest tags open first
+        id=-cut_id,  # Force an order. Push open tags leftward
         end=end,
         type=tag_type))
 
     cuts.append(Cut(
         pos=end,
-        open=False,             # Close tags come before open tags
-        len=trait_len,          # Longest tags close last
-        id=cut_id,              # Force an order. Push close tags rightward
+        open=False,  # Close tags come before open tags
+        len=trait_len,  # Longest tags close last
+        id=cut_id,  # Force an order. Push close tags rightward
         end=end,
         type=tag_type))
 

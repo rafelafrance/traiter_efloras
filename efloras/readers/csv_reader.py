@@ -1,8 +1,8 @@
 """Read data from a CSV file."""
 
 import pandas as pd
-from efloras.pylib import util
-from efloras.pylib import db
+
+from efloras.pylib import db, util
 
 
 def read(args):
