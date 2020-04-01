@@ -1,8 +1,8 @@
-"""The rulers and how they map to ."""
+"""The matchers and how they map to ."""
 
 import regex
 from efloras.pylib.util import FLAGS
-from efloras.rulers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
+from efloras.matchers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
 
 
 ALL_RULERS = {

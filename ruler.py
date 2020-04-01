@@ -6,7 +6,7 @@ import sys
 import argparse
 import textwrap
 import efloras.pylib.family_util as futil
-import efloras.rulers.all as rall
+import efloras.matchers.all as rall
 from efloras.writers.html_writer import html_writer
 from efloras.writers.csv_writer import csv_writer
 from efloras.readers.efloras_ruler import efloras_ruler
