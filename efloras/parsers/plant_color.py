@@ -2,13 +2,16 @@
 
 import string
 from typing import Any
+
 import regex
 from traiter.token import Token
 from traiter.vocabulary import Vocabulary
-from efloras.pylib.trait import Trait
-import efloras.pylib.util as util
+
 import efloras.pylib.shared_patterns as patterns
+import efloras.pylib.util as util
 from efloras.parsers.base import Base
+from efloras.pylib.trait import Trait
+
 
 VOCAB = Vocabulary(patterns.VOCAB)
 
@@ -137,9 +140,9 @@ def parser(plant_part):
         )
 
 
-FLOWER_COLOR = parser('flower')
-HYPANTHIUM_COLOR = parser('hypanthium')
-SEPAL_COLOR = parser('sepal')
-PETAL_COLOR = parser('petal')
 CAYLX_COLOR = parser('calyx')
 COROLLA_COLOR = parser('corolla')
+FLOWER_COLOR = parser('flower')
+HYPANTHIUM_COLOR = parser('hypanthium')
+PETAL_COLOR = parser('petal')
+SEPAL_COLOR = parser('sepal')

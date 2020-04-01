@@ -1,11 +1,13 @@
 """Parse the trait."""
 
 from typing import Any
-from traiter.vocabulary import Vocabulary
+
 from traiter.token import Token
-from efloras.pylib.trait import Trait
+from traiter.vocabulary import Vocabulary
+
 import efloras.pylib.shared_patterns as patterns
 from efloras.parsers.base import Base
+from efloras.pylib.trait import Trait
 
 
 def convert(token: Token) -> Any:

@@ -2,12 +2,14 @@
 
 import string
 from typing import Any
+
+from traiter.parser import Parser
 from traiter.token import Token
 from traiter.vocabulary import Vocabulary
-from traiter.parser import Parser
-from efloras.pylib.trait import Trait
+
 import efloras.pylib.shared_patterns as patterns
 from efloras.parsers.base import Base
+from efloras.pylib.trait import Trait
 
 VOCAB = Vocabulary(patterns.VOCAB)
 
@@ -154,11 +156,11 @@ def parser(plant_part: str) -> Parser:
             ])
 
 
-LEAF_SHAPE = parser('leaf')
-PETIOLE_SHAPE = parser('petiole')
-FLOWER_SHAPE = parser('flower')
-HYPANTHIUM_SHAPE = parser('hypanthium')
-SEPAL_SHAPE = parser('sepal')
-PETAL_SHAPE = parser('petal')
 CAYLX_SHAPE = parser('calyx')
 COROLLA_SHAPE = parser('corolla')
+FLOWER_SHAPE = parser('flower')
+HYPANTHIUM_SHAPE = parser('hypanthium')
+LEAF_SHAPE = parser('leaf')
+PETAL_SHAPE = parser('petal')
+PETIOLE_SHAPE = parser('petiole')
+SEPAL_SHAPE = parser('sepal')

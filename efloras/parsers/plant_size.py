@@ -2,13 +2,15 @@
 
 import copy
 from typing import Any
+
 from traiter.token import Token
 from traiter.vocabulary import Vocabulary
-from efloras.pylib.convert_units import convert as convert_units
-from efloras.pylib.trait import Trait
+
 import efloras.pylib.util as util
-from efloras.pylib.shared_patterns import VOCAB, part_phrase
 from efloras.parsers.base import Base
+from efloras.pylib.convert_units import convert as convert_units
+from efloras.pylib.shared_patterns import VOCAB, part_phrase
+from efloras.pylib.trait import Trait
 
 
 def convert(token: Token) -> Any:
@@ -106,11 +108,12 @@ def parser(plant_part):
         )
 
 
-LEAF_SIZE = parser('leaf')
-PETIOLE_SIZE = parser('petiole')
-SEPAL_SIZE = parser('sepal')
-PETAL_SIZE = parser('petal')
 CALYX_SIZE = parser('calyx')
 COROLLA_SIZE = parser('corolla')
 FLOWER_SIZE = parser('flower')
 HYPANTHIUM_SIZE = parser('hypanthium')
+LEAF_SIZE = parser('leaf')
+PETAL_SIZE = parser('petal')
+PETIOLE_SIZE = parser('petiole')
+SEED_SIZE = parser('seed')
+SEPAL_SIZE = parser('sepal')

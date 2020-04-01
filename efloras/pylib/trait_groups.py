@@ -1,21 +1,16 @@
 """The trait groups and what is being parsed for each."""
 
 import regex
-from .util import FLAGS
-from ..parsers.plant_size import LEAF_SIZE, PETIOLE_SIZE
-from ..parsers.plant_size import PETAL_SIZE, CALYX_SIZE
-from ..parsers.plant_size import SEPAL_SIZE, FLOWER_SIZE
-from ..parsers.plant_size import HYPANTHIUM_SIZE, COROLLA_SIZE
-from ..parsers.plant_shape import LEAF_SHAPE, PETIOLE_SHAPE
-from ..parsers.plant_shape import PETAL_SHAPE, CAYLX_SHAPE
-from ..parsers.plant_shape import FLOWER_SHAPE, HYPANTHIUM_SHAPE
-from ..parsers.plant_shape import COROLLA_SHAPE, SEPAL_SHAPE
-from ..parsers.plant_color import FLOWER_COLOR, HYPANTHIUM_COLOR
-from ..parsers.plant_color import SEPAL_COLOR, PETAL_COLOR
-from ..parsers.plant_color import CAYLX_COLOR, COROLLA_COLOR
-from ..parsers.plant_descriptors import SEXUAL_DESCRIPTOR, SYMMETRY_DESCRIPTOR
-# from efloras.parsers.plant_count import SEPAL_COUNT
 
+from .util import FLAGS
+from ..parsers.plant_color import CAYLX_COLOR, COROLLA_COLOR, FLOWER_COLOR, \
+    HYPANTHIUM_COLOR, PETAL_COLOR, SEPAL_COLOR
+from ..parsers.plant_descriptors import SEXUAL_DESCRIPTOR, SYMMETRY_DESCRIPTOR
+from ..parsers.plant_shape import CAYLX_SHAPE, COROLLA_SHAPE, FLOWER_SHAPE, \
+    HYPANTHIUM_SHAPE, LEAF_SHAPE, PETAL_SHAPE, PETIOLE_SHAPE, SEPAL_SHAPE
+from ..parsers.plant_size import CALYX_SIZE, COROLLA_SIZE, FLOWER_SIZE, \
+    HYPANTHIUM_SIZE, LEAF_SIZE, PETAL_SIZE, PETIOLE_SIZE, SEPAL_SIZE, \
+    SEED_SIZE
 
 ALL = [SEXUAL_DESCRIPTOR, SYMMETRY_DESCRIPTOR]
 CALYX = [CALYX_SIZE, CAYLX_SHAPE, CAYLX_COLOR]
@@ -25,6 +20,7 @@ HYPANTHIUM = [HYPANTHIUM_SHAPE, HYPANTHIUM_SIZE, HYPANTHIUM_COLOR]
 LEAF = [LEAF_SIZE, LEAF_SHAPE]
 PETAL = [PETAL_SIZE, PETAL_SHAPE, PETAL_COLOR]
 PETIOLE = [PETIOLE_SIZE, PETIOLE_SHAPE]
+SEED = [SEED_SIZE]
 SEPAL = [SEPAL_SIZE, SEPAL_SHAPE, SEPAL_COLOR]
 
 
@@ -65,7 +61,7 @@ TRAIT_GROUPS = {
     'pollen': [],
     'racemes': (
         FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
-    'seeds': [],
+    'seeds': SEED,
     'staminate corollas': (
         FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'staminate flowers': (

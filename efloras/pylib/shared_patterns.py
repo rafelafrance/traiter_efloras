@@ -1,7 +1,8 @@
 """Shared plant parser logic."""
 
 import regex
-from traiter.vocabulary import Vocabulary, FIRST, LOWEST
+from traiter.vocabulary import FIRST, LOWEST, Vocabulary
+
 from efloras.pylib import util
 
 VOCAB = Vocabulary()
@@ -108,6 +109,7 @@ VOCAB.term('sepal', 'sepals?')
 VOCAB.term('calyx', 'calyx | calyces')
 VOCAB.term('stamen', 'stamens?')
 VOCAB.term('anther', 'anthers?')
+VOCAB.term('seed', 'seeds?')
 VOCAB.term('style', 'styles?')
 VOCAB.term('stigma', 'stigmas?')
 VOCAB.term('petal', r' petals? ')
