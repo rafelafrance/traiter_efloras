@@ -1,14 +1,13 @@
 """Common color snippets."""
 
 from spacy.matcher import PhraseMatcher
-
 from .base import Base
 from .shared import SHARED_TERMS
 from ..pylib.trait import Trait
 
 COLOR_TERMS = {
     'COLOR': """
-        black blue brown 
+        black blue brown
         cream cream-yellow creamy crimson
         glaucous-pink gold golden golden-yellow gray gray-green green
         grey grey-green
@@ -25,7 +24,7 @@ COLOR_TERMS = {
         white
         yellow
         """.split(),
-    'LEADER': """
+    'COLOR_LEADER': """
         blackish blueish brownish
         grayish greenish greyish
         pinkish purpleish purplish
@@ -34,7 +33,7 @@ COLOR_TERMS = {
         whitish
         yellowish
         """.split(),
-    'FOLLOWER': """
+    'COLOR_FOLLOWER': """
         colored
         lined lines longitudinal
         mottled
@@ -106,7 +105,7 @@ class PlantColor(Base):
         if not matches:
             return []
 
-        matches = self.remove_overlapping(matches)
+        matches = self.first_longest(matches)
         colors = []
         prev_end, prev_label = -99, ''
 
@@ -127,24 +126,20 @@ class PlantColor(Base):
 
             if label == 'COLOR':
                 color = RENAME.get(norm, norm)
-                if prev_label == 'LEADER' and dist == 0:
-                    colors[-1] += f'-{color}'
-                elif (prev_label == 'COLOR' and dist == 1
-                      and doc[start-1].text in ('-',)):
+                if (prev_label == ('COLOR_LEADER', 'COLOR')
+                        and self.previous_token(dist, doc, start)):
                     colors[-1] += f'-{color}'
                 else:
                     colors.append(color)
 
-            elif label == 'LEADER':
+            elif label == 'COLOR_LEADER':
                 color = RENAME.get(norm, norm)
                 colors.append(color)
 
-            elif label == 'FOLLOWER':
-                if prev_label in ('COLOR', 'FOLLOWER') and dist == 0:
-                    colors[-1] += f'-{norm}'
-                elif (prev_label in ('COLOR', 'FOLLOWER') and dist == 1
-                      and doc[start-1].text in ('-',)):
-                    colors[-1] += f'-{norm}'
+            elif (label == 'COLOR_FOLLOWER'
+                    and prev_label in ('COLOR', 'COLOR_FOLLOWER')
+                    and self.previous_token(dist, doc, start)):
+                colors[-1] += f'-{norm}'
 
             prev_end, prev_label = end, label
 
@@ -157,4 +152,3 @@ class PlantColor(Base):
 
 
 PLANT_COLOR = PlantColor()
-

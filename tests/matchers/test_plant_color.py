@@ -1,4 +1,4 @@
-"""Test the plant color ruler."""
+"""Test the plant color matcher."""
 
 import unittest
 from efloras.pylib.trait import Trait
