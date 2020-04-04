@@ -9,23 +9,9 @@ import efloras.pylib.terms as terms
 class Base(Matcher):
     """Base matcher object."""
 
-    # def __init__(self, name):
-    #     super().__init__(name)
-
     def parse(self, text):
         """Parse the traits."""
         raise NotImplementedError
-
-    def previous_token(self, distance, doc, start):
-        """Look at the previous token with a possible dash in between."""
-        if distance == 0:
-            return True
-        return self.dash_token(distance, doc, start)
-
-    @staticmethod
-    def dash_token(distance, doc, start):
-        """Look at the previous token with a possible dash in between."""
-        return distance == 1 and doc[start - 1].text in ('-',)
 
     def term_phrases(self, attr='lower'):
         """Get terms specific for the matcher and shared terms."""
