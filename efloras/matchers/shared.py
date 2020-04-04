@@ -15,12 +15,12 @@ SHARED_TERMS = {
         flower flowers
         gynoecia gynoecium
         hair hairs hypanthia hypanthium
-        leaf leaflet leaves lobe lobes
+        leaf leaflet leaves :lobe lobes
         petal petals petiole petioles petiolule petiolules
         pistil pistils peduncle peduncles
         ovary ovaries ovule ovules
         raceme racemes
-        sepal sepals stamen stamens stigma stigmas stipule stipules 
+        sepal sepals stamen stamens stigma stigmas stipule stipules
         style styles
         """.split(),
     }

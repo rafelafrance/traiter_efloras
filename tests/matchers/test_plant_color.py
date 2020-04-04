@@ -51,6 +51,7 @@ class TestPlantColor(unittest.TestCase):
 
     def test_parse_05(self):
         """It handles pattern notations within colors."""
+        self.maxDiff = None
         self.assertEqual(
             PLANT_COLOR.parse(
                 'petals 5, distinct, white to cream, obovate to '
