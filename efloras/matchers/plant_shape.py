@@ -1,114 +1,129 @@
 """Parse the trait."""
-from spacy.matcher import PhraseMatcher
+import regex
+from spacy.matcher import Matcher
 
 from .base import Base
 from ..pylib.trait import Trait
-
-# SHAPE_TERMS = {
-#     'SHAPE': r"""
-#         acicular actinomorphic acuminate acute
-#         apiculate aristate attenuate auriculate
-#         bilabiate bilateral bilaterally bowlshaped
-#         calceolate campanulate caudate circular convex cordate coronate
-#         crateriform cruciform cuneate cupshaped cupulate cyanthiform
-#         cylindric cylindrical cymbiform
-#         deltate deltoid dentate depressed digitate
-#         elliptic elongate emarginate ensate ensiform
-#         falcate fenestrate filiform flabellate flabelliorm funnelform
-#         galeate globose
-#         hastate hemispheric
-#         incised infundibular irregular irregularly
-#         keeled
-#         labiate laciniate lanceolate ligulate liguliform linear lorate lyrate
-#         monosymmetric monosymmetrical mucronate multifid
-#         navicular
-#         obconic obcordate oblanceolate oblique oblong obovate obtriangular
-#         obtuse orbicular orbiculate orbicular ovate
-#         palmatifid palmatipartite palmatisect pandurate
-#         papilionaceous peltate pentagonal pentangular perfoliate
-#         perforate petiolate pinnate pinnately pinnatifid pinnatipartite
-#         pinnatisect plicate polygonal
-#         radially rectangular regular reniform retuse rhombic rhomboid
-#         rhomboidal rosette rosettes rotate rotund round rounded roundish
-#         saccate sagittate salverform saucerlike saucershaped semiterete
-#         septagonal sinuate spatulate spearshaped spheric stellate
-#         subcylindric ubcylindrical subobtuse suborbicular suborbiculate
-#         subpeltate subreniform subterete subulate symmetric
-#         terete triangular trullate truncate tubular turbinate
-#         undulate unifoliate urceolate
-#         zygomorphic zygomorphous
-#         """.split(),
-#     'NSHAPE': """ angular angulate """.split(),
-#     'PREFIX': """ semi sub elongate """.split(),
-#     }
-
-# LEAF_POLYGONAL = fr"""
-#     ( ( orbicular | angulate ) -? )?
-#     ( \b (\d-)? angular | \b (\d-)? angulate
-#         | pentagonal | pentangular | septagonal )
-#     ( -? ( orbicular | (\d-)? angulate ) )?
-#     """.split()
-
-RENAME = {
-    'actinomorphic': 'radially symmetric',
-    'angular-orbiculate': 'polygonal',
-    'bilateral': 'bilaterally symmetric',
-    'bowl-shaped': 'saucerlike',
-    'bowlshaped': 'saucerlike',
-    'crateriform': 'saucerlike',
-    'cupulate': 'cup-shaped',
-    'cyanthiform': 'saucerlike',
-    'deltate': 'deltoid',
-    'ensiform': 'linear',
-    'flabelliorm': 'flabellate',
-    'globose': 'spheric',
-    'irregular': 'bilaterally symmetric',
-    'irregularly': 'bilaterally symmetric',
-    'keeled': 'cymbiform',
-    'labiate': 'bilabiate',
-    'liguliform': 'ligulate',
-    'lorate': 'linear',
-    'monosymmetric': 'bilaterally symmetric',
-    'monosymmetrical': 'bilaterally symmetric',
-    'navicular': 'cymbiform',
-    'oblong-terete': 'oblong',
-    'palmately': 'palmate',
-    'pedately': 'pedate',
-    'rectangular': 'rhomboid',
-    'regular': 'radially symmetric',
-    'rhombic': 'rhomboic',
-    'saucer-shaped': 'saucerlike',
-    'saucershaped': 'saucerlike',
-    'subcylindric': 'cylindrical',
-    'subcylindrical': 'cylindrical',
-    'subreniform': 'reniform',
-    'zygomorphic': 'bilaterally symmetric',
-    'zygomorphous': 'bilaterally symmetric',
-    'circular': 'orbicular',
-    'orbiculate': 'orbicular',
-    'rotund': 'orbicular',
-    'round': 'orbicular',
-    'rounded': 'orbicular',
-    'roundish': 'orbicular',
-    'suborbicular': 'orbicular',
-    'suborbiculate': 'orbicular',
-    }
+from ..pylib.terms import replacements
 
 
 class PlantShape(Base):
     """Parse plant colors."""
 
+    term_matcher = {
+        'SHAPE': [[
+            {'IS_DIGIT': True},
+            {'TEXT': '-', 'OP': '?'},
+            {'LOWER': {'IN': ['angular', 'angulate']}},
+            ]],
+        }
+
+    trait_matchers = {
+        'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
+        'SHAPE_PHRASE': [
+            [{'_': {'term': 'SHAPE'}}],
+            [
+                {'_': {'term': {'IN': ['SHAPE', 'SHAPE_STARTER']}}},
+                {'POS': {'IN': ['ADP', 'PART']}},
+                {'_': {'term': {'IN': ['SHAPE', 'SHAPE_STARTER']}}},
+                {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
+            ], [
+                {'_': {'term': 'SHAPE_STARTER'}},
+                {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
+            ], [
+                {'_': {'term': 'SHAPE_STARTER'}, 'OP': '?'},
+                {'_': {'term': {
+                    'IN': ['SHAPE', 'SHAPE_STARTER', 'PART_LOCATION']}}},
+                {'TEXT': '-'},
+                {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
+            ]],
+        'LOBE': [
+            [
+                {'IS_DIGIT': True},
+                {'TEXT': '-', 'OP': '?'},
+                {'LOWER': {'IN': ['lobe', 'lobed']}},
+                ],
+            ]}
+
+    leaf_polygonal = regex.compile(r"""
+        ( ( orbicular | angulate ) -? )?
+        ( \b (\d-)? angular | \b (\d-)? angulate
+            | pen-?tagonal | pentangular | septagonal )
+        ( -? ( orbicular | (\d-)? angulate ) )?
+        """, regex.IGNORECASE | regex.VERBOSE)
+
     def __init__(self):
         super().__init__('plant_shape')
-        self.matcher = PhraseMatcher(self.nlp.vocab, attr='LOWER')
-        self.term_phrases()
+
+        matcher = Matcher(self.nlp.vocab)
+        _ = [matcher.add(k, v, on_match=self.term_label)
+             for k, v in self.term_matcher.items()]
+        self.term_matchers.append(matcher)
+        self.replace = replacements(self.name)
 
     def parse(self, text):
         """Parse the traits."""
         traits = []
-        trait = Trait()
-        traits.append(trait)
+
+        doc = self.find_terms(text)
+
+        # for token in doc:
+        #     print(token.text, token.pos_, token._.term)
+
+        if not (matches := self.get_trait_matches(doc)):
+            return []
+
+        shapes = set()
+        trait = Trait(start=len(text), end=0)
+        raw_start, raw_end = len(text), 0
+
+        for match_id, start, end in matches:
+            label = doc.vocab.strings[match_id]
+            span = doc[start:end]
+            norm = span.text.lower()
+            trait.end = max(trait.end, span.end_char)
+
+            if label == 'PLANT_PART':
+                self.append_trait(
+                    text, traits, trait, shapes, raw_start, raw_end)
+                raw_start, raw_end = len(text), 0
+                shapes = set()
+                trait = Trait(
+                    part=norm,
+                    start=span.start_char,
+                    end=span.end_char)
+
+            elif label == 'SHAPE_PHRASE':
+                raw_start = min(raw_start, span.start_char)
+                raw_end = max(raw_end, span.end_char)
+                shape = self.to_shape(span)
+                shapes.add(shape)
+
+        self.append_trait(
+            text, traits, trait, shapes, raw_start, raw_end)
+
         return traits
+
+    def to_shape(self, span):
+        """Convert the span text into a shape."""
+        words = {self.replacer(t.text): 1 for t in span
+                 if t._.term == 'SHAPE'}
+        return '-'.join(words.keys()) if words else ''
+
+    def replacer(self, word):
+        """Allow replace rules more complex than a dict lookup."""
+        word = self.replace.get(word, word)
+        word = self.leaf_polygonal.sub('polygonal', word)
+        return word
+
+    def append_trait(self, text, traits, trait, shapes, raw_start, raw_end):
+        """Append trait to the end of the traits list."""
+        shapes = [s for s in shapes if s]
+        if shapes:
+            trait.raw_value = text[raw_start:raw_end]
+            shapes = [self.replace.get(s, s) for s in shapes]
+            trait.value = sorted(shapes)
+            traits.append(trait)
 
 
 PLANT_SHAPE = PlantShape()

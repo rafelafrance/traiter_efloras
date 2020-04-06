@@ -1,19 +1,32 @@
 """Base matcher object."""
 
-from traiter.matcher import Matcher
+from spacy.matcher import Matcher, PhraseMatcher
+from traiter.matcher import Matcher as TraitMatcher
 
-import efloras.pylib.util as util
 import efloras.pylib.terms as terms
+from ..pylib.terms import replacements
 
 
-class Base(Matcher):
+class Base(TraitMatcher):
     """Base matcher object."""
+
+    trait_matchers = {}
+
+    def __init__(self, name):
+        super().__init__(name)
+        self.term_matchers.append(PhraseMatcher(self.nlp.vocab, attr='LOWER'))
+        self.literal_terms()
+        self.replace = replacements(self.name)
+
+        self.trait_matcher = Matcher(self.nlp.vocab)
+        _ = [self.trait_matcher.add(k, v) for
+             k, v in self.trait_matchers.items()]
 
     def parse(self, text):
         """Parse the traits."""
         raise NotImplementedError
 
-    def term_phrases(self, attr='lower'):
+    def literal_terms(self, attr='lower', index=0):
         """Get terms specific for the matcher and shared terms."""
         attr = attr.upper()
 
@@ -21,10 +34,33 @@ class Base(Matcher):
         for label, values in combined.items():
             patterns = [self.nlp.make_doc(t['term']) for t in values
                         if t['match_on'].upper() == attr]
-            self.term_matcher.add(label, self.term_label, *patterns)
+            self.term_matchers[index].add(label, self.term_label, *patterns)
 
-    def term_replace(self):
-        """Get terms specific for the matcher and shared terms."""
-        combined = {**terms.TERMS[self.name], **terms.TERMS['shared']}
-        combined = util.flatten(list(combined.values()))
-        return {t['term']: t['replace'] for t in combined if t['replace']}
+    def find_terms(self, text):
+        """Find all terms in the text and return the resulting doc.
+
+        There may be more than one matcher for the terms. Gather the results
+        for each one and combine them. Then retokenize the doc to handle terms
+        that span multiple tokens.
+        """
+        doc = self.nlp(text)
+
+        matches = []
+        for matcher in self.term_matchers:
+            matches += matcher(doc)
+        if not matches:
+            return []
+        matches = self.leftmost_longest(matches)
+
+        with doc.retokenize() as retokenizer:
+            for match_id, start, end in matches:
+                retokenizer.merge(doc[start:end])
+
+        return doc
+
+    def get_trait_matches(self, doc):
+        """Get the trait matches."""
+        matches = self.trait_matcher(doc)
+        if not matches:
+            return []
+        return self.leftmost_longest(matches)

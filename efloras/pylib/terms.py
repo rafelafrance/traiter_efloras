@@ -15,3 +15,10 @@ def all_terms():
 
 
 TERMS = all_terms()
+
+
+def replacements(name):
+    """Get replacement values for the terms."""
+    combined = {**TERMS[name], **TERMS['shared']}
+    combined = util.flatten(list(combined.values()))
+    return {t['term']: t['replace'] for t in combined if t['replace']}
