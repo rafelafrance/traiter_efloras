@@ -4,7 +4,7 @@ from spacy.matcher import Matcher
 
 from .base import Base
 from ..pylib.terms import replacements
-from ..pylib.trait import Trait
+from ..pylib.util import DotDict as Trait
 
 
 class PlantShape(Base):
@@ -18,6 +18,7 @@ class PlantShape(Base):
         ]],
     }
 
+    # TODO: Simplify the rules
     trait_matchers = {
         'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
         'SHAPE_PHRASE': [
@@ -33,8 +34,8 @@ class PlantShape(Base):
             ], [
                 {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
                 {'POS': {'IN': ['ADP', 'PART', 'CCONJ', 'PUNCT']}},
-                {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}},
-                 'OP': '?'},
+                {'_': {'term': {'IN': [
+                    'SHAPE_STARTER', 'PART_LOCATION']}}, 'OP': '?'},
                 {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
             ], [
                 {'_': {'term': 'SHAPE_STARTER'}, 'OP': '?'},

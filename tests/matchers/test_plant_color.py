@@ -1,7 +1,7 @@
 """Test the plant color matcher."""
 
 import unittest
-from efloras.pylib.trait import Trait
+from efloras.pylib.util import DotDict as Trait
 from efloras.matchers.plant_color import PLANT_COLOR
 
 

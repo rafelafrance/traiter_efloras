@@ -57,7 +57,7 @@ def set_size_values(trait, token):
     Update the size measurements with normalized values.
 
     There are typically several measurements (minimum, low, high, & maximum)
-    for each dimension (length & width). We normalize to millimeters.
+    for each dimension (length & width) normalized to millimeters.
     """
     length = token.group.get('units_length', '')
     width = token.group.get('units_width', '')
@@ -104,8 +104,7 @@ def parser(plant_part):
             catalog.producer(convert, f"""
                 {plant_part}_phrase noise (?: open? sex close? )? noise
                     (?: cross_upper | cross ) (?P<dimension> dim )? """),
-        ],
-    )
+        ])
 
 
 CALYX_SIZE = parser('calyx')

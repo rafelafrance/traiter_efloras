@@ -3,7 +3,7 @@
 import unittest
 
 from efloras.matchers.plant_shape import PLANT_SHAPE
-from efloras.pylib.trait import Trait
+from efloras.pylib.util import DotDict as Trait
 
 
 class TestPlantShape(unittest.TestCase):

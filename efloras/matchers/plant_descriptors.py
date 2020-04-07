@@ -1,7 +1,7 @@
 """Parse the trait."""
 
 from .base import Base
-from ..pylib.trait import Trait
+from ..pylib.util import DotDict as Trait
 
 
 class PlantDescriptor(Base):

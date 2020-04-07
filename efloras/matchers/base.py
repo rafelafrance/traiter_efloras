@@ -48,8 +48,6 @@ class Base(TraitMatcher):
         matches = []
         for matcher in self.term_matchers:
             matches += matcher(doc)
-        if not matches:
-            return []
         matches = self.leftmost_longest(matches)
 
         with doc.retokenize() as retokenizer:
