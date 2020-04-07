@@ -1,19 +1,18 @@
-"""Test the plant color trait parser."""
+"""Test the plant descriptor matcher."""
 
 import unittest
 
-from efloras.parsers.plant_descriptors import SEXUAL_DESCRIPTOR, \
-    SYMMETRY_DESCRIPTOR
+from efloras.matchers.plant_descriptors import PLANT_DESCRIPTOR
 from efloras.pylib.trait import Trait
 
 
-class TestPlantDescriptor(unittest.TestCase):
-    """Test the plant color trait parser."""
+class TestPlantShape(unittest.TestCase):
+    """Test the plant descriptor trait parser."""
 
     def test_parse_01(self):
         """It parses a compound sex notation."""
         self.assertEqual(
-            SEXUAL_DESCRIPTOR.parse(
+            PLANT_DESCRIPTOR.parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             [
@@ -26,7 +25,7 @@ class TestPlantDescriptor(unittest.TestCase):
     def test_parse_02(self):
         """It parses a compound sex notation."""
         self.assertEqual(
-            SYMMETRY_DESCRIPTOR.parse(
+            PLANT_DESCRIPTOR.parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),
             [
                 Trait(value='actinomorphic', start=16, end=29),
