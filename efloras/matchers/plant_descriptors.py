@@ -1,6 +1,5 @@
 """Parse the trait."""
 
-
 from .base import Base
 from ..pylib.trait import Trait
 
@@ -10,10 +9,7 @@ class PlantDescriptor(Base):
 
     def parse(self, text):
         """parse the traits."""
-        # trait = Trait(start=len(text), end=0)
-        # raw_start, raw_end = len(text), 0
-        sexual = []
-        symmetry = []
+        sexual, symmetry = [], []
 
         doc = self.find_terms(text)
 

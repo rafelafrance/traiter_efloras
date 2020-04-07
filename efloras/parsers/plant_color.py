@@ -79,7 +79,7 @@ RENAME = {
     'violetish': 'purple',
     'whitish': 'white',
     'yellowish': 'yellow',
-    }
+}
 
 
 def convert(token: Token) -> Any:
@@ -134,8 +134,8 @@ def parser(plant_part):
 
             catalog.producer(convert, f"""
                 (?P<part> {plant_part} ) (?P<value> color_phrase+ ) """),
-            ],
-        )
+        ],
+    )
 
 
 CAYLX_COLOR = parser('calyx')

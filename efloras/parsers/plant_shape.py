@@ -96,7 +96,7 @@ RENAME = {
     'subreniform': 'reniform',
     'zygomorphic': 'bilaterally symmetric',
     'zygomorphous': 'bilaterally symmetric',
-    }
+}
 
 
 def convert(token: Token) -> Any:
@@ -153,7 +153,7 @@ def parser(plant_part: str) -> Parser:
                     ( word | conj | prep | punct )*
                     (?P<value> shape_phrase )
                     """),
-            ])
+        ])
 
 
 CAYLX_SHAPE = parser('calyx')

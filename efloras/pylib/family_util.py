@@ -119,7 +119,7 @@ def search_families(args, families):
 
     for family in families.values():
         if (pattern.search(family['family'])
-            or pattern.search(family['flora_name'])):
+                or pattern.search(family['flora_name'])):
             print(template.format(
                 family['family'],
                 family['taxon_id'],

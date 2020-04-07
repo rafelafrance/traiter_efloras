@@ -74,7 +74,7 @@ TRAIT_GROUPS = {
     'tendrils': [],
     'vines': [],
     'x': [],
-    }
+}
 
 # A quick & dirty way to get the ALL traits into every trait group
 for value in TRAIT_GROUPS.values():

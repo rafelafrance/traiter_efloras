@@ -43,8 +43,8 @@ def parser(descriptor):
         name=f'{descriptor}',
         rules=[
             catalog.producer(convert, f""" (?P<value> {descriptor} ) """),
-            ],
-        )
+        ],
+    )
 
 
 SEXUAL_DESCRIPTOR = parser('sexual_descriptor')

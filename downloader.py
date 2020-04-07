@@ -53,10 +53,10 @@ def download(family_name, flora_id, taxon_id):
     for path in tree_dir.glob('*.html'):
         with open(path) as in_file:
             page = html.fromstring(in_file.read())
-        get_treatements(flora_id, family_name, page)
+        get_treatments(flora_id, family_name, page)
 
 
-def get_treatements(flora_id, family_name, page):
+def get_treatments(flora_id, family_name, page):
     """Get the treatment files in the tree."""
     treatement = regex.compile(
         r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
@@ -66,10 +66,10 @@ def get_treatements(flora_id, family_name, page):
         link = anchor[2]
         if match := treatement.match(link):
             taxon_id = match.group('taxon_id')
-            get_treatement(flora_id, family_name, taxon_id)
+            get_treatment(flora_id, family_name, taxon_id)
 
 
-def get_treatement(flora_id, family_name, taxon_id):
+def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
     path = futil.treatment_file(flora_id, family_name, taxon_id)
     url = ('http://www.efloras.org/florataxon.aspx'

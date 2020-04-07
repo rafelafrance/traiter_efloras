@@ -2,15 +2,14 @@
 
 """Use a custom ruler to parse efloras pages."""
 
-import sys
 import argparse
+import sys
 import textwrap
-import efloras.pylib.family_util as futil
-import efloras.matchers.all as rall
-from efloras.writers.html_writer import html_writer
-from efloras.writers.csv_writer import csv_writer
-from efloras.readers.efloras_ruler import efloras_ruler
 
+import efloras.pylib.family_util as futil
+from efloras.readers.efloras_ruler import efloras_ruler
+from efloras.writers.csv_writer import csv_writer
+from efloras.writers.html_writer import html_writer
 
 INPUT_FORMATS = {
     'efloras': efloras_ruler}

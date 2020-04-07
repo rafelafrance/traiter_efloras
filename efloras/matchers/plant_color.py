@@ -16,9 +16,9 @@ class PlantColor(Base):
                 {'_': {'term': 'COLOR'}},
                 {'TEXT': '-', 'OP': '?'},
                 {'_': {'term': 'COLOR_FOLLOWER'}, 'OP': '*'},
-                ],
+            ],
             [{'_': {'term': 'COLOR_LEADER'}}],
-            ]}
+        ]}
 
     def parse(self, text):
         """parse the traits."""
@@ -28,7 +28,7 @@ class PlantColor(Base):
         doc = self.find_terms(text)
         matches = self.get_trait_matches(doc)
 
-        colors = {}     # Sets do not preserve order
+        colors = {}  # Sets do not preserve order
 
         for match_id, start, end in matches:
             label = doc.vocab.strings[match_id]
