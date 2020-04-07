@@ -52,13 +52,7 @@ class PlantShape(Base):
                 {'POS': {'IN': ['ADP', 'PART', 'CCONJ', 'PUNCT']}},
                 {'_': {'term': {'IN': ['PART_LOCATION']}}},
             ]],
-        'LOBE': [
-            [
-                {'IS_DIGIT': True},
-                {'TEXT': '-', 'OP': '?'},
-                {'LOWER': {'IN': ['lobe', 'lobed', 'unlobed']}},
-            ],
-        ]}
+    }
 
     leaf_polygonal = regex.compile(r"""
         ( ( orbicular | angulate ) -? )?
@@ -82,8 +76,8 @@ class PlantShape(Base):
 
         doc = self.find_terms(text)
 
-        for token in doc:
-            print(token.text, token.pos_, token._.term)
+        # for token in doc:
+        #     print(token.text, token.pos_, token._.term)
 
         if not (matches := self.get_trait_matches(doc)):
             return []
