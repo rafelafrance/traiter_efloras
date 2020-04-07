@@ -101,7 +101,6 @@ def convert(token: Token) -> Any:
 
 def normalize(value: str) -> str:
     """Normalize the shape value."""
-    value = VOCAB['shape_starter'].regexp.sub('', value)
     value = value.strip(string.punctuation).lower()
 
     parts = []
