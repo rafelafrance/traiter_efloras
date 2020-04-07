@@ -28,7 +28,7 @@ class PlantColor(Base):
         doc = self.find_terms(text)
         matches = self.get_trait_matches(doc)
 
-        colors = set()
+        colors = {}     # Sets do not preserve order
 
         for match_id, start, end in matches:
             label = doc.vocab.strings[match_id]
@@ -45,10 +45,10 @@ class PlantColor(Base):
                 words = [self.replace.get(t.text, t.text)
                          for t in span if t.text != '-']
                 color = '-'.join(words)
-                colors.add(color)
+                colors[color] = 1
 
         trait.raw_value = text[raw_start:raw_end]
-        trait.value = sorted(colors)
+        trait.value = list(colors.keys())
         return [trait]
 
 

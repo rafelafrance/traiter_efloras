@@ -37,7 +37,7 @@ class TestPlantColor(unittest.TestCase):
                 'petals 5, connate 1/2-2/3 length, white, cream, '
                 'or pale green [orange to yellow], '),
             [Trait(start=0, end=79, part='petals',
-                   value=['green', 'orange', 'white', 'yellow'],
+                   value=['white', 'green', 'orange', 'yellow'],
                    raw_value='white, cream, or pale green '
                              '[orange to yellow')])
 
@@ -59,8 +59,8 @@ class TestPlantColor(unittest.TestCase):
                 'yellowish or pale brown, commonly mottled or with '
                 'light green or white longitudinal stripes'),
             [Trait(start=0, end=188, part='petals',
-                   value=['brown', 'green', 'green-yellow', 'white',
-                          'white-longitudinal-stripes', 'yellow'],
+                   value=['white', 'green-yellow', 'yellow', 'brown', 'green',
+                          'white-longitudinal-stripes'],
                    raw_value=(
                        'white to cream, obovate to oblong-obovate, '
                        '(15–)20–greenish yellow, maturing yellowish or '
@@ -75,8 +75,8 @@ class TestPlantColor(unittest.TestCase):
                 'or yellowish green, or yellowish, usually green-throated '
                 'and faintly green-lined,'),
             [Trait(start=0, end=132, part='petals',
-                   value=['green-lined', 'green-throated', 'green-white',
-                          'white', 'yellow', 'yellow-green'],
+                   value=['white', 'green-white', 'yellow-green', 'yellow',
+                          'green-throated', 'green-lined'],
                    raw_value='white to cream, greenish '
                              'white, or yellowish green, or yellowish, '
                              'usually green-throated and faintly '

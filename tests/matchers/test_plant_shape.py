@@ -6,7 +6,7 @@ from efloras.matchers.plant_shape import PLANT_SHAPE
 from efloras.pylib.trait import Trait
 
 
-class TestPlantColor(unittest.TestCase):
+class TestPlantShape(unittest.TestCase):
     """Test the plant color trait parser."""
 
     def test_parse_01(self):
@@ -37,7 +37,7 @@ class TestPlantColor(unittest.TestCase):
                 'Leaves ; blade ovate or orbiculate to '
                 'suborbiculate or reniform,'),
             [Trait(start=9, end=63, part='blade',
-                   value=['orbicular', 'ovate', 'reniform'],
+                   value=['ovate', 'orbicular', 'reniform'],
                    raw_value='ovate or orbiculate to '
                              'suborbiculate or reniform')])
 
@@ -48,8 +48,8 @@ class TestPlantColor(unittest.TestCase):
                 'Leaves: blade ovate or elongate-ovate to '
                 'lanceolate-ovate or ovate-triangular, '),
             [Trait(start=8, end=77, part='blade',
-                   value=['elongate-ovate', 'lanceolate-ovate',
-                          'ovate', 'ovate-triangular'],
+                   value=['ovate', 'elongate-ovate', 'lanceolate-ovate',
+                          'ovate-triangular'],
                    raw_value='ovate or elongate-ovate to '
                              'lanceolate-ovate or ovate-triangular')])
 
@@ -86,7 +86,7 @@ class TestPlantColor(unittest.TestCase):
                 'broadly ovate-cordate to triangular-cordate or reniform, '
                 'shallowly to deeply palmately '),
             [Trait(start=0, end=106, part='blade',
-                   value=['ovate-cordate', 'reniform', 'triangular-cordate'],
+                   value=['ovate-cordate', 'triangular-cordate', 'reniform'],
                    raw_value='broadly ovate-cordate to triangular-cordate '
                              'or reniform')])
 
@@ -124,7 +124,7 @@ class TestPlantColor(unittest.TestCase):
                 'blade lanceolate to narrowly or broadly lanceolate '
                 'or elliptic-lanceolate, '),
             [Trait(start=0, end=73, part='blade',
-                   value=['elliptic-lanceolate', 'lanceolate'],
+                   value=['lanceolate', 'elliptic-lanceolate'],
                    raw_value='lanceolate to narrowly or broadly lanceolate '
                              'or elliptic-lanceolate')])
 
@@ -135,7 +135,7 @@ class TestPlantColor(unittest.TestCase):
                 'blade broadly ovate to rounded-cordate, subreniform, '
                 'or deltate'),
             [Trait(start=0, end=63, part='blade',
-                   value=['deltoid', 'orbicular-cordate', 'ovate', 'reniform'
+                   value=['ovate', 'orbicular-cordate', 'reniform', 'deltoid'
                           ],
                    raw_value='broadly ovate to rounded-cordate, subreniform, '
                              'or deltate')])
@@ -157,7 +157,7 @@ class TestPlantColor(unittest.TestCase):
             [Trait(start=0, end=17, part='blade',
                    value=['polygonal'], raw_value='pen-tagonal')])
 
-    def off_test_parse_17(self):
+    def test_parse_17(self):
         """It gets the plant part location."""
         self.assertEqual(
             PLANT_SHAPE.parse(
@@ -168,84 +168,86 @@ class TestPlantColor(unittest.TestCase):
                    value=['rosettes'],
                    raw_value='basal rosettes, sometimes cauline')])
 
-    # def test_parse_18(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse('hypanthium cupulate'),
-    #         [Trait(start=0, end=19, part='hypanthium',
-    #                value=['cup-shaped'], raw_value='cupulate')])
-    #
-    # def test_parse_19(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse(
-    #             'hypanthium cupulate to shallowly campanulate;'),
-    #         [Trait(start=0, end=44, part='hypanthium',
-    #                value=['cup-shaped', 'campanulate'],
-    #                raw_value='cupulate to shallowly campanulate')])
-    #
-    # def test_parse_20(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse(
-    #             'hypanthium subcylindric to narrowly funnelform;'),
-    #         [Trait(start=0, end=46, part='hypanthium',
-    #                value=['cylindrical', 'funnelform'],
-    #                raw_value='subcylindric to narrowly funnelform')])
-    #
-    # def test_parse_21(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse(
-    #             'hypanthium narrowly campanulate to cylindric '
-    #             '[obtriangular];'),
-    #         [Trait(
-    #             start=0, end=58, part='hypanthium',
-    #             value=['campanulate', 'cylindric', 'obtriangular'],
-    #             raw_value='narrowly campanulate to cylindric [obtriangular')])
-    #
-    # def test_parse_22(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse('sepals linear-subulate, 3–5 mm; '),
-    #         [Trait(start=0, end=22, part='sepals',
-    #                value=['linear-subulate'],
-    #                raw_value='linear-subulate')])
-    #
-    # def test_parse_23(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse('sepals cylindrical, peltate, semiterete, '
-    #                           'subcylindrical, subpeltate, subterete, '
-    #                           'subulate, terete'),
-    #         [Trait(start=0, end=96, part='sepals',
-    #                value=['cylindrical', 'peltate', 'semiterete',
-    #                       'subpeltate', 'subterete',
-    #                       'subulate', 'terete'],
-    #                raw_value='cylindrical, peltate, semiterete, '
-    #                          'subcylindrical, subpeltate, subterete, '
-    #                          'subulate, terete')])
-    #
-    # def test_parse_24(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse(
-    #             'blade unlobed or palmately, pedately, or pinnately lobed'),
-    #         [])
-    #
-    # def test_parse_25(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse(
-    #             'Pistillate flowers: ovary usually 1-locular, ovoid to '
-    #             'elliptic-ovoid or subglobose'),
-    #         [])
-    #
-    # def test_parse_26(self):
-    #     """TODO."""
-    #     self.assertEqual(
-    #         PLANT_SHAPE.parse('Leaves in basal rosette and cauline'),
-    #         [Trait(start=0, end=35, part='leaves',
-    #                location=['basal', 'cauline'],
-    #                value=['rosette'],
-    #                raw_value='basal rosette and cauline')])
+    def test_parse_18(self):
+        """It parses other shapes."""
+        self.assertEqual(
+            PLANT_SHAPE.parse('hypanthium cupulate'),
+            [Trait(start=0, end=19, part='hypanthium',
+                   value=['cup-shaped'], raw_value='cupulate')])
+
+    def test_parse_19(self):
+        """It separates different shapes."""
+        self.assertEqual(
+            PLANT_SHAPE.parse(
+                'hypanthium cupulate to shallowly campanulate;'),
+            [Trait(start=0, end=44, part='hypanthium',
+                   value=['cup-shaped', 'campanulate'],
+                   raw_value='cupulate to shallowly campanulate')])
+
+    def test_parse_20(self):
+        """It separates different shapes."""
+        self.assertEqual(
+            PLANT_SHAPE.parse(
+                'hypanthium subcylindric to narrowly funnelform;'),
+            [Trait(start=0, end=46, part='hypanthium',
+                   value=['cylindrical', 'funnelform'],
+                   raw_value='subcylindric to narrowly funnelform')])
+
+    def test_parse_21(self):
+        """It separates different shapes."""
+        self.assertEqual(
+            PLANT_SHAPE.parse(
+                'hypanthium narrowly campanulate to cylindric '
+                '[obtriangular];'),
+            [Trait(
+                start=0, end=58, part='hypanthium',
+                value=['campanulate', 'cylindric', 'obtriangular'],
+                raw_value='narrowly campanulate to cylindric [obtriangular')])
+
+    def test_parse_22(self):
+        """It gets sepal shapes."""
+        self.assertEqual(
+            PLANT_SHAPE.parse('sepals linear-subulate, 3–5 mm; '),
+            [Trait(start=0, end=22, part='sepals',
+                   value=['linear-subulate'],
+                   raw_value='linear-subulate')])
+
+    def test_parse_23(self):
+        """It picks up many shape notations."""
+        self.assertEqual(
+            PLANT_SHAPE.parse('sepals cylindrical, peltate, semiterete, '
+                              'subcylindrical, subpeltate, subterete, '
+                              'subulate, terete'),
+            [Trait(start=0, end=96, part='sepals',
+                   value=['cylindrical', 'peltate', 'semiterete',
+                          'subpeltate', 'subterete',
+                          'subulate', 'terete'],
+                   raw_value='cylindrical, peltate, semiterete, '
+                             'subcylindrical, subpeltate, subterete, '
+                             'subulate, terete')])
+
+    def test_parse_24(self):
+        """It does not pick up a lobe notation."""
+        self.assertEqual(
+            PLANT_SHAPE.parse(
+                'blade unlobed or palmately, pedately, or pinnately lobed'),
+            [])
+
+    def test_parse_25(self):
+        """It gets an ovary shape."""
+        self.assertEqual(
+            PLANT_SHAPE.parse(
+                'Pistillate flowers: ovary usually 1-locular, ovoid to '
+                'elliptic-ovoid or subglobose'),
+            [Trait(start=20, end=68, part='ovary',
+                   value=['ovoid', 'elliptic-ovoid'],
+                   raw_value='ovoid to elliptic-ovoid')])
+
+    def test_parse_26(self):
+        """It gathers two locations."""
+        self.assertEqual(
+            PLANT_SHAPE.parse('Leaves in basal rosette and cauline'),
+            [Trait(start=0, end=35, part='leaves',
+                   location=['basal', 'cauline'],
+                   value=['rosette'],
+                   raw_value='basal rosette and cauline')])
