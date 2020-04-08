@@ -2,14 +2,14 @@
 
 import unittest
 
-from efloras.matchers.plant_descriptors import PLANT_DESCRIPTOR
 from efloras.pylib.util import DotDict as Trait
+from efloras.matchers.plant_descriptors import PLANT_DESCRIPTOR
 
 
 class TestPlantShape(unittest.TestCase):
     """Test the plant descriptor trait parser."""
 
-    def test_parse_01(self):
+    def test_plant_descriptor_01(self):
         """It parses a compound sex notation."""
         self.assertEqual(
             PLANT_DESCRIPTOR.parse(
@@ -22,7 +22,7 @@ class TestPlantShape(unittest.TestCase):
                 Trait(value='dioecious', start=66, end=75),
             ])
 
-    def test_parse_02(self):
+    def test_plant_descriptor_02(self):
         """It parses a compound sex notation."""
         self.assertEqual(
             PLANT_DESCRIPTOR.parse(

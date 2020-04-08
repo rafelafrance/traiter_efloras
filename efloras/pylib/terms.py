@@ -4,6 +4,14 @@ from collections import defaultdict
 import efloras.pylib.util as util
 
 
+OPEN = {'TEXT': {'REGEX': r'[(\[]'}}
+CLOSE = {'TEXT': {'REGEX': r'[)\]]'}}
+DASH = {'TEXT': {'REGEX': r'[\–\-]'}}
+CROSS = {'TEXT': {'REGEX': r'[x×]'}}
+FLOAT = {'LIKE_NUM': True}
+INT = {'TEXT': {'REGEX': r'\d+'}}
+
+
 def all_terms():
     """Read terms."""
     terms = defaultdict(lambda: defaultdict(list))

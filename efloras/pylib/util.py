@@ -67,7 +67,7 @@ def to_float(value):
         return None
 
 
-def to_pos_float(value):
+def to_positive_float(value):
     """Convert the value to a float."""
     value = regex.sub(r'[^\d.]', '', value) if value else ''
     try:

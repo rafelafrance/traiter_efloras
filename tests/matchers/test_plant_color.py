@@ -8,7 +8,7 @@ from efloras.matchers.plant_color import PLANT_COLOR
 class TestPlantColor(unittest.TestCase):
     """Test the plant color trait parser."""
 
-    def test_parse_01(self):
+    def test_plant_color_01(self):
         """It parses compound color notations."""
         self.assertEqual(
             PLANT_COLOR.parse(
@@ -19,7 +19,7 @@ class TestPlantColor(unittest.TestCase):
                    raw_value='green or greenish yellow, usually not '
                              'purple-spotted, rarely purple-spotted')])
 
-    def test_parse_02(self):
+    def test_plant_color_02(self):
         """It parses compound color words."""
         self.assertEqual(
             PLANT_COLOR.parse(
@@ -30,7 +30,7 @@ class TestPlantColor(unittest.TestCase):
                    raw_value='straw-colored to sulphur-yellow or '
                              'golden-yellow')])
 
-    def test_parse_03(self):
+    def test_plant_color_03(self):
         """It normalizes color notations."""
         self.assertEqual(
             PLANT_COLOR.parse(
@@ -41,7 +41,7 @@ class TestPlantColor(unittest.TestCase):
                    raw_value='white, cream, or pale green '
                              '[orange to yellow')])
 
-    def test_parse_04(self):
+    def test_plant_color_04(self):
         """It handles colors with trailing punctuation."""
         self.assertEqual(
             PLANT_COLOR.parse('sepals erect, green- or red-tipped'),
@@ -49,7 +49,7 @@ class TestPlantColor(unittest.TestCase):
                    value=['green', 'red-tipped'],
                    raw_value='green- or red-tipped')])
 
-    def test_parse_05(self):
+    def test_plant_color_05(self):
         """It handles pattern notations within colors."""
         self.maxDiff = None
         self.assertEqual(
@@ -67,7 +67,7 @@ class TestPlantColor(unittest.TestCase):
                        'pale brown, commonly mottled or with light green '
                        'or white longitudinal stripes'))])
 
-    def test_parse_06(self):
+    def test_plant_color_06(self):
         """It handles some odd pattern notations like 'throated'."""
         self.assertEqual(
             PLANT_COLOR.parse(
