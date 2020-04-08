@@ -121,7 +121,7 @@ class PlantSize(Base):
             # print(f'{label} {norm}')
 
             if action.get('save'):
-                self.save_trait(traits, trait)
+                self.append_trait(traits, trait)
                 old = trait
                 trait = Trait(start=-1)
                 if carry := action.get('carry'):
@@ -147,12 +147,12 @@ class PlantSize(Base):
 
         action = self.fsm[state].get('end', {})
         if action.get('save'):
-            self.save_trait(traits, trait)
+            self.append_trait(traits, trait)
 
         return traits
 
     @staticmethod
-    def save_trait(traits, trait):
+    def append_trait(traits, trait):
         """Check if a trait is valid, update & save it if it is."""
         # It must have a plant part
         if not trait.get('part'):

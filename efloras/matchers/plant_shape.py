@@ -5,6 +5,7 @@ from spacy.matcher import Matcher
 from .base import Base
 from ..pylib.terms import replacements
 from ..pylib.util import DotDict as Trait
+from ..pylib.terms import DASH
 
 
 class PlantShape(Base):
@@ -18,7 +19,6 @@ class PlantShape(Base):
         ]],
     }
 
-    # TODO: Simplify the rules
     trait_matchers = {
         'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
         'SHAPE_PHRASE': [
@@ -41,7 +41,7 @@ class PlantShape(Base):
                 {'_': {'term': 'SHAPE_STARTER'}, 'OP': '?'},
                 {'_': {'term': {
                     'IN': ['SHAPE', 'SHAPE_STARTER', 'PART_LOCATION']}}},
-                {'TEXT': '-'},
+                DASH,
                 {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
             ], [
                 {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
@@ -51,7 +51,7 @@ class PlantShape(Base):
                 {'_': {'term': {'IN': [
                     'SHAPE', 'SHAPE_STARTER', 'PART_LOCATION']}}},
                 {'POS': {'IN': ['ADP', 'PART', 'CCONJ', 'PUNCT']}},
-                {'_': {'term': {'IN': ['PART_LOCATION']}}},
+                {'_': {'term': 'PART_LOCATION'}},
             ]],
     }
 
@@ -76,12 +76,7 @@ class PlantShape(Base):
         traits = []
 
         doc = self.find_terms(text)
-
-        # for token in doc:
-        #     print(token.text, token.pos_, token._.term)
-
-        if not (matches := self.get_trait_matches(doc)):
-            return []
+        matches = self.get_trait_matches(doc)
 
         shapes, locations = {}, {}  # Sets do not preserve order
         trait = Trait(start=len(text), end=0)
@@ -104,7 +99,6 @@ class PlantShape(Base):
                     end=span.end_char)
 
             elif label == 'SHAPE_PHRASE':
-                # print(span.text)
                 raw_start = min(raw_start, span.start_char)
                 raw_end = max(raw_end, span.end_char)
                 shape = self.to_shape(span)

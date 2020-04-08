@@ -2,6 +2,7 @@
 
 from .base import Base
 from ..pylib.util import DotDict as Trait
+from ..pylib.terms import DASH_Q
 
 
 class PlantColor(Base):
@@ -12,9 +13,9 @@ class PlantColor(Base):
         'COLOR_PHRASE': [
             [
                 {'_': {'term': 'COLOR_LEADER'}, 'OP': '?'},
-                {'TEXT': '-', 'OP': '?'},
+                DASH_Q,
                 {'_': {'term': 'COLOR'}},
-                {'TEXT': '-', 'OP': '?'},
+                DASH_Q,
                 {'_': {'term': 'COLOR_FOLLOWER'}, 'OP': '*'},
             ],
             [{'_': {'term': 'COLOR_LEADER'}}],
