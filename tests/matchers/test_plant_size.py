@@ -1,4 +1,4 @@
-"""Test plant size trait parsers."""
+"""Test plant size trait matcher."""
 
 import unittest
 
@@ -208,7 +208,7 @@ class TestPlantSize(unittest.TestCase):
         """It gets sepal measurements with a sex notation."""
         self.assertEqual(
             PLANT_SIZE.parse('sepals (pistillate) linear, 6–7 mm;'),
-            [Trait(start=0, end=34,  units='mm',
+            [Trait(start=0, end=34, units='mm',
                    part='sepals', sex='pistillate',
                    low_length=6, high_length=7)])
 

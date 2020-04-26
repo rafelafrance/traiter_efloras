@@ -10,7 +10,7 @@ DASH = {'TEXT': {'REGEX': r'[\–\-]'}}
 DASH_Q = {'TEXT': {'REGEX': r'[\–\-]'}, 'OP': '?'}
 CROSS = {'TEXT': {'REGEX': r'[x×]'}}
 FLOAT = {'LIKE_NUM': True}
-INT = {'TEXT': {'REGEX': r'\d+'}}
+INT = {'TEXT': {'REGEX': r'^\d+$'}}
 
 
 def all_terms():

@@ -3,10 +3,10 @@
 import unittest
 
 from efloras.pylib.util import DotDict as Trait
-from efloras.matchers.plant_descriptors import PLANT_DESCRIPTOR
+from efloras.matchers.plant_descriptor import PLANT_DESCRIPTOR
 
 
-class TestPlantShape(unittest.TestCase):
+class TestPlantDescriptor(unittest.TestCase):
     """Test the plant descriptor trait parser."""
 
     def test_plant_descriptor_01(self):

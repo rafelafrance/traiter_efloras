@@ -77,8 +77,17 @@ def to_positive_float(value):
 
 
 def to_int(value):
-    """Convert value to an integer, handle 'no' or 'none' etc."""
+    """Convert the value to an integer."""
     value = regex.sub(r'[^\d-]', '', value) if value else ''
+    try:
+        return int(value)
+    except ValueError:
+        return 0
+
+
+def to_positive_int(value):
+    """Convert the value to an integer."""
+    value = regex.sub(r'[^\d]', '', value) if value else ''
     try:
         return int(value)
     except ValueError:
