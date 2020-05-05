@@ -1,11 +1,10 @@
 """Parse the trait."""
 
 from functools import reduce
-from .base import Base
-from ..pylib.util import DotDict as Trait
-from ..pylib.util import to_positive_int
-from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, STOP_PUNCT
 
+from .base import Base
+from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, STOP_PUNCT
+from ..pylib.util import DotDict as Trait, to_positive_int
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
 
@@ -55,8 +54,8 @@ class PlantCount(Base):
             'COUNT_LOW': {'set': 'low_count', 'int': True},
             'COUNT_HIGH': {'set': 'high_count', 'int': True},
             'COUNT_MAX': {'set': 'max_count', 'int': True},
-            'LENGTH_UNITS': {'reject': True, 'max_dist': 1},
             'PLANT_SEX': {'set': 'sex'},
+            'LENGTH_UNITS': {'reject': True, 'max_dist': 1},
             'STOP_PUNCT': {'save': True, 'state': 'start'},
             'end': {'save': True},
         },

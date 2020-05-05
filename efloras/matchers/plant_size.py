@@ -1,10 +1,9 @@
 """Parse the trait."""
 
 from .base import Base
-from ..pylib.util import DotDict as Trait
-from ..pylib.util import to_positive_float
 from ..pylib.convert_units import convert
 from ..pylib.terms import CLOSE, CROSS, DASH, FLOAT, OPEN
+from ..pylib.util import DotDict as Trait, to_positive_float
 
 
 class PlantSize(Base):

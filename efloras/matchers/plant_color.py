@@ -1,8 +1,8 @@
 """Common color snippets."""
 
 from .base import Base
-from ..pylib.util import DotDict as Trait
 from ..pylib.terms import DASH_Q
+from ..pylib.util import DotDict as Trait
 
 
 class PlantColor(Base):

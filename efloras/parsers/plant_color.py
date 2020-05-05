@@ -106,7 +106,7 @@ def normalize(value: str) -> str:
     parts = []
     has_color = False
     for part in regex.split(
-        rf'\s+ | {VOCAB["dash"].pattern}', value, flags=util.FLAGS):
+            rf'\s+ | {VOCAB["dash"].pattern}', value, flags=util.FLAGS):
         if VOCAB['color'].regexp.search(part):
             parts.append(RENAME.get(part, part))
             has_color = True

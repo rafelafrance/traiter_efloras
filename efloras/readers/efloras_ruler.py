@@ -2,11 +2,13 @@
 
 # import sys
 from collections import defaultdict
+
+import efloras.matchers.all as ar
 import pandas as pd
 from bs4 import BeautifulSoup
-import efloras.pylib.util as util
+
 import efloras.pylib.family_util as futil
-import efloras.matchers.all as ar
+import efloras.pylib.util as util
 
 
 def efloras_ruler(args, families):
@@ -26,7 +28,7 @@ def efloras_ruler(args, families):
 
 
 def parse_efloras_page(args, path, family):
-    """Parse the taxon treatement."""
+    """Parse the taxon treatment."""
     treatment = get_treatement(path)
     text = get_traits(treatment)
     taxon = ''  # get_taxon()

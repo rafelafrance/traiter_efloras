@@ -146,7 +146,7 @@ def parse_args(flora_ids):
     description = """Download data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         allow_abbrev=True,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        # formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 

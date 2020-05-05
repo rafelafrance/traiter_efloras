@@ -2,8 +2,8 @@
 
 import unittest
 
-from efloras.pylib.util import DotDict as Trait
 from efloras.matchers.plant_descriptor import PLANT_DESCRIPTOR
+from efloras.pylib.util import DotDict as Trait
 
 
 class TestPlantDescriptor(unittest.TestCase):

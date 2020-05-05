@@ -3,9 +3,8 @@ import regex
 from spacy.matcher import Matcher
 
 from .base import Base
-from ..pylib.terms import replacements
+from ..pylib.terms import DASH, replacements
 from ..pylib.util import DotDict as Trait
-from ..pylib.terms import DASH
 
 
 class PlantShape(Base):
