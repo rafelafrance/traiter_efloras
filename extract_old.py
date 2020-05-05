@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 
-"""Use a custom ruler to parse efloras pages."""
+"""Parse extracted efloras web pages."""
 
 import argparse
 import sys
 import textwrap
 
 import efloras.pylib.family_util as futil
-from efloras.readers.efloras_ruler import efloras_ruler
+import efloras.pylib.trait_groups as tg
+from efloras.readers.efloras_reader_old import efloras_reader
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
 
 INPUT_FORMATS = {
-    'efloras': efloras_ruler}
+    'efloras': efloras_reader}
 
 OUTPUT_FORMATS = {
     'csv': csv_writer,
@@ -28,20 +29,25 @@ def main(args):
         sys.exit()
 
     if args.list_traits:
-        for trait in rall.TRAIT_NAMES:
+        for trait in tg.TRAIT_NAMES:
             print(trait)
         sys.exit()
 
     if not futil.check_family_flora_ids(args, families):
         sys.exit(1)
 
-    if not (traits := rall.expand_traits(args)):
+    if not (traits := tg.expand_traits(args)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)
 
+    parse_traits(args, families)
+
+
+def parse_traits(args, families):
+    """Perform actions based on the arguments."""
     df = INPUT_FORMATS[args.input_format](args, families)
-    # OUTPUT_FORMATS[args.output_format](args, df)
+    OUTPUT_FORMATS[args.output_format](args, df)
 
 
 def parse_args():
@@ -49,7 +55,7 @@ def parse_args():
     description = """Parse data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         allow_abbrev=True,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        # formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 
