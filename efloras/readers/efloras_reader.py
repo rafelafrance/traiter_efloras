@@ -6,9 +6,9 @@ from collections import defaultdict
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from efloras.matchers.all import MATCHERS
 import efloras.pylib.family_util as futil
 import efloras.pylib.util as util
+from efloras.matchers.all import MATCHERS
 
 
 def efloras_ruler(args, families):

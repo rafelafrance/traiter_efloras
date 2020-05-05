@@ -7,6 +7,7 @@ import sys
 import textwrap
 
 import efloras.pylib.family_util as futil
+from efloras.matchers.all import MATCHERS
 from efloras.readers.efloras_reader import efloras_ruler
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
@@ -28,14 +29,14 @@ def main(args):
         sys.exit()
 
     if args.list_traits:
-        for trait in rall.TRAIT_NAMES:
+        for trait in MATCHERS.TRAIT_NAMES:
             print(trait)
         sys.exit()
 
     if not futil.check_family_flora_ids(args, families):
         sys.exit(1)
 
-    if not (traits := rall.expand_traits(args)):
+    if not (traits := MATCHERS.expand_traits(args)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)
@@ -49,7 +50,7 @@ def parse_args():
     description = """Parse data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         allow_abbrev=True,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        # formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 
@@ -92,9 +93,13 @@ def parse_args():
 
     if args.family:
         args.family = [f.lower() for f in args.family]
+    else:
+        args.family = []
 
     if args.flora_id:
         args.flora_id = [int(i) for i in args.flora_id]
+    else:
+        args.flora_id = [1]
 
     return args
 

@@ -3,6 +3,7 @@
 """Build and run a wget command."""
 
 import argparse
+from html import unescape
 import os
 import random
 import sys
@@ -11,12 +12,15 @@ import time
 import urllib.request
 
 import regex
+# import pandas as pd
+from bs4 import BeautifulSoup
 from lxml import html
 
+import efloras.pylib.util as util
 from efloras.pylib import family_util as futil
 
 # Don't hit the site too hard
-SLEEP_MID = 20
+SLEEP_MID = 15
 SLEEP_RADIUS = 5
 SLEEP_RANGE = (SLEEP_MID - SLEEP_RADIUS, SLEEP_MID + SLEEP_RADIUS)
 
@@ -31,6 +35,10 @@ def main(args, families, flora_ids):
         futil.search_families(args, families)
         sys.exit()
 
+    if args.update_families:
+        update_families()
+        sys.exit()
+
     for family in args.family:
         key = (family, args.flora_id)
         family_name = FAMILIES[key]['family']
@@ -43,6 +51,69 @@ def main(args, families, flora_ids):
         os.makedirs(dir_, exist_ok=True)
 
         download(family_name, args.flora_id, taxon_id)
+
+
+def update_families():
+    """Update the list of families for each flora ID."""
+    floras = get_floras()
+    # for flora in floras:
+    #     print(flora)
+    #     get_families(flora['flora_id'])
+
+    for flora in floras:
+        pattern = f'flora_id={flora["flora_id"]}_page=*'
+        families = []
+        for page in sorted(util.FAMILY_DIR.glob(pattern)):
+            print(page)
+
+
+def get_families(flora_id):
+    """Get the families for the flora."""
+    base_url = f'{futil.CITE}/browse.aspx?flora_id={flora_id}'
+    path = util.FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
+    urllib.request.urlretrieve(base_url, path)  # ##########################
+
+    with open(path) as in_file:
+        page = in_file.read()
+    soup = BeautifulSoup(page, features='lxml')
+    link_re = regex.compile(fr'browse.aspx\?flora_id={flora_id}&page=\d+')
+    page_re = regex.compile(r'page=(\d)')
+
+    pages = set()
+
+    for link in soup.findAll('a', attrs={'href': link_re}):
+        page_no = page_re.search(str(link))
+        page_no = int(page_no[1])
+        pages.add(page_no)
+
+    for page in pages:
+        url = base_url + f'&page={page}'
+        path = util.FAMILY_DIR / f'flora_id={flora_id}_page={page}.html'
+        urllib.request.urlretrieve(url, path)
+
+
+def get_floras():
+    """Get the floras from the main page."""
+    url = futil.CITE
+    path = util.FAMILY_DIR / 'home_page.html'
+    # urllib.request.urlretrieve(url, path)  # ###############################
+
+    with open(path) as in_file:
+        page = in_file.read()
+
+    floras = []
+
+    soup = BeautifulSoup(page, features='lxml')
+    floras_re = regex.compile(r'flora_page.aspx\?flora_id=(\d+)')
+
+    for link in soup.findAll('a', attrs={'href': floras_re}):
+        flora_id = floras_re.search(str(link))
+        floras.append({
+            'flora_id': int(flora_id[1]),
+            'flora_name': link.text,
+        })
+
+    return sorted(floras, key=lambda x: x['flora_id'])
 
 
 def download(family_name, flora_id, taxon_id):
@@ -72,7 +143,7 @@ def get_treatments(flora_id, family_name, page):
 def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
     path = futil.treatment_file(flora_id, family_name, taxon_id)
-    url = ('http://www.efloras.org/florataxon.aspx'
+    url = (f'{futil.CITE}/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
 
@@ -116,7 +187,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
 
     path = futil.tree_file(flora_id, family_name, taxon_id, page_no)
 
-    url = ('http://www.efloras.org/browse.aspx'
+    url = (f'{futil.CITE}/browse.aspx'
            f'?flora_id={flora_id}'
            f'&start_taxon_id={taxon_id}')
     if page_no > 1:
@@ -146,9 +217,12 @@ def parse_args(flora_ids):
     description = """Download data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         allow_abbrev=True,
-        # formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
+
+    arg_parser.add_argument(
+        '--update-families', '-u', action='store_true',
+        help="""Download the list of families for each flora ID.""")
 
     arg_parser.add_argument(
         '--family', '-f', action='append',

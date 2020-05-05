@@ -1,4 +1,5 @@
 beautifulsoup4>=4.9.0
+html5lib>=1.0.1
 inflect>=4.1.0
 Jinja2>=2.11.2
 lxml>=4.5.0

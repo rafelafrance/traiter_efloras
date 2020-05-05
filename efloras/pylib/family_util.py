@@ -8,6 +8,9 @@ import regex
 
 import efloras.pylib.util as util
 
+
+CITE = 'http://www.efloras.org/'
+
 EFLORAS_FAMILIES = util.DATA_DIR / 'eFloras_family_list.csv'
 
 FLORA_ID = 1
@@ -61,7 +64,9 @@ def get_families():
 
             times = {'created': '', 'modified': '', 'count': 0}
 
-            path = util.DATA_DIR / f"{family['family']}_{family['flora_id']}"
+            path = (util.EFLORAS_DIR
+                    / f"{family['family']}_{family['flora_id']}")
+
             if path.exists():
                 times['count'] = len(list(path.glob('**/*.html')))
                 if times['count']:
