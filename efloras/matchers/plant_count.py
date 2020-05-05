@@ -4,7 +4,7 @@ from functools import reduce
 from .base import Base
 from ..pylib.util import DotDict as Trait
 from ..pylib.util import to_positive_int
-from ..pylib.terms import CLOSE, DASH, INT, OPEN
+from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, STOP_PUNCT
 
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
@@ -15,21 +15,39 @@ class PlantCount(Base):
 
     trait_matchers = {
         'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
-        'COUNT_MIN': [[OPEN, INT, DASH, CLOSE]],
+        'COUNT_MIN': [
+            [OPEN, INT, DASH, CLOSE],
+            [OPEN, INT, DASH_LIKE, CLOSE],
+        ],
         'COUNT_LOW': [[INT]],
         'COUNT_HIGH': [
             [DASH, INT],
-            [{'LOWER': {'IN': ['or', 'to']}}, INT],
+            [DASH_LIKE, INT],
         ],
-        'COUNT_MAX': [[OPEN, DASH, INT, CLOSE]],
+        'COUNT_MAX': [
+            [OPEN, DASH, INT, CLOSE],
+            [OPEN, DASH_LIKE, INT, CLOSE],
+        ],
         'LENGTH_UNITS': [[{'_': {'term': 'LENGTH_UNITS'}}]],
-        # 'PLANT_SEX': [[{'_': {'term': 'PLANT_SEX'}}]],
+        'PLANT_SEX': [[{'_': {'term': 'PLANT_SEX'}}]],
+        'STOP_PUNCT': [[STOP_PUNCT]],
         # 'CONJUNCTION': [[{'POS': 'CCONJ'}]],
     }
 
     fsm = {
         'start': {
             'PLANT_PART': {'state': 'count', 'set': 'part'},
+            'PLANT_SEX': {'set': 'sex', 'state': 'plant_part'},
+        },
+        'plant_part': {
+            'PLANT_PART': {'state': 'count', 'set': 'part'},
+            'COUNT_MIN': {'state': 'start'},
+            'COUNT_LOW': {'state': 'start'},
+            'COUNT_HIGH': {'state': 'start'},
+            'COUNT_MAX': {'state': 'start'},
+            'STOP_PUNCT': {'state': 'start'},
+            'PLANT_SEX': {'state': 'plant_part', 'set': 'part'},
+            'LENGTH_UNITS': {'reject': True, 'max_dist': 1},
         },
         'count': {
             'PLANT_PART': {'state': 'count', 'save': True, 'set': 'part'},
@@ -38,8 +56,10 @@ class PlantCount(Base):
             'COUNT_HIGH': {'set': 'high_count', 'int': True},
             'COUNT_MAX': {'set': 'max_count', 'int': True},
             'LENGTH_UNITS': {'reject': True, 'max_dist': 1},
+            'PLANT_SEX': {'set': 'sex'},
+            'STOP_PUNCT': {'save': True, 'state': 'start'},
             'end': {'save': True},
-        }
+        },
     }
 
     def parse(self, text):
