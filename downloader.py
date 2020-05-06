@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-"""Build and run a wget command."""
+"""Download files from efloras."""
 
 import argparse
-from html import unescape
 import os
 import random
 import sys
@@ -12,7 +11,7 @@ import time
 import urllib.request
 
 import regex
-# import pandas as pd
+import pandas as pd
 from bs4 import BeautifulSoup
 from lxml import html
 
@@ -55,23 +54,45 @@ def main(args, families, flora_ids):
 
 def update_families():
     """Update the list of families for each flora ID."""
-    floras = get_floras()
-    # for flora in floras:
-    #     print(flora)
-    #     get_families(flora['flora_id'])
+    floras = download_floras()
+    for flora_id in floras.keys():
+        download_families(flora_id)
 
-    for flora in floras:
-        pattern = f'flora_id={flora["flora_id"]}_page=*'
-        families = []
-        for page in sorted(util.FAMILY_DIR.glob(pattern)):
-            print(page)
+    pattern = f'flora_id=*_page=*'
+    families = []
+
+    for path in util.FAMILY_DIR.glob(pattern):
+
+        with open(path) as in_file:
+            page = in_file.read()
+
+        soup = BeautifulSoup(page, features='lxml')
+
+        find_re = regex.compile(r'Accepted Name', flags=regex.IGNORECASE)
+        flora_re = regex.compile(r'flora_id=(\d+)')
+        taxon_re = regex.compile(r'taxon_id=(\d+)')
+
+        for link in soup.findAll('a', attrs={'title': find_re}):
+            href = link.attrs['href']
+            flora_id = int(flora_re.search(href)[1])
+            families.append({
+                'flora_id': flora_id,
+                'taxon_id': int(taxon_re.search(href)[1]),
+                'link': f'{futil.CITE}/{href}',
+                'family': link.text,
+                'flora_name': floras[flora_id],
+            })
+
+    df = pd.DataFrame(families)
+    df = df.sort_values(by=['flora_id', 'family'])
+    df.to_csv(futil.EFLORAS_FAMILIES, index=None)
 
 
-def get_families(flora_id):
+def download_families(flora_id):
     """Get the families for the flora."""
     base_url = f'{futil.CITE}/browse.aspx?flora_id={flora_id}'
     path = util.FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
-    urllib.request.urlretrieve(base_url, path)  # ##########################
+    urllib.request.urlretrieve(base_url, path)
 
     with open(path) as in_file:
         page = in_file.read()
@@ -92,28 +113,25 @@ def get_families(flora_id):
         urllib.request.urlretrieve(url, path)
 
 
-def get_floras():
+def download_floras():
     """Get the floras from the main page."""
     url = futil.CITE
     path = util.FAMILY_DIR / 'home_page.html'
-    # urllib.request.urlretrieve(url, path)  # ###############################
+    urllib.request.urlretrieve(url, path)
 
     with open(path) as in_file:
         page = in_file.read()
 
-    floras = []
+    floras = {}
 
     soup = BeautifulSoup(page, features='lxml')
-    floras_re = regex.compile(r'flora_page.aspx\?flora_id=(\d+)')
+    link_re = regex.compile(r'flora_page.aspx\?flora_id=(\d+)')
 
-    for link in soup.findAll('a', attrs={'href': floras_re}):
-        flora_id = floras_re.search(str(link))
-        floras.append({
-            'flora_id': int(flora_id[1]),
-            'flora_name': link.text,
-        })
+    for link in soup.findAll('a', attrs={'href': link_re}):
+        flora_id = int(link_re.search(str(link))[1])
+        floras[flora_id] = link.text
 
-    return sorted(floras, key=lambda x: x['flora_id'])
+    return floras
 
 
 def download(family_name, flora_id, taxon_id):
@@ -129,13 +147,13 @@ def download(family_name, flora_id, taxon_id):
 
 def get_treatments(flora_id, family_name, page):
     """Get the treatment files in the tree."""
-    treatement = regex.compile(
+    treatment = regex.compile(
         r'.*florataxon\.aspx\?flora_id=\d+&taxon_id=(?P<taxon_id>\d+)',
         regex.VERBOSE | regex.IGNORECASE)
 
     for anchor in page.iterlinks():
         link = anchor[2]
-        if match := treatement.match(link):
+        if match := treatment.match(link):
             taxon_id = match.group('taxon_id')
             get_treatment(flora_id, family_name, taxon_id)
 
