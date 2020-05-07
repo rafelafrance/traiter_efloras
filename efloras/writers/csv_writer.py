@@ -80,20 +80,20 @@ def merge_duplicates(args, df):
                         value = [{k: v for k, v in loc} for loc in value]
                     else:
                         value = util.flatten(value)
-                    new_row[f'{header}_{field}_{i}'] = util.squash(value)
+                    new_row[f'{header}_{i}_{field}'] = util.squash(value)
 
         new_data.append(new_row)
 
     # Build a dataframe and move some columns
     df = pd.DataFrame(new_data)
+    df = df.sort_index(axis=1)
 
-    column = df.pop('flora_name')
-    df.insert(0, 'flora_name', column)
+    for name in """ taxon_id taxon flora_id flora_name family """.split():
+        column = df.pop(name)
+        df.insert(0, name, column)
 
-    column = df.pop('text')
-    df.insert(len(df.columns), 'text', column)
-
-    column = df.pop('link')
-    df.insert(len(df.columns), 'link', column)
+    for name in """ text link """.split():
+        column = df.pop(name)
+        df.insert(len(df.columns), name, column)
 
     return df

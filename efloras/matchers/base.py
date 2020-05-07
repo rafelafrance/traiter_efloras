@@ -13,7 +13,7 @@ class Base(TraitMatcher):
     trait_matchers = {}
 
     def __init__(self, name):
-        super().__init__(name.split('_')[1])
+        super().__init__(name)
 
         self.title = name.replace('_', ' ').title()
         self.term_matchers.append(PhraseMatcher(self.nlp.vocab, attr='LOWER'))
