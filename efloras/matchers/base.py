@@ -13,7 +13,9 @@ class Base(TraitMatcher):
     trait_matchers = {}
 
     def __init__(self, name):
-        super().__init__(name)
+        super().__init__(name.split('_')[1])
+
+        self.title = name.replace('_', ' ').title()
         self.term_matchers.append(PhraseMatcher(self.nlp.vocab, attr='LOWER'))
         self.literal_terms()
         self.replace = replacements(self.name)

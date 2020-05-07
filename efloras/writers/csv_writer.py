@@ -12,8 +12,7 @@ def csv_writer(args, df):
     """Output the data frame."""
     # Split the family name/flora ID into separate columns
     flora_ids = futil.get_flora_ids()
-    df['flora_name'] = df['family'].apply(lambda f: flora_ids[f[1]])
-    df['family'] = df['family'].apply(lambda f: f[0])
+    df['flora_name'] = df['flora_id'].apply(lambda f: flora_ids[f])
 
     df = merge_duplicates(args, df)
     df.to_csv(args.output_file, index=False)
@@ -94,7 +93,7 @@ def merge_duplicates(args, df):
     column = df.pop('text')
     df.insert(len(df.columns), 'text', column)
 
-    column = df.pop('path')
-    df.insert(len(df.columns), 'path', column)
+    column = df.pop('link')
+    df.insert(len(df.columns), 'link', column)
 
     return df

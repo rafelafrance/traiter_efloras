@@ -68,16 +68,12 @@ def update_families():
 
         soup = BeautifulSoup(page, features='lxml')
 
-        find_re = regex.compile(r'Accepted Name', flags=regex.IGNORECASE)
-        flora_re = regex.compile(r'flora_id=(\d+)')
-        taxon_re = regex.compile(r'taxon_id=(\d+)')
-
-        for link in soup.findAll('a', attrs={'title': find_re}):
+        for link in soup.findAll('a', attrs={'title': futil.TAXON_RE}):
             href = link.attrs['href']
-            flora_id = int(flora_re.search(href)[1])
+            flora_id = futil.get_flora_id(href)
             families.append({
                 'flora_id': flora_id,
-                'taxon_id': int(taxon_re.search(href)[1]),
+                'taxon_id': futil.get_taxon_id(href),
                 'link': f'{futil.CITE}/{href}',
                 'family': link.text,
                 'flora_name': floras[flora_id],

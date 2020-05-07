@@ -10,12 +10,8 @@ import efloras.pylib.util as util
 
 
 CITE = 'http://www.efloras.org/'
-
 EFLORAS_FAMILIES = util.DATA_DIR / 'eFloras_family_list.csv'
-
-FLORA_ID = 1
-LINK = ('www.efloras.org/florataxon.aspx?'
-        rf'flora_id={FLORA_ID}&taxon_id=\1')
+TAXON_RE = regex.compile(r'Accepted Name', flags=regex.IGNORECASE)
 
 
 def family_dir(flora_id, family_name):
@@ -52,6 +48,20 @@ def treatment_file(flora_id, family_name, taxon_id, page_no=1):
     """Build the treatment directory name."""
     root = treatment_dir(flora_id, family_name)
     return root / taxon_file(taxon_id, page_no)
+
+
+def get_flora_id(href):
+    """Given a link or file name return a flora ID."""
+    href = str(href)
+    flora_id_re = regex.compile(r'flora_id[=_](\d+)')
+    return int(flora_id_re.search(href)[1])
+
+
+def get_taxon_id(href):
+    """Given a link or file name return a taxon ID."""
+    href = str(href)
+    taxon_id_re = regex.compile(r'taxon_id[=_](\d+)')
+    return int(taxon_id_re.search(href)[1])
 
 
 def get_families():
@@ -182,3 +192,9 @@ def check_family_flora_ids(args, families):
             print(f'Flora ID "{id_}" is not being used.')
 
     return ok
+
+
+def treatment_link(flora_id, taxon_id):
+    """Build a link to the treatment page."""
+    return (f'{CITE}/florataxon.aspx?'
+            rf'flora_id={flora_id}&taxon_id={taxon_id}')

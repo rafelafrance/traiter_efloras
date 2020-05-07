@@ -91,7 +91,6 @@ def get_efloras_page(path):
     return html.fromstring(page)
 
 
-# TODO: Move this logic to a new-style trait parser
 def get_taxon(page):
     """Get the taxon description."""
     taxon_id = 'lblTaxonDesc'

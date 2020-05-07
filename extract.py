@@ -7,13 +7,13 @@ import sys
 import textwrap
 
 import efloras.pylib.family_util as futil
-from efloras.matchers.all import MATCHERS
-from efloras.readers.efloras_reader import efloras_ruler
+import efloras.matchers.all as mall
+from efloras.readers.efloras_reader import efloras_matcher
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
 
 INPUT_FORMATS = {
-    'efloras': efloras_ruler}
+    'efloras': efloras_matcher}
 
 OUTPUT_FORMATS = {
     'csv': csv_writer,
@@ -29,20 +29,24 @@ def main(args):
         sys.exit()
 
     if args.list_traits:
-        for trait in MATCHERS.TRAIT_NAMES:
+        for trait in mall.all_traits():
             print(trait)
         sys.exit()
 
     if not futil.check_family_flora_ids(args, families):
         sys.exit(1)
 
-    if not (traits := MATCHERS.expand_traits(args)):
+    if not args.trait:
+        print('No traits selected.')
+        sys.exit(1)
+
+    if not (traits := mall.expand_traits(args)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)
 
     df = INPUT_FORMATS[args.input_format](args, families)
-    # OUTPUT_FORMATS[args.output_format](args, df)
+    OUTPUT_FORMATS[args.output_format](args, df)
 
 
 def parse_args():
@@ -50,7 +54,6 @@ def parse_args():
     description = """Parse data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         allow_abbrev=True,
-        # formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 
