@@ -2,12 +2,12 @@
 
 import regex
 
-from .plant_color import PLANT_COLOR
-from .plant_count import PLANT_COUNT
-from .plant_descriptor import PLANT_DESCRIPTOR
-from .plant_shape import PLANT_SHAPE
-from .plant_size import PLANT_SIZE
-from ..pylib.util import FLAGS
+from efloras.matchers.plant_color import PLANT_COLOR
+from efloras.matchers.plant_count import PLANT_COUNT
+from efloras.matchers.plant_descriptor import PLANT_DESCRIPTOR
+from efloras.matchers.plant_shape import PLANT_SHAPE
+from efloras.matchers.plant_size import PLANT_SIZE
+from efloras.pylib.util import FLAGS
 
 
 MATCHERS = {

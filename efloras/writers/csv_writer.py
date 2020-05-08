@@ -11,9 +11,6 @@ import efloras.pylib.util as util
 def csv_writer(args, df):
     """Output the data frame."""
     # Split the family name/flora ID into separate columns
-    flora_ids = futil.get_flora_ids()
-    df['flora_name'] = df['flora_id'].apply(lambda f: flora_ids[f])
-
     df = merge_duplicates(args, df)
     df.to_csv(args.output_file, index=False)
 

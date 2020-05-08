@@ -9,7 +9,7 @@ import regex
 import efloras.pylib.util as util
 
 
-CITE = 'http://www.efloras.org/'
+CITE = 'http://www.efloras.org'
 EFLORAS_FAMILIES = util.DATA_DIR / 'eFloras_family_list.csv'
 TAXON_RE = regex.compile(r'Accepted Name', flags=regex.IGNORECASE)
 

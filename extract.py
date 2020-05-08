@@ -7,7 +7,7 @@ import sys
 import textwrap
 
 import efloras.pylib.family_util as futil
-import efloras.matchers.all as mall
+import efloras.pylib.trait_matchers as mall
 from efloras.readers.efloras_reader import efloras_matcher
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
@@ -53,7 +53,6 @@ def parse_args():
     """Process command-line arguments."""
     description = """Parse data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
-        allow_abbrev=True,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 

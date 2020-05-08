@@ -9,7 +9,7 @@ from itertools import cycle
 from jinja2 import Environment, FileSystemLoader
 
 import efloras.pylib.family_util as futil
-import efloras.pylib.trait_groups as tg
+import efloras.pylib.trait_matchers as tm
 
 # CSS colors
 CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
@@ -21,13 +21,10 @@ Cut = namedtuple('Cut', 'pos open len id end type')
 def html_writer(args, df):
     """Output the data frame."""
     df = df.fillna('')
-    families = df['family'].unique()
 
-    pattern = re.compile(r'data/\w+/taxon_id_(\d+)\.html')
-    df['link'] = df['path'].str.replace(pattern, futil.LINK)
-    other_cols = [c for c in df.columns if c not in tg.TRAIT_NAMES]
+    other_cols = [c for c in df.columns if c not in tm.TRAITS]
 
-    trait_cols = sorted([c for c in df.columns if c in tg.TRAIT_NAMES])
+    trait_cols = sorted([c for c in df.columns if c in tm.TRAITS])
     df = df.reindex(other_cols + trait_cols, axis='columns')
 
     trait_cols = {f'{c}_data': c for c in trait_cols}
@@ -54,9 +51,6 @@ def html_writer(args, df):
 
     template = env.get_template('html_writer.html').render(
         now=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
-        args=args,
-        families=families,
-        flora_ids=futil.get_flora_ids(),
         headers=trait_headers,
         traits=trait_cols.values(),
         rows=rows)
@@ -112,7 +106,7 @@ def format_text(trait_cols, row, tags, colors):
             cut_id = append_endpoints(
                 cuts, cut_id, trait.start, trait.end, colors[col])
 
-    for trait in tg.TRAIT_GROUPS_RE.finditer(text):
+    for trait in tm.ATOMIZER.finditer(text):
         cut_id = append_endpoints(
             cuts, cut_id, trait.start(), trait.end(), 'bold')
 

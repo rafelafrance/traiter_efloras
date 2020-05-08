@@ -104,8 +104,6 @@ class PlantSize(Base):
         doc = self.find_terms(text)
         matches = self.get_trait_matches(doc)
 
-        # print('\n'.join([f'{t.text} {t.pos_} {t._.term}' for t in doc]))
-
         trait = Trait(start=-1)
         state = 'start'
         prev_end, max_dist = 0, len(doc)
@@ -116,8 +114,6 @@ class PlantSize(Base):
             norm = span.text.lower()
 
             action = self.fsm[state].get(label, {})
-
-            # print(f'{label} {norm}')
 
             if action.get('save'):
                 self.append_trait(traits, trait)

@@ -254,3 +254,13 @@ class TestPlantSize(unittest.TestCase):
                              'ca. 0.6 × 0.3-0.5 mm, wingless;'),
             [Trait(start=0, end=65, part='seeds', units='mm',
                    low_length=0.6, low_width=0.3, high_width=0.5)])
+
+    def test_plant_size_31(self):
+        """It does not pick up trailing adjective."""
+        self.assertEqual(
+            PLANT_SIZE.parse(
+                'Leaves spreading, keeled, pellucid when moist, slightly '
+                'contorted when dry, variable in size and shape, 1-3 mm, '
+                'proximal'),
+            [Trait(start=0, end=110, part='leaves', units='mm',
+                   low_length=1.0, high_length=3.0)])

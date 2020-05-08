@@ -4,14 +4,14 @@ from collections import defaultdict
 import efloras.pylib.util as util
 
 
-OPEN = {'TEXT': {'REGEX': r'[(\[]'}}
-CLOSE = {'TEXT': {'REGEX': r'[)\]]'}}
-DASH = {'TEXT': {'REGEX': r'[\–\-]'}}
-DASH_Q = {'TEXT': {'REGEX': r'[\–\-]'}, 'OP': '?'}
-CROSS = {'TEXT': {'REGEX': r'[x×]'}}
+OPEN = {'TEXT': {'REGEX': r'^[(\[]$'}}
+CLOSE = {'TEXT': {'REGEX': r'^[)\]]$'}}
+DASH = {'TEXT': {'REGEX': r'^[\–\-]$'}}
+DASH_Q = {'TEXT': {'REGEX': r'^[\–\-]$'}, 'OP': '?'}
+CROSS = {'TEXT': {'REGEX': r'^[x×]$'}}
 FLOAT = {'LIKE_NUM': True}
 INT = {'TEXT': {'REGEX': r'^\d+$'}}
-STOP_PUNCT = {'TEXT': {'REGEX': r'[,;.]'}}
+STOP_PUNCT = {'TEXT': {'REGEX': r'^[,;.]$'}}
 DASH_LIKE = {'LOWER': {'IN': ['or', 'to']}}
 
 
