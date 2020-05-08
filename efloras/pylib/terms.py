@@ -1,6 +1,7 @@
 """Utilities for working with terms."""
 import csv
 from collections import defaultdict
+
 import efloras.pylib.util as util
 
 

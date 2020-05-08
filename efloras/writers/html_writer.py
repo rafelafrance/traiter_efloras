@@ -1,14 +1,12 @@
 """Write output to an HTML file."""
 
 import html
-import re
 from collections import deque, namedtuple
 from datetime import datetime
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-import efloras.pylib.family_util as futil
 import efloras.pylib.trait_matchers as tm
 
 # CSS colors

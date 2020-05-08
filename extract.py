@@ -7,7 +7,7 @@ import sys
 import textwrap
 
 import efloras.pylib.family_util as futil
-import efloras.pylib.trait_matchers as mall
+import efloras.pylib.trait_matchers as tm
 from efloras.readers.efloras_reader import efloras_matcher
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
@@ -29,8 +29,12 @@ def main(args):
         sys.exit()
 
     if args.list_traits:
-        for trait in mall.all_traits():
+        for trait in tm.all_traits():
             print(trait)
+        sys.exit()
+
+    if args.list_terms:
+        tm.list_terms(args.list_terms)
         sys.exit()
 
     if not futil.check_family_flora_ids(args, families):
@@ -40,7 +44,7 @@ def main(args):
         print('No traits selected.')
         sys.exit(1)
 
-    if not (traits := mall.expand_traits(args)):
+    if not (traits := tm.expand_traits(args)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)
@@ -90,6 +94,12 @@ def parse_args():
     arg_parser.add_argument(
         '--list-traits', '-T', action='store_true',
         help="""List traits available to extract and exit.""")
+
+    arg_parser.add_argument(
+        '--list-terms', '-L',
+        help="""List terms for a trait and exit. To see what phrases form the
+            basis of the trait. Depending on the type of trait (for example
+            size traits) there may not be any terms.""")
 
     args = arg_parser.parse_args()
 

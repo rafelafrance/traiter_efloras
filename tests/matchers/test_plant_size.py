@@ -256,7 +256,7 @@ class TestPlantSize(unittest.TestCase):
                    low_length=0.6, low_width=0.3, high_width=0.5)])
 
     def test_plant_size_31(self):
-        """It does not pick up trailing adjective."""
+        """It does not pick up trailing word with an 'x' in it."""
         self.assertEqual(
             PLANT_SIZE.parse(
                 'Leaves spreading, keeled, pellucid when moist, slightly '
