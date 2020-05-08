@@ -3,7 +3,7 @@
 from functools import reduce
 
 from .base import Base
-from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, STOP_PUNCT
+from ..pylib.terms import CLOSE, DASH, DASH_LIKE, POS_INT, OPEN, STOP_PUNCT
 from ..pylib.util import DotDict as Trait, to_positive_int
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
@@ -15,17 +15,17 @@ class PlantCount(Base):
     trait_matchers = {
         'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
         'COUNT_MIN': [
-            [OPEN, INT, DASH, CLOSE],
-            [OPEN, INT, DASH_LIKE, CLOSE],
+            [OPEN, POS_INT, DASH, CLOSE],
+            [OPEN, POS_INT, DASH_LIKE, CLOSE],
         ],
-        'COUNT_LOW': [[INT]],
+        'COUNT_LOW': [[POS_INT]],
         'COUNT_HIGH': [
-            [DASH, INT],
-            [DASH_LIKE, INT],
+            [DASH, POS_INT],
+            [DASH_LIKE, POS_INT],
         ],
         'COUNT_MAX': [
-            [OPEN, DASH, INT, CLOSE],
-            [OPEN, DASH_LIKE, INT, CLOSE],
+            [OPEN, DASH, POS_INT, CLOSE],
+            [OPEN, DASH_LIKE, POS_INT, CLOSE],
         ],
         'LENGTH_UNITS': [[{'_': {'term': 'LENGTH_UNITS'}}]],
         'PLANT_SEX': [[{'_': {'term': 'PLANT_SEX'}}]],

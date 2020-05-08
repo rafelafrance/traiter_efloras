@@ -10,7 +10,7 @@ DASH = {'TEXT': {'REGEX': r'^[\–\-]$'}}
 DASH_Q = {'TEXT': {'REGEX': r'^[\–\-]$'}, 'OP': '?'}
 CROSS = {'TEXT': {'REGEX': r'^[x×]$'}}
 FLOAT = {'LIKE_NUM': True}
-INT = {'TEXT': {'REGEX': r'^\d+$'}}
+POS_INT = {'TEXT': {'REGEX': r'^\d+$'}}
 STOP_PUNCT = {'TEXT': {'REGEX': r'^[,;.]$'}}
 DASH_LIKE = {'LOWER': {'IN': ['or', 'to']}}
 
