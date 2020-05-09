@@ -230,7 +230,6 @@ def parse_args(flora_ids):
     """Process command-line arguments."""
     description = """Download data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
-        allow_abbrev=True,
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 
@@ -269,7 +268,13 @@ def parse_args(flora_ids):
 
 
 if __name__ == "__main__":
+    ERROR_SLEEP = 120
     FAMILIES = futil.get_families()
     FLORA_IDS = futil.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
-    main(ARGS, FAMILIES, FLORA_IDS)
+    for _ in range(10):
+        try:
+            main(ARGS, FAMILIES, FLORA_IDS)
+            break
+        except TimeoutError:
+            time.sleep(ERROR_SLEEP)
