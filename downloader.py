@@ -269,12 +269,17 @@ def parse_args(flora_ids):
 
 if __name__ == "__main__":
     ERROR_SLEEP = 120
+    ERROR_RETRY = 10
+
     FAMILIES = futil.get_families()
     FLORA_IDS = futil.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
-    for _ in range(10):
+
+    for attempt in range(ERROR_RETRY):
+        print(f'Attempt {attempt + 1}')
         try:
             main(ARGS, FAMILIES, FLORA_IDS)
             break
         except TimeoutError:
+            print('Waiting for next attempt')
             time.sleep(ERROR_SLEEP)
