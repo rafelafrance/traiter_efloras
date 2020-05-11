@@ -5,6 +5,7 @@
 import argparse
 import os
 import random
+import socket
 import sys
 import textwrap
 import time
@@ -22,6 +23,14 @@ from efloras.pylib import family_util as futil
 SLEEP_MID = 15
 SLEEP_RADIUS = 5
 SLEEP_RANGE = (SLEEP_MID - SLEEP_RADIUS, SLEEP_MID + SLEEP_RADIUS)
+
+# Make a few attempts to download a page
+ERROR_SLEEP = 120
+ERROR_RETRY = 10
+
+# Set a timeout for requests
+TIMEOUT = 30
+socket.setdefaulttimeout(TIMEOUT)
 
 
 def main(args, families, flora_ids):
@@ -170,7 +179,6 @@ def get_treatment(flora_id, family_name, taxon_id):
 
 def family_tree(family_name, flora_id, taxon_id, parents):
     """Get to the pages via the family links."""
-    # http://www.efloras.org/browse.aspx?flora_id=1&page=2
     page_link = regex.compile(
         (r'browse\.aspx\?flora_id=\d+'
          r'&start_taxon_id=(?P<taxon_id>\d+)'
@@ -226,6 +234,22 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
     return page
 
 
+def download_page(url, path):
+    """Download a page if it does not exist."""
+    if path.exists():
+        return
+
+    for attempt in range(ERROR_RETRY):
+        if attempt:
+            print(f'Attempt {attempt + 1}')
+        try:
+            urllib.request.urlretrieve(url, path)
+            time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+            break
+        except TimeoutError:
+            pass
+
+
 def parse_args(flora_ids):
     """Process command-line arguments."""
     description = """Download data from the eFloras website."""
@@ -268,18 +292,7 @@ def parse_args(flora_ids):
 
 
 if __name__ == "__main__":
-    ERROR_SLEEP = 120
-    ERROR_RETRY = 10
-
     FAMILIES = futil.get_families()
     FLORA_IDS = futil.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
-
-    for attempt in range(ERROR_RETRY):
-        print(f'Attempt {attempt + 1}')
-        try:
-            main(ARGS, FAMILIES, FLORA_IDS)
-            break
-        except TimeoutError:
-            print('Waiting for next attempt')
-            time.sleep(ERROR_SLEEP)
+    main(ARGS, FAMILIES, FLORA_IDS)
