@@ -66,7 +66,8 @@ def parse_args():
 
     arg_parser.add_argument(
         '--trait', '-t', action='append',
-        help="""The traits to extract.""")
+        help="""The traits to extract. You may use '*' and '?' wildcards for
+            matching multiple traits.""")
 
     flora_ids = futil.get_flora_ids()
     arg_parser.add_argument(
