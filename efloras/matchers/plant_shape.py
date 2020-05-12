@@ -11,7 +11,7 @@ class PlantShape(Base):
     """Parse plant colors."""
 
     term_matcher = {
-        'SHAPE': [[
+        'shape': [[
             {'IS_DIGIT': True},
             {'TEXT': '-', 'OP': '?'},
             {'LOWER': {'IN': ['angular', 'angulate']}},
@@ -19,38 +19,38 @@ class PlantShape(Base):
     }
 
     trait_matchers = {
-        'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
-        'SHAPE_PHRASE': [
-            [{'_': {'term': 'SHAPE'}}],
+        'plant_part': [[{'_': {'term': 'plant_part'}}]],
+        'shape_phrase': [
+            [{'_': {'term': 'shape'}}],
             [
-                {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
+                {'_': {'term': {'IN': ['shape_starter', 'part_location']}}},
                 {'POS': {'IN': ['PUNCT']}},
-                {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
+                {'_': {'term': {'IN': ['shape_starter', 'part_location']}}},
                 {'POS': {'IN': ['PUNCT']}},
                 {'POS': {'IN': ['ADP', 'PART', 'CCONJ', ]}},
                 {'_': {'term': {'IN': [
-                    'SHAPE', 'SHAPE_STARTER', 'PART_LOCATION']}}},
+                    'shape', 'shape_starter', 'part_location']}}},
             ], [
-                {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
+                {'_': {'term': {'IN': ['shape_starter', 'part_location']}}},
                 {'POS': {'IN': ['ADP', 'PART', 'CCONJ', 'PUNCT']}},
                 {'_': {'term': {'IN': [
-                    'SHAPE_STARTER', 'PART_LOCATION']}}, 'OP': '?'},
-                {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
+                    'shape_starter', 'part_location']}}, 'OP': '?'},
+                {'_': {'term': {'IN': ['shape', 'part_location']}}},
             ], [
-                {'_': {'term': 'SHAPE_STARTER'}, 'OP': '?'},
+                {'_': {'term': 'shape_starter'}, 'OP': '?'},
                 {'_': {'term': {
-                    'IN': ['SHAPE', 'SHAPE_STARTER', 'PART_LOCATION']}}},
+                    'IN': ['shape', 'shape_starter', 'part_location']}}},
                 DASH,
-                {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
+                {'_': {'term': {'IN': ['shape', 'part_location']}}},
             ], [
-                {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
-                {'_': {'term': {'IN': ['SHAPE', 'PART_LOCATION']}}},
+                {'_': {'term': {'IN': ['shape_starter', 'part_location']}}},
+                {'_': {'term': {'IN': ['shape', 'part_location']}}},
             ], [
-                {'_': {'term': {'IN': ['SHAPE_STARTER', 'PART_LOCATION']}}},
+                {'_': {'term': {'IN': ['shape_starter', 'part_location']}}},
                 {'_': {'term': {'IN': [
-                    'SHAPE', 'SHAPE_STARTER', 'PART_LOCATION']}}},
+                    'shape', 'shape_starter', 'part_location']}}},
                 {'POS': {'IN': ['ADP', 'PART', 'CCONJ', 'PUNCT']}},
-                {'_': {'term': 'PART_LOCATION'}},
+                {'_': {'term': 'part_location'}},
             ]],
     }
 
@@ -87,7 +87,7 @@ class PlantShape(Base):
             norm = span.text.lower()
             trait.end = max(trait.end, span.end_char)
 
-            if label == 'PLANT_PART':
+            if label == 'plant_part':
                 self.append_trait(
                     text, traits, trait, shapes, locations, raw_start, raw_end)
                 raw_start, raw_end = len(text), 0
@@ -97,7 +97,7 @@ class PlantShape(Base):
                     start=span.start_char,
                     end=span.end_char)
 
-            elif label == 'SHAPE_PHRASE':
+            elif label == 'shape_phrase':
                 raw_start = min(raw_start, span.start_char)
                 raw_end = max(raw_end, span.end_char)
                 shape = self.to_shape(span)
@@ -112,13 +112,13 @@ class PlantShape(Base):
     def to_shape(self, span):
         """Convert the span text into a shape."""
         words = {self.replacer(t.text): 1 for t in span
-                 if t._.term == 'SHAPE'}
+                 if t._.term == 'shape'}
         return '-'.join(words.keys()) if words else ''
 
     def to_location(self, span):
         """Convert the span text into a location."""
         words = {self.replacer(t.text): 1 for t in span
-                 if t._.term == 'PART_LOCATION'}
+                 if t._.term == 'part_location'}
         return words
 
     def replacer(self, word):

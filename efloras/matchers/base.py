@@ -16,6 +16,7 @@ class Base(TraitMatcher):
         super().__init__(name)
 
         self.title = name.replace('_', ' ').title()
+
         self.term_matchers.append(PhraseMatcher(self.nlp.vocab, attr='LOWER'))
         self.literal_terms()
         self.replace = replacements(self.name)
@@ -56,6 +57,8 @@ class Base(TraitMatcher):
             for match_id, start, end in matches:
                 retokenizer.merge(doc[start:end])
 
+        # for token in doc:
+        #     print(f'[{token._.term}] {token.text}')
         return doc
 
     def get_trait_matches(self, doc):

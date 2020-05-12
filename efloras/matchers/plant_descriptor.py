@@ -16,13 +16,13 @@ class PlantDescriptor(Base):
         for token in doc:
             label = token._.term
 
-            if label == 'SEXUAL_DESCRIPTOR':
+            if label == 'sexual_descriptor':
                 sexual.append(Trait(
                     value=token.text.lower(),
                     start=token.idx,
                     end=token.idx + len(token)
                 ))
-            elif label == 'SYMMETRY_DESCRIPTOR':
+            elif label == 'symmetry_descriptor':
                 symmetry.append(Trait(
                     value=token.text.lower(),
                     start=token.idx,

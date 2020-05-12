@@ -3,7 +3,7 @@
 from functools import reduce
 
 from .base import Base
-from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT_N, OPEN, STOP_PUNCT
+from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, STOP_PUNCT
 from ..pylib.util import DotDict as Trait, to_positive_int
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
@@ -13,50 +13,50 @@ class PlantCount(Base):
     """Parse plant count notations."""
 
     trait_matchers = {
-        'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
-        'COUNT_MIN': [
-            [OPEN, INT_N, DASH, CLOSE],
-            [OPEN, INT_N, DASH_LIKE, CLOSE],
+        'plant_part': [[{'_': {'term': 'plant_part'}}]],
+        'count_min': [
+            [OPEN, INT, DASH, CLOSE],
+            [OPEN, INT, DASH_LIKE, CLOSE],
         ],
-        'COUNT_LOW': [[INT_N]],
-        'COUNT_HIGH': [
-            [DASH, INT_N],
-            [DASH_LIKE, INT_N],
+        'count_low': [[INT]],
+        'count_high': [
+            [DASH, INT],
+            [DASH_LIKE, INT],
         ],
-        'COUNT_MAX': [
-            [OPEN, DASH, INT_N, CLOSE],
-            [OPEN, DASH_LIKE, INT_N, CLOSE],
+        'count_max': [
+            [OPEN, DASH, INT, CLOSE],
+            [OPEN, DASH_LIKE, INT, CLOSE],
         ],
-        'LENGTH_UNITS': [[{'_': {'term': 'LENGTH_UNITS'}}]],
-        'PLANT_SEX': [[{'_': {'term': 'PLANT_SEX'}}]],
-        'STOP_PUNCT': [[STOP_PUNCT]],
+        'length_units': [[{'_': {'term': 'length_units'}}]],
+        'plant_sex': [[{'_': {'term': 'plant_sex'}}]],
+        'stop_punct': [[STOP_PUNCT]],
         # 'CONJUNCTION': [[{'POS': 'CCONJ'}]],
     }
 
     fsm = {
         'start': {
-            'PLANT_PART': {'state': 'count', 'set': 'part'},
-            'PLANT_SEX': {'set': 'sex', 'state': 'plant_part'},
+            'plant_part': {'state': 'count', 'set': 'part'},
+            'plant_sex': {'set': 'sex', 'state': 'plant_part'},
         },
         'plant_part': {
-            'PLANT_PART': {'state': 'count', 'set': 'part'},
-            'COUNT_MIN': {'state': 'start'},
-            'COUNT_LOW': {'state': 'start'},
-            'COUNT_HIGH': {'state': 'start'},
-            'COUNT_MAX': {'state': 'start'},
-            'STOP_PUNCT': {'state': 'start'},
-            'PLANT_SEX': {'state': 'plant_part', 'set': 'part'},
-            'LENGTH_UNITS': {'reject': True, 'max_dist': 1},
+            'plant_part': {'state': 'count', 'set': 'part'},
+            'count_min': {'state': 'start'},
+            'count_low': {'state': 'start'},
+            'count_high': {'state': 'start'},
+            'count_max': {'state': 'start'},
+            'stop_punct': {'state': 'start'},
+            'plant_sex': {'state': 'plant_part', 'set': 'part'},
+            'length_units': {'reject': True, 'max_dist': 1},
         },
         'count': {
-            'PLANT_PART': {'state': 'count', 'save': True, 'set': 'part'},
-            'COUNT_MIN': {'set': 'min_count', 'int': True},
-            'COUNT_LOW': {'set': 'low_count', 'int': True},
-            'COUNT_HIGH': {'set': 'high_count', 'int': True},
-            'COUNT_MAX': {'set': 'max_count', 'int': True},
-            'PLANT_SEX': {'set': 'sex'},
-            'LENGTH_UNITS': {'reject': True, 'max_dist': 1},
-            'STOP_PUNCT': {'save': True, 'state': 'start'},
+            'plant_part': {'state': 'count', 'save': True, 'set': 'part'},
+            'count_min': {'set': 'min_count', 'int': True},
+            'count_low': {'set': 'low_count', 'int': True},
+            'count_high': {'set': 'high_count', 'int': True},
+            'count_max': {'set': 'max_count', 'int': True},
+            'plant_sex': {'set': 'sex'},
+            'length_units': {'reject': True, 'max_dist': 1},
+            'stop_punct': {'save': True, 'state': 'start'},
             'end': {'save': True},
         },
     }

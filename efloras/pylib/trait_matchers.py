@@ -65,6 +65,7 @@ SEPAL = ['sepal_size', 'sepal_shape', 'sepal_color']
 ATOMS = {
     r'2n': [],
     'anther heads': [],
+    'anthers': [],
     'asexual structures': [],
     'basal leaves': (LEAF + PETIOLE),
     'basal rosettes': [],

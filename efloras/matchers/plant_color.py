@@ -9,16 +9,16 @@ class PlantColor(Base):
     """Parse plant colors."""
 
     trait_matchers = {
-        'PLANT_PART': [[{'_': {'term': 'PLANT_PART'}}]],
-        'COLOR_PHRASE': [
+        'plant_part': [[{'_': {'term': 'plant_part'}}]],
+        'color_phrase': [
             [
-                {'_': {'term': 'COLOR_LEADER'}, 'OP': '?'},
+                {'_': {'term': 'color_leader'}, 'OP': '?'},
                 DASH_Q,
-                {'_': {'term': 'COLOR'}},
+                {'_': {'term': 'color'}},
                 DASH_Q,
-                {'_': {'term': 'COLOR_FOLLOWER'}, 'OP': '*'},
+                {'_': {'term': 'color_follower'}, 'OP': '*'},
             ],
-            [{'_': {'term': 'COLOR_LEADER'}}],
+            [{'_': {'term': 'color_leader'}}],
         ]}
 
     def parse(self, text):
@@ -38,7 +38,7 @@ class PlantColor(Base):
             norm = span.text.lower()
             trait.end = max(trait.end, span.end_char)
 
-            if label == 'PLANT_PART':
+            if label == 'plant_part':
                 self.append_trait(
                     text, traits, trait, values, raw_start, raw_end)
                 values = {}
@@ -46,7 +46,7 @@ class PlantColor(Base):
                     part=self.replace.get(norm, norm),
                     start=span.start_char,
                     end=span.end_char)
-            elif label == 'COLOR_PHRASE':
+            elif label == 'color_phrase':
                 raw_start = min(raw_start, span.start_char)
                 raw_end = max(raw_end, span.end_char)
                 words = [self.replace.get(t.text, t.text)
