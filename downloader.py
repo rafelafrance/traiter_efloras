@@ -172,9 +172,7 @@ def get_treatment(flora_id, family_name, taxon_id):
 
     print(f'Treatment: {url}')
 
-    if not path.exists():
-        urllib.request.urlretrieve(url, path)
-        time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+    download_page(url, path)
 
 
 def family_tree(family_name, flora_id, taxon_id, parents):
@@ -217,9 +215,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
 
     print(f'Tree: {url}')
 
-    if not path.exists():
-        urllib.request.urlretrieve(url, path)
-        time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+    download_page(url, path)
 
     with open(path) as in_file:
         page = html.fromstring(in_file.read())
@@ -240,13 +236,13 @@ def download_page(url, path):
         return
 
     for attempt in range(ERROR_RETRY):
-        if attempt:
+        if attempt > 0:
             print(f'Attempt {attempt + 1}')
         try:
             urllib.request.urlretrieve(url, path)
             time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
             break
-        except TimeoutError:
+        except (TimeoutError, socket.timeout):
             pass
 
 
