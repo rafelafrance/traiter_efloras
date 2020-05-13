@@ -3,7 +3,7 @@
 from functools import reduce
 
 from .base import Base
-from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, STOP_PUNCT
+from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, SEP
 from ..pylib.util import DotDict as Trait, to_positive_int
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
@@ -29,7 +29,7 @@ class PlantCount(Base):
         ],
         'length_units': [[{'_': {'term': 'length_units'}}]],
         'plant_sex': [[{'_': {'term': 'plant_sex'}}]],
-        'stop_punct': [[STOP_PUNCT]],
+        'sep': [[SEP]],
         # 'CONJUNCTION': [[{'POS': 'CCONJ'}]],
     }
 
@@ -44,7 +44,7 @@ class PlantCount(Base):
             'count_low': {'state': 'start'},
             'count_high': {'state': 'start'},
             'count_max': {'state': 'start'},
-            'stop_punct': {'state': 'start'},
+            'sep': {'state': 'start'},
             'plant_sex': {'state': 'plant_part', 'set': 'part'},
             'length_units': {'reject': True, 'max_dist': 1},
         },
@@ -56,7 +56,7 @@ class PlantCount(Base):
             'count_max': {'set': 'max_count', 'int': True},
             'plant_sex': {'set': 'sex'},
             'length_units': {'reject': True, 'max_dist': 1},
-            'stop_punct': {'save': True, 'state': 'start'},
+            'sep': {'save': True, 'state': 'start'},
             'end': {'save': True},
         },
     }

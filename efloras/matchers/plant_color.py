@@ -5,6 +5,45 @@ from ..pylib.terms import DASH_Q
 from ..pylib.util import DotDict as Trait
 
 
+def convert(self, doc, extended_match, starts, ends):
+    """Convert the matched term into a trait."""
+    _, start, end, match = extended_match
+
+    trait = Trait(start=start, end=end)
+
+    start = starts[match.start('part')]
+    end = ends[match.end('part')]
+    span = doc.char_span(start, end)
+    trait.part = span.text.lower()
+
+    start = starts[match.start('value')]
+    end = ends[match.end('value')]
+    span = doc.char_span(start, end)
+    trait.raw_value = span.text
+
+    values = {}  # Sets do not preserve order
+    value = []
+    for token in span:
+        term = token._.term
+        if term in ('color_leader', 'color', 'color_follower'):
+            value.append(token.text.lower())
+        elif term == 'dash':
+            continue
+        elif value:
+            value = '-'.join(self.replace.get(v, v) for v in value)
+            value = self.replace.get(value, value)
+            values[value] = 1
+            value = []
+    if value:
+        value = '-'.join(self.replace.get(v, v) for v in value)
+        value = self.replace.get(value, value)
+        values[value] = 1
+
+    trait.value = list(values.keys())
+
+    return trait
+
+
 class PlantColor(Base):
     """Parse plant colors."""
 
@@ -21,8 +60,21 @@ class PlantColor(Base):
             [{'_': {'term': 'color_leader'}}],
         ]}
 
-    def parse(self, text):
-        """parse the traits."""
+    raw_regex_terms = """ dash """.split()
+
+    raw_groupers = {
+        'color_phrase': [
+            """ (color_leader dash*)? color+ dash* color_follower* """,
+            # """ color_leader """,
+        ],
+    }
+
+    raw_producers = [
+        [convert, r""" (?P<part> plant_part ) (?P<value> color_phrase+ ) """],
+    ]
+
+    def old_parse(self, text):
+        """Keep this logic until it is replaced"""
         traits = []
 
         doc = self.find_terms(text)

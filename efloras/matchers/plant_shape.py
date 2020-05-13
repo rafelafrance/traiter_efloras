@@ -1,9 +1,8 @@
 """Parse the trait."""
 import regex
-from spacy.matcher import Matcher
 
 from .base import Base
-from ..pylib.terms import DASH, replacements
+from ..pylib.terms import DASH
 from ..pylib.util import DotDict as Trait
 
 
@@ -60,15 +59,6 @@ class PlantShape(Base):
             | pentagonal | pentangular | septagonal )
         ( -? ( orbicular | (\d-)? angulate ) )?
         """, regex.IGNORECASE | regex.VERBOSE)
-
-    def __init__(self):
-        super().__init__('plant_shape')
-
-        matcher = Matcher(self.nlp.vocab)
-        _ = [matcher.add(k, v, on_match=self.term_label)
-             for k, v in self.term_matcher.items()]
-        self.term_matchers.append(matcher)
-        self.replace = replacements(self.name)
 
     def parse(self, text):
         """Parse the traits."""
@@ -139,4 +129,4 @@ class PlantShape(Base):
                 trait.location = list(locations.keys())
 
 
-PLANT_SHAPE = PlantShape()
+PLANT_SHAPE = PlantShape('plant_shape')
