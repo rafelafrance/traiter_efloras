@@ -7,7 +7,7 @@ from efloras.matchers.plant_count import PLANT_COUNT
 from efloras.matchers.plant_descriptor import PLANT_DESCRIPTOR
 from efloras.matchers.plant_shape import PLANT_SHAPE
 from efloras.matchers.plant_size import PLANT_SIZE
-from .terms import TERMS
+from .catalog import CATALOG
 from .util import FLAGS
 
 
@@ -145,7 +145,7 @@ def list_terms(trait_name):
     """List terms for a given trait."""
     step = 4
     matcher_name = TRAITS[trait_name].name
-    terms = [t['term'] for v in TERMS[matcher_name].values() for t in v]
+    terms = [t['term'] for v in CATALOG[matcher_name].values() for t in v]
     terms = sorted(terms)
     count = len(terms)
     terms = ['{:<20} '.format(t) for t in terms] + ([''] * step)

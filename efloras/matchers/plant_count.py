@@ -3,7 +3,7 @@
 from functools import reduce
 
 from .base import Base
-from ..pylib.terms import CLOSE, DASH, DASH_LIKE, INT, OPEN, SEP
+from ..pylib.catalog import CLOSE, DASH, DASH_LIKE, INT, OPEN, SEP
 from ..pylib.util import DotDict as Trait, to_positive_int
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
@@ -11,6 +11,26 @@ FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
 
 class PlantCount(Base):
     """Parse plant count notations."""
+
+    def convert(self, doc, match, token_map):
+        """Convert the matched term into a trait."""
+        trait = Trait()
+        return trait
+
+    raw_regex_terms = """ open int dash close """.split()
+    raw_shared_terms = """ plant_part dash_like """.split()
+
+    raw_groupers = {
+        'count_min': """ open int (dash | dash_like) close """,
+        'count_max': """ open (dash | dash_like) int close """,
+        'count_high': """ (dash | dash_like) int """,
+    }
+
+    raw_producers = [
+        [convert, r"""
+            (?P<part> plant_part )
+                (?P<value> color_phrase+ ) """],
+    ]
 
     trait_matchers = {
         'plant_part': [[{'_': {'term': 'plant_part'}}]],

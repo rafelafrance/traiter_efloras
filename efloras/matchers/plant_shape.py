@@ -2,7 +2,7 @@
 import regex
 
 from .base import Base
-from ..pylib.terms import DASH
+from ..pylib.catalog import DASH
 from ..pylib.util import DotDict as Trait
 
 
