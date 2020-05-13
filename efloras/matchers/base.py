@@ -2,7 +2,7 @@
 
 import regex
 from spacy.matcher import Matcher, PhraseMatcher
-from traiter.matcher import Matcher as TraitMatcher
+from traiter.matcher import Matcher as TraitMatcher, CODES, CODE_LEN
 
 from ..pylib.terms import TERMS, replacements
 from ..pylib.util import FLAGS
@@ -14,14 +14,14 @@ class Base(TraitMatcher):
     # Find tokens in the regex. Look for words that are not part of a group
     # name or a metacharacter. So, "word" not "<word>". Neither "(?P" nor "\b"
     word_re = regex.compile(r"""
-        (?<! \(\?P< ) (?<! \(\? ) (?<! [\\] ) \b ( [a-z]\w* ) \b """, FLAGS)
-
-    split_re = regex.compile(r""" (?<= [\w?+*)] ) \s+ (?= [\w(] ) """, FLAGS)
+        (?<! \(\?P< ) (?<! \(\? ) (?<! [\\] )
+        \b (?P<word> [a-z]\w* ) \b """, FLAGS)
 
     trait_matchers = {}
     raw_groupers = {}
     raw_producers = []
     raw_regex_terms = []
+    raw_shared_terms = []
 
     def __init__(self, name):
         super().__init__(name)
@@ -49,7 +49,7 @@ class Base(TraitMatcher):
         for label in self.raw_regex_terms:
             regexp = TERMS['regexp'][label][0]['term']
             pattern = [{'TEXT': {'REGEX': regexp}}]
-            regex_terms.add(label, [pattern], on_match=self.term_label)
+            regex_terms.add(label, [pattern], on_match=self.enrich)
         return regex_terms
 
     def build_literal_terms(self, attr='lower'):
@@ -58,11 +58,14 @@ class Base(TraitMatcher):
 
         literal_terms = PhraseMatcher(self.nlp.vocab, attr='LOWER')
 
-        combined = {**TERMS[self.name], **TERMS['shared']}
+        shared = {k: v for k, v in TERMS['shared'].items()
+                  if k in self.raw_shared_terms}
+
+        combined = {**TERMS[self.name], **shared}
         for label, values in combined.items():
             patterns = [self.nlp.make_doc(t['term']) for t in values
                         if t['match_on'].upper() == attr]
-            literal_terms.add(label, self.term_label, *patterns)
+            literal_terms.add(label, self.enrich, *patterns)
         return literal_terms
 
     def find_terms(self, text):
@@ -85,9 +88,6 @@ class Base(TraitMatcher):
             for match_id, start, end in matches:
                 retokenizer.merge(doc[start:end])
 
-        # for token in doc:
-        #     print(f'[{token._.term}] {token.text}')
-
         return doc
 
     def get_trait_matches(self, doc):
@@ -109,54 +109,42 @@ class Base(TraitMatcher):
 
     def build_producers(self):
         """Create and compile regex out of the producers."""
+        def _replace(match):
+            word = match.group('word')
+            return f'(?:{CODES[word]})'
+
         producers = []
         for p_func, p_regex in self.raw_producers:
             for g_name, g_regex in self.groupers.items():
                 p_regex = p_regex.replace(g_name, g_regex)
-            p_regex = self.word_re.sub(r'(?:\1)', p_regex)
-            p_regex = r'\s?'.join(self.split_re.split(p_regex))
-            p_regex = ''.join(p_regex.split())
+            p_regex = self.word_re.sub(_replace, p_regex)
             p_regex = regex.compile(p_regex, FLAGS)
             producers.append([p_func, p_regex])
         return producers
 
     def parse(self, text):
-        """parse the traits."""
+        """Parse the traits."""
         doc = self.find_terms(text)
 
-        starts = {}
-        ends = {}
-        terms = []
+        # Because we elide over some tokens we need an easy way to map them
+        token_map = [t.i for t in doc if t._.code]
 
-        term_start = 0
-        for token in doc:
-            term = token._.term
-            if not term:
-                continue
-            terms.append(term)
-            starts[term_start] = token.idx
-            end = term_start + len(term)
-            ends[end] = token.idx + len(token)
-            term_start = end + 1
-        string = ' '.join(terms)
+        encoded = [t._.code for t in doc if t._.code]
+        encoded = ''.join(encoded)
 
-        matches = []
-        print(text)
-        print(string)
+        enriched_matches = []
         for func, regexp in self.producers:
-            print(regexp)
-            for match in regexp.finditer(string):
+            for match in regexp.finditer(encoded):
                 start, end = match.span()
-                print(match)
-                matches.append((func, starts[start], ends[end], match))
+                enriched_matches.append((func, start, end, match))
 
-        matches = self.leftmost_longest(matches)
+        enriched_matches = self.leftmost_longest(enriched_matches)
 
         all_traits = []
-        for extended_match in matches:
-            action, *_ = extended_match
+        for enriched_match in enriched_matches:
+            action, _, _, match = enriched_match
 
-            traits = action(self, doc, extended_match, starts, ends)
+            traits = action(self, doc, match, token_map)
 
             if not traits:
                 continue
@@ -164,3 +152,12 @@ class Base(TraitMatcher):
             all_traits += traits if isinstance(traits, list) else [traits]
 
             return all_traits
+
+
+def group2span(doc, match, group, token_map):
+    """Convert a regex match group into a spacy span."""
+    start = match.start(group) // CODE_LEN
+    start = token_map[start]
+    end = match.end(group) // CODE_LEN
+    end = token_map[end-1] + 1
+    return doc[start:end]
