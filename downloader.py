@@ -10,6 +10,7 @@ import sys
 import textwrap
 import time
 import urllib.request
+from urllib.error import HTTPError
 
 import regex
 import pandas as pd
@@ -242,7 +243,7 @@ def download_page(url, path):
             urllib.request.urlretrieve(url, path)
             time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
             break
-        except (TimeoutError, socket.timeout):
+        except (TimeoutError, socket.timeout, HTTPError):
             pass
 
 
