@@ -2,7 +2,7 @@
 
 import unittest
 
-from efloras.matchers.plant_count import PLANT_COUNT
+from efloras.matchers.plant_count import PLANT_COUNT, SEPAL_COUNT
 from efloras.pylib.util import DotDict as Trait
 
 
@@ -67,3 +67,10 @@ class TestPlantCount(unittest.TestCase):
         self.assertEqual(
             PLANT_COUNT.parse('Petals 5(or 6)'),
             [Trait(start=0, end=14, part='petals', low_count=5, max_count=6)])
+
+    def test_plant_count_10(self):
+        """It parses a sepal count."""
+        self.assertEqual(
+            SEPAL_COUNT.parse('Sepal [1–]3–12[–30]'),
+            [Trait(start=0, end=19, part='sepal',
+                   min_count=1, low_count=3, high_count=12, max_count=30)])

@@ -57,4 +57,4 @@ class PlantCount(Base):
 
 
 PLANT_COUNT = PlantCount('plant')
-# SEPAL_COUNT = PlantCount('sepal')
+SEPAL_COUNT = PlantCount('sepal')
