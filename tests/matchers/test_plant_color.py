@@ -73,7 +73,7 @@ class TestPlantColor(unittest.TestCase):
         """It handles some odd pattern notations like 'throated'."""
         self.assertEqual(
             PLANT_COLOR.parse(
-                'petals 5, distinct, white to cream, greenish white, '
+                'Petals 5, distinct, white to cream, greenish white, '
                 'or yellowish green, or yellowish, usually green-throated '
                 'and faintly green-lined,'),
             [Trait(start=0, end=132, part='petals',

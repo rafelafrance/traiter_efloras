@@ -1,9 +1,6 @@
 """Parse the trait."""
 
-from functools import reduce
-
-from .base import Base
-from ..pylib.catalog import CLOSE, DASH, DASH_LIKE, INT, OPEN, SEP
+from .base import Base, group2span
 from ..pylib.util import DotDict as Trait, to_positive_int
 
 FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
@@ -12,139 +9,52 @@ FIELDS = ('min_count', 'low_count', 'high_count', 'max_count')
 class PlantCount(Base):
     """Parse plant count notations."""
 
-    def convert(self, doc, match, token_map):
-        """Convert the matched term into a trait."""
-        trait = Trait()
-        return trait
+    def __init__(self, part):
+        plant_part = f'{part}_part'
+        name = f'{part}_count'
 
-    raw_regex_terms = """ open int dash close """.split()
-    raw_shared_terms = """ plant_part dash_like """.split()
+        super().__init__(name)
 
-    raw_groupers = {
-        'count_min': """ open int (dash | dash_like) close """,
-        'count_max': """ open (dash | dash_like) int close """,
-        'count_high': """ (dash | dash_like) int """,
-    }
+        self.use('sep')
 
-    raw_producers = [
-        [convert, r"""
-            (?P<part> plant_part )
-                (?P<value> color_phrase+ ) """],
-    ]
+        self.capture('min_count', """ open int (dash | dash_like) close """)
+        self.capture('high_count', """ (dash | dash_like) int """)
+        self.capture('max_count', """ open (dash | dash_like) int close """)
 
-    trait_matchers = {
-        'plant_part': [[{'_': {'term': 'plant_part'}}]],
-        'count_min': [
-            [OPEN, INT, DASH, CLOSE],
-            [OPEN, INT, DASH_LIKE, CLOSE],
-        ],
-        'count_low': [[INT]],
-        'count_high': [
-            [DASH, INT],
-            [DASH_LIKE, INT],
-        ],
-        'count_max': [
-            [OPEN, DASH, INT, CLOSE],
-            [OPEN, DASH_LIKE, INT, CLOSE],
-        ],
-        'length_units': [[{'_': {'term': 'length_units'}}]],
-        'plant_sex': [[{'_': {'term': 'plant_sex'}}]],
-        'sep': [[SEP]],
-        # 'CONJUNCTION': [[{'POS': 'CCONJ'}]],
-    }
+        self.capture('sex', 'plant_sex')
 
-    fsm = {
-        'start': {
-            'plant_part': {'state': 'count', 'set': 'part'},
-            'plant_sex': {'set': 'sex', 'state': 'plant_part'},
-        },
-        'plant_part': {
-            'plant_part': {'state': 'count', 'set': 'part'},
-            'count_min': {'state': 'start'},
-            'count_low': {'state': 'start'},
-            'count_high': {'state': 'start'},
-            'count_max': {'state': 'start'},
-            'sep': {'state': 'start'},
-            'plant_sex': {'state': 'plant_part', 'set': 'part'},
-            'length_units': {'reject': True, 'max_dist': 1},
-        },
-        'count': {
-            'plant_part': {'state': 'count', 'save': True, 'set': 'part'},
-            'count_min': {'set': 'min_count', 'int': True},
-            'count_low': {'set': 'low_count', 'int': True},
-            'count_high': {'set': 'high_count', 'int': True},
-            'count_max': {'set': 'max_count', 'int': True},
-            'plant_sex': {'set': 'sex'},
-            'length_units': {'reject': True, 'max_dist': 1},
-            'sep': {'save': True, 'state': 'start'},
-            'end': {'save': True},
-        },
-    }
+        self.grouper('reject', """
+            length_units | cross | int | dash | dash_like | open | close
+            | slash
+            """)
 
-    def parse(self, text):
-        """parse the traits."""
-        traits = []
-        doc = self.find_terms(text)
-        matches = self.get_trait_matches(doc)
-
-        # print('\n'.join([f'{t.text} {t.pos_} {t._.term}' for t in doc]))
-
-        trait = Trait(start=-1)
-        state = 'start'
-        prev_end, max_dist = 0, len(doc)
-
-        for match_id, start, end in matches:
-            label = doc.vocab.strings[match_id]
-            span = doc[start:end]
-            norm = span.text.lower()
-
-            action = self.fsm[state].get(label, {})
-
-            # print(f'{label} {norm}')
-
-            if action.get('save'):
-                self.append_trait(traits, trait)
-                old = trait
-                trait = Trait(start=-1)
-                if carry := action.get('carry'):
-                    for field in carry:
-                        trait[field] = old[field]
-
-            dist = start - prev_end
-            if (action.get('reject')
-                    and dist <= action.get('max_dist', max_dist)):
-                trait = Trait(start=-1)
-                continue
-
-            if field := action.get('set'):
-                if action.get('int'):
-                    trait[field] = to_positive_int(norm)
-                else:
-                    trait[field] = self.replace.get(norm, norm)
-
-            if trait.start < 0:
-                trait.start = span.start_char
-            trait.end = span.end_char
-
-            state = action.get('state', state)
-            prev_end = end
-
-        action = self.fsm[state].get('end', {})
-        if action.get('save'):
-            self.append_trait(traits, trait)
-
-        return traits
+        self.producer(self.convert, f"""
+            sex? (?P<part> {plant_part} )
+            (?P<value> min_count? (?P<low_count> int) high_count? max_count? )
+            (?! reject ) """)
 
     @staticmethod
-    def append_trait(traits, trait):
-        """Check if a trait is valid, update & save it if it is."""
-        # It must have a plant part
-        if not trait.get('part'):
-            return
+    def convert(doc, match, token_map):
+        """Convert the matched term into a trait."""
+        trait = Trait()
 
-        if reduce(lambda x, y: x | (trait.get(y) is not None),
-                  FIELDS, False):
-            traits.append(trait)
+        span = group2span(doc, match, 'part', token_map)
+        trait.start = span.start_char
+        trait.part = span.text.lower()
+
+        if span := group2span(doc, match, 'sex', token_map):
+            trait.start = min(span.start_char, trait.start)
+            trait.sex = span.text.lower()
+
+        span = group2span(doc, match, 'value', token_map)
+        trait.end = span.end_char
+
+        for group in ('min_count', 'low_count', 'high_count', 'max_count'):
+            if span := group2span(doc, match, group, token_map):
+                trait[group] = to_positive_int(span.text)
+
+        return trait
 
 
-PLANT_COUNT = PlantCount('plant_count')
+PLANT_COUNT = PlantCount('plant')
+# SEPAL_COUNT = PlantCount('sepal')
