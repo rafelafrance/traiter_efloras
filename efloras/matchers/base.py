@@ -1,10 +1,13 @@
 """Base matcher object."""
 
-from spacy.matcher import Matcher
-from traiter.pattern import CODE_LEN
+from traiter.catalog import Catalog
 from traiter.matcher import Parser
+from traiter.pattern import CODE_LEN, Type
 
-from ..pylib.catalog import CATALOG
+import efloras.pylib.util as util
+
+CATALOG = Catalog()
+CATALOG.read_terms(util.DATA_DIR / 'terms.csv')
 
 
 class Base(Parser):
@@ -12,20 +15,12 @@ class Base(Parser):
 
     def __init__(self, name):
         super().__init__(name, CATALOG)
-        self.replace = CATALOG.get_term_replacements(self.term_list)
+        # self.replace = CATALOG.get_term_replacements()
 
-        # TODO: Delete this
-        self.trait_matcher = Matcher(self.nlp.vocab)
-        _ = [self.trait_matcher.add(k, v) for
-             k, v in self.trait_matchers.items()]
-
-    def get_trait_matches(self, doc):
-        """Get the trait matches."""
-        # TODO: Delete this
-        matches = self.trait_matcher(doc)
-        if not matches:
-            return []
-        return self.leftmost_longest(matches)
+    def get_term_replacements(self):
+        """Get replacement values for a term."""
+        return {t['term']: r for p in self.patterns[Type.PHRASE]
+                for t in p.terms if (r := t.get('replace'))}
 
 
 def group2span(doc, match, group, token_map):

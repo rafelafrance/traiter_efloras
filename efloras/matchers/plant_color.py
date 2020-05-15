@@ -7,6 +7,22 @@ from ..pylib.util import DotDict as Trait
 class PlantColor(Base):
     """Parse plant colors."""
 
+    def __init__(self, part):
+        plant_part = f'{part}_part'
+        name = f'{part}_color'
+
+        super().__init__(name)
+
+        self.grouper('color_phrase', """
+            color_leader* dash* color dash* color_follower* """)
+
+        self.producer(self.convert, f"""
+            (?P<part> {plant_part} ) (?P<value> color_phrase+ ) """)
+
+        self.build()
+
+        self.replace = self.get_term_replacements()
+
     def convert(self, doc, match, token_map):
         """Convert the matched term into a trait."""
         trait = Trait()
@@ -24,6 +40,7 @@ class PlantColor(Base):
         raw_end = span.start
         for token in span:
             term = token._.term
+            # print(term, value, token.text)
 
             if term in ('color_leader', 'color', 'color_follower'):
                 raw_end = max(raw_end, token.i)
@@ -53,19 +70,11 @@ class PlantColor(Base):
         value = self.replace.get(value, value)
         values[value] = 1
 
-    term_list = """
-        plant_part color color_leader color_follower dash """.split()
 
-    raw_groupers = {
-        'color_phrase': [
-            """ color_leader* dash* color dash* color_follower* """,
-        ],
-    }
-
-    raw_producers = [
-        [convert, r"""
-            (?P<part> plant_part ) (?P<value> color_phrase+ ) """],
-    ]
-
-
-PLANT_COLOR = PlantColor('plant_color')
+PLANT_COLOR = PlantColor('plant')
+CAYLX_COLOR = PlantColor('calyx')
+COROLLA_COLOR = PlantColor('corolla')
+FLOWER_COLOR = PlantColor('flower')
+HYPANTHIUM_COLOR = PlantColor('hypanthium')
+PETAL_COLOR = PlantColor('petal')
+SEPAL_COLOR = PlantColor('sepal')

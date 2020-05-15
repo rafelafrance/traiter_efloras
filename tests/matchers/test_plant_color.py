@@ -2,7 +2,8 @@
 
 import unittest
 
-from efloras.matchers.plant_color import PLANT_COLOR
+from efloras.matchers.plant_color import CAYLX_COLOR, COROLLA_COLOR, \
+    FLOWER_COLOR, HYPANTHIUM_COLOR, PETAL_COLOR, PLANT_COLOR, SEPAL_COLOR
 from efloras.pylib.util import DotDict as Trait
 
 
@@ -82,3 +83,45 @@ class TestPlantColor(unittest.TestCase):
                              'white, or yellowish green, or yellowish, '
                              'usually green-throated and faintly '
                              'green-lined')])
+
+    def test_plant_color_07(self):
+        """It parses calyx color."""
+        self.assertEqual(
+            CAYLX_COLOR.parse('calyx yellow'),
+            [Trait(start=0, end=12, part='calyx',
+                   value=['yellow'], raw_value='yellow')])
+
+    def test_plant_color_08(self):
+        """It parses corolla color."""
+        self.assertEqual(
+            COROLLA_COLOR.parse('corolla yellow'),
+            [Trait(start=0, end=14, part='corolla',
+                   value=['yellow'], raw_value='yellow')])
+
+    def test_plant_color_09(self):
+        """It parses flower color."""
+        self.assertEqual(
+            FLOWER_COLOR.parse('flower yellow'),
+            [Trait(start=0, end=13, part='flower',
+                   value=['yellow'], raw_value='yellow')])
+
+    def test_plant_color_10(self):
+        """It parses hypanthium color."""
+        self.assertEqual(
+            HYPANTHIUM_COLOR.parse('hypanthium yellow'),
+            [Trait(start=0, end=17, part='hypanthium',
+                   value=['yellow'], raw_value='yellow')])
+
+    def test_plant_color_11(self):
+        """It parses petal color."""
+        self.assertEqual(
+            PETAL_COLOR.parse('petal yellow'),
+            [Trait(start=0, end=12, part='petal',
+                   value=['yellow'], raw_value='yellow')])
+
+    def test_plant_color_12(self):
+        """It parses sepal color."""
+        self.assertEqual(
+            SEPAL_COLOR.parse('sepal yellow'),
+            [Trait(start=0, end=12, part='sepal',
+                   value=['yellow'], raw_value='yellow')])
