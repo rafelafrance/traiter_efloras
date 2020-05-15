@@ -5,7 +5,7 @@ import regex
 from .util import FLAGS
 from ..parsers.plant_color import CAYLX_COLOR, COROLLA_COLOR, FLOWER_COLOR, \
     HYPANTHIUM_COLOR, PETAL_COLOR, SEPAL_COLOR
-from ..parsers.plant_descriptors import SEXUAL_DESCRIPTOR, SYMMETRY_DESCRIPTOR
+from ..parsers.plant_descriptor import SEXUAL_DESCRIPTOR, SYMMETRY_DESCRIPTOR
 from ..parsers.plant_shape import CAYLX_SHAPE, COROLLA_SHAPE, FLOWER_SHAPE, \
     HYPANTHIUM_SHAPE, LEAF_SHAPE, PETAL_SHAPE, PETIOLE_SHAPE, SEPAL_SHAPE
 from ..parsers.plant_size import CALYX_SIZE, COROLLA_SIZE, FLOWER_SIZE, \

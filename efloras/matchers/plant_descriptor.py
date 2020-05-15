@@ -1,35 +1,30 @@
 """Parse the trait."""
 
-from .base import Base
+from .base import Base, group2span
 from ..pylib.util import DotDict as Trait
 
 
 class PlantDescriptor(Base):
     """Parse plant colors."""
 
-    def parse(self, text):
-        """parse the traits."""
-        sexual, symmetry = [], []
+    def __init__(self, part):
+        self.descriptor = f'{part}_descriptor'
 
-        doc = self.find_terms(text)
+        super().__init__(self.descriptor)
 
-        for token in doc:
-            label = token._.term
+        self.producer(self.convert, f""" (?P<value> {self.descriptor} ) """)
 
-            if label == 'sexual_descriptor':
-                sexual.append(Trait(
-                    value=token.text.lower(),
-                    start=token.idx,
-                    end=token.idx + len(token)
-                ))
-            elif label == 'symmetry_descriptor':
-                symmetry.append(Trait(
-                    value=token.text.lower(),
-                    start=token.idx,
-                    end=token.idx + len(token)
-                ))
+    def convert(self, doc, match, token_map):
+        """Convert the matched term into a trait."""
+        trait = Trait()
 
-        return sexual + symmetry
+        span = group2span(doc, match, 'value', token_map)
+        trait.start = span.start_char
+        trait.end = span.end_char
+        trait.value = span.text.lower()
+
+        return trait
 
 
-PLANT_DESCRIPTOR = PlantDescriptor('plant_descriptor')
+SEXUAL_DESCRIPTOR = PlantDescriptor('sexual')
+SYMMETRY_DESCRIPTOR = PlantDescriptor('symmetry')

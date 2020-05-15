@@ -2,7 +2,8 @@
 
 import unittest
 
-from efloras.matchers.plant_descriptor import PLANT_DESCRIPTOR
+from efloras.matchers.plant_descriptor import SEXUAL_DESCRIPTOR, \
+    SYMMETRY_DESCRIPTOR
 from efloras.pylib.util import DotDict as Trait
 
 
@@ -12,7 +13,7 @@ class TestPlantDescriptor(unittest.TestCase):
     def test_plant_descriptor_01(self):
         """It parses a compound sex notation."""
         self.assertEqual(
-            PLANT_DESCRIPTOR.parse(
+            SEXUAL_DESCRIPTOR.parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             [
@@ -25,7 +26,7 @@ class TestPlantDescriptor(unittest.TestCase):
     def test_plant_descriptor_02(self):
         """It parses a compound sex notation."""
         self.assertEqual(
-            PLANT_DESCRIPTOR.parse(
+            SYMMETRY_DESCRIPTOR.parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),
             [
                 Trait(value='actinomorphic', start=16, end=29),

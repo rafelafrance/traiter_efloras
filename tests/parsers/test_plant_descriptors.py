@@ -2,7 +2,7 @@
 
 import unittest
 
-from efloras.parsers.plant_descriptors import SEXUAL_DESCRIPTOR, \
+from efloras.parsers.plant_descriptor import SEXUAL_DESCRIPTOR, \
     SYMMETRY_DESCRIPTOR
 from efloras.pylib.trait import Trait
 
