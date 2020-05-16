@@ -1,5 +1,6 @@
 """Common color snippets."""
 
+import regex
 from .base import Base, group2span
 from ..pylib.util import DotDict as Trait
 
@@ -13,11 +14,19 @@ class PlantColor(Base):
 
         super().__init__(name)
 
-        self.grouper('color_phrase', """
-            color_leader* dash* color dash* color_follower* """)
+        self.use('sep')
+
+        self.capture('part', plant_part)
+
+        self.capture('color_phrase', """
+            (color_leader dash?)? (color | color_leader)
+                dash* color_follower* """)
+
+        self.grouper('noise', ' dash sep conj '.split())
 
         self.producer(self.convert, f"""
-            (?P<part> {plant_part} ) (?P<value> color_phrase+ ) """)
+            part noise*
+                ( noise* color_phrase (noise | color_follower)* )+ """)
 
         self.build()
 
@@ -31,44 +40,28 @@ class PlantColor(Base):
         trait.start = span.start_char
         trait.part = span.text.lower()
 
-        span = group2span(doc, match, 'value', token_map)
-        trait.end = span.end_char
+        raw_start = len(doc)
+        raw_end = 0
 
-        values = {}  # Sets do not preserve order
-        value = []
-        raw_start = span.end
-        raw_end = span.start
-        for token in span:
-            term = token._.term
-            # print(term, value, token.text)
+        values = {}
+        for i, group in enumerate(match.captures('color_phrase')):
+            span = group2span(doc, match, 'color_phrase', token_map, i)
 
-            if term in ('color_leader', 'color', 'color_follower'):
-                raw_end = max(raw_end, token.i)
-                raw_start = min(raw_start, token.i)
+            raw_start = min(span.start, raw_start)
+            raw_end = max(span.end, raw_end)
 
-            if term in ('color_leader', 'color'):
-                value.append(token.text.lower())
-            elif term == 'color_follower':
-                if value:
-                    value.append(token.text.lower())
-            elif term == 'dash':
-                continue
-            elif value:
-                self.build_value(value, values)
-                value = []
-        if value:
-            self.build_value(value, values)
+            value = [v for v in regex.split(r'[\s-]+', span.text) if v]
+            value = '-'.join(self.replace.get(v, v) for v in value)
+            value = self.replace.get(value, value)
+            values[value] = 1   # Sets do not preserve order but dicts do
 
         trait.value = list(values.keys())
-        trait.raw_value = doc[raw_start:raw_end + 1].text
+
+        span = doc[raw_start:raw_end]
+        trait.raw_value = span.text
+        trait.end = span.end_char
 
         return trait
-
-    def build_value(self, value, values):
-        """Add a color value."""
-        value = '-'.join(self.replace.get(v, v) for v in value)
-        value = self.replace.get(value, value)
-        values[value] = 1
 
 
 PLANT_COLOR = PlantColor('plant')

@@ -22,12 +22,12 @@ class Base(Parser):
                 for t in p.terms if (r := t.get('replace'))}
 
 
-def group2span(doc, match, group, token_map):
+def group2span(doc, match, group, token_map, idx=0):
     """Convert a regex match group into a spacy span."""
     if group in match.groupdict():
-        start = match.start(group) // CODE_LEN
+        start = match.starts(group)[idx] // CODE_LEN
         start = token_map[start]
-        end = match.end(group) // CODE_LEN
-        end = token_map[end-1] + 1
+        end = match.ends(group)[idx] // CODE_LEN
+        end = token_map[end - 1] + 1
         return doc[start:end]
     return None

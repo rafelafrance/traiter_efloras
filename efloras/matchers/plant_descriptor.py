@@ -14,7 +14,8 @@ class PlantDescriptor(Base):
 
         self.producer(self.convert, f""" (?P<value> {self.descriptor} ) """)
 
-    def convert(self, doc, match, token_map):
+    @staticmethod
+    def convert(doc, match, token_map):
         """Convert the matched term into a trait."""
         trait = Trait()
 
