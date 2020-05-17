@@ -5,7 +5,7 @@ from collections import defaultdict
 import pandas as pd
 from bs4 import BeautifulSoup
 
-import efloras.pylib.trait_matchers as tm
+import efloras.pylib.atoms as tm
 import efloras.pylib.family_util as futil
 
 
@@ -92,7 +92,7 @@ def extract_traits(args, atoms, text):
 
         # Now parse all of the intersecting traits
         for trait_name in trait_names:
-            matcher = tm.TRAITS[trait_name]
+            matcher = tm.TRAIT_NAMES[trait_name]
             for trait in matcher.parse(atom_text):
                 trait.start += atom_start
                 trait.end += atom_start

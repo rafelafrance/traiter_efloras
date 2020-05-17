@@ -2,7 +2,7 @@
 
 from .base import Base
 from ..pylib.convert_units import convert
-from ..pylib.catalog import CLOSE, CROSS, DASH, FLOAT, OPEN
+from ..pylib.terms import CLOSE, CROSS, DASH, FLOAT, OPEN
 from ..pylib.util import DotDict as Trait, to_positive_float
 
 

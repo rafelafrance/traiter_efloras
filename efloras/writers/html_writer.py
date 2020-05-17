@@ -7,7 +7,7 @@ from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-import efloras.pylib.trait_matchers as tm
+import efloras.pylib.atoms as tm
 
 # CSS colors
 CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
@@ -20,9 +20,9 @@ def html_writer(args, df):
     """Output the data frame."""
     df = df.fillna('')
 
-    other_cols = [c for c in df.columns if c not in tm.TRAITS]
+    other_cols = [c for c in df.columns if c not in tm.TRAIT_NAMES]
 
-    trait_cols = sorted([c for c in df.columns if c in tm.TRAITS])
+    trait_cols = sorted([c for c in df.columns if c in tm.TRAIT_NAMES])
     df = df.reindex(other_cols + trait_cols, axis='columns')
 
     trait_cols = {f'{c}_data': c for c in trait_cols}

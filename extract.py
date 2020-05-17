@@ -6,8 +6,11 @@ import argparse
 import sys
 import textwrap
 
+import regex
+
 import efloras.pylib.family_util as futil
-import efloras.pylib.trait_matchers as tm
+import efloras.pylib.terms
+from efloras.matchers.base import TRAIT_NAMES
 from efloras.readers.efloras_reader import efloras_matcher
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
@@ -29,12 +32,12 @@ def main(args):
         sys.exit()
 
     if args.list_traits:
-        for trait in tm.all_traits():
+        for trait in TRAIT_NAMES:
             print(trait)
         sys.exit()
 
-    if args.list_terms:
-        tm.list_terms(args.list_terms)
+    if efloras.pylib.terms.list_terms:
+        efloras.pylib.terms.list_terms(efloras.pylib.terms.list_terms)
         sys.exit()
 
     if not futil.check_family_flora_ids(args, families):
@@ -44,7 +47,7 @@ def main(args):
         print('No traits selected.')
         sys.exit(1)
 
-    if not (traits := tm.expand_traits(args)):
+    if not (traits := expand_traits(args)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)
@@ -115,6 +118,29 @@ def parse_args():
         args.flora_id = [1]
 
     return args
+
+
+def expand_traits(args):
+    """Expand traits using wildcards."""
+    traits = set()
+    for trait in args.trait:
+        pattern = trait.replace('*', '.*').replace('?', '.?')
+        pattern = regex.compile(pattern, regex.IGNORECASE)
+        hits = {t for t in TRAIT_NAMES if pattern.search(t)}
+        traits |= hits
+    return sorted(traits)
+
+
+def list_terms(trait_name):
+    """List terms for a given trait."""
+    step = 4
+    matcher_name = TRAIT_NAMES[trait_name]
+    terms = [t for v in TERMS[matcher_name] for t in v]
+    terms = sorted(terms)
+    count = len(terms)
+    terms = ['{:<20} '.format(t) for t in terms] + ([''] * step)
+    for i in range(0, count, step):
+        print(''.join(terms[i:i+step]))
 
 
 if __name__ == '__main__':

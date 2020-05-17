@@ -1,9 +1,10 @@
 """Common color snippets."""
 
-from ..pylib.catalog import DASH, REPLACE
+from traiter.util import as_list
+from ..pylib.terms import DASH, REPLACE
 
 
-def color_phrase(span):
+def plant_color(span):
     """Enrich a color phrase match."""
     parts = {}
     for token in span:
@@ -11,21 +12,27 @@ def color_phrase(span):
         if part not in DASH:
             parts[part] = 1     # Sets do not preserve order but dicts do
     value = '-'.join(parts)
-    return {'value': REPLACE.get(value, value)}
+    value = REPLACE.get(value, value)
+    return {'value': as_list(value)}
 
 
 PLANT_COLOR = {
-    'color_phrase': {
-        'on_match': color_phrase,
-        'patterns': [
-            [
-                {'_': {'term': 'color_leader'}, 'OP': '?'},
-                {'_': {'term': 'dash'}, 'OP': '?'},
-                {'_': {'term': 'color'}, 'OP': '+'},
-                {'_': {'term': 'dash'}, 'OP': '?'},
-                {'_': {'term': 'color_follower'}, 'OP': '*'},
+    'name': 'plant_color',
+    'trait_names': """caylx_color corolla_color flower_color fruit_color
+        hypanthium_color petal_color sepal_color """.split(),
+    'matchers': {
+        'plant_color': {
+            'on_match': plant_color,
+            'patterns': [
+                [
+                    {'_': {'term': 'color_leader'}, 'OP': '?'},
+                    {'_': {'term': 'dash'}, 'OP': '?'},
+                    {'_': {'term': 'color'}, 'OP': '+'},
+                    {'_': {'term': 'dash'}, 'OP': '?'},
+                    {'_': {'term': 'color_follower'}, 'OP': '*'},
+                ],
+                [{'_': {'term': 'color_leader'}}],
             ],
-            [{'_': {'term': 'color_leader'}}],
-        ],
-    },
+        },
+    }
 }

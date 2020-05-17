@@ -27,5 +27,6 @@ class PlantDescriptor(Base):
         return trait
 
 
+PLANT_DESCRIPTOR = PlantDescriptor('sexual')
 SEXUAL_DESCRIPTOR = PlantDescriptor('sexual')
 SYMMETRY_DESCRIPTOR = PlantDescriptor('symmetry')
