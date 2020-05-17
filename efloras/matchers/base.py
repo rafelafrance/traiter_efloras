@@ -1,33 +1,19 @@
 """Base matcher object."""
 
-from traiter.catalog import Catalog
 from traiter.matcher import Parser
-from traiter.pattern import CODE_LEN, Type
 
-import efloras.pylib.util as util
-
-CATALOG = Catalog()
-CATALOG.read_terms(util.DATA_DIR / 'terms.csv')
+from .plant_color import PLANT_COLOR
+from .plant_part import PLANT_PART
+from ..pylib.catalog import TERMS
 
 
 class Base(Parser):
     """Base matcher object."""
 
-    def __init__(self, name):
-        super().__init__(name, CATALOG)
+    def __init__(self):
+        super().__init__()
 
-    def get_term_replacements(self):
-        """Get replacement values for a term."""
-        return {t['term']: r for p in self.get_patterns(Type.PHRASE)
-                for t in p.terms if (r := t.get('replace'))}
+        self.add_terms(TERMS)
 
-
-def group2span(doc, match, group, token_map, idx=0):
-    """Convert a regex match group into a spacy span."""
-    if group in match.groupdict():
-        start = match.starts(group)[idx] // CODE_LEN
-        start = token_map[start]
-        end = match.ends(group)[idx] // CODE_LEN
-        end = token_map[end - 1] + 1
-        return doc[start:end]
-    return None
+        traits = {**PLANT_PART, **PLANT_COLOR}
+        self.add_traits(traits)
