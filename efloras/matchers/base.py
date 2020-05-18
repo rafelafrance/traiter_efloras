@@ -4,7 +4,7 @@ from traiter.matcher import Parser
 from traiter.util import as_list, DotDict as Trait
 
 
-from ..pylib.terms import terms4patterns
+from ..pylib.terms import terms_from_patterns
 from ..pylib.traits import MATCHER_NAMES, TRAIT2MATCHER
 
 
@@ -31,7 +31,7 @@ class Base(Parser):
         self.add_patterns(self.patterns)
 
         # Add the terms we need based on the patterns
-        self.terms = terms4patterns(self.patterns)
+        self.terms = terms_from_patterns(self.patterns)
         self.add_terms(self.terms)
 
     def parse(self, text):
@@ -52,8 +52,7 @@ class Base(Parser):
             elif trait_name in self.matchers:
                 trait.start = min(token.idx, trait.start)
                 trait.end = max(token.idx + len(token), trait.end)
-                for val in data['value']:
-                    value[val] = 1
+                value[data['value']] = 1
         trait.value = list(value)
         trait.raw_value = text[trait.start:trait.end]
 

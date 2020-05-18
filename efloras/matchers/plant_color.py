@@ -13,7 +13,7 @@ def plant_color(span):
             parts[part] = 1     # Sets do not preserve order but dicts do
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    return {'value': as_list(value)}
+    return {'value': value}
 
 
 PLANT_COLOR = {
