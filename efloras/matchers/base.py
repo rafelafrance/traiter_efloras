@@ -51,8 +51,9 @@ class Base(Parser):
                 traits[label].append(data)
 
             elif label == 'descriptor' and data:
-                trait_name = f'{data["category"]}'
+                trait_name = data['category']
                 if trait_name in self.trait_filter:
+                    del data['category']
                     descriptors[trait_name].append(data)
 
             elif data:
@@ -69,6 +70,5 @@ class Base(Parser):
         print()
         from pprint import pp
         pp([dict(p) for p in parts])
-        print()
 
         return parts
