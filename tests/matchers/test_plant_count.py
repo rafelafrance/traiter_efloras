@@ -15,8 +15,7 @@ class TestPlantCount(unittest.TestCase):
             [{'part': [
                 {'value': 'seed', 'start': 0, 'end': 5,
                  'raw_value': 'Seeds'}],
-                'seed_count': [{'start': 6,
-                                'end': 19,
+                'seed_count': [{'start': 6, 'end': 19,
                                 'raw_value': '[1–]3–12[–30]',
                                 'min_count': 1,
                                 'low_count': 3,
@@ -31,8 +30,7 @@ class TestPlantCount(unittest.TestCase):
             [{'part': [
                 {'value': 'seed', 'start': 0, 'end': 5,
                  'raw_value': 'Seeds'}],
-                'seed_count': [{'start': 6,
-                                'end': 10,
+                'seed_count': [{'start': 6, 'end': 10,
                                 'raw_value': '3–12',
                                 'low_count': 3,
                                 'high_count': 12}]}]
@@ -60,8 +58,7 @@ class TestPlantCount(unittest.TestCase):
             Matcher('*_count').parse('ovules mostly 120–200.'),
             [{'part': [{'value': 'ovary', 'start': 0, 'end': 6,
                         'raw_value': 'ovules'}],
-              'ovary_count': [{'start': 14,
-                               'end': 21,
+              'ovary_count': [{'start': 14, 'end': 21,
                                'raw_value': '120–200',
                                'low_count': 120,
                                'high_count': 200}]}]
@@ -72,8 +69,7 @@ class TestPlantCount(unittest.TestCase):
         self.assertEqual(
             Matcher('*_count').parse('staminate flowers (3–)5–10(–20)'),
             [{'part': [{'value': 'flower',
-                        'start': 0,
-                        'end': 17,
+                        'start': 0, 'end': 17,
                         'raw_value': 'staminate flowers',
                         'sex': 'staminate'}]}]
         )
@@ -84,8 +80,7 @@ class TestPlantCount(unittest.TestCase):
             Matcher('ovary_count').parse('Ovaries (4 or)5,'),
             [{'part': [{'value': 'ovary', 'start': 0, 'end': 7,
                         'raw_value': 'Ovaries'}],
-              'ovary_count': [{'start': 8,
-                               'end': 15,
+              'ovary_count': [{'start': 8, 'end': 15,
                                'raw_value': '(4 or)5',
                                'min_count': 4,
                                'low_count': 5}]}]
@@ -97,11 +92,10 @@ class TestPlantCount(unittest.TestCase):
             Matcher('seed_count').parse('Seeds 5(or 6)'),
             [{'part': [
                 {'value': 'seed', 'start': 0, 'end': 5, 'raw_value': 'Seeds'}],
-              'seed_count': [{'start': 6,
-                              'end': 13,
-                              'raw_value': '5(or 6)',
-                              'low_count': 5,
-                              'max_count': 6}]}]
+                'seed_count': [{'start': 6, 'end': 13,
+                                'raw_value': '5(or 6)',
+                                'low_count': 5,
+                                'max_count': 6}]}]
         )
 
     def test_plant_count_09(self):
@@ -110,8 +104,7 @@ class TestPlantCount(unittest.TestCase):
             Matcher('stamen_count').parse('Stamen [1–]3–12[–30]'),
             [{'part': [{'value': 'stamen', 'start': 0, 'end': 6,
                         'raw_value': 'Stamen'}],
-              'stamen_count': [{'start': 7,
-                                'end': 20,
+              'stamen_count': [{'start': 7, 'end': 20,
                                 'raw_value': '[1–]3–12[–30]',
                                 'min_count': 1,
                                 'low_count': 3,

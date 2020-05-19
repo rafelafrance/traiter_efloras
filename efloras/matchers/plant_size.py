@@ -1,185 +1,148 @@
-"""Parse the trait."""
+"""Common color snippets."""
 
-from .matcher import Matcher
-from ..pylib.convert_units import convert
-from ..pylib.terms import CLOSE, CROSS, DASH, FLOAT, OPEN
-from ..pylib.util import DotDict as Trait, to_positive_float
+import regex
+from traiter.util import to_positive_float
+
+from ..pylib.terms import TERMS
+
+DIMENSIONS = {t['pattern']: t['category'] for t in TERMS
+              if t['label'] == 'dimension'}
+UNITS = {t['pattern']: t['category'] for t in TERMS
+         if t['label'] == 'length_units'}
+MULTIPLY = {t['category']: to_positive_float(m) for t in TERMS
+            if t['label'] == 'length_units' if (m := t['replace'])}
 
 
-class PlantSize(Matcher):
-    """Parse plant size notations."""
+def length(span):
+    """Enrich a phrase match."""
+    data = dict(
+        start=span.start_char,
+        end=span.end_char,
+        raw_value=span.text,
+    )
 
-    trait_matchers = {
-        'plant_part': [[{'_': {'term': 'plant_part'}}]],
-        'size_min': [[OPEN, FLOAT, DASH, CLOSE]],
-        'size_low': [[FLOAT]],
-        'size_high': [[DASH, FLOAT]],
-        'size_max': [[OPEN, DASH, FLOAT, CLOSE]],
-        'cross': [[CROSS]],
-        'length_units': [[{'_': {'term': 'length_units'}}]],
-        'dimension': [[{'_': {'term': 'dimension'}}]],
-        'part_location': [[{'_': {'term': 'part_location'}}]],
-        'plant_sex': [[{'_': {'term': 'plant_sex'}}]],
-        'up_to': [[{'LOWER': 'to'}, FLOAT]],
-        'conjunction': [[{'POS': 'CCONJ'}]],
+    dims = [{}]
+    d = 0
+
+    for token in span:
+        term = token._.term
+
+        if term in 'min_size low_size high_size max_size'.split():
+            key = term.split('_')[0]
+            dims[d][key] = to_positive_float(token.text)
+
+        elif term == 'length_units':
+            units = UNITS[token.text.lower()]
+            dims[d]['units'] = units
+            dims[d]['times'] = MULTIPLY[units]
+
+        elif term == 'dimension':
+            dims[d]['dimension'] = DIMENSIONS[token.text.lower()]
+
+        elif term == 'sex':
+            value = token.text.lower()
+            value = regex.sub(r'\W+', '', value)
+            dims[d]['sex'] = value
+
+        elif term == 'cross':
+            d += 1
+            dims.append({})
+
+    if len(dims) > 1:
+        if (dims[0].get('dimension') == 'width'
+                or dims[1].get('dimension') == 'length'):
+            dims[0], dims[1] = dims[1], dims[0]
+        if not dims[0].get('times'):
+            dims[0]['times'] = dims[1]['times']
+        if not dims[1].get('times'):
+            dims[1]['times'] = dims[0]['times']
+
+    dims[0]['dim_name'] = dims[0].get('dimension', 'length')
+    if len(dims) > 1:
+        dims[1]['dim_name'] = dims[1].get('dimension', 'width')
+
+    for dim in dims:
+        dim_name = dim['dim_name']
+        times = dim['times']
+        for field in """ min low high max """.split():
+            if value := dim.get(field):
+                key = f'{dim_name}_{field}'
+                data[key] = round(value * times, 3)
+        if value := dim.get('sex'):
+            data['sex'] = value.lower()
+        if value := dim.get('units'):
+            key = f'{dim_name}_units'
+            data[key] = value.lower()
+
+    return data
+
+
+PLANT_SIZE = {
+    'name': 'size',
+    'trait_names': """ calyx_size corolla_size flower_size hypanthium_size
+        leaf_size petal_size petiole_size seed_size sepal_size """.split(),
+    'groupers': {
+        'min_size': [[
+            {'_': {'term': 'open'}},
+            {'_': {'term': 'float'}},
+            {'_': {'term': {'IN': ['dash', 'prep']}}},
+            {'_': {'term': 'close'}},
+        ]],
+        'low_size': [[
+            {'_': {'term': 'float'}},
+        ]],
+        'high_size': [[
+            {'_': {'term': {'IN': ['dash', 'prep']}}},
+            {'_': {'term': 'float'}},
+        ]],
+        'max_size': [[
+            {'_': {'term': 'open'}},
+            {'_': {'term': {'IN': ['dash', 'prep']}}},
+            {'_': {'term': 'float'}},
+            {'_': {'term': 'close'}},
+        ]],
+        'sex': [[
+            {'_': {'term': 'open'}, 'OP': '?'},
+            {'_': {'term': 'plant_sex'}},
+            {'_': {'term': 'close'}, 'OP': '?'},
+        ]],
+    },
+    'matchers': {
+        'size': {
+            'on_match': length,
+            'patterns': [
+                [
+                    {'_': {'term': 'min_size'}, 'OP': '?'},
+                    {'_': {'term': 'low_size'}},
+                    {'_': {'term': 'high_size'}, 'OP': '?'},
+                    {'_': {'term': 'max_size'}, 'OP': '?'},
+                    {'_': {'term': 'length_units'}},
+                    {'_': {'term': 'dimension'}, 'OP': '?'},
+                    {'_': {'term': 'sex'}, 'OP': '?'},
+                ],
+                [
+                    {'_': {'term': 'min_size'}, 'OP': '?'},
+                    {'_': {'term': 'low_size'}},
+                    {'_': {'term': 'high_size'}, 'OP': '?'},
+                    {'_': {'term': 'max_size'}, 'OP': '?'},
+                    {'_': {'term': 'length_units'}, 'OP': '?'},
+                    {'_': {'term': 'dimension'}, 'OP': '?'},
+                    {'_': {'term': 'cross'}},
+                    {'_': {'term': 'min_size'}, 'OP': '?'},
+                    {'_': {'term': 'low_size'}},
+                    {'_': {'term': 'high_size'}, 'OP': '?'},
+                    {'_': {'term': 'max_size'}, 'OP': '?'},
+                    {'_': {'term': 'length_units'}},
+                    {'_': {'term': 'dimension'}, 'OP': '?'},
+                    {'_': {'term': 'sex'}, 'OP': '?'},
+                ],
+                [
+                    {'_': {'term': 'high_size'}},
+                    {'_': {'term': 'length_units'}},
+                    {'_': {'term': 'dimension'}, 'OP': '?'},
+                    {'_': {'term': 'sex'}, 'OP': '?'},
+                ]
+            ],
+        },
     }
-
-    fsm = {
-        'start': {
-            'plant_part': {'state': 'length', 'set': 'part'},
-            'part_location': {'state': 'plant_part', 'set': 'location'},
-        },
-        'plant_part': {
-            'plant_part': {'state': 'length', 'set': 'part'},
-            'size_min': {'state': 'start'},
-            'size_low': {'state': 'start'},
-            'size_high': {'state': 'start'},
-            'size_max': {'state': 'start'},
-            'cross': {'state': 'start'},
-            'length_units': {'state': 'start'},
-            'dimension': {'state': 'start'},
-            'part_location': {'set': 'location'},
-            'plant_sex': {'set': 'sex'},
-            'up_to': {'state': 'start'},
-            'conjunction': {'state': 'start'},
-        },
-        'length': {
-            'plant_part': {'state': 'length', 'save': True, 'set': 'part'},
-            'size_min': {
-                'state': 'in_len', 'set': 'min_length', 'float': True},
-            'size_low': {
-                'state': 'in_len', 'set': 'low_length', 'float': True},
-            'size_high': {
-                'state': 'in_len', 'set': 'high_length', 'float': True},
-            'size_max': {
-                'state': 'in_len', 'set': 'max_length', 'float': True},
-            'cross': {'state': 'width'},
-            'length_units': {},
-            'dimension': {},
-            'part_location': {},
-            'plant_sex': {'set': 'sex'},
-            'up_to': {'state': 'in_len', 'set': 'high_length', 'float': True},
-            'conjunction': {
-                'state': 'length', 'save': True, 'carry': ('start', 'part')},
-            'end': {'save': True},
-        },
-        'in_len': {
-            'plant_part': {'state': 'length', 'save': True, 'set': 'part'},
-            'size_min': {'set': 'min_length', 'float': True},
-            'size_low': {'set': 'low_length', 'float': True},
-            'size_high': {'set': 'high_length', 'float': True},
-            'size_max': {'set': 'max_length', 'float': True},
-            'cross': {'state': 'width'},
-            'length_units': {'set': 'length_units'},
-            'dimension': {'set': 'dimension', 'max_dist': 1},
-            'part_location': {'set': 'location'},
-            'plant_sex': {'set': 'sex'},
-            'up_to': {'set': 'high_length', 'float': True},
-            'conjunction': {
-                'state': 'length', 'save': True, 'carry': ('start', 'part')},
-            'end': {'save': True},
-        },
-        'width': {
-            'plant_part': {'state': 'length', 'save': True, 'set': 'part'},
-            'size_min': {'set': 'min_width', 'float': True},
-            'size_low': {'set': 'low_width', 'float': True},
-            'size_high': {'set': 'high_width', 'float': True},
-            'size_max': {'set': 'max_width', 'float': True},
-            'cross': {'state': 'start'},
-            'length_units': {'set': 'width_units'},
-            'dimension': {'set': 'dimension', 'max_dist': 1},
-            'part_location': {'set': 'location'},
-            'plant_sex': {'set': 'sex'},
-            'up_to': {'set': 'high_width', 'float': True},
-            'conjunction': {
-                'state': 'length', 'save': True, 'carry': ('start', 'part')},
-            'end': {'save': True},
-        },
-    }
-
-    def parse(self, text):
-        """parse the traits."""
-        traits = []
-
-        doc = self.find_terms(text)
-        matches = self.get_trait_matches(doc)
-
-        trait = Trait(start=-1)
-        state = 'start'
-        prev_end, max_dist = 0, len(doc)
-
-        for match_id, start, end in matches:
-            label = doc.vocab.strings[match_id]
-            span = doc[start:end]
-            norm = span.text.lower()
-
-            action = self.fsm[state].get(label, {})
-
-            if action.get('save'):
-                self.append_trait(traits, trait)
-                old = trait
-                trait = Trait(start=-1)
-                if carry := action.get('carry'):
-                    for field in carry:
-                        trait[field] = old[field]
-
-            dist = start - prev_end
-            if dist > action.get('max_dist', max_dist):
-                continue
-
-            if field := action.get('set'):
-                if action.get('float'):
-                    trait[field] = to_positive_float(norm)
-                else:
-                    trait[field] = self.replace.get(norm, norm)
-
-            if trait.start < 0:
-                trait.start = span.start_char
-            trait.end = span.end_char
-
-            state = action.get('state', state)
-            prev_end = end
-
-        action = self.fsm[state].get('end', {})
-        if action.get('save'):
-            self.append_trait(traits, trait)
-
-        return traits
-
-    @staticmethod
-    def append_trait(traits, trait):
-        """Check if a trait is valid, update & save it if it is."""
-        # It must have a plant part
-        if not trait.get('part'):
-            return
-
-        # It must have units. Make sure we have units for all values
-        if trait.get('width_units'):
-            if trait.get('length_units'):
-                trait.units = [trait.length_units, trait.width_units]
-            else:
-                trait.length_units = trait.width_units
-                trait.units = trait.width_units
-        elif trait.get('length_units'):
-            trait.units = trait.length_units
-            trait.width_units = trait.length_units
-        else:
-            return
-
-        has_value = False
-        for dim in ('length', 'width'):
-            units = trait[f'{dim}_units']
-            for name in ('min', 'low', 'high', 'max'):
-                field = f'{name}_{dim}'
-                if field in trait:
-                    has_value = True
-                    value = trait[field]
-                    trait[field] = convert(value, units)
-
-        if has_value:
-            del trait['length_units']
-            del trait['width_units']
-            traits.append(trait)
-
-
-PLANT_SIZE = PlantSize('plant_size')
+}

@@ -8,9 +8,10 @@ from ..matchers.plant_count import PLANT_COUNT
 from ..matchers.plant_descriptor import PLANT_DESCRIPTOR
 from ..matchers.plant_part import PLANT_PART
 from ..matchers.plant_shape import PLANT_SHAPE
+from ..matchers.plant_size import PLANT_SIZE
 
 MATCHERS = [PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_PART,
-            PLANT_SHAPE]
+            PLANT_SHAPE, PLANT_SIZE]
 
 MATCHER_NAMES = {m['name']: m for m in MATCHERS}
 TRAIT2MATCHER = {n: m['name'] for m in MATCHERS for n in m['trait_names']}
