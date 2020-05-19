@@ -1,6 +1,7 @@
 """Plant part parser."""
 
-from traiter.util import DotDict as Trait
+import regex
+from traiter.util import FLAGS
 
 from ..pylib.terms import TERMS
 
@@ -9,12 +10,16 @@ CATEGORIES = {t['pattern']: c for t in TERMS if (c := t['category'])}
 
 def part(span):
     """Enrich a plant part match."""
-    return Trait(
-        value=CATEGORIES.get(span.text.lower()),
+    value = CATEGORIES.get(span.text.lower(), '')
+    trait = dict(
+        value=value,
         start=span.start_char,
         end=span.end_char,
         raw_value=span.text,
     )
+    if match := regex.search(r' pistillate | staminate ', span.text, FLAGS):
+        trait['sex'] = match.group().lower()
+    return trait
 
 
 PLANT_PART = {

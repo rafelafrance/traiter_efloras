@@ -3,10 +3,9 @@
 from collections import defaultdict
 
 from traiter.matcher import Parser
-from traiter.util import as_list
 
 from ..pylib.terms import terms_from_patterns
-from ..pylib.traits import MATCHER_NAMES, TRAIT2MATCHER
+from ..pylib.traits import expand_trait_names, traits_to_matchers
 
 
 class Base(Parser):
@@ -15,24 +14,19 @@ class Base(Parser):
     def __init__(self, trait_names=None):
         super().__init__()
 
-        # Build the traits to parse
-        names = as_list(trait_names) if trait_names else list(TRAIT2MATCHER)
-        names += ['plant_part']  # We always need to parse plant_parts
-        self.trait_names = {k: v for k, v in TRAIT2MATCHER.items()
-                            if k in sorted(names)}
+        self.trait_names = expand_trait_names(trait_names)
+        matchers = traits_to_matchers(self.trait_names)
 
-        # Build the matchers we need to parse the traits
-        self.matchers = {TRAIT2MATCHER[n]: MATCHER_NAMES[TRAIT2MATCHER[n]]
-                         for n in names}
+        # Get what we need from the matchers
+        patterns = {}
+        aux_names = []
+        for matcher in matchers:
+            patterns = {**patterns, **matcher['matchers']}
+            aux_names += matcher.get('aux_names', [])
+        self.add_patterns(patterns)
+        self.trait_filter = set(self.trait_names + aux_names)
 
-        # Add the parser patterns that we need
-        self.patterns = {}
-        for matcher in self.matchers.values():
-            self.patterns = {**self.patterns, **matcher['matchers']}
-        self.add_patterns(self.patterns)
-
-        # Add the terms we need based on the patterns
-        self.terms = terms_from_patterns(self.patterns)
+        self.terms = terms_from_patterns(patterns)
         self.add_terms(self.terms)
 
     def parse(self, text):
@@ -56,12 +50,16 @@ class Base(Parser):
                 traits[label].append(data)
 
             elif data:
-                key = f'{category}_{label}'
-                traits[key].append(data)
+                trait_name = f'{category}_{label}'
+                if trait_name in self.trait_filter:
+                    traits[trait_name].append(data)
 
         if traits:
             parts.append(traits)
 
-        print([dict(p) for p in parts])
+        # print()
+        # from pprint import pp
+        # pp([dict(p) for p in parts])
+        # print()
 
         return parts
