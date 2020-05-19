@@ -1,28 +1,31 @@
 """Common color snippets."""
 
-from traiter.util import as_list
+from traiter.util import DotDict as Trait
+
 from ..pylib.terms import DASH, REPLACE
 
 
-def plant_color(span):
+def color(span):
     """Enrich a color phrase match."""
-    parts = {}
-    for token in span:
-        part = REPLACE.get(token.text, token.text)
-        if part not in DASH:
-            parts[part] = 1     # Sets do not preserve order but dicts do
+    parts = {r: 1 for t in span
+             if (r := REPLACE.get(t.text, t.text)) not in DASH}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    return {'value': value}
+    return Trait(
+        value=value,
+        start=span.start_char,
+        end=span.end_char,
+        raw_value=span.text,
+    )
 
 
 PLANT_COLOR = {
-    'name': 'plant_color',
+    'name': 'color',
     'trait_names': """caylx_color corolla_color flower_color fruit_color
         hypanthium_color petal_color sepal_color """.split(),
     'matchers': {
-        'plant_color': {
-            'on_match': plant_color,
+        'color': {
+            'on_match': color,
             'patterns': [
                 [
                     {'_': {'term': 'color_leader'}, 'OP': '?'},

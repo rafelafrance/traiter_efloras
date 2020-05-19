@@ -1,8 +1,9 @@
 """Base matcher object."""
 
-from traiter.matcher import Parser
-from traiter.util import as_list, DotDict as Trait
+from collections import defaultdict
 
+from traiter.matcher import Parser
+from traiter.util import as_list
 
 from ..pylib.terms import terms_from_patterns
 from ..pylib.traits import MATCHER_NAMES, TRAIT2MATCHER
@@ -38,24 +39,29 @@ class Base(Parser):
         """Parse the traits."""
         doc = super().parse(text)
 
-        traits = []
+        parts = []
+        traits = defaultdict(list)
 
-        trait = Trait(end=0, start=len(text), value=[])
-
-        value = {}
+        category = ''
 
         for token in doc:
-            trait_name = token._.trait
+            label = token._.label
             data = token._.data
-            if trait_name == 'plant_part':
-                trait.part = data['part']
-            elif trait_name in self.matchers:
-                trait.start = min(token.idx, trait.start)
-                trait.end = max(token.idx + len(token), trait.end)
-                value[data['value']] = 1
-        trait.value = list(value)
-        trait.raw_value = text[trait.start:trait.end]
 
-        traits.append(trait)
+            if label == 'part':
+                if traits:
+                    parts.append(traits)
+                category = data['value']
+                traits = defaultdict(list)
+                traits[label].append(data)
 
-        return traits
+            elif data:
+                key = f'{category}_{label}'
+                traits[key].append(data)
+
+        if traits:
+            parts.append(traits)
+
+        print([dict(p) for p in parts])
+
+        return parts

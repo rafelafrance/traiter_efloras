@@ -22,11 +22,13 @@ def read_terms():
 
 
 TERMS = read_terms()
+LABELS = {t['label'] for t in TERMS}
 REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
 
 
 PATTERN_RE = regex.compile(rf"""
-    {QUOTE}term{QUOTE} \s* :\s* {QUOTE} (?P<term> \w+ ) {QUOTE}
+    {QUOTE} term {QUOTE} \s* : \s* {QUOTE} (\w+) {QUOTE}
+    | {QUOTE} term {QUOTE} \s* : \s*  \{{ {QUOTE} IN {QUOTE} ( [^}}]+ )
     """, t_util.FLAGS)
 
 
@@ -36,5 +38,8 @@ def terms_from_patterns(patterns):
     string = json.dumps(patterns)
     terms = set()
     for match in PATTERN_RE.finditer(string):
-        terms.add(match.group('term'))
+        if match.group(1):
+            terms.add(match.group(1))
+        else:
+            terms |= {t for t in regex.split(r'\W+', match.group(2)) if t}
     return [t for t in TERMS if t['label'] in terms]

@@ -1,17 +1,28 @@
 """Plant part parser."""
 
+from traiter.util import DotDict as Trait
 
-def plant_part(span):
+from ..pylib.terms import TERMS
+
+CATEGORIES = {t['pattern']: c for t in TERMS if (c := t['category'])}
+
+
+def part(span):
     """Enrich a plant part match."""
-    return {'part': span.text.lower()}
+    return Trait(
+        value=CATEGORIES.get(span.text.lower()),
+        start=span.start_char,
+        end=span.end_char,
+        raw_value=span.text,
+    )
 
 
 PLANT_PART = {
-    'name': 'plant_part',
+    'name': 'part',
     'trait_names': ['plant_part'],
     'matchers': {
-        'plant_part': {
-            'on_match': plant_part,
+        'part': {
+            'on_match': part,
             'patterns': [[{'_': {'term': 'plant_part'}}]],
         },
     }

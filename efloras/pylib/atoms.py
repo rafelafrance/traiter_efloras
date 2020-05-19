@@ -54,9 +54,14 @@ ATOMS = {
     'petals': (
             FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'petioles': (LEAF + PETIOLE),
+    'pistillate corollas': (
+            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'pistillate flowers': (
             FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
-    'pistillate': [],
+    'pistillate inflorescences': (
+            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+    'pistillate racemes': (
+            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'plants': [],
     'pollen': [],
     'protonematal flaps': [],
