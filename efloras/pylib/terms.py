@@ -34,7 +34,6 @@ PATTERN_RE = regex.compile(rf"""
 
 def terms_from_patterns(patterns):
     """Get all of the terms required by the matchers."""
-    patterns = [p['patterns'] for p in patterns.values()]
     string = json.dumps(patterns)
     terms = set()
     for match in PATTERN_RE.finditer(string):

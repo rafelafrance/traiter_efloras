@@ -2,7 +2,7 @@
 
 import unittest
 
-from efloras.matchers.base import Base
+from efloras.matchers.matcher import Matcher
 
 
 class TestPlantDescriptor(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestPlantDescriptor(unittest.TestCase):
     def test_plant_descriptor_01(self):
         """It parses a compound sex notation."""
         self.assertEqual(
-            Base('sexual_descriptor').parse(
+            Matcher('sexual_descriptor').parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             [{'sexual_descriptor': [{'value': 'bisexual',
@@ -31,7 +31,7 @@ class TestPlantDescriptor(unittest.TestCase):
     def test_plant_descriptor_02(self):
         """It parses a symmetry descriptor."""
         self.assertEqual(
-            Base('symmetry_descriptor').parse(
+            Matcher('symmetry_descriptor').parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),
             [{'symmetry_descriptor': [{'value': 'actinomorphic',
                                        'start': 16, 'end': 29,

@@ -2,7 +2,7 @@
 
 import unittest
 
-from efloras.matchers.base import Base
+from efloras.matchers.matcher import Matcher
 
 
 class TestPlantShape(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_01(self):
         """It finds a shape."""
         self.assertEqual(
-            Base('*_shape').parse('leaf suborbiculate'),
+            Matcher('*_shape').parse('leaf suborbiculate'),
             [{'part': [
                 {'value': 'leaf', 'start': 0, 'end': 4, 'raw_value': 'leaf'}],
                 'leaf_shape': [{'value': 'orbicular',
@@ -22,7 +22,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_02(self):
         """It combines shapes."""
         self.assertEqual(
-            Base('*_shape').parse('leaf ovate-suborbicular'),
+            Matcher('*_shape').parse('leaf ovate-suborbicular'),
             [{'part': [
                 {'value': 'leaf', 'start': 0, 'end': 4, 'raw_value': 'leaf'}],
                 'leaf_shape': [{'value': 'ovate-orbicular',
@@ -33,7 +33,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_03(self):
         """It gets a shape starter word."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'petiolule 3–12 mm, narrowly oblanceolate,'),
             [{'part': [{'value': 'petiole',
                         'start': 0, 'end': 9,
@@ -46,7 +46,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_04(self):
         """It handles multiple shapes."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaves ; blade ovate or orbiculate to '
                 'suborbiculate or reniform,'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
@@ -70,7 +70,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_05(self):
         """It handles multiple shapes."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaves: blade ovate or elongate-ovate to '
                 'lanceolate-ovate or ovate-triangular, '),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
@@ -94,7 +94,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_06(self):
         """It handles complex shape starter phrases."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaves: blade broadly to shallowly triangular'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
                         'raw_value': 'Leaves'}]},
@@ -109,7 +109,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_07(self):
         """It handles complex shape phrases."""
         self.assertEqual(
-            Base('leaf_shape').parse(
+            Matcher('leaf_shape').parse(
                 '; blade sometimes white-mottled abaxially, suborbiculate to '
                 'broadly ovate, depressed-ovate, or reniform, '),
             [{'part': [
@@ -131,7 +131,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_08(self):
         """It does not pick up lobe notations."""
         self.assertEqual(
-            Base('*_shape').parse('blade deeply pedately 3-lobed'),
+            Matcher('*_shape').parse('blade deeply pedately 3-lobed'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 5,
                         'raw_value': 'blade'}]}]
         )
@@ -140,7 +140,7 @@ class TestPlantShape(unittest.TestCase):
         """It handles complex shape phrases."""
         self.maxDiff = None
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'blade <sometimes white-spotted at vein junctions>, '
                 'broadly ovate-cordate to triangular-cordate or reniform, '
                 'shallowly to deeply palmately '),
@@ -160,7 +160,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_10(self):
         """It does not pick up a lobe notation in the middle of the text."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaf blades 2–7 cm wide, lobe apex rounded'),
             [{'part': [{'value': 'leaf',
                         'start': 0, 'end': 11,
@@ -173,7 +173,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_11(self):
         """It allows a lobe notation after a shape notation."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaf blades mostly orbiculate, deeply to shallowly lobed,'),
             [{'part': [{'value': 'leaf',
                         'start': 0, 'end': 11,
@@ -186,7 +186,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_12(self):
         """It handles the n-angulate shape."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaves: petiole 1–3(–4.5) cm; blade pentagonal-angulate to '
                 'reniform-angulate or shallowly 5-angulate,'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
@@ -210,7 +210,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_13(self):
         """It more complex shape notations."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'blade lanceolate to narrowly or broadly lanceolate '
                 'or elliptic-lanceolate, '),
             [{'part': [
@@ -229,7 +229,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_14(self):
         """It more complex shape notations."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'blade broadly ovate to rounded-cordate, subreniform, '
                 'or deltate'),
             [{'part': [
@@ -251,7 +251,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_15(self):
         """It handles hyphenated words."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'blade orbic-ulate to pentagonal,'),
             [{'part': [
                 {'value': 'leaf', 'start': 0, 'end': 5, 'raw_value': 'blade'}],
@@ -266,7 +266,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_16(self):
         """It handles hyphenated words."""
         self.assertEqual(
-            Base('*_shape').parse('blade pen-tagonal'),
+            Matcher('*_shape').parse('blade pen-tagonal'),
             [{'part': [
                 {'value': 'leaf', 'start': 0, 'end': 5, 'raw_value': 'blade'}],
                 'leaf_shape': [{'value': 'polygonal',
@@ -277,7 +277,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_17(self):
         """It gets the plant part location."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Leaves usually in basal rosettes, sometimes cauline, '
                 'usually alternate, sometimes opposite '),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
@@ -296,7 +296,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_18(self):
         """It parses other shapes."""
         self.assertEqual(
-            Base('*_shape').parse('hypanthium cupulate'),
+            Matcher('*_shape').parse('hypanthium cupulate'),
             [{'part': [{'value': 'hypanthium',
                         'start': 0, 'end': 10,
                         'raw_value': 'hypanthium'}],
@@ -308,7 +308,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_19(self):
         """More multiple shape parsing."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'hypanthium cupulate to shallowly campanulate;'),
             [{'part': [{'value': 'hypanthium',
                         'start': 0, 'end': 10,
@@ -324,7 +324,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_20(self):
         """It separates different shapes."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'hypanthium subcylindric to narrowly funnelform;'),
             [{'part': [{'value': 'hypanthium',
                         'start': 0, 'end': 10,
@@ -340,7 +340,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_21(self):
         """It separates different shapes."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'hypanthium narrowly campanulate to cylindric '
                 '[obtriangular];'),
             [{'part': [{'value': 'hypanthium',
@@ -360,7 +360,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_22(self):
         """It gets sepal shapes."""
         self.assertEqual(
-            Base('sepal_shape').parse('sepals linear-subulate, 3–5 mm; '),
+            Matcher('sepal_shape').parse('sepals linear-subulate, 3–5 mm; '),
             [{'part': [{'value': 'sepal', 'start': 0, 'end': 6,
                         'raw_value': 'sepals'}],
               'sepal_shape': [{'value': 'linear-subulate',
@@ -371,7 +371,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_23(self):
         """It picks up many shape notations."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'sepals cylindrical, peltate, semiterete, subcylindrical, '
                 'subpeltate, subterete, subulate, terete'),
             [{'part': [{'value': 'sepal', 'start': 0, 'end': 6,
@@ -405,7 +405,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_24(self):
         """It does not pick up a lobe notation."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'blade unlobed or palmately, pedately, or pinnately lobed'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 5,
                         'raw_value': 'blade'}]},
@@ -416,7 +416,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_25(self):
         """It does not get an ovary shape."""
         self.assertEqual(
-            Base('*_shape').parse(
+            Matcher('*_shape').parse(
                 'Pistillate flowers: ovary usually 1-locular, ovoid to '
                 'elliptic-ovoid or subglobose'),
             [{'part': [{'value': 'flower',
@@ -430,7 +430,7 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_26(self):
         """It gathers two locations."""
         self.assertEqual(
-            Base('*_shape').parse('Leaves in basal rosette and cauline'),
+            Matcher('*_shape').parse('Leaves in basal rosette and cauline'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
                         'raw_value': 'Leaves'}],
               'leaf_location': [{'value': 'basal',

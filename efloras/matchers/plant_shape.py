@@ -48,7 +48,7 @@ PLANT_SHAPE = {
                 ],
                 [
                     {'_': {'term': 'shape_leader'}},
-                    {'_': {'term': {'IN': ['prep', 'dash']}}},
+                    {'_': {'term': {'IN': ['dash', 'prep']}}},
                     {'_': {'term': {'IN': ['shape_leader']}}},
                     {'_': {'term': 'dash'}, 'OP': '?'},
                     {'_': {'term': 'shape'}, 'OP': '+'},

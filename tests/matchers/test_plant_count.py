@@ -2,8 +2,7 @@
 
 import unittest
 
-from efloras.matchers.plant_count import PLANT_COUNT, SEED_COUNT, SEPAL_COUNT
-from efloras.pylib.util import DotDict as Trait
+from efloras.matchers.matcher import Matcher
 
 
 class TestPlantCount(unittest.TestCase):
@@ -12,72 +11,110 @@ class TestPlantCount(unittest.TestCase):
     def test_plant_count_01(self):
         """It parses a simple count."""
         self.assertEqual(
-            PLANT_COUNT.parse('Seeds [1–]3–12[–30]'),
-            [Trait(start=0, end=19, part='seeds',
-                   min_count=1, low_count=3, high_count=12, max_count=30)])
+            Matcher('*_count').parse('Seeds [1–]3–12[–30]'),
+            [{'part': [
+                {'value': 'seed', 'start': 0, 'end': 5,
+                 'raw_value': 'Seeds'}],
+                'seed_count': [{'start': 6,
+                                'end': 19,
+                                'raw_value': '[1–]3–12[–30]',
+                                'min_count': 1,
+                                'low_count': 3,
+                                'high_count': 12,
+                                'max_count': 30}]}]
+        )
 
     def test_plant_count_02(self):
-        """It parses a simple count range."""
+        """It parses a seed count."""
         self.assertEqual(
-            PLANT_COUNT.parse('Seeds 3–12'),
-            [Trait(start=0, end=10, part='seeds',
-                   low_count=3, high_count=12)])
+            Matcher('*_count').parse('Seeds 3–12'),
+            [{'part': [
+                {'value': 'seed', 'start': 0, 'end': 5,
+                 'raw_value': 'Seeds'}],
+                'seed_count': [{'start': 6,
+                                'end': 10,
+                                'raw_value': '3–12',
+                                'low_count': 3,
+                                'high_count': 12}]}]
+        )
 
     def test_plant_count_03(self):
         """It does not parse a length measurement."""
         self.assertEqual(
-            PLANT_COUNT.parse('blade 5–10 × 4–9 cm'),
-            [])
+            Matcher('*_count').parse('blade 5–10 × 4–9 cm'),
+            [{'part': [{'value': 'leaf', 'start': 0, 'end': 5,
+                        'raw_value': 'blade'}]}]
+        )
 
     def test_plant_count_04(self):
         """It does not parse a length measurement."""
         self.assertEqual(
-            PLANT_COUNT.parse('petals 5, connate 1/2–2/3 length'),
-            [Trait(start=0, end=8, part='petals', low_count=5)])
+            Matcher('*_count').parse('petals 5, connate 1/2–2/3 length'),
+            [{'part': [{'value': 'petal', 'start': 0, 'end': 6,
+                        'raw_value': 'petals'}]}]
+        )
 
     def test_plant_count_05(self):
-        """It handles an adverb between the plant part and counts."""
+        """It handles ovary counts."""
         self.assertEqual(
-            PLANT_COUNT.parse('ovules mostly 120–200.'),
-            [Trait(start=0, end=21, part='ovules',
-                   low_count=120, high_count=200)])
+            Matcher('*_count').parse('ovules mostly 120–200.'),
+            [{'part': [{'value': 'ovary', 'start': 0, 'end': 6,
+                        'raw_value': 'ovules'}],
+              'ovary_count': [{'start': 14,
+                               'end': 21,
+                               'raw_value': '120–200',
+                               'low_count': 120,
+                               'high_count': 200}]}]
+        )
 
     def test_plant_count_06(self):
-        """It gets a sex notation."""
+        """We're not counting flowers yet."""
         self.assertEqual(
-            PLANT_COUNT.parse('staminate flowers (3–)5–10(–20)'),
-            [Trait(start=0, end=31, part='flowers', sex='staminate',
-                   min_count=3, low_count=5,
-                   high_count=10, max_count=20)])
+            Matcher('*_count').parse('staminate flowers (3–)5–10(–20)'),
+            [{'part': [{'value': 'flower',
+                        'start': 0,
+                        'end': 17,
+                        'raw_value': 'staminate flowers',
+                        'sex': 'staminate'}]}]
+        )
 
     def test_plant_count_07(self):
-        """It does not pick up a lobe notation."""
+        """It handles an ovary."""
         self.assertEqual(
-            PLANT_COUNT.parse('stigmas 3, 2(–3)-lobed'),
-            [Trait(start=0, end=9, part='stigmas', low_count=3)])
+            Matcher('ovary_count').parse('Ovaries (4 or)5,'),
+            [{'part': [{'value': 'ovary', 'start': 0, 'end': 7,
+                        'raw_value': 'Ovaries'}],
+              'ovary_count': [{'start': 8,
+                               'end': 15,
+                               'raw_value': '(4 or)5',
+                               'min_count': 4,
+                               'low_count': 5}]}]
+        )
 
     def test_plant_count_08(self):
         """It handles a conjunction in place of a dash."""
         self.assertEqual(
-            PLANT_COUNT.parse('Petals (4 or)5,'),
-            [Trait(start=0, end=14, part='petals', min_count=4, low_count=5)])
+            Matcher('seed_count').parse('Seeds 5(or 6)'),
+            [{'part': [
+                {'value': 'seed', 'start': 0, 'end': 5, 'raw_value': 'Seeds'}],
+              'seed_count': [{'start': 6,
+                              'end': 13,
+                              'raw_value': '5(or 6)',
+                              'low_count': 5,
+                              'max_count': 6}]}]
+        )
 
     def test_plant_count_09(self):
-        """It handles a conjunction in place of a dash."""
-        self.assertEqual(
-            PLANT_COUNT.parse('Petals 5(or 6)'),
-            [Trait(start=0, end=14, part='petals', low_count=5, max_count=6)])
-
-    def test_plant_count_10(self):
         """It parses a sepal count."""
         self.assertEqual(
-            SEPAL_COUNT.parse('Sepal [1–]3–12[–30]'),
-            [Trait(start=0, end=19, part='sepal',
-                   min_count=1, low_count=3, high_count=12, max_count=30)])
-
-    def test_plant_count_11(self):
-        """It parses a seed count."""
-        self.assertEqual(
-            SEED_COUNT.parse('Seeds [1–]3–12[–30]'),
-            [Trait(start=0, end=19, part='seeds',
-                   min_count=1, low_count=3, high_count=12, max_count=30)])
+            Matcher('stamen_count').parse('Stamen [1–]3–12[–30]'),
+            [{'part': [{'value': 'stamen', 'start': 0, 'end': 6,
+                        'raw_value': 'Stamen'}],
+              'stamen_count': [{'start': 7,
+                                'end': 20,
+                                'raw_value': '[1–]3–12[–30]',
+                                'min_count': 1,
+                                'low_count': 3,
+                                'high_count': 12,
+                                'max_count': 30}]}]
+        )

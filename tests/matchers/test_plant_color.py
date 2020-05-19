@@ -2,7 +2,7 @@
 
 import unittest
 
-from efloras.matchers.base import Base
+from efloras.matchers.matcher import Matcher
 
 
 class TestPlantColor(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_01(self):
         """It parses compound color notations."""
         self.assertEqual(
-            Base('*_color').parse(
+            Matcher('*_color').parse(
                 'hypanthium green or greenish yellow, '
                 'usually not purple-spotted, rarely purple-spotted distally'),
             [{'part': [{'value': 'hypanthium',
@@ -33,7 +33,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_02(self):
         """It parses compound color words."""
         self.assertEqual(
-            Base('*_color').parse(
+            Matcher('*_color').parse(
                 'hypanthium straw-colored to '
                 'sulphur-yellow or golden-yellow'),
             [{'part': [{'value': 'hypanthium',
@@ -52,7 +52,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_03(self):
         """It normalizes color notations."""
         self.assertEqual(
-            Base('*_color').parse('sepals erect, green- or red-tipped'),
+            Matcher('*_color').parse('sepals erect, green- or red-tipped'),
             [{'part': [{'value': 'sepal', 'start': 0, 'end': 6,
                         'raw_value': 'sepals'}],
               'sepal_color': [{'value': 'green',
@@ -67,7 +67,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_04(self):
         """It handles colors with trailing punctuation."""
         self.assertEqual(
-            Base('*_color').parse(
+            Matcher('*_color').parse(
                 'petals 5, connate 1/2-2/3 length, white, cream, '
                 'or pale green [orange to yellow], '),
             [{'part': [{'value': 'petal', 'start': 0, 'end': 6,
@@ -93,7 +93,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_05(self):
         """It handles pattern notations within colors."""
         self.assertEqual(
-            Base('*_color').parse(
+            Matcher('*_color').parse(
                 'petals 5, distinct, white to cream, obovate to '
                 'oblong-obovate, (15–)20–greenish yellow, maturing '
                 'yellowish or pale brown, commonly mottled or with '
@@ -126,7 +126,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_06(self):
         """It handles some odd pattern notations like 'throated'."""
         self.assertEqual(
-            Base('*_color').parse(
+            Matcher('*_color').parse(
                 'Petals 5, distinct, white to cream, greenish white, '
                 'or yellowish green, or yellowish, usually green-throated '
                 'and faintly green-lined,'),
@@ -159,7 +159,7 @@ class TestPlantColor(unittest.TestCase):
         """It parses calyx color."""
         self.maxDiff = None
         self.assertEqual(
-            Base('calyx_color').parse('calyx yellow'),
+            Matcher('calyx_color').parse('calyx yellow'),
             [{'part': [{'value': 'calyx', 'start': 0, 'end': 5,
                         'raw_value': 'calyx'}],
               'calyx_color': [{'value': 'yellow',
@@ -170,7 +170,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_08(self):
         """It parses corolla color."""
         self.assertEqual(
-            Base('corolla_color').parse('corolla yellow'),
+            Matcher('corolla_color').parse('corolla yellow'),
             [{'part': [{'value': 'corolla', 'start': 0, 'end': 7,
                         'raw_value': 'corolla'}],
               'corolla_color': [{'value': 'yellow',
@@ -181,7 +181,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_09(self):
         """It parses flower color."""
         self.assertEqual(
-            Base('flower_color').parse('flower yellow'),
+            Matcher('flower_color').parse('flower yellow'),
             [{'part': [{'value': 'flower', 'start': 0, 'end': 6,
                         'raw_value': 'flower'}],
               'flower_color': [{'value': 'yellow',
@@ -193,7 +193,7 @@ class TestPlantColor(unittest.TestCase):
         """It parses hypanthium color."""
         self.maxDiff = None
         self.assertEqual(
-            Base('hypanthium_color').parse('hypanthium yellow'),
+            Matcher('hypanthium_color').parse('hypanthium yellow'),
             [{'part': [{'value': 'hypanthium',
                         'start': 0, 'end': 10,
                         'raw_value': 'hypanthium'}],
@@ -205,7 +205,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_11(self):
         """It parses petal color."""
         self.assertEqual(
-            Base('petal_color').parse('petal yellow'),
+            Matcher('petal_color').parse('petal yellow'),
             [{'part': [{'value': 'petal', 'start': 0, 'end': 5,
                         'raw_value': 'petal'}],
               'petal_color': [{'value': 'yellow',
@@ -216,7 +216,7 @@ class TestPlantColor(unittest.TestCase):
     def test_plant_color_12(self):
         """It parses sepal color."""
         self.assertEqual(
-            Base('sepal_color').parse('sepal yellow'),
+            Matcher('sepal_color').parse('sepal yellow'),
             [{'part': [{'value': 'sepal', 'start': 0, 'end': 5,
                         'raw_value': 'sepal'}],
               'sepal_color': [{'value': 'yellow',

@@ -2,13 +2,13 @@
 
 from collections import defaultdict
 
-from traiter.matcher import Parser
+from traiter.trait_matcher import TraitMatcher
 
 from ..pylib.terms import terms_from_patterns
 from ..pylib.traits import expand_trait_names, traits_to_matchers
 
 
-class Base(Parser):
+class Matcher(TraitMatcher):
     """Base matcher object."""
 
     def __init__(self, trait_names=None):
@@ -17,16 +17,25 @@ class Base(Parser):
         self.trait_names = expand_trait_names(trait_names)
         matchers = traits_to_matchers(self.trait_names)
 
-        # Get what we need from the matchers
-        patterns = {}
+        # Process the matchers
+        trait_patterns = {}
+        group_patterns = {}
         aux_names = []
+
         for matcher in matchers:
-            patterns = {**patterns, **matcher['matchers']}
+            trait_patterns = {**trait_patterns, **matcher['matchers']}
+            group_patterns = {**group_patterns, **matcher.get('groupers', {})}
             aux_names += matcher.get('aux_names', [])
-        self.add_patterns(patterns)
+
+        self.add_trait_patterns(trait_patterns)
+        self.add_group_patterns(group_patterns)
+
         self.trait_filter = set(self.trait_names + aux_names)
 
+        # We can now add the terms
+        patterns = [p['patterns'] for p in trait_patterns.values()]
         self.terms = terms_from_patterns(patterns)
+        self.terms += terms_from_patterns(group_patterns)
         self.add_terms(self.terms)
 
     def parse(self, text):
@@ -67,8 +76,8 @@ class Base(Parser):
         if descriptors:
             parts = [descriptors] + parts
 
-        print()
-        from pprint import pp
-        pp([dict(p) for p in parts])
+        # print()
+        # from pprint import pp
+        # pp([dict(p) for p in parts])
 
         return parts
