@@ -4,10 +4,11 @@ import regex
 from traiter.util import as_list
 
 from ..matchers.plant_color import PLANT_COLOR
+from ..matchers.plant_descriptor import PLANT_DESCRIPTOR
 from ..matchers.plant_part import PLANT_PART
 from ..matchers.plant_shape import PLANT_SHAPE
 
-MATCHERS = [PLANT_COLOR, PLANT_PART, PLANT_SHAPE]
+MATCHERS = [PLANT_COLOR, PLANT_DESCRIPTOR, PLANT_PART, PLANT_SHAPE]
 
 MATCHER_NAMES = {m['name']: m for m in MATCHERS}
 TRAIT2MATCHER = {n: m['name'] for m in MATCHERS for n in m['trait_names']}

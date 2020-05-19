@@ -27,7 +27,7 @@ def location(span):
     )
 
 
-SHAPE_TRAITS = """caylx_shape corolla_shape flower_shape hypanthium_shape
+SHAPE_TRAITS = """ caylx_shape corolla_shape flower_shape hypanthium_shape
         leaf_shape petal_shape petiole_shape sepal_shape """.split()
 
 PLANT_SHAPE = {

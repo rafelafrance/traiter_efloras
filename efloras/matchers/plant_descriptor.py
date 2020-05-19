@@ -1,32 +1,33 @@
-"""Parse the trait."""
+"""Common color snippets."""
 
-from .base import Base, group2span
-from ..pylib.util import DotDict as Trait
-
-
-class PlantDescriptor(Base):
-    """Parse plant colors."""
-
-    def __init__(self, part):
-        self.descriptor = f'{part}_descriptor'
-
-        super().__init__(self.descriptor)
-
-        self.producer(self.convert, f""" (?P<value> {self.descriptor} ) """)
-
-    @staticmethod
-    def convert(doc, match, token_map):
-        """Convert the matched term into a trait."""
-        trait = Trait()
-
-        span = group2span(doc, match, 'value', token_map)
-        trait.start = span.start_char
-        trait.end = span.end_char
-        trait.value = span.text.lower()
-
-        return trait
+from ..pylib.terms import TERMS
 
 
-PLANT_DESCRIPTOR = PlantDescriptor('sexual')
-SEXUAL_DESCRIPTOR = PlantDescriptor('sexual')
-SYMMETRY_DESCRIPTOR = PlantDescriptor('symmetry')
+CATEGORIES = {t['pattern']: t['category'] for t in TERMS
+              if t['label'] == 'descriptor'}
+
+
+def descriptor(span):
+    """Enrich a phrase match."""
+    value = span.text.lower()
+    category = CATEGORIES.get(value, '')
+    return dict(
+        value=value,
+        category=category,
+        start=span.start_char,
+        end=span.end_char,
+        raw_value=span.text,
+    )
+
+
+PLANT_DESCRIPTOR = {
+    'name': 'descriptor',
+    'trait_names': """ seasonal_descriptor sexual_descriptor
+        symmetry_descriptor temporal_descriptor""".split(),
+    'matchers': {
+        'descriptor': {
+            'on_match': descriptor,
+            'patterns': [[{'_': {'term': 'descriptor'}}]],
+        },
+    }
+}

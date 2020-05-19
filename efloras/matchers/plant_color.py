@@ -19,7 +19,7 @@ def color(span):
 
 PLANT_COLOR = {
     'name': 'color',
-    'trait_names': """calyx_color corolla_color flower_color fruit_color
+    'trait_names': """ calyx_color corolla_color flower_color fruit_color
         hypanthium_color petal_color sepal_color """.split(),
     'matchers': {
         'color': {

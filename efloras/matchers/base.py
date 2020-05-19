@@ -34,6 +34,7 @@ class Base(Parser):
         doc = super().parse(text)
 
         parts = []
+        descriptors = defaultdict(list)
         traits = defaultdict(list)
 
         category = ''
@@ -49,6 +50,11 @@ class Base(Parser):
                 traits = defaultdict(list)
                 traits[label].append(data)
 
+            elif label == 'descriptor' and data:
+                trait_name = f'{data["category"]}'
+                if trait_name in self.trait_filter:
+                    descriptors[trait_name].append(data)
+
             elif data:
                 trait_name = f'{category}_{label}'
                 if trait_name in self.trait_filter:
@@ -57,9 +63,12 @@ class Base(Parser):
         if traits:
             parts.append(traits)
 
-        # print()
-        # from pprint import pp
-        # pp([dict(p) for p in parts])
-        # print()
+        if descriptors:
+            parts = [descriptors] + parts
+
+        print()
+        from pprint import pp
+        pp([dict(p) for p in parts])
+        print()
 
         return parts
