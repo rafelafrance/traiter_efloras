@@ -3,21 +3,23 @@
 import csv
 from datetime import datetime
 from itertools import product
+from pathlib import Path
 
 import regex
 
-import efloras.pylib.util as util
-
+DATA_DIR = Path('.') / 'data'
+EFLORAS_DIR = DATA_DIR / 'eFloras'
+FAMILY_DIR = DATA_DIR / 'families'
 
 CITE = 'http://www.efloras.org'
-EFLORAS_FAMILIES = util.DATA_DIR / 'eFloras_family_list.csv'
+EFLORAS_FAMILIES = DATA_DIR / 'eFloras_family_list.csv'
 TAXON_RE = regex.compile(r'Accepted Name', flags=regex.IGNORECASE)
 
 
 def family_dir(flora_id, family_name):
     """Build the family directory name."""
     taxon_dir = f'{family_name}_{flora_id}'
-    return util.DATA_DIR / 'eFloras' / taxon_dir
+    return DATA_DIR / 'eFloras' / taxon_dir
 
 
 def taxon_file(taxon_id, page_no=1):
@@ -74,7 +76,7 @@ def get_families():
 
             times = {'created': '', 'modified': '', 'count': 0}
 
-            path = (util.EFLORAS_DIR
+            path = (EFLORAS_DIR
                     / f"{family['family']}_{family['flora_id']}")
 
             if path.exists():

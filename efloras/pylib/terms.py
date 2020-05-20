@@ -6,9 +6,9 @@ import json
 import regex
 import traiter.util as t_util
 
-import efloras.pylib.util as util
+import efloras.pylib.family_util as futil
 
-TERM_PATH = util.DATA_DIR / 'terms.csv'
+TERM_PATH = futil.DATA_DIR / 'terms.csv'
 
 DASH = '–-'
 QUOTE = """["']"""
