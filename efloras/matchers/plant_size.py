@@ -18,7 +18,7 @@ MULTIPLY = {t['category']: to_positive_float(m) for t in TERMS
             if t['label'] == 'length_units' if (m := t['replace'])}
 
 
-def length(span):
+def size(span):
     """Enrich a phrase match."""
     data = dict(
         start=span.start_char,
@@ -105,24 +105,6 @@ def scan_tokens(span, dims, idx):
             dims.append({})
 
 
-def cross(span):
-    """Testing."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-        raw_value=span.text,
-    )
-
-    dims = [{}]
-    idx = 0
-
-    scan_tokens(span, dims, idx)
-    fix_dimensions(dims)
-    fill_data(data, dims)
-
-    return data
-
-
 PLANT_SIZE = {
     'name': 'size',
     'trait_names': """ calyx_size corolla_size flower_size hypanthium_size
@@ -156,7 +138,7 @@ PLANT_SIZE = {
     'matchers': [
         {
             'label': 'size',
-            'on_match': length,
+            'on_match': size,
             'patterns': [
                 [
                     {'_': {'term': 'min_size'}, 'OP': '?'},
@@ -176,7 +158,7 @@ PLANT_SIZE = {
         },
         {
             'label': 'size',
-            'on_match': cross,
+            'on_match': size,   # cross
             'patterns': [[
                 {'_': {'term': 'min_size'}, 'OP': '?'},
                 {'_': {'term': 'low_size'}},
