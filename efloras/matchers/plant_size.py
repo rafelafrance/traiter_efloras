@@ -105,6 +105,24 @@ def scan_tokens(span, dims, idx):
             dims.append({})
 
 
+def cross(span):
+    """Testing."""
+    data = dict(
+        start=span.start_char,
+        end=span.end_char,
+        raw_value=span.text,
+    )
+
+    dims = [{}]
+    idx = 0
+
+    scan_tokens(span, dims, idx)
+    fix_dimensions(dims)
+    fill_data(data, dims)
+
+    return data
+
+
 PLANT_SIZE = {
     'name': 'size',
     'trait_names': """ calyx_size corolla_size flower_size hypanthium_size
@@ -135,8 +153,9 @@ PLANT_SIZE = {
             {'_': {'term': 'close'}, 'OP': '?'},
         ]],
     },
-    'matchers': {
-        'size': {
+    'matchers': [
+        {
+            'label': 'size',
             'on_match': length,
             'patterns': [
                 [
@@ -147,30 +166,33 @@ PLANT_SIZE = {
                     {'_': {'term': 'length_units'}},
                     {'_': {'term': 'dimension'}, 'OP': '?'},
                     {'_': {'term': 'sex'}, 'OP': '?'},
-                ],
-                [
-                    {'_': {'term': 'min_size'}, 'OP': '?'},
-                    {'_': {'term': 'low_size'}},
-                    {'_': {'term': 'high_size'}, 'OP': '?'},
-                    {'_': {'term': 'max_size'}, 'OP': '?'},
-                    {'_': {'term': 'length_units'}, 'OP': '?'},
-                    {'_': {'term': 'dimension'}, 'OP': '?'},
-                    {'_': {'term': 'cross'}},
-                    {'_': {'term': 'min_size'}, 'OP': '?'},
-                    {'_': {'term': 'low_size'}},
-                    {'_': {'term': 'high_size'}, 'OP': '?'},
-                    {'_': {'term': 'max_size'}, 'OP': '?'},
-                    {'_': {'term': 'length_units'}},
-                    {'_': {'term': 'dimension'}, 'OP': '?'},
-                    {'_': {'term': 'sex'}, 'OP': '?'},
-                ],
-                [
+                ], [
                     {'_': {'term': 'high_size'}},
                     {'_': {'term': 'length_units'}},
                     {'_': {'term': 'dimension'}, 'OP': '?'},
                     {'_': {'term': 'sex'}, 'OP': '?'},
-                ]
+                ],
             ],
         },
-    }
+        {
+            'label': 'size',
+            'on_match': cross,
+            'patterns': [[
+                {'_': {'term': 'min_size'}, 'OP': '?'},
+                {'_': {'term': 'low_size'}},
+                {'_': {'term': 'high_size'}, 'OP': '?'},
+                {'_': {'term': 'max_size'}, 'OP': '?'},
+                {'_': {'term': 'length_units'}, 'OP': '?'},
+                {'_': {'term': 'dimension'}, 'OP': '?'},
+                {'_': {'term': 'cross'}},
+                {'_': {'term': 'min_size'}, 'OP': '?'},
+                {'_': {'term': 'low_size'}},
+                {'_': {'term': 'high_size'}, 'OP': '?'},
+                {'_': {'term': 'max_size'}, 'OP': '?'},
+                {'_': {'term': 'length_units'}},
+                {'_': {'term': 'dimension'}, 'OP': '?'},
+                {'_': {'term': 'sex'}, 'OP': '?'},
+            ]],
+        },
+    ]
 }

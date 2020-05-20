@@ -18,12 +18,12 @@ class Matcher(TraitMatcher):
         matchers = traits_to_matchers(self.trait_names)
 
         # Process the matchers
-        trait_patterns = {}
+        trait_patterns = []
         group_patterns = {}
         aux_names = []
 
         for matcher in matchers:
-            trait_patterns = {**trait_patterns, **matcher['matchers']}
+            trait_patterns += matcher['matchers']
             group_patterns = {**group_patterns, **matcher.get('groupers', {})}
             aux_names += matcher.get('aux_names', [])
 
@@ -33,7 +33,7 @@ class Matcher(TraitMatcher):
         self.trait_filter = set(self.trait_names + aux_names)
 
         # We can now add the terms
-        patterns = [p['patterns'] for p in trait_patterns.values()]
+        patterns = [p['patterns'] for p in trait_patterns]
         self.terms = terms_from_patterns(patterns)
         self.terms += terms_from_patterns(group_patterns)
         self.add_terms(self.terms)

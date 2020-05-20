@@ -47,8 +47,9 @@ PLANT_COUNT = {
             {'_': {'term': 'close'}},
         ]],
     },
-    'matchers': {
-        'count': {
+    'matchers': [
+        {
+            'label': 'count',
             'on_match': count,
             'patterns': [
                 [
@@ -61,5 +62,5 @@ PLANT_COUNT = {
                 ],
             ],
         },
-    }
+    ]
 }

@@ -25,10 +25,11 @@ def part(span):
 PLANT_PART = {
     'name': 'part',
     'trait_names': ['plant_part'],
-    'matchers': {
-        'part': {
+    'matchers': [
+        {
+            'label': 'part',
             'on_match': part,
             'patterns': [[{'_': {'term': 'plant_part'}}]],
         },
-    }
+    ],
 }

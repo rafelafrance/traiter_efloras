@@ -34,8 +34,9 @@ PLANT_SHAPE = {
     'name': 'shape',
     'trait_names': SHAPE_TRAITS,
     'aux_names': [n.replace('_shape', '_location') for n in SHAPE_TRAITS],
-    'matchers': {
-        'shape': {
+    'matchers': [
+        {
+            'label': 'shape',
             'on_match': shape,
             'patterns': [
                 [
@@ -54,14 +55,10 @@ PLANT_SHAPE = {
                     {'_': {'term': 'shape'}, 'OP': '+'},
                 ],
             ],
-        },
-        'location': {
+        }, {
+            'label': 'location',
             'on_match': location,
-            'patterns': [
-                [
-                    {'_': {'term': 'part_location'}},
-                ],
-            ],
+            'patterns': [[{'_': {'term': 'part_location'}}]],
         },
-    }
+    ]
 }

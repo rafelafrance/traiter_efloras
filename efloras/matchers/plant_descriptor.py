@@ -24,10 +24,11 @@ PLANT_DESCRIPTOR = {
     'name': 'descriptor',
     'trait_names': """ seasonal_descriptor sexual_descriptor
         symmetry_descriptor temporal_descriptor""".split(),
-    'matchers': {
-        'descriptor': {
+    'matchers': [
+        {
+            'label': 'descriptor',
             'on_match': descriptor,
             'patterns': [[{'_': {'term': 'descriptor'}}]],
         },
-    }
+    ]
 }
