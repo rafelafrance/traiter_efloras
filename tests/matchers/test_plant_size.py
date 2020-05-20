@@ -330,3 +330,20 @@ class TestPlantSize(unittest.TestCase):
                                    'length_high': 8.0,
                                    'length_units': 'mm'}]}]
         )
+
+    def test_plant_size_20(self):
+        """It handles a double dash notation."""
+        self.assertEqual(
+            Matcher('*_size').parse(
+                'Flowers 5--16 × 4--12 cm'),
+            [{'part': [{'value': 'flower', 'start': 0, 'end': 7,
+                        'raw_value': 'Flowers'}],
+              'flower_size': [{'start': 8,
+                               'end': 24,
+                               'raw_value': '5--16 × 4--12 cm',
+                               'length_low': 50.0,
+                               'length_high': 160.0,
+                               'width_low': 40.0,
+                               'width_high': 120.0,
+                               'width_units': 'cm'}]}]
+        )

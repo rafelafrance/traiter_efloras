@@ -163,11 +163,13 @@ class TestPlantShape(unittest.TestCase):
             Matcher('*_shape').parse(
                 'Leaf blades 2–7 cm wide, lobe apex rounded'),
             [{'part': [{'value': 'leaf',
-                        'start': 0, 'end': 11,
-                        'raw_value': 'Leaf blades'}]},
-             {'part': [{'value': 'lobes', 'start': 25, 'end': 29,
-                        'raw_value': 'lobe'}]}]
-
+                        'start': 0,
+                        'end': 11,
+                        'raw_value': 'Leaf blades'}],
+              'leaf_shape': [{'value': 'orbicular',
+                              'start': 35,
+                              'end': 42,
+                              'raw_value': 'rounded'}]}]
         )
 
     def test_plant_shape_11(self):
@@ -408,9 +410,7 @@ class TestPlantShape(unittest.TestCase):
             Matcher('*_shape').parse(
                 'blade unlobed or palmately, pedately, or pinnately lobed'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 5,
-                        'raw_value': 'blade'}]},
-             {'part': [{'value': 'lobes', 'start': 6, 'end': 13,
-                        'raw_value': 'unlobed'}]}]
+                        'raw_value': 'blade'}]}]
         )
 
     def test_plant_shape_25(self):

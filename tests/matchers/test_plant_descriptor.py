@@ -38,7 +38,5 @@ class TestPlantDescriptor(unittest.TestCase):
                                        'raw_value': 'actinomorphic'},
                                       {'value': 'zygomorphic',
                                        'start': 38, 'end': 49,
-                                       'raw_value': 'zygomorphic'}]},
-             {'part': [{'value': 'flower', 'start': 0, 'end': 7,
-                        'raw_value': 'flowers'}]}]
+                                       'raw_value': 'zygomorphic'}]}]
         )
