@@ -5,10 +5,15 @@ from traiter.util import to_positive_float
 
 from ..pylib.terms import TERMS
 
+# Normalize dimension notations
 DIMENSIONS = {t['pattern']: t['category'] for t in TERMS
               if t['label'] == 'dimension'}
+
+# Normalize unit notations
 UNITS = {t['pattern']: t['category'] for t in TERMS
          if t['label'] == 'length_units'}
+
+# Multiply units by this to normalize to millimeters
 MULTIPLY = {t['category']: to_positive_float(m) for t in TERMS
             if t['label'] == 'length_units' if (m := t['replace'])}
 
@@ -22,38 +27,47 @@ def length(span):
     )
 
     dims = [{}]
-    d = 0
+    idx = 0
 
-    for token in span:
-        term = token._.term
+    scan_tokens(span, dims, idx)
+    fix_dimensions(dims)
+    fill_data(data, dims)
 
-        if term in 'min_size low_size high_size max_size'.split():
-            key = term.split('_')[0]
-            dims[d][key] = to_positive_float(token.text)
+    return data
 
-        elif term == 'length_units':
-            units = UNITS[token.text.lower()]
-            dims[d]['units'] = units
-            dims[d]['times'] = MULTIPLY[units]
 
-        elif term == 'dimension':
-            dims[d]['dimension'] = DIMENSIONS[token.text.lower()]
+def fill_data(data, dims):
+    """Move fields into correct place & give them consistent names."""
+    for dim in dims:
+        dim_name = dim['dim_name']
 
-        elif term == 'sex':
-            value = token.text.lower()
-            value = regex.sub(r'\W+', '', value)
-            dims[d]['sex'] = value
+        # Rename value fields & multiply values to put into millimeters
+        for field in """ min low high max """.split():
+            if value := dim.get(field):
+                key = f'{dim_name}_{field}'
+                data[key] = round(value * dim['times'], 3)
 
-        elif term == 'cross':
-            d += 1
-            dims.append({})
+        # Rename the unit fields
+        if value := dim.get('units'):
+            key = f'{dim_name}_units'
+            data[key] = value.lower()
 
+        # Get the sex field if it's there
+        if value := dim.get('sex'):
+            data['sex'] = value.lower()
+
+
+def fix_dimensions(dims):
+    """Handle width comes before length and one of them is missing units."""
     if len(dims) > 1:
+        # Length & width are reversed
         if (dims[0].get('dimension') == 'width'
                 or dims[1].get('dimension') == 'length'):
             dims[0], dims[1] = dims[1], dims[0]
+        # Missing units in the length (most likely)
         if not dims[0].get('times'):
             dims[0]['times'] = dims[1]['times']
+        # Missing units in the width
         if not dims[1].get('times'):
             dims[1]['times'] = dims[0]['times']
 
@@ -61,20 +75,34 @@ def length(span):
     if len(dims) > 1:
         dims[1]['dim_name'] = dims[1].get('dimension', 'width')
 
-    for dim in dims:
-        dim_name = dim['dim_name']
-        times = dim['times']
-        for field in """ min low high max """.split():
-            if value := dim.get(field):
-                key = f'{dim_name}_{field}'
-                data[key] = round(value * times, 3)
-        if value := dim.get('sex'):
-            data['sex'] = value.lower()
-        if value := dim.get('units'):
-            key = f'{dim_name}_units'
-            data[key] = value.lower()
 
-    return data
+def scan_tokens(span, dims, idx):
+    """Scan tokens for the various fields."""
+    for token in span:
+        term = token._.term
+
+        # Convert the size fields to floats
+        if term in 'min_size low_size high_size max_size'.split():
+            key = term.split('_')[0]  # Remove "_size"
+            dims[idx][key] = to_positive_float(token.text)
+
+        # Save the units and get the unit multiplier
+        elif term == 'length_units':
+            units = UNITS[token.text.lower()]
+            dims[idx]['units'] = units
+            dims[idx]['times'] = MULTIPLY[units]
+
+        elif term == 'dimension':
+            dims[idx]['dimension'] = DIMENSIONS[token.text.lower()]
+
+        elif term == 'sex':
+            value = token.text.lower()
+            value = regex.sub(r'\W+', '', value)
+            dims[idx]['sex'] = value
+
+        elif term == 'cross':
+            idx += 1
+            dims.append({})
 
 
 PLANT_SIZE = {

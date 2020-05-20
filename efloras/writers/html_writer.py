@@ -7,7 +7,8 @@ from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-import efloras.pylib.atoms as tm
+import efloras.pylib.atoms as atoms
+import efloras.pylib.traits as traits
 
 # CSS colors
 CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
@@ -20,9 +21,9 @@ def html_writer(args, df):
     """Output the data frame."""
     df = df.fillna('')
 
-    other_cols = [c for c in df.columns if c not in tm.TRAIT_NAMES]
+    other_cols = [c for c in df.columns if c not in traits.TRAIT_NAMES]
 
-    trait_cols = sorted([c for c in df.columns if c in tm.TRAIT_NAMES])
+    trait_cols = sorted([c for c in df.columns if c in traits.TRAIT_NAMES])
     df = df.reindex(other_cols + trait_cols, axis='columns')
 
     trait_cols = {f'{c}_data': c for c in trait_cols}
@@ -104,7 +105,7 @@ def format_text(trait_cols, row, tags, colors):
             cut_id = append_endpoints(
                 cuts, cut_id, trait.start, trait.end, colors[col])
 
-    for trait in tm.ATOMIZER.finditer(text):
+    for trait in atoms.ATOMIZER.finditer(text):
         cut_id = append_endpoints(
             cuts, cut_id, trait.start(), trait.end(), 'bold')
 

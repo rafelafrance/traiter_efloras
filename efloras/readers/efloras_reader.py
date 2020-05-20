@@ -5,8 +5,9 @@ from collections import defaultdict
 import pandas as pd
 from bs4 import BeautifulSoup
 
-import efloras.pylib.atoms as tm
 import efloras.pylib.family_util as futil
+from efloras.pylib.atoms import ATOMIZER
+from efloras.pylib.traits import TRAIT_NAMES
 
 
 def efloras_matcher(args, families):
@@ -87,12 +88,12 @@ def extract_traits(args, atoms, text):
 
         # Certain traits are associated with each atom keyword. We want the
         # intersection of traits arguments with what may be in an atom
-        trait_names = {t for t in tm.ATOMS.get(atom_name)
+        trait_names = {t for t in atoms.ATOMS.get(atom_name)
                        if t in arg_traits}
 
         # Now parse all of the intersecting traits
         for trait_name in trait_names:
-            matcher = tm.TRAIT_NAMES[trait_name]
+            matcher = TRAIT_NAMES[trait_name]
             for trait in matcher.parse(atom_text):
                 trait.start += atom_start
                 trait.end += atom_start
@@ -104,7 +105,7 @@ def extract_traits(args, atoms, text):
 def find_atom_names(text):
     """Break text into slices that are used to look for particular traits."""
     # The sections start with a keyword and extend up to the next keyword
-    atoms = [(m.start(), m.end()) for m in tm.ATOMIZER.finditer(text)]
+    atoms = [(m.start(), m.end()) for m in ATOMIZER.finditer(text)]
     atoms.append((-1, -1))  # Sentinel
     return atoms
 
@@ -121,6 +122,6 @@ def get_traits(treatment):
     """Find the trait paragraph in the treatment."""
     for para in treatment.find_all('p'):
         text = ' '.join(para.get_text().split())
-        if tm.ATOMIZER.search(text):
+        if ATOMIZER.search(text):
             return text
     return ''

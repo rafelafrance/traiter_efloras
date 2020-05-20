@@ -18,7 +18,7 @@ def read_terms():
     """Read and cache the terms."""
     with open(TERM_PATH) as term_file:
         reader = csv.DictReader(term_file)
-        return [t for t in reader]
+        return list(reader)
 
 
 TERMS = read_terms()

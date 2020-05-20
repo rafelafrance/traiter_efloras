@@ -33,16 +33,16 @@ ATOMS = {
     'caudices': [],
     'cauline leaves': (LEAF + PETIOLE),
     'corollas': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'flowering stems': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'flowers': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'fruiting peduncles': [],
     'fruits': FRUIT,
     'herbs': [],
     'hypanthia': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'inflorescences': [],
     'inflorescenses': [],
     'leaf blades': (LEAF + PETIOLE),
@@ -52,21 +52,21 @@ ATOMS = {
     'peduncles': [],
     'pepos': FRUIT,
     'petals': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'petioles': (LEAF + PETIOLE),
     'pistillate corollas': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'pistillate flowers': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'pistillate inflorescences': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'pistillate racemes': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'plants': [],
     'pollen': [],
     'protonematal flaps': [],
     'racemes': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'seeds': SEED,
     'seta': [],
     'seta superficial cells': [],
@@ -74,13 +74,13 @@ ATOMS = {
     'specialized asexual structures': [],
     'spores': [],
     'staminate corollas': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'staminate flowers': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'staminate inflorescences': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'staminate racemes': (
-            FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
+        FLOWER + HYPANTHIUM + SEPAL + PETAL + CALYX + COROLLA),
     'stem leaves': [],
     'stems': [],
     'stolon leaves': [],
@@ -91,8 +91,7 @@ ATOMS = {
     'x': [],
 }
 
-ATOMS = {k: v for k, v in sorted(
-    ATOMS.items(), reverse=True, key=lambda x: len(x[0]))}
+ATOMS = dict(sorted(ATOMS.items(), reverse=True, key=lambda x: len(x[0])))
 
 ATOMIZER = ' | '.join(
     r' \s+ '.join(x.split()) for x in ATOMS.keys())
