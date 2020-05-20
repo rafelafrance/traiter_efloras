@@ -6,27 +6,96 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 import efloras.pylib.family_util as futil
-from efloras.pylib.atoms import ATOMIZER
-from efloras.pylib.traits import TRAIT_NAMES
+from efloras.matchers.matcher import Matcher
+from efloras.pylib.atoms import ATOMIZER, ATOMS, DESCRIPTOR
 
 
 def efloras_matcher(args, families):
     """Perform the parsing."""
-    combos = futil.get_family_flora_ids(args, families)
+    traits = set(args.trait)
+    descriptor_traits = traits & DESCRIPTOR
+    atomized_traits = traits - descriptor_traits
+
+    descriptor_matcher = Matcher(descriptor_traits)
+    atomized_matcher = Matcher(atomized_traits)
+    target_atoms = {a for a, t in ATOMS.items() if t & traits}
+    families_flora = futil.get_family_flora_ids(args, families)
+
     rows = []
-    for key in combos:
-        family = families[key]
+
+    for family_name, flora_id in families_flora:
+        family = families[(family_name, flora_id)]
         taxa = get_family_tree(family)
-        name = family['family']
-        flora_id = family['flora_id']
-        root = futil.treatment_dir(flora_id, name)
-        for path in root.glob('*.html'):
-            row = parse_treatment_page(args, path, family, taxa)
+        root = futil.treatment_dir(flora_id, family['family'])
+        for i, path in enumerate(root.glob('*.html')):
+            treatment = get_treatment(path)
+            text = get_traits(treatment)
+            taxon_id = futil.get_taxon_id(path)
+
+            row = {
+                'family': family['family'],
+                'flora_id': flora_id,
+                'taxon': taxa[taxon_id],
+                'taxon_id': taxon_id,
+                'link': futil.treatment_link(flora_id, taxon_id),
+                'text': '',
+            }
+
+            if text is None:
+                rows.append(row)
+                continue
+
+            row['text'] = text
+
+            flora_id = int(flora_id)
+            atom_names = get_atom_names(text)
+
+            descriptor_traits = get_descriptor_traits(
+                descriptor_matcher, text)
+            atomized_traits = get_atomized_traits(
+                atomized_matcher, target_atoms, atom_names, text)
+
+            row = {**row, **descriptor_traits, **atomized_traits}
             rows.append(row)
+
     df = pd.DataFrame(rows)
-    flora_ids = futil.get_flora_ids()
-    df['flora_name'] = df['flora_id'].apply(lambda f: flora_ids[f])
     return df
+
+
+def get_descriptor_traits(matcher, text):
+    """Look for descriptor traits in the entire text."""
+    traits = defaultdict(list)
+
+    for match in matcher.parse(text):
+        for label, data in match.items():
+            traits[label] += data
+
+    return traits
+
+
+def get_atomized_traits(matcher, target_atoms, atom_names, text):
+    """Look for traits in the atoms."""
+    traits = defaultdict(list)
+
+    for i, (atom_start, name_end, atom_name) in enumerate(atom_names[:-1]):
+        atom_name = atom_name.lower()
+        text_end, *_ = atom_names[i + 1]
+        atom_text = text[atom_start:text_end]
+
+        if atom_name not in target_atoms:
+            continue
+
+        parses = matcher.parse(atom_text)
+        for parse in parses:
+            for label, data in parse.items():
+                if label == 'part':
+                    continue
+                for datum in data:
+                    datum['start'] += atom_start
+                    datum['end'] += atom_start
+                traits[label] += data
+
+    return traits
 
 
 def get_family_tree(family):
@@ -48,65 +117,11 @@ def get_family_tree(family):
     return taxa
 
 
-def parse_treatment_page(args, path, family, taxa):
-    """Parse the taxon treatment."""
-    treatment = get_treatment(path)
-    text = get_traits(treatment)
-    flora_id = int(family['flora_id'])
-    taxon_id = futil.get_taxon_id(path)
-
-    row = {
-        'family': family['family'],
-        'flora_id': flora_id,
-        'taxon': taxa[taxon_id],
-        'taxon_id': taxon_id,
-        'link': futil.treatment_link(flora_id, taxon_id),
-        'text': '',
-    }
-
-    if text is None:
-        return row
-
-    row['text'] = text
-
-    atoms = find_atom_names(text)
-
-    row = {**row, **extract_traits(args, atoms, text)}
-
-    return row
-
-
-def extract_traits(args, atoms, text):
-    """Look for traits in the atoms."""
-    traits = defaultdict(list)
-    arg_traits = set(args.trait)
-
-    for i, (atom_start, name_end) in enumerate(atoms[:-1]):
-        text_end, _ = atoms[i + 1]
-        atom_name = text[atom_start:name_end].lower()
-        atom_text = text[atom_start:text_end]
-
-        # Certain traits are associated with each atom keyword. We want the
-        # intersection of traits arguments with what may be in an atom
-        trait_names = {t for t in atoms.ATOMS.get(atom_name)
-                       if t in arg_traits}
-
-        # Now parse all of the intersecting traits
-        for trait_name in trait_names:
-            matcher = TRAIT_NAMES[trait_name]
-            for trait in matcher.parse(atom_text):
-                trait.start += atom_start
-                trait.end += atom_start
-                traits[trait_name].append(trait)
-
-    return traits
-
-
-def find_atom_names(text):
+def get_atom_names(text):
     """Break text into slices that are used to look for particular traits."""
     # The sections start with a keyword and extend up to the next keyword
-    atoms = [(m.start(), m.end()) for m in ATOMIZER.finditer(text)]
-    atoms.append((-1, -1))  # Sentinel
+    atoms = [(m.start(), m.end(), m.group(1)) for m in ATOMIZER.finditer(text)]
+    atoms.append((-1, -1, ''))  # Sentinel
     return atoms
 
 
