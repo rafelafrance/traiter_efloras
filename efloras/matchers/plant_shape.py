@@ -9,22 +9,16 @@ def shape(span):
              if (r := REPLACE.get(t.text, t.text)) and t._.term == 'shape'}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    return dict(
+    loc = [t.text.lower() for t in span if t._.term == 'part_location']
+    trait = dict(
         value=value,
         start=span.start_char,
         end=span.end_char,
         raw_value=span.text,
     )
-
-
-def location(span):
-    """Enrich a phrase match."""
-    return dict(
-        value=span.text.lower(),
-        start=span.start_char,
-        end=span.end_char,
-        raw_value=span.text,
-    )
+    if loc:
+        trait['location'] = loc[0]
+    return trait
 
 
 SHAPE_TRAITS = """ caylx_shape corolla_shape flower_shape hypanthium_shape
@@ -33,15 +27,15 @@ SHAPE_TRAITS = """ caylx_shape corolla_shape flower_shape hypanthium_shape
 PLANT_SHAPE = {
     'name': 'shape',
     'trait_names': SHAPE_TRAITS,
-    'aux_names': [n.replace('_shape', '_location') for n in SHAPE_TRAITS],
     'matchers': [
         {
             'label': 'shape',
             'on_match': shape,
             'patterns': [
                 [
-                    {'_': {'term': {'IN': ['shape', 'shape_leader']}},
-                     'OP': '?'},
+                    {'_': {'term': {'IN': [
+                        'shape', 'shape_leader', 'part_location']}},
+                     'OP': '*'},
                     {'_': {'term': 'dash'}, 'OP': '?'},
                     {'_': {'term': 'shape'}, 'OP': '+'},
                     {'_': {'term': 'dash'}, 'OP': '?'},
@@ -55,10 +49,6 @@ PLANT_SHAPE = {
                     {'_': {'term': 'shape'}, 'OP': '+'},
                 ],
             ],
-        }, {
-            'label': 'location',
-            'on_match': location,
-            'patterns': [[{'_': {'term': 'part_location'}}]],
         },
     ]
 }

@@ -284,15 +284,11 @@ class TestPlantShape(unittest.TestCase):
                 'usually alternate, sometimes opposite '),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
                         'raw_value': 'Leaves'}],
-              'leaf_location': [{'value': 'basal',
-                                 'start': 18, 'end': 23,
-                                 'raw_value': 'basal'},
-                                {'value': 'cauline',
-                                 'start': 44, 'end': 51,
-                                 'raw_value': 'cauline'}],
               'leaf_shape': [{'value': 'rosettes',
-                              'start': 24, 'end': 32,
-                              'raw_value': 'rosettes'}]}]
+                              'start': 18,
+                              'end': 32,
+                              'raw_value': 'basal rosettes',
+                              'location': 'basal'}]}]
         )
 
     def test_plant_shape_18(self):
@@ -433,13 +429,9 @@ class TestPlantShape(unittest.TestCase):
             Matcher('*_shape').parse('Leaves in basal rosette and cauline'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 6,
                         'raw_value': 'Leaves'}],
-              'leaf_location': [{'value': 'basal',
-                                 'start': 10, 'end': 15,
-                                 'raw_value': 'basal'},
-                                {'value': 'cauline',
-                                 'start': 28, 'end': 35,
-                                 'raw_value': 'cauline'}],
               'leaf_shape': [{'value': 'rosette',
-                              'start': 16, 'end': 23,
-                              'raw_value': 'rosette'}]}]
+                              'start': 10,
+                              'end': 23,
+                              'raw_value': 'basal rosette',
+                              'location': 'basal'}]}]
         )
