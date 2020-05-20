@@ -80,7 +80,7 @@ def get_families():
                     / f"{family['family']}_{family['flora_id']}")
 
             if path.exists():
-                times['count'] = len(list(path.glob('**/*.html')))
+                times['count'] = len(list(path.glob('**/treatments/*.html')))
                 if times['count']:
                     stat = path.stat()
                     times['created'] = datetime.fromtimestamp(
@@ -105,7 +105,7 @@ def print_families(families):
         'Flora Name',
         'Directory Created',
         'Directory Modified',
-        'File Count'))
+        'Treatments'))
 
     for family in families.values():
         print(template.format(
