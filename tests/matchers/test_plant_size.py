@@ -17,12 +17,12 @@ class TestPlantSize(unittest.TestCase):
                 'leaf_size': [{'start': 5,
                                'end': 26,
                                'raw_value': '(12-)23-34 × 45-56 cm',
-                               'length_min': 120.0,
-                               'length_low': 230.0,
-                               'length_high': 340.0,
-                               'width_low': 450.0,
-                               'width_high': 560.0,
-                               'width_units': 'cm'}]}]
+                               'value': {'length_min': 120.0,
+                                         'length_low': 230.0,
+                                         'length_high': 340.0,
+                                         'width_low': 450.0,
+                                         'width_high': 560.0,
+                                         'width_units': 'cm'}}]}]
         )
 
     def test_plant_size_02(self):
@@ -42,10 +42,10 @@ class TestPlantSize(unittest.TestCase):
                 'leaf_size': [{'start': 6,
                                'end': 18,
                                'raw_value': '1.5–5(–7) cm',
-                               'length_low': 15.0,
-                               'length_high': 50.0,
-                               'length_max': 70.0,
-                               'length_units': 'cm'}]}]
+                               'value': {'length_low': 15.0,
+                                         'length_high': 50.0,
+                                         'length_max': 70.0,
+                                         'length_units': 'cm'}}]}]
         )
 
     def test_plant_size_04(self):
@@ -65,9 +65,9 @@ class TestPlantSize(unittest.TestCase):
                 'leaf_size': [{'start': 5,
                                'end': 17,
                                'raw_value': '4–10 cm wide',
-                               'width_low': 40.0,
-                               'width_high': 100.0,
-                               'width_units': 'cm'}]}]
+                               'value': {'width_low': 40.0,
+                                         'width_high': 100.0,
+                                         'width_units': 'cm'}}]}]
         )
 
     def test_plant_size_06(self):
@@ -89,9 +89,9 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 11,
                                 'end': 17,
                                 'raw_value': '2–5 mm',
-                                'length_low': 2.0,
-                                'length_high': 5.0,
-                                'length_units': 'mm'}]}]
+                                'value': {'length_low': 2.0,
+                                          'length_high': 5.0,
+                                          'length_units': 'mm'}}]}]
         )
 
     def test_plant_size_08(self):
@@ -106,9 +106,9 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 11,
                                 'end': 17,
                                 'raw_value': '2–5 mm',
-                                'length_low': 2.0,
-                                'length_high': 5.0,
-                                'length_units': 'mm'}]},
+                                'value': {'length_low': 2.0,
+                                          'length_high': 5.0,
+                                          'length_units': 'mm'}}]},
              {'part': [{'value': 'petiole',
                         'start': 37,
                         'end': 45,
@@ -116,9 +116,9 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 46,
                                 'end': 54,
                                 'raw_value': '16–28 mm',
-                                'length_low': 16.0,
-                                'length_high': 28.0,
-                                'length_units': 'mm'}]}]
+                                'value': {'length_low': 16.0,
+                                          'length_high': 28.0,
+                                          'length_units': 'mm'}}]}]
         )
 
     def test_plant_size_09(self):
@@ -132,9 +132,9 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 16,
                                 'end': 23,
                                 'raw_value': '2–15 cm',
-                                'length_low': 20.0,
-                                'length_high': 150.0,
-                                'length_units': 'cm'}]}]
+                                'value': {'length_low': 20.0,
+                                          'length_high': 150.0,
+                                          'length_units': 'cm'}}]}]
         )
 
     def test_plant_size_10(self):
@@ -149,11 +149,11 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 32,
                                 'end': 48,
                                 'raw_value': '[5–]7–25[–32] mm',
-                                'length_min': 5.0,
-                                'length_low': 7.0,
-                                'length_high': 25.0,
-                                'length_max': 32.0,
-                                'length_units': 'mm'}]}]
+                                'value': {'length_min': 5.0,
+                                          'length_low': 7.0,
+                                          'length_high': 25.0,
+                                          'length_max': 32.0,
+                                          'length_units': 'mm'}}]}]
         )
 
     def test_plant_size_11(self):
@@ -165,12 +165,12 @@ class TestPlantSize(unittest.TestCase):
                 'leaf_size': [{'start': 5,
                                'end': 21,
                                'raw_value': '2–4 cm × 2–10 mm',
-                               'length_low': 20.0,
-                               'length_high': 40.0,
-                               'length_units': 'cm',
-                               'width_low': 2.0,
-                               'width_high': 10.0,
-                               'width_units': 'mm'}]}]
+                               'value': {'length_low': 20.0,
+                                         'length_high': 40.0,
+                                         'length_units': 'cm',
+                                         'width_low': 2.0,
+                                         'width_high': 10.0,
+                                         'width_units': 'mm'}}]}]
         )
 
     def test_plant_size_12(self):
@@ -183,10 +183,10 @@ class TestPlantSize(unittest.TestCase):
                 'leaf_size': [{'start': 32,
                                'end': 47,
                                'raw_value': '4–5(–7) cm wide',
-                               'width_low': 40.0,
-                               'width_high': 50.0,
-                               'width_max': 70.0,
-                               'width_units': 'cm'}]}]
+                               'value': {'width_low': 40.0,
+                                         'width_high': 50.0,
+                                         'width_max': 70.0,
+                                         'width_units': 'cm'}}]}]
         )
 
     def test_plant_size_13(self):
@@ -206,9 +206,9 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 70,
                                 'end': 76,
                                 'raw_value': '2–5 mm',
-                                'length_low': 2.0,
-                                'length_high': 5.0,
-                                'length_units': 'mm'}]}]
+                                'value': {'length_low': 2.0,
+                                          'length_high': 5.0,
+                                          'length_units': 'mm'}}]}]
         )
 
     def test_plant_size_14(self):
@@ -223,9 +223,9 @@ class TestPlantSize(unittest.TestCase):
               'leaf_size': [{'start': 17,
                              'end': 23,
                              'raw_value': '3–5 cm',
-                             'length_low': 30.0,
-                             'length_high': 50.0,
-                             'length_units': 'cm'}]},
+                             'value': {'length_low': 30.0,
+                                       'length_high': 50.0,
+                                       'length_units': 'cm'}}]},
              {'part': [{'value': 'leaf', 'start': 25, 'end': 30,
                         'raw_value': 'blade'}]},
              {'part': [{'value': 'petiole',
@@ -235,9 +235,9 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 62,
                                 'end': 69,
                                 'raw_value': '3–12 mm',
-                                'length_low': 3.0,
-                                'length_high': 12.0,
-                                'length_units': 'mm'}]}]
+                                'value': {'length_low': 3.0,
+                                          'length_high': 12.0,
+                                          'length_units': 'mm'}}]}]
         )
 
     def test_plant_size_15(self):
@@ -250,13 +250,13 @@ class TestPlantSize(unittest.TestCase):
                 'leaf_size': [{'start': 30,
                                'end': 54,
                                'raw_value': '5–25 × (8–)10–25(–30) cm',
-                               'length_low': 50.0,
-                               'length_high': 250.0,
-                               'width_min': 80.0,
-                               'width_low': 100.0,
-                               'width_high': 250.0,
-                               'width_max': 300.0,
-                               'width_units': 'cm'}]}]
+                               'value': {'length_low': 50.0,
+                                         'length_high': 250.0,
+                                         'width_min': 80.0,
+                                         'width_low': 100.0,
+                                         'width_high': 250.0,
+                                         'width_max': 300.0,
+                                         'width_units': 'cm'}}]}]
         )
 
     def test_plant_size_16(self):
@@ -275,8 +275,8 @@ class TestPlantSize(unittest.TestCase):
               'petiole_size': [{'start': 8,
                                 'end': 16,
                                 'raw_value': 'to 11 cm',
-                                'length_high': 110.0,
-                                'length_units': 'cm'}]}]
+                                'value': {'length_high': 110.0,
+                                          'length_units': 'cm'}}]}]
         )
 
     def test_plant_size_18(self):
@@ -290,20 +290,20 @@ class TestPlantSize(unittest.TestCase):
               'petal_size': [{'start': 7,
                               'end': 36,
                               'raw_value': '(1–)3–10(–12) mm (pistillate)',
-                              'length_min': 1.0,
-                              'length_low': 3.0,
-                              'length_high': 10.0,
-                              'length_max': 12.0,
-                              'length_units': 'mm',
-                              'sex': 'pistillate'},
+                              'value': {'length_min': 1.0,
+                                        'length_low': 3.0,
+                                        'length_high': 10.0,
+                                        'length_max': 12.0,
+                                        'length_units': 'mm',
+                                        'sex': 'pistillate'}},
                              {'start': 40,
                               'end': 63,
                               'raw_value': '5–8(–10) mm (staminate)',
-                              'length_low': 5.0,
-                              'length_high': 8.0,
-                              'length_max': 10.0,
-                              'length_units': 'mm',
-                              'sex': 'staminate'}]}]
+                              'value': {'length_low': 5.0,
+                                        'length_high': 8.0,
+                                        'length_max': 10.0,
+                                        'length_units': 'mm',
+                                        'sex': 'staminate'}}]}]
         )
 
     def test_plant_size_19(self):
@@ -316,9 +316,9 @@ class TestPlantSize(unittest.TestCase):
               'flower_size': [{'start': 8,
                                'end': 20,
                                'raw_value': '5–10 cm diam',
-                               'diameter_low': 50.0,
-                               'diameter_high': 100.0,
-                               'diameter_units': 'cm'}]},
+                               'value': {'diameter_low': 50.0,
+                                         'diameter_high': 100.0,
+                                         'diameter_units': 'cm'}}]},
              {'part': [{'value': 'hypanthium',
                         'start': 23,
                         'end': 33,
@@ -326,9 +326,9 @@ class TestPlantSize(unittest.TestCase):
               'hypanthium_size': [{'start': 34,
                                    'end': 40,
                                    'raw_value': '4–8 mm',
-                                   'length_low': 4.0,
-                                   'length_high': 8.0,
-                                   'length_units': 'mm'}]}]
+                                   'value': {'length_low': 4.0,
+                                             'length_high': 8.0,
+                                             'length_units': 'mm'}}]}]
         )
 
     def test_plant_size_20(self):
@@ -341,9 +341,9 @@ class TestPlantSize(unittest.TestCase):
               'flower_size': [{'start': 8,
                                'end': 24,
                                'raw_value': '5--16 × 4--12 cm',
-                               'length_low': 50.0,
-                               'length_high': 160.0,
-                               'width_low': 40.0,
-                               'width_high': 120.0,
-                               'width_units': 'cm'}]}]
+                               'value': {'length_low': 50.0,
+                                         'length_high': 160.0,
+                                         'width_low': 40.0,
+                                         'width_high': 120.0,
+                                         'width_units': 'cm'}}]}]
         )

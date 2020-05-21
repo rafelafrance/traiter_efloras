@@ -20,41 +20,43 @@ MULTIPLY = {t['category']: to_positive_float(m) for t in TERMS
 
 def size(span):
     """Enrich a phrase match."""
+    dims = scan_tokens(span)
+    dims = fix_dimensions(dims)
+    data = fill_data(span, dims)
+    return data
+
+
+def fill_data(span, dims):
+    """Move fields into correct place & give them consistent names."""
     data = dict(
         start=span.start_char,
         end=span.end_char,
         raw_value=span.text,
     )
 
-    dims = [{}]
-    idx = 0
+    value = {}
 
-    scan_tokens(span, dims, idx)
-    fix_dimensions(dims)
-    fill_data(data, dims)
-
-    return data
-
-
-def fill_data(data, dims):
-    """Move fields into correct place & give them consistent names."""
     for dim in dims:
         dim_name = dim['dim_name']
 
         # Rename value fields & multiply values to put into millimeters
         for field in """ min low high max """.split():
-            if value := dim.get(field):
+            if datum := dim.get(field):
                 key = f'{dim_name}_{field}'
-                data[key] = round(value * dim['times'], 3)
+                value[key] = round(datum * dim['times'], 3)
 
         # Rename the unit fields
-        if value := dim.get('units'):
+        if datum := dim.get('units'):
             key = f'{dim_name}_units'
-            data[key] = value.lower()
+            value[key] = datum.lower()
 
         # Get the sex field if it's there
-        if value := dim.get('sex'):
-            data['sex'] = value.lower()
+        if datum := dim.get('sex'):
+            value['sex'] = datum.lower()
+
+    data['value'] = value
+
+    return data
 
 
 def fix_dimensions(dims):
@@ -75,9 +77,14 @@ def fix_dimensions(dims):
     if len(dims) > 1:
         dims[1]['dim_name'] = dims[1].get('dimension', 'width')
 
+    return dims
 
-def scan_tokens(span, dims, idx):
+
+def scan_tokens(span):
     """Scan tokens for the various fields."""
+    dims = [{}]
+    idx = 0
+
     for token in span:
         term = token._.term
 
@@ -103,6 +110,8 @@ def scan_tokens(span, dims, idx):
         elif term == 'cross':
             idx += 1
             dims.append({})
+
+    return dims
 
 
 PLANT_SIZE = {

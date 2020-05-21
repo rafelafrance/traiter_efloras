@@ -11,14 +11,17 @@ def count(span):
         raw_value=span.text,
     )
 
+    value = {}
     for token in span:
         term = token._.term
 
         if term in ('min_count', 'low_count', 'high_count', 'max_count'):
-            data[term] = to_positive_int(token.text)
+            value[term] = to_positive_int(token.text)
 
         elif term in ('cross', 'length_units'):
             return {}
+
+    data['value'] = value
 
     return data
 

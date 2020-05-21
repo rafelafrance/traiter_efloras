@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 
-from traiter.trait_matcher import TraitMatcher
+from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
 from ..pylib.terms import terms_from_patterns
 from ..pylib.traits import expand_trait_names, traits_to_matchers
@@ -76,7 +76,6 @@ class Matcher(TraitMatcher):
         if descriptors:
             parts = [descriptors] + parts
 
-        # print()
         # from pprint import pp
         # pp([dict(p) for p in parts])
 
