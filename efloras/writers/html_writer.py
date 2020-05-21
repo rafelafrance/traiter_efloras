@@ -1,14 +1,16 @@
 """Write output to an HTML file."""
 
 import html
-from collections import deque, namedtuple
+from collections import deque, namedtuple, defaultdict
 from datetime import datetime
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
+# from traiter.util import as_list
 
-import efloras.pylib.atoms as atoms
-import efloras.pylib.traits as traits
+from ..pylib.atoms import ATOMIZER
+from ..pylib.family_util import get_flora_ids
+from ..pylib.traits import TRAIT_NAMES
 
 # CSS colors
 CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
@@ -21,28 +23,27 @@ def html_writer(args, df):
     """Output the data frame."""
     df = df.fillna('')
 
-    other_cols = [c for c in df.columns if c not in traits.TRAIT_NAMES]
+    flora_ids = get_flora_ids()
+    df['flora_name'] = df['flora_id'].map(flora_ids)
 
-    trait_cols = sorted([c for c in df.columns if c in traits.TRAIT_NAMES])
+    other_cols = [c for c in df.columns if c not in TRAIT_NAMES]
+    trait_cols = sorted([c for c in df.columns if c in TRAIT_NAMES])
+
     df = df.reindex(other_cols + trait_cols, axis='columns')
-
-    trait_cols = {f'{c}_data': c for c in trait_cols}
-
-    df = df.rename(columns={v: k for k, v in trait_cols.items()})
-
-    for col in trait_cols.values():
-        df[col] = ''
-
     df = df.sort_values(by=['family', 'taxon'])
 
-    rows = [x.to_dict() for i, x in df.iterrows()]
-    colors = {t: next(COLORS) for t in trait_cols}
-    trait_headers = [f'<span class="{colors[k]}">{v}</span>'
-                     for k, v in trait_cols.items()]
     tags = build_tags()
-    for row in rows:
-        format_traits(trait_cols, row)
-        format_text(trait_cols, row, tags, colors)
+    colors = {t: next(COLORS) for t in trait_cols}
+
+    df['text'] = df.apply(
+        format_text, axis='columns',
+        colors=colors, tags=tags, trait_cols=trait_cols)
+
+    for col in trait_cols:
+        df[col] = df[col].apply(format_trait)
+
+    trait_headers = [f'<span class="{colors[c]}">{c}</span>'
+                     for c in trait_cols]
 
     env = Environment(
         loader=FileSystemLoader('./efloras/writers/templates'),
@@ -50,66 +51,29 @@ def html_writer(args, df):
 
     template = env.get_template('html_writer.html').render(
         now=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
+        traits=trait_cols,
         headers=trait_headers,
-        traits=trait_cols.values(),
-        rows=rows)
+        rows=df)
     args.output_file.write(template)
     args.output_file.close()
 
 
-def build_tags():
-    """
-    Make tags for HTML text color highlighting.
-
-    Tag keys are the the CSS class and if it's an open or close tag.
-    For example:
-        (css_class, is_open) -> <span class="css_class">
-        (css_class, not_open) -> </span>
-    """
-    tags = {
-        ('bold', True): '<strong>',
-        ('bold', False): '</strong>'}
-
-    for color in CLASSES:
-        tags[(color, True)] = f'<span class={color}>'
-        tags[(color, False)] = '</span>'
-
-    return tags
-
-
-def format_traits(trait_cols, row):
-    """Format the traits for HTML."""
-    for old, new in trait_cols.items():
-        parses = []
-        for parse in row[old]:
-            attrs = []
-            for key, value in parse.items():
-                if key == 'value':
-                    value = ', '.join(value)
-                if key not in ['start', 'end', 'trait_group', 'raw_value']:
-                    attrs.append(f'<b>{key}</b>:&nbsp;{value}')
-            parses.append('<br/>'.join(attrs))
-        row[new] = '<hr/>'.join(parses)
-
-
-def format_text(trait_cols, row, tags, colors):
+def format_text(row, tags=None, colors=None, trait_cols=None):
     """Colorize and format the text for HTML."""
     text = row['text']
-
     cuts = []
-
     cut_id = 0
 
     for col in trait_cols:
         for trait in row[col]:
             cut_id = append_endpoints(
-                cuts, cut_id, trait.start, trait.end, colors[col])
+                cuts, cut_id, trait['start'], trait['end'], colors[col])
 
-    for trait in atoms.ATOMIZER.finditer(text):
+    for atom in ATOMIZER.finditer(text):
         cut_id = append_endpoints(
-            cuts, cut_id, trait.start(), trait.end(), 'bold')
+            cuts, cut_id, atom.start(), atom.end(), 'bold')
 
-    row['text'] = insert_markup(text, cuts, tags)
+    return insert_markup(text, cuts, tags)
 
 
 def insert_markup(text, cuts, tags):
@@ -198,3 +162,51 @@ def append_endpoints(cuts, cut_id, start, end, tag_type):
         type=tag_type))
 
     return cut_id
+
+
+def build_tags():
+    """
+    Make tags for HTML text color highlighting.
+
+    Tag keys are the the CSS class and if it's an open or close tag.
+    For example:
+        (css_class, is_open) -> <span class="css_class">
+        (css_class, not_open) -> </span>
+    """
+    tags = {
+        ('bold', True): '<strong>',
+        ('bold', False): '</strong>'}
+
+    for color in CLASSES:
+        tags[(color, True)] = f'<span class={color}>'
+        tags[(color, False)] = '</span>'
+
+    return tags
+
+
+def format_trait(cell):
+    """Format the traits for HTML."""
+    pivot = defaultdict(list)
+    for trait in cell:
+        for key, value in trait.items():
+            if key not in ('start', 'end', 'raw_value'):
+                pivot[key].append(value)
+
+    output = []
+    for label, data in pivot.items():
+        simple = {}
+        compound = []
+        for datum in data:
+            if isinstance(datum, dict):
+                fields = []
+                for key, value in datum.items():
+                    value = str(value)
+                    field = f'{key}:&nbsp;{value}'
+                    fields.append(field)
+                compound.append('<br/>'.join(fields))
+            else:
+                simple[datum] = 1
+        simple = ', '.join(simple)
+        compound = '<hr/>'.join(compound)
+        output.append('<nr/>'.join([x for x in [simple, compound] if x]))
+    return '<hr/>'.join(output)

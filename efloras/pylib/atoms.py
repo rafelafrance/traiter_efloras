@@ -5,8 +5,8 @@ import regex
 from traiter.util import FLAGS  # pylint: disable=import-error
 
 
-ALL = {'seasonal_descriptor', 'sexual_descriptor', 'symmetry_descriptor',
-       'temporal_descriptor'}
+DESCRIPTOR = set(""" seasonal_descriptor sexual_descriptor symmetry_descriptor
+    temporal_descriptor """.split())
 CALYX = {'calyx_size', 'caylx_shape', 'caylx_color'}
 COROLLA = {'corolla_size', 'corolla_shape', 'corolla_color'}
 FLOWER = {'flower_shape', 'flower_size', 'flower_color'}
@@ -21,12 +21,14 @@ SEPAL = {'sepal_size', 'sepal_shape', 'sepal_color'}
 
 # Keywords used to split treatment into text atoms
 ATOMS = {
-    r'2n': set(),
+    r'2\s*n': set(),
     'anther heads': set(),
     'anthers': set(),
     'asexual structures': set(),
+    'bark': set(),
     'basal leaves': (LEAF | PETIOLE),
     'basal rosettes': set(),
+    'branches': set(),
     'calyptra': set(),
     'capsule': FRUIT,
     'capsules': set(),
@@ -38,6 +40,7 @@ ATOMS = {
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'flowers': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
+    'fruiting catkins': set(),
     'fruiting peduncles': set(),
     'fruits': FRUIT,
     'herbs': set(),
@@ -47,6 +50,8 @@ ATOMS = {
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'inflorescenses': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
+    'infructescences': set(),
+    'leaf blade': (LEAF | PETIOLE),
     'leaf blades': (LEAF | PETIOLE),
     'leaflets': (LEAF | PETIOLE),
     'leaves': (LEAF | PETIOLE),
@@ -69,10 +74,12 @@ ATOMS = {
     'protonematal flaps': set(),
     'racemes': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
+    'samaras': set(),
     'seeds': SEED,
     'seta': set(),
     'seta superficial cells': set(),
     'sexual condition': set(),
+    'shrubs': set(),
     'specialized asexual structures': set(),
     'spores': set(),
     'staminate corollas': (
@@ -89,7 +96,11 @@ ATOMS = {
     'stolons': set(),
     'tendrils': set(),
     'thallose protonematal flaps': set(),
+    'trees': set(),
+    'twigs': set(),
     'vines': set(),
+    'winter buds': set(),
+    'wood': set(),
     'x': set(),
 }
 
@@ -97,5 +108,8 @@ ATOMS = dict(sorted(ATOMS.items(), reverse=True, key=lambda a: len(a[0])))
 
 ATOMIZER = ' | '.join(
     r' \s '.join(x.split()) for x in ATOMS.keys())
+# ATOMIZER = regex.compile(
+#     rf""" (?<! [\w:,<>()] \s) \b ( {ATOMIZER} ) \b  """, flags=FLAGS)
+
 ATOMIZER = regex.compile(
-    rf""" (?<! [\w:,<>()] \s) \b ( {ATOMIZER} ) \b  """, flags=FLAGS)
+    rf""" (?<= ^ | [.] \s* ) \b ( {ATOMIZER} ) \b  """, flags=FLAGS)

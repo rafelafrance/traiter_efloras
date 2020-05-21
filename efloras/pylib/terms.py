@@ -4,7 +4,7 @@ import csv
 import json
 
 import regex
-import traiter.util as t_util
+from traiter.util import FLAGS  # pylint: disable=import-error
 
 import efloras.pylib.family_util as futil
 
@@ -25,11 +25,10 @@ TERMS = read_terms()
 LABELS = sorted({t['label'] for t in TERMS})
 REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
 
-
 PATTERN_RE = regex.compile(rf"""
     {QUOTE} term {QUOTE} \s* : \s* {QUOTE} (\w+) {QUOTE}
     | {QUOTE} term {QUOTE} \s* : \s*  \{{ {QUOTE} IN {QUOTE} ( [^}}]+ )
-    """, t_util.FLAGS)
+    """, FLAGS)
 
 
 def terms_from_patterns(patterns):

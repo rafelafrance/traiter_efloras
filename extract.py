@@ -40,7 +40,7 @@ def main(args):
         print('No traits selected.')
         sys.exit(1)
 
-    if not (traits := expand_trait_names(args.traits)):
+    if not (traits := expand_trait_names(args.trait)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)
     setattr(args, 'trait', traits)

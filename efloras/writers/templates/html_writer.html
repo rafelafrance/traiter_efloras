@@ -22,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for row in rows %}
+    {% for _, row in rows.iterrows() %}
     <tr>
       <td>
         {{ row.family.capitalize() }}<hr/>
