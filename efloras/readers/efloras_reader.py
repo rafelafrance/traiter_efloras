@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 import efloras.pylib.family_util as futil
 from efloras.matchers.matcher import Matcher
-from efloras.pylib.atoms import ATOMIZER, ATOMS, DESCRIPTOR
+from efloras.pylib.atoms import ATOMIZER, ATOMS, DESCRIPTOR, atomize
 
 
 def efloras_matcher(args, families):
@@ -31,6 +31,9 @@ def efloras_matcher(args, families):
             treatment = get_treatment(path)
             text = get_traits(treatment)
             taxon_id = futil.get_taxon_id(path)
+            print('=' * 120)
+            print(taxa[taxon_id])
+            print()
 
             row = {
                 'family': family['family'],
@@ -48,12 +51,12 @@ def efloras_matcher(args, families):
             row['text'] = text
 
             flora_id = int(flora_id)
-            atom_names = get_atom_names(text)
+            text_atoms = atomize(text)
 
             descriptor_traits = get_descriptor_traits(
                 descriptor_matcher, text)
             atomized_traits = get_atomized_traits(
-                atomized_matcher, target_atoms, atom_names, text)
+                atomized_matcher, target_atoms, text_atoms, text)
 
             row = {**row, **descriptor_traits, **atomized_traits}
             rows.append(row)
@@ -73,14 +76,17 @@ def get_descriptor_traits(matcher, text):
     return traits
 
 
-def get_atomized_traits(matcher, target_atoms, atom_names, text):
+def get_atomized_traits(matcher, target_atoms, text_atoms, text):
     """Look for traits in the atoms."""
     traits = defaultdict(list)
 
-    for i, (atom_start, name_end, atom_name) in enumerate(atom_names[:-1]):
-        atom_name = atom_name.lower()
-        text_end, *_ = atom_names[i + 1]
-        atom_text = text[atom_start:text_end]
+    for text_atom in text_atoms:
+        atom_name = text_atom['name']
+        text_start = text_atom['start']
+        text_end = text_atom['end']
+        atom_text = text[text_start:text_end]
+        print(text_atom)
+        print(f'[{atom_text}]')
 
         if atom_name not in target_atoms:
             continue
@@ -91,8 +97,8 @@ def get_atomized_traits(matcher, target_atoms, atom_names, text):
                 if label == 'part':
                     continue
                 for datum in data:
-                    datum['start'] += atom_start
-                    datum['end'] += atom_start
+                    datum['start'] += text_start
+                    datum['end'] += text_start
                 traits[label] += data
 
     return traits
@@ -117,12 +123,14 @@ def get_family_tree(family):
     return taxa
 
 
-def get_atom_names(text):
-    """Break text into slices that are used to look for particular traits."""
-    # The sections start with a keyword and extend up to the next keyword
-    atoms = [(m.start(), m.end(), m.group(1)) for m in ATOMIZER.finditer(text)]
-    atoms.append((-1, -1, ''))  # Sentinel
-    return atoms
+# def get_atom_names(text):
+#     """Break text into slices that are used to look for
+#     particular traits."""
+#     # The sections start with a keyword and extend up to the next keyword
+#     atoms = [(m.start(), m.end(), m.group(1)) for
+#     m in ATOMIZER.finditer(text)]
+#     atoms.append((-1, -1, ''))  # Sentinel
+#     return atoms
 
 
 def get_treatment(path):

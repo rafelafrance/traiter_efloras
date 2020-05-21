@@ -1,12 +1,11 @@
 """Write output to an HTML file."""
 
 import html
-from collections import deque, namedtuple, defaultdict
+from collections import defaultdict, deque, namedtuple
 from datetime import datetime
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
-# from traiter.util import as_list
 
 from ..pylib.atoms import ATOMIZER
 from ..pylib.family_util import get_flora_ids

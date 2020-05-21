@@ -2,6 +2,7 @@
 
 import regex
 
+from traiter.spacy_nlp import NLP
 from traiter.util import FLAGS  # pylint: disable=import-error
 
 
@@ -21,42 +22,28 @@ SEPAL = {'sepal_size', 'sepal_shape', 'sepal_color'}
 
 # Keywords used to split treatment into text atoms
 ATOMS = {
-    r'2\s*n': set(),
-    'anther heads': set(),
-    'anthers': set(),
-    'asexual structures': set(),
-    'bark': set(),
     'basal leaves': (LEAF | PETIOLE),
-    'basal rosettes': set(),
-    'branches': set(),
-    'calyptra': set(),
     'capsule': FRUIT,
-    'capsules': set(),
-    'caudices': set(),
     'cauline leaves': (LEAF | PETIOLE),
     'corollas': (
+        FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
+    'flowering': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'flowering stems': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'flowers': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
-    'fruiting catkins': set(),
-    'fruiting peduncles': set(),
     'fruits': FRUIT,
-    'herbs': set(),
     'hypanthia': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'inflorescences': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'inflorescenses': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
-    'infructescences': set(),
     'leaf blade': (LEAF | PETIOLE),
     'leaf blades': (LEAF | PETIOLE),
     'leaflets': (LEAF | PETIOLE),
     'leaves': (LEAF | PETIOLE),
-    'pedicels': set(),
-    'peduncles': set(),
     'pepos': FRUIT,
     'petals': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
@@ -69,19 +56,9 @@ ATOMS = {
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'pistillate racemes': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
-    'plants': set(),
-    'pollen': set(),
-    'protonematal flaps': set(),
     'racemes': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
-    'samaras': set(),
     'seeds': SEED,
-    'seta': set(),
-    'seta superficial cells': set(),
-    'sexual condition': set(),
-    'shrubs': set(),
-    'specialized asexual structures': set(),
-    'spores': set(),
     'staminate corollas': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'staminate flowers': (
@@ -90,18 +67,7 @@ ATOMS = {
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
     'staminate racemes': (
         FLOWER | HYPANTHIUM | SEPAL | PETAL | CALYX | COROLLA),
-    'stem leaves': set(),
-    'stems': set(),
-    'stolon leaves': set(),
-    'stolons': set(),
-    'tendrils': set(),
-    'thallose protonematal flaps': set(),
-    'trees': set(),
-    'twigs': set(),
-    'vines': set(),
-    'winter buds': set(),
-    'wood': set(),
-    'x': set(),
+    'stem leaves': (LEAF | PETIOLE),
 }
 
 ATOMS = dict(sorted(ATOMS.items(), reverse=True, key=lambda a: len(a[0])))
@@ -110,6 +76,33 @@ ATOMIZER = ' | '.join(
     r' \s '.join(x.split()) for x in ATOMS.keys())
 # ATOMIZER = regex.compile(
 #     rf""" (?<! [\w:,<>()] \s) \b ( {ATOMIZER} ) \b  """, flags=FLAGS)
-
 ATOMIZER = regex.compile(
-    rf""" (?<= ^ | [.] \s* ) \b ( {ATOMIZER} ) \b  """, flags=FLAGS)
+    rf""" (?<= ^ \s* | [.] \s* ) \b ( {ATOMIZER} ) \b  """, flags=FLAGS)
+
+
+def atomize(text):
+    """Break the text into atoms."""
+    doc = NLP(text)
+
+    atoms = []
+
+    for sent in doc.sents:
+        atom = {
+            'start': sent.start_char,
+            'end': sent.end_char,
+            'last': sent.end,
+        }
+
+        if (name := sent[:1].text.lower()) in ATOMS:
+            atom['name'] = name
+            atoms.append(atom)
+
+        elif (name := sent[:2].text.lower()) in ATOMS:
+            atom['name'] = name
+            atoms.append(atom)
+
+        # elif atoms and text[atoms[-1]['end']] != '.':
+        #     atoms[-1]['end'] = sent.end_char
+        #     atoms[-1]['last'] = sent.end
+
+    return atoms
