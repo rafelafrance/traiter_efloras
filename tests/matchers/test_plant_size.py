@@ -347,3 +347,22 @@ class TestPlantSize(unittest.TestCase):
                                          'width_high': 120.0,
                                          'width_units': 'cm'}}]}]
         )
+
+    def test_plant_size_21(self):
+        # """It an inflorescence notation."""
+        self.assertEqual(
+            Matcher('*_size').parse(
+                'Inflorescences formed season before flowering and exposed '
+                'during winter; staminate catkins in 1 or more clusters '
+                'of 2--5, 3--8.5 cm,'),
+            [{'part': [{'value': 'flower',
+                        'start': 0,
+                        'end': 14,
+                        'raw_value': 'Inflorescences'}],
+              'flower_size': [{'start': 122,
+                               'end': 131,
+                               'raw_value': '3--8.5 cm',
+                               'value': {'length_low': 30.0,
+                                         'length_high': 85.0,
+                                         'length_units': 'cm'}}]}]
+        )
