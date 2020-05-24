@@ -8,7 +8,6 @@ def count(span):
     data = dict(
         start=span.start_char,
         end=span.end_char,
-        raw_value=span.text,
     )
 
     value = {}

@@ -3,7 +3,6 @@
 import regex
 from traiter.util import as_set  # pylint: disable=import-error
 
-from .atoms import DESCRIPTOR
 from ..matchers.plant_color import PLANT_COLOR
 from ..matchers.plant_count import PLANT_COUNT
 from ..matchers.plant_descriptor import PLANT_DESCRIPTOR
@@ -23,9 +22,6 @@ def expand_trait_names(trait_names):
     """Expand traits wildcards like: * or ?."""
     trait_names = as_set(trait_names) if trait_names else set(TRAIT2MATCHER)
 
-    if trait_names - DESCRIPTOR:
-        trait_names.add('plant_part')  # Atomized traits need this
-
     traits = set()
     for name in trait_names:
         pattern = name.replace('*', '.*').replace('?', '.?')
@@ -33,7 +29,7 @@ def expand_trait_names(trait_names):
         hits = {t for t in TRAIT2MATCHER if pattern.search(t)}
         traits |= hits
 
-    return sorted(traits)
+    return traits
 
 
 def traits_to_matchers(trait_names):

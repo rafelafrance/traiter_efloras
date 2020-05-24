@@ -31,7 +31,6 @@ def fill_data(span, dims):
     data = dict(
         start=span.start_char,
         end=span.end_char,
-        raw_value=span.text,
     )
 
     value = {}

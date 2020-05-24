@@ -13,7 +13,6 @@ def color(span):
         value=value,
         start=span.start_char,
         end=span.end_char,
-        raw_value=span.text,
     )
 
 

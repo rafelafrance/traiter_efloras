@@ -21,6 +21,14 @@ h2 {
 .c7 { background: rgba(255, 128, 128, 35%); }
 .c8 { background: rgba(0, 0, 0, 35%); }
 .bold { font-weight: bold; }
+.border {
+    border-left: 3px solid black;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-right: 3px solid black;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
 
 table {
   border-collapse: collapse;

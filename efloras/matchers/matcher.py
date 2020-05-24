@@ -20,17 +20,17 @@ class Matcher(TraitMatcher):
         # Process the matchers
         trait_patterns = []
         group_patterns = {}
-        aux_names = []
+        aux_names = set()
 
         for matcher in matchers:
             trait_patterns += matcher['matchers']
             group_patterns = {**group_patterns, **matcher.get('groupers', {})}
-            aux_names += matcher.get('aux_names', [])
+            aux_names |= set(matcher.get('aux_names', []))
 
         self.add_trait_patterns(trait_patterns)
         self.add_group_patterns(group_patterns)
 
-        self.trait_filter = set(self.trait_names + aux_names)
+        self.trait_filter = set(self.trait_names | aux_names)
 
         # We can now add the terms
         patterns = [p['patterns'] for p in trait_patterns]
@@ -38,45 +38,26 @@ class Matcher(TraitMatcher):
         self.terms += terms_from_patterns(group_patterns)
         self.add_terms(self.terms)
 
-    def parse(self, text):
+    def parse(self, text, part='plant'):
         """Parse the traits."""
         doc = super().parse(text)
-
-        parts = []
-        descriptors = defaultdict(list)
         traits = defaultdict(list)
-
-        category = ''
 
         for token in doc:
             label = token._.label
             data = token._.data
 
-            if label == 'part':
-                if traits:
-                    parts.append(traits)
-                category = data['value']
-                traits = defaultdict(list)
+            if label == 'descriptor':
+                label = data.get('category')
+                del data['category']
+            else:
+                label = f'{part}_{label}'
+
+            if data:
                 traits[label].append(data)
 
-            elif label == 'descriptor' and data:
-                trait_name = data['category']
-                if trait_name in self.trait_filter:
-                    del data['category']
-                    descriptors[trait_name].append(data)
-
-            elif data:
-                trait_name = f'{category}_{label}'
-                if trait_name in self.trait_filter:
-                    traits[trait_name].append(data)
-
-        if traits:
-            parts.append(traits)
-
-        if descriptors:
-            parts = [descriptors] + parts
-
         # from pprint import pp
-        # pp([dict(p) for p in parts])
+        # print()
+        # pp(dict(traits))
 
-        return parts
+        return traits if traits else {}

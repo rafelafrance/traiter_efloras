@@ -14,7 +14,6 @@ def shape(span):
         value=value,
         start=span.start_char,
         end=span.end_char,
-        raw_value=span.text,
     )
     if loc:
         trait['location'] = loc[0]

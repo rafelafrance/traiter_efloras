@@ -36,10 +36,6 @@ def main(args):
     if not futil.check_family_flora_ids(args, families):
         sys.exit(1)
 
-    if not args.trait:
-        print('No traits selected.')
-        sys.exit(1)
-
     if not (traits := expand_trait_names(args.trait)):
         print(f'No traits match: {" or ".join(args.trait)}.')
         sys.exit(1)

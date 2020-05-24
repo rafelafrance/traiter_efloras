@@ -15,7 +15,6 @@ def part(span):
         value=value,
         start=span.start_char,
         end=span.end_char,
-        raw_value=span.text,
     )
     if match := regex.search(r' pistillate | staminate ', span.text, FLAGS):
         trait['sex'] = match.group().lower()

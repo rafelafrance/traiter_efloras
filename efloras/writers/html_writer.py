@@ -7,7 +7,7 @@ from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-from ..pylib.atoms import ATOMIZER
+from efloras.matchers.sentence import parse_sentences
 from ..pylib.family_util import get_flora_ids
 from ..pylib.traits import TRAIT_NAMES
 
@@ -25,10 +25,8 @@ def html_writer(args, df):
     flora_ids = get_flora_ids()
     df['flora_name'] = df['flora_id'].map(flora_ids)
 
-    other_cols = [c for c in df.columns if c not in TRAIT_NAMES]
     trait_cols = sorted([c for c in df.columns if c in TRAIT_NAMES])
 
-    df = df.reindex(other_cols + trait_cols, axis='columns')
     df = df.sort_values(by=['family', 'taxon'])
 
     tags = build_tags()
@@ -68,9 +66,11 @@ def format_text(row, tags=None, colors=None, trait_cols=None):
             cut_id = append_endpoints(
                 cuts, cut_id, trait['start'], trait['end'], colors[col])
 
-    for atom in ATOMIZER.finditer(text):
+    for sent in row['sentences']:
         cut_id = append_endpoints(
-            cuts, cut_id, atom.start(), atom.end(), 'bold')
+            cuts, cut_id, sent['leader_start'], sent['leader_end'], 'bold')
+        cut_id = append_endpoints(
+            cuts, cut_id, sent['start'], sent['end'], 'border')
 
     return insert_markup(text, cuts, tags)
 
@@ -174,10 +174,13 @@ def build_tags():
     """
     tags = {
         ('bold', True): '<strong>',
-        ('bold', False): '</strong>'}
+        ('bold', False): '</strong>',
+        ('border', True): '<span class="border">',
+        ('border', False): '</span>',
+    }
 
     for color in CLASSES:
-        tags[(color, True)] = f'<span class={color}>'
+        tags[(color, True)] = f'<span class="{color}">'
         tags[(color, False)] = '</span>'
 
     return tags
