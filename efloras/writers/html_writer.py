@@ -7,15 +7,16 @@ from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-from efloras.matchers.sentence import parse_sentences
+from ..matchers.matcher import MATCHERS
 from ..pylib.family_util import get_flora_ids
-from ..pylib.traits import TRAIT_NAMES
 
 # CSS colors
 CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
 COLORS = cycle(CLASSES)
 
 Cut = namedtuple('Cut', 'pos open len id end type')
+
+TRAIT_SUFFIXES = [m['name'] for m in MATCHERS]
 
 
 def html_writer(args, df):
@@ -25,7 +26,8 @@ def html_writer(args, df):
     flora_ids = get_flora_ids()
     df['flora_name'] = df['flora_id'].map(flora_ids)
 
-    trait_cols = sorted([c for c in df.columns if c in TRAIT_NAMES])
+    trait_cols = [c for c in df.columns if (s := c.split('_')[-1])]
+    trait_cols = sorted(trait_cols)
 
     df = df.sort_values(by=['family', 'taxon'])
 
