@@ -6,10 +6,10 @@ from ..pylib.terms import REPLACE
 def shape(span):
     """Enrich a phrase match."""
     parts = {r: 1 for t in span
-             if (r := REPLACE.get(t.text, t.text)) and t._.term == 'shape'}
+             if (r := REPLACE.get(t.text, t.text)) and t._.label == 'shape'}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    loc = [t.text.lower() for t in span if t._.term == 'part_location']
+    loc = [t.text.lower() for t in span if t._.label == 'part_location']
     trait = dict(
         value=value,
         start=span.start_char,
@@ -20,32 +20,28 @@ def shape(span):
     return trait
 
 
-SHAPE_TRAITS = """ caylx_shape corolla_shape flower_shape hypanthium_shape
-        leaf_shape petal_shape petiole_shape sepal_shape """.split()
-
 PLANT_SHAPE = {
     'name': 'shape',
-    'trait_names': SHAPE_TRAITS,
     'matchers': [
         {
             'label': 'shape',
             'on_match': shape,
             'patterns': [
                 [
-                    {'_': {'term': {'IN': [
+                    {'_': {'label': {'IN': [
                         'shape', 'shape_leader', 'part_location']}},
                      'OP': '*'},
-                    {'_': {'term': 'dash'}, 'OP': '?'},
-                    {'_': {'term': 'shape'}, 'OP': '+'},
-                    {'_': {'term': 'dash'}, 'OP': '?'},
-                    {'_': {'term': 'shape'}, 'OP': '?'},
+                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'_': {'label': 'shape'}, 'OP': '+'},
+                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'_': {'label': 'shape'}, 'OP': '?'},
                 ],
                 [
-                    {'_': {'term': 'shape_leader'}},
-                    {'_': {'term': {'IN': ['dash', 'prep']}}},
-                    {'_': {'term': {'IN': ['shape_leader']}}},
-                    {'_': {'term': 'dash'}, 'OP': '?'},
-                    {'_': {'term': 'shape'}, 'OP': '+'},
+                    {'_': {'label': 'shape_leader'}},
+                    {'_': {'label': {'IN': ['dash', 'prep']}}},
+                    {'_': {'label': {'IN': ['shape_leader']}}},
+                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'_': {'label': 'shape'}, 'OP': '+'},
                 ],
             ],
         },

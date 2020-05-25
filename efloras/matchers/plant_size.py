@@ -3,6 +3,7 @@
 import regex
 from traiter.util import to_positive_float
 
+from .shared import RANGE_GROUPS
 from ..pylib.terms import TERMS
 
 # Normalize dimension notations
@@ -85,28 +86,27 @@ def scan_tokens(span):
     idx = 0
 
     for token in span:
-        term = token._.term
+        label = token._.label
 
         # Convert the size fields to floats
-        if term in 'min_size low_size high_size max_size'.split():
-            key = term.split('_')[0]  # Remove "_size"
-            dims[idx][key] = to_positive_float(token.text)
+        if label in """ min low high max """.split():
+            dims[idx][label] = to_positive_float(token.text)
 
         # Save the units and get the unit multiplier
-        elif term == 'length_units':
+        elif label == 'length_units':
             units = UNITS[token.text.lower()]
             dims[idx]['units'] = units
             dims[idx]['times'] = MULTIPLY[units]
 
-        elif term == 'dimension':
+        elif label == 'dimension':
             dims[idx]['dimension'] = DIMENSIONS[token.text.lower()]
 
-        elif term == 'sex':
+        elif label == 'sex':
             value = token.text.lower()
             value = regex.sub(r'\W+', '', value)
             dims[idx]['sex'] = value
 
-        elif term == 'cross':
+        elif label == 'cross':
             idx += 1
             dims.append({})
 
@@ -115,73 +115,43 @@ def scan_tokens(span):
 
 PLANT_SIZE = {
     'name': 'size',
-    'trait_names': """ calyx_size corolla_size flower_size hypanthium_size
-        leaf_size petal_size petiole_size seed_size sepal_size """.split(),
-    'groupers': {
-        'min_size': [[
-            {'_': {'term': 'open'}},
-            {'_': {'term': 'float'}},
-            {'_': {'term': {'IN': ['dash', 'prep']}}},
-            {'_': {'term': 'close'}},
-        ]],
-        'low_size': [[
-            {'_': {'term': 'float'}},
-        ]],
-        'high_size': [[
-            {'_': {'term': {'IN': ['dash', 'prep']}}},
-            {'_': {'term': 'float'}},
-        ]],
-        'max_size': [[
-            {'_': {'term': 'open'}},
-            {'_': {'term': {'IN': ['dash', 'prep']}}},
-            {'_': {'term': 'float'}},
-            {'_': {'term': 'close'}},
-        ]],
-        'sex': [[
-            {'_': {'term': 'open'}, 'OP': '?'},
-            {'_': {'term': 'plant_sex'}},
-            {'_': {'term': 'close'}, 'OP': '?'},
-        ]],
-    },
+    'groupers': RANGE_GROUPS,
     'matchers': [
         {
             'label': 'size',
             'on_match': size,
             'patterns': [
                 [
-                    {'_': {'term': 'min_size'}, 'OP': '?'},
-                    {'_': {'term': 'low_size'}},
-                    {'_': {'term': 'high_size'}, 'OP': '?'},
-                    {'_': {'term': 'max_size'}, 'OP': '?'},
-                    {'_': {'term': 'length_units'}},
-                    {'_': {'term': 'dimension'}, 'OP': '?'},
-                    {'_': {'term': 'sex'}, 'OP': '?'},
+                    {'_': {'label': 'min'}, 'OP': '?'},
+                    {'_': {'label': 'low'}},
+                    {'_': {'label': 'high'}, 'OP': '?'},
+                    {'_': {'label': 'max'}, 'OP': '?'},
+                    {'_': {'label': 'length_units'}},
+                    {'_': {'label': 'dimension'}, 'OP': '?'},
                 ], [
-                    {'_': {'term': 'high_size'}},
-                    {'_': {'term': 'length_units'}},
-                    {'_': {'term': 'dimension'}, 'OP': '?'},
-                    {'_': {'term': 'sex'}, 'OP': '?'},
+                    {'_': {'label': 'high'}},
+                    {'_': {'label': 'length_units'}},
+                    {'_': {'label': 'dimension'}, 'OP': '?'},
                 ],
             ],
         },
         {
             'label': 'size',
-            'on_match': size,   # cross
+            'on_match': size,  # cross
             'patterns': [[
-                {'_': {'term': 'min_size'}, 'OP': '?'},
-                {'_': {'term': 'low_size'}},
-                {'_': {'term': 'high_size'}, 'OP': '?'},
-                {'_': {'term': 'max_size'}, 'OP': '?'},
-                {'_': {'term': 'length_units'}, 'OP': '?'},
-                {'_': {'term': 'dimension'}, 'OP': '?'},
-                {'_': {'term': 'cross'}},
-                {'_': {'term': 'min_size'}, 'OP': '?'},
-                {'_': {'term': 'low_size'}},
-                {'_': {'term': 'high_size'}, 'OP': '?'},
-                {'_': {'term': 'max_size'}, 'OP': '?'},
-                {'_': {'term': 'length_units'}},
-                {'_': {'term': 'dimension'}, 'OP': '?'},
-                {'_': {'term': 'sex'}, 'OP': '?'},
+                {'_': {'label': 'min'}, 'OP': '?'},
+                {'_': {'label': 'low'}},
+                {'_': {'label': 'high'}, 'OP': '?'},
+                {'_': {'label': 'max'}, 'OP': '?'},
+                {'_': {'label': 'length_units'}, 'OP': '?'},
+                {'_': {'label': 'dimension'}, 'OP': '?'},
+                {'_': {'label': 'cross'}},
+                {'_': {'label': 'min'}, 'OP': '?'},
+                {'_': {'label': 'low'}},
+                {'_': {'label': 'high'}, 'OP': '?'},
+                {'_': {'label': 'max'}, 'OP': '?'},
+                {'_': {'label': 'length_units'}},
+                {'_': {'label': 'dimension'}, 'OP': '?'},
             ]],
         },
     ]

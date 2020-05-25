@@ -2,6 +2,8 @@
 
 from traiter.util import to_positive_int
 
+from .shared import RANGE_GROUPS
+
 
 def count(span):
     """Enrich a phrase match."""
@@ -12,12 +14,14 @@ def count(span):
 
     value = {}
     for token in span:
-        term = token._.term
+        label = token._.label
 
-        if term in ('min_count', 'low_count', 'high_count', 'max_count'):
-            value[term] = to_positive_int(token.text)
+        if label in ('min', 'low', 'high', 'max'):
+            if (as_int := to_positive_int(token.text)) is None:
+                return {}
+            value[label] = as_int
 
-        elif term in ('cross', 'length_units'):
+        elif label in ('cross', 'length_units', 'slash', 'dash'):
             return {}
 
     data['value'] = value
@@ -27,39 +31,23 @@ def count(span):
 
 PLANT_COUNT = {
     'name': 'count',
-    'trait_names': """ ovary_count seed_count stamen_count """.split(),
-    'groupers': {
-        'min_count': [[
-            {'_': {'term': 'open'}},
-            {'_': {'term': 'int'}},
-            {'_': {'term': {'IN': ['dash', 'conj', 'prep']}}},
-            {'_': {'term': 'close'}},
-        ]],
-        'low_count': [[
-            {'_': {'term': 'int'}},
-        ]],
-        'high_count': [[
-            {'_': {'term': {'IN': ['dash', 'conj', 'prep']}}},
-            {'_': {'term': 'int'}},
-        ]],
-        'max_count': [[
-            {'_': {'term': 'open'}},
-            {'_': {'term': {'IN': ['dash', 'conj', 'prep']}}},
-            {'_': {'term': 'int'}},
-            {'_': {'term': 'close'}},
-        ]],
-    },
+    'groupers': RANGE_GROUPS,
     'matchers': [
         {
             'label': 'count',
             'on_match': count,
             'patterns': [
                 [
-                    {'_': {'term': 'min_count'}, 'OP': '?'},
-                    {'_': {'term': 'low_count'}},
-                    {'_': {'term': 'high_count'}, 'OP': '?'},
-                    {'_': {'term': 'max_count'}, 'OP': '?'},
-                    {'_': {'term': {'IN': ['cross', 'length_units']}},
+                    {'_': {'label': {'IN': ['cross', 'slash']}},
+                     'OP': '?'},
+                    {'_': {'label': 'min'}, 'OP': '?'},
+                    {'_': {'label': 'low'}},
+                    {'_': {'label': 'high'}, 'OP': '?'},
+                    {'_': {'label': 'max'}, 'OP': '?'},
+                    {'_': {'label': {
+                        'IN': ['cross', 'length_units', 'slash', 'dash']}},
+                        'OP': '?'},
+                    {'_': {'label': {'IN': ['min', 'low', 'high', 'max']}},
                      'OP': '?'},
                 ],
             ],

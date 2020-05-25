@@ -4,6 +4,8 @@ import unittest
 
 from efloras.matchers.matcher import Matcher
 
+MATCHER = Matcher()
+
 
 class TestPlantDescriptor(unittest.TestCase):
     """Test the plant descriptor trait parser."""
@@ -11,32 +13,25 @@ class TestPlantDescriptor(unittest.TestCase):
     def test_plant_descriptor_01(self):
         """It parses a compound sex notation."""
         self.assertEqual(
-            Matcher('sexual_descriptor').parse(
+            MATCHER.parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
-            {'sexual_descriptor': [{'value': 'bisexual',
-                                    'start': 0, 'end': 8,
-                                    'raw_value': 'bisexual'},
-                                   {'value': 'unisexual',
-                                    'start': 10, 'end': 19,
-                                    'raw_value': 'unisexual'},
-                                   {'value': 'gynodioecious',
-                                    'start': 41, 'end': 54,
-                                    'raw_value': 'gynodioecious'},
-                                   {'value': 'dioecious',
-                                    'start': 66, 'end': 75,
-                                    'raw_value': 'dioecious'}]}
+            [{'sexual_descriptor': [
+                {'value': 'bisexual', 'start': 0, 'end': 8},
+                {'value': 'unisexual', 'start': 10, 'end': 19},
+                {'value': 'gynodioecious', 'start': 41, 'end': 54},
+                {'value': 'dioecious', 'start': 66, 'end': 75}]},
+             {'part': [{'value': 'plant', 'start': 24, 'end': 30}]},
+             {'part': [{'value': 'plant', 'start': 59, 'end': 65}]}]
         )
 
     def test_plant_descriptor_02(self):
         """It parses a symmetry descriptor."""
         self.assertEqual(
-            Matcher('symmetry_descriptor').parse(
+            MATCHER.parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),
-            {'symmetry_descriptor': [{'value': 'actinomorphic',
-                                      'start': 16, 'end': 29,
-                                      'raw_value': 'actinomorphic'},
-                                     {'value': 'zygomorphic',
-                                      'start': 38, 'end': 49,
-                                      'raw_value': 'zygomorphic'}]}
+            [{'symmetry_descriptor': [
+                {'value': 'actinomorphic', 'start': 16, 'end': 29},
+                {'value': 'zygomorphic', 'start': 38, 'end': 49}]},
+             {'part': [{'value': 'flower', 'start': 0, 'end': 7}]}]
         )

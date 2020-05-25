@@ -5,19 +5,36 @@ from traiter.util import FLAGS
 
 from ..pylib.terms import TERMS
 
-CATEGORIES = {t['pattern']: c for t in TERMS if (c := t['category'])}
+
+PARTS = [t for t in TERMS if t['label'] == 'plant_part']
+
+CATEGORIES = {t['pattern']: t['category'] for t in PARTS}
+
+PATTERNS = sorted([t['pattern'] for t in PARTS],
+                  key=lambda p: len(p), reverse=True)
+
+SPLITTER = '|'.join(PATTERNS)
+SPLITTER = regex.compile(f'({SPLITTER})', FLAGS)
+
+KEYS = set(PATTERNS)
+
+SEX = {t['pattern']: t['category'] for t in TERMS
+       if t['label'] == 'plant_sex'}
+SEX_RE = '|'.join(SEX)
+SEX_RE = regex.compile(fr' \b ({SEX_RE}) \b', FLAGS)
 
 
 def part(span):
     """Enrich a plant part match."""
-    value = CATEGORIES.get(span.text.lower(), '')
+    value = span.text.lower()
+    value = CATEGORIES.get(value, '')
     trait = dict(
         value=value,
         start=span.start_char,
         end=span.end_char,
     )
-    if match := regex.search(r' pistillate | staminate ', span.text, FLAGS):
-        trait['sex'] = match.group().lower()
+    if match := SEX_RE.search(span.text):
+        trait['sex'] = SEX[match.group().lower()]
     return trait
 
 
@@ -28,7 +45,7 @@ PLANT_PART = {
         {
             'label': 'part',
             'on_match': part,
-            'patterns': [[{'_': {'term': 'plant_part'}}]],
+            'patterns': [[{'_': {'label': 'plant_part'}}]],
         },
     ],
 }

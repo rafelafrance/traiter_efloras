@@ -18,21 +18,19 @@ def color(span):
 
 PLANT_COLOR = {
     'name': 'color',
-    'trait_names': """ calyx_color corolla_color flower_color fruit_color
-        hypanthium_color petal_color sepal_color """.split(),
     'matchers': [
         {
             'label': 'color',
             'on_match': color,
             'patterns': [
                 [
-                    {'_': {'term': 'color_leader'}, 'OP': '?'},
-                    {'_': {'term': 'dash'}, 'OP': '?'},
-                    {'_': {'term': 'color'}, 'OP': '+'},
-                    {'_': {'term': 'dash'}, 'OP': '?'},
-                    {'_': {'term': 'color_follower'}, 'OP': '*'},
+                    {'_': {'label': 'color_leader'}, 'OP': '?'},
+                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'_': {'label': 'color'}, 'OP': '+'},
+                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'_': {'label': 'color_follower'}, 'OP': '*'},
                 ],
-                [{'_': {'term': 'color_leader'}}],
+                [{'_': {'label': 'color_leader'}}],
             ],
         },
     ]
