@@ -1,7 +1,7 @@
 """Plant part parser."""
 
 import regex
-from traiter.util import FLAGS
+from traiter.util import FLAGS  # pylint: disable=import-error
 
 from ..pylib.terms import TERMS
 
@@ -10,8 +10,7 @@ PARTS = [t for t in TERMS if t['label'] == 'plant_part']
 
 CATEGORIES = {t['pattern']: t['category'] for t in PARTS}
 
-PATTERNS = sorted([t['pattern'] for t in PARTS],
-                  key=lambda p: len(p), reverse=True)
+PATTERNS = sorted([t['pattern'] for t in PARTS], key=len, reverse=True)
 
 SPLITTER = '|'.join(PATTERNS)
 SPLITTER = regex.compile(f'({SPLITTER})', FLAGS)

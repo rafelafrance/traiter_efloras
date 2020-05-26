@@ -4,7 +4,7 @@ from collections import defaultdict
 
 import pandas as pd
 
-import traiter.util as util
+import traiter.util as util  # pylint: disable=import-error
 
 
 def csv_writer(args, df):
@@ -15,23 +15,7 @@ def csv_writer(args, df):
 
 
 def merge_duplicates(args, df):
-    """Merge duplicate extracts.
-
-    If the same trait value is extracted multiple times then we merge those
-    duplicated values but still report the multiple places where the trait was
-    extracted. We are giving each extracted value a separate column. Like so:
-        "color": [
-            {"value": "red", "start": 10, "end": 13},
-            {"value": "red", "start": 20, "end": 23},
-            {"value": "blue", "start": 30, "end": 34},
-        ]
-    becomes:
-        "color_1":
-            {"value": "red", "location": [
-                {"start": 10, "end": 13},
-                {"start": 20, "end": 23}]},
-         "color_2: {"value": "blue", "location": {"start": 30, "end": 34}}
-    """
+    """Merge duplicate extracts."""
     data = df.fillna('').to_dict('records')
 
     location_fields = ('start', 'end', 'trait_group')

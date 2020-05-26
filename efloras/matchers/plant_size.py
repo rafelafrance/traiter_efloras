@@ -1,7 +1,7 @@
 """Common color snippets."""
 
 import regex
-from traiter.util import to_positive_float
+from traiter.util import to_positive_float  # pylint: disable=import-error
 
 from .shared import RANGE_GROUPS
 from ..pylib.terms import TERMS

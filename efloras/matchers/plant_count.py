@@ -46,7 +46,7 @@ PLANT_COUNT = {
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': {
                         'IN': ['cross', 'length_units', 'slash', 'dash']}},
-                        'OP': '?'},
+                     'OP': '?'},
                     {'_': {'label': {'IN': ['min', 'low', 'high', 'max']}},
                      'OP': '?'},
                 ],

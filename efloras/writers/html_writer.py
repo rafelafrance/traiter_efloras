@@ -26,7 +26,8 @@ def html_writer(args, df):
     flora_ids = get_flora_ids()
     df['flora_name'] = df['flora_id'].map(flora_ids)
 
-    trait_cols = [c for c in df.columns if (s := c.split('_')[-1])]
+    trait_cols = [c for c in df.columns
+                  if c.split('_')[-1] in TRAIT_SUFFIXES]
     trait_cols = sorted(trait_cols)
 
     df = df.sort_values(by=['family', 'taxon'])
@@ -197,7 +198,7 @@ def format_trait(cell):
                 pivot[key].append(value)
 
     output = []
-    for label, data in pivot.items():
+    for _, data in pivot.items():
         simple = {}
         compound = []
         for datum in data:
