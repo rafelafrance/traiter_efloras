@@ -31,17 +31,17 @@ class TestHtmlWriter(unittest.TestCase):
         cuts.append(Cut(
             pos=match1.start(), open=True,
             len=-(match1.end() - match1.start()), id=-1, end=match1.end(),
-            type=1))
+            type=1, title=None))
         cuts.append(Cut(
             pos=match1.end(), open=False, len=match1.end() - match1.start(),
-            id=1, end=match1.end(), type=1))
+            id=1, end=match1.end(), type=1, title=None))
         cuts.append(Cut(
             pos=match2.start(), open=True,
             len=-(match2.end() - match2.start()), id=-2, end=match2.end(),
-            type=2))
+            type=2, title=None))
         cuts.append(Cut(
             pos=match2.end(), open=False, len=match2.end() - match2.start(),
-            id=2, end=match2.end(), type=2))
+            id=2, end=match2.end(), type=2, title=None))
         return cuts
 
     def test_insert_markup_01(self):

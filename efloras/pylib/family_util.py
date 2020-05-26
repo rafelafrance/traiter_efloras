@@ -5,7 +5,7 @@ from datetime import datetime
 from itertools import product
 from pathlib import Path
 
-import regex
+import re
 
 DATA_DIR = Path('.') / 'data'
 EFLORAS_DIR = DATA_DIR / 'eFloras'
@@ -13,7 +13,7 @@ FAMILY_DIR = DATA_DIR / 'families'
 
 CITE = 'http://www.efloras.org'
 EFLORAS_FAMILIES = DATA_DIR / 'eFloras_family_list.csv'
-TAXON_RE = regex.compile(r'Accepted Name', flags=regex.IGNORECASE)
+TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
 
 def family_dir(flora_id, family_name):
@@ -55,14 +55,14 @@ def treatment_file(flora_id, family_name, taxon_id, page_no=1):
 def get_flora_id(href):
     """Given a link or file name return a flora ID."""
     href = str(href)
-    flora_id_re = regex.compile(r'flora_id[=_](\d+)')
+    flora_id_re = re.compile(r'flora_id[=_](\d+)')
     return int(flora_id_re.search(href)[1])
 
 
 def get_taxon_id(href):
     """Given a link or file name return a taxon ID."""
     href = str(href)
-    taxon_id_re = regex.compile(r'taxon_id[=_](\d+)')
+    taxon_id_re = re.compile(r'taxon_id[=_](\d+)')
     return int(taxon_id_re.search(href)[1])
 
 
@@ -123,7 +123,7 @@ def search_families(args, families):
     template = '{:<20} {:>8} {:>8} {:<30}  {:<20} {:<20} {:>8}'
 
     pattern = args.search.replace('*', '.*').replace('?', '.?')
-    pattern = regex.compile(pattern, regex.IGNORECASE)
+    pattern = re.compile(pattern, flags=re.IGNORECASE)
 
     print(template.format(
         'Family',

@@ -7,19 +7,12 @@ from bs4 import BeautifulSoup
 
 import efloras.pylib.family_util as futil
 from efloras.matchers.matcher import Matcher
-from efloras.matchers.sentence import CONTAINS_TRAITS, SENT_STARTERS, \
-    DESCRIPTOR, parse_sentences
+from efloras.matchers.plant_part import PATTERN_RE
 
 
-def efloras_matcher(args, families):
+def efloras_reader(args, families):
     """Perform the parsing."""
-    traits = set(args.trait)
-    descriptor_traits = traits & DESCRIPTOR
-    atomized_traits = traits - descriptor_traits
-
-    descriptor_matcher = Matcher(descriptor_traits)
-    sent_matcher = Matcher(atomized_traits)
-    target_sents = {a for a, t in SENT_STARTERS.items() if t & traits}
+    matcher = Matcher()
     families_flora = futil.get_family_flora_ids(args, families)
 
     rows = []
@@ -49,13 +42,9 @@ def efloras_matcher(args, families):
 
             row['text'] = text
 
-            descriptor_traits = get_full_text_traits(
-                descriptor_matcher, text)
-            sent_traits, sents = get_sentence_traits(
-                sent_matcher, target_sents, text)
+            traits = match_traits(matcher, text)
 
-            row['sentences'] = sents
-            row = {**row, **descriptor_traits, **sent_traits}
+            row = {**row, **traits}
 
             rows.append(row)
 
@@ -63,34 +52,15 @@ def efloras_matcher(args, families):
     return df
 
 
-def get_full_text_traits(matcher, text):
+def match_traits(matcher, text):
     """Look for descriptor traits in the entire text."""
     traits = defaultdict(list)
 
-    for label, data in matcher.parse(text).items():
-        traits[label] += data
+    for part in matcher.parse(text):
+        for label, data in part.items():
+            traits[label] += data
 
     return traits
-
-
-def get_sentence_traits(matcher, target_sents, text):
-    """Look for traits in the atoms."""
-    traits = defaultdict(list)
-    sents = []
-
-    for sent in parse_sentences(text):
-        if sent['value'] not in target_sents:
-            continue
-        sents.append(sent)
-        sent_text = text[sent['start']:sent['end']]
-        parses = matcher.parse(sent_text, sent['part'])
-        for name, values in parses.items():
-            for value in values:
-                value['start'] += sent['start']
-                value['end'] += sent['start']
-            traits[name] += values
-
-    return traits, sents
 
 
 def get_family_tree(family):
@@ -126,6 +96,6 @@ def get_traits(treatment):
         return ''
     for para in treatment.find_all('p'):
         text = ' '.join(para.get_text().split())
-        if CONTAINS_TRAITS.search(text):
+        if PATTERN_RE.search(text):
             return text
     return ''

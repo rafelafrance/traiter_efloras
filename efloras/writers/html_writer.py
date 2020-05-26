@@ -1,6 +1,7 @@
 """Write output to an HTML file."""
 
 import html
+import re
 from collections import defaultdict, deque, namedtuple
 from datetime import datetime
 from itertools import cycle
@@ -11,10 +12,10 @@ from ..matchers.matcher import MATCHERS
 from ..pylib.family_util import get_flora_ids
 
 # CSS colors
-CLASSES = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8']
+CLASSES = """c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12 c13 c14 c15 c16""".split()
 COLORS = cycle(CLASSES)
 
-Cut = namedtuple('Cut', 'pos open len id end type')
+Cut = namedtuple('Cut', 'pos open len id end type title')
 
 TRAIT_SUFFIXES = [m['name'] for m in MATCHERS]
 
@@ -26,8 +27,9 @@ def html_writer(args, df):
     flora_ids = get_flora_ids()
     df['flora_name'] = df['flora_id'].map(flora_ids)
 
-    trait_cols = [c for c in df.columns
-                  if c.split('_')[-1] in TRAIT_SUFFIXES]
+    trait_cols = {c for c in df.columns
+                  if c.split('_')[-1] in TRAIT_SUFFIXES}
+    trait_cols = {c for c in trait_cols if not re.match(r'[2x]|part', c)}
     trait_cols = sorted(trait_cols)
 
     df = df.sort_values(by=['family', 'taxon'])
@@ -65,15 +67,16 @@ def format_text(row, tags=None, colors=None, trait_cols=None):
     cut_id = 0
 
     for col in trait_cols:
+        title = ' '.join(col.split('_'))
         for trait in row[col]:
             cut_id = append_endpoints(
-                cuts, cut_id, trait['start'], trait['end'], colors[col])
+                cuts, cut_id,
+                trait['start'], trait['end'],
+                colors[col], title=title)
 
-    for sent in row['sentences']:
+    for sent in row['part']:
         cut_id = append_endpoints(
-            cuts, cut_id, sent['leader_start'], sent['leader_end'], 'bold')
-        cut_id = append_endpoints(
-            cuts, cut_id, sent['start'], sent['end'], 'border')
+            cuts, cut_id, sent['start'], sent['end'], 'bold')
 
     return insert_markup(text, cuts, tags)
 
@@ -94,8 +97,11 @@ def insert_markup(text, cuts, tags):
 
         # Add an open tag
         if cut.open:
-            parts.append(tags[(cut.type, True)])  # Add tag to output
-            stack.appendleft(cut)  # Prepend open cut to stack
+            tag = tags[(cut.type, True)]
+            if cut.title:
+                tag = tag.replace('>', f' title="{cut.title}">')
+            parts.append(tag)       # Add tag to output
+            stack.appendleft(cut)   # Prepend open cut to stack
 
         # Close tags are more complicated. We have to search for the
         # matching open tag on the stack & remove it. We also need to
@@ -130,7 +136,7 @@ def insert_markup(text, cuts, tags):
     return ''.join(parts)
 
 
-def append_endpoints(cuts, cut_id, start, end, tag_type):
+def append_endpoints(cuts, cut_id, start, end, tag_type, title=None):
     """
     Append endpoints to the cuts.
 
@@ -153,7 +159,9 @@ def append_endpoints(cuts, cut_id, start, end, tag_type):
         len=-trait_len,  # Longest tags open first
         id=-cut_id,  # Force an order. Push open tags leftward
         end=end,
-        type=tag_type))
+        type=tag_type,
+        title=title,
+    ))
 
     cuts.append(Cut(
         pos=end,
@@ -161,7 +169,9 @@ def append_endpoints(cuts, cut_id, start, end, tag_type):
         len=trait_len,  # Longest tags close last
         id=cut_id,  # Force an order. Push close tags rightward
         end=end,
-        type=tag_type))
+        type=tag_type,
+        title=None,
+    ))
 
     return cut_id
 
@@ -178,8 +188,6 @@ def build_tags():
     tags = {
         ('bold', True): '<strong>',
         ('bold', False): '</strong>',
-        ('border', True): '<span class="border">',
-        ('border', False): '</span>',
     }
 
     for color in CLASSES:

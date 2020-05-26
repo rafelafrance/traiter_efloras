@@ -5,6 +5,9 @@ from traiter.util import to_positive_int
 from .shared import RANGE_GROUPS
 
 
+NO_COUNT = """ cross length_units slash dash no_count """.split()
+
+
 def count(span):
     """Enrich a phrase match."""
     data = dict(
@@ -21,7 +24,7 @@ def count(span):
                 return {}
             value[label] = as_int
 
-        elif label in ('cross', 'length_units', 'slash', 'dash'):
+        elif label in NO_COUNT:
             return {}
 
     data['value'] = value
@@ -44,9 +47,7 @@ PLANT_COUNT = {
                     {'_': {'label': 'low'}},
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
-                    {'_': {'label': {
-                        'IN': ['cross', 'length_units', 'slash', 'dash']}},
-                     'OP': '?'},
+                    {'_': {'label': {'IN': NO_COUNT}}, 'OP': '?'},
                     {'_': {'label': {'IN': ['min', 'low', 'high', 'max']}},
                      'OP': '?'},
                 ],

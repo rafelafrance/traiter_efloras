@@ -159,13 +159,14 @@ class TestPlantSize(unittest.TestCase):
             MATCHER.parse(
                 'terminal leaflet 3–5 cm, blade '
                 'petiolule 3–12 mm,'),
-            [{'part': [{'value': 'leaf', 'start': 9, 'end': 16}],
+            [{'part': [{'start': 0, 'end': 16, 'location': 'terminal',
+                        'value': 'leaf'}],
               'leaf_size': [{'start': 17, 'end': 23,
                              'value': {'length_low': 30.0,
                                        'length_high': 50.0,
                                        'length_units': 'cm'}}]},
-             {'part': [{'value': 'leaf', 'start': 25, 'end': 30}]},
-             {'part': [{'value': 'petiole', 'start': 31, 'end': 40}],
+             {'part': [{'start': 25, 'end': 30, 'value': 'leaf'}]},
+             {'part': [{'start': 31, 'end': 40, 'value': 'petiole'}],
               'petiole_size': [{'start': 41, 'end': 48,
                                 'value': {'length_low': 3.0,
                                           'length_high': 12.0,

@@ -12,23 +12,23 @@ h2 {
   margin-left: 40px;
 }
 
-.c1 { background: rgba(0, 255, 0, 35%); }
-.c2 { background: rgba(0, 0, 255, 35%); }
-.c3 { background: rgba(255, 0, 0, 35%); }
-.c4 { background: rgba(255, 255, 0, 35%); }
-.c5 { background: rgba(255, 0, 255, 35%); }
-.c6 { background: rgba(0, 255, 255, 35%); }
-.c7 { background: rgba(255, 128, 128, 35%); }
-.c8 { background: rgba(0, 0, 0, 35%); }
+.c1 { background: #00FFFF66; }
+.c2 { background: #00000066; }
+.c3 { background: #0000FF66; }
+.c4 { background: #FF00FF66; }
+.c5 { background: #80808066; }
+.c6 { background: #00800066; }
+.c7 { background: #00FF0066; }
+.c8 { background: #80000066; }
+.c9 { background: #00008066; }
+.c10 { background: #80800066; }
+.c11 { background: #80008066; }
+.c12 { background: #FF000066; }
+.c13 { background: #C0C0C066; }
+.c14 { background: #00808066; }
+.c15 { background: #ffa50066; }
+.c16 { background: #FFFF0066; }
 .bold { font-weight: bold; }
-.border {
-    border-left: 3px solid black;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-right: 3px solid black;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
 
 table {
   border-collapse: collapse;

@@ -109,3 +109,10 @@ class TestPlantCount(unittest.TestCase):
             MATCHER.parse('leaf (12-)23-34 × 45-56'),
             [{'part': [{'value': 'leaf', 'start': 0, 'end': 4}]}]
         )
+
+    def test_plant_count_11(self):
+        """Units are required."""
+        self.assertEqual(
+            MATCHER.parse('stigma papillose on 1 side,'),
+            [{'part': [{'value': 'stigma', 'start': 0, 'end': 6}]}]
+        )

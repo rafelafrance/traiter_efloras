@@ -1,10 +1,10 @@
 """Plant part parser."""
 
-import regex
+import re
+
 from traiter.util import FLAGS  # pylint: disable=import-error
 
 from ..pylib.terms import TERMS
-
 
 PARTS = [t for t in TERMS if t['label'] == 'plant_part']
 
@@ -12,29 +12,33 @@ CATEGORIES = {t['pattern']: t['category'] for t in PARTS}
 
 PATTERNS = sorted([t['pattern'] for t in PARTS], key=len, reverse=True)
 
-SPLITTER = '|'.join(PATTERNS)
-SPLITTER = regex.compile(f'({SPLITTER})', FLAGS)
+PATTERN_RE = '|'.join(PATTERNS)
+PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)
 
 KEYS = set(PATTERNS)
 
 SEX = {t['pattern']: t['category'] for t in TERMS
        if t['label'] == 'plant_sex'}
-SEX_RE = '|'.join(SEX)
-SEX_RE = regex.compile(fr' \b ({SEX_RE}) \b', FLAGS)
 
 
 def part(span):
     """Enrich a plant part match."""
-    value = span.text.lower()
-    value = CATEGORIES.get(value, '')
-    trait = dict(
-        value=value,
+    data = dict(
         start=span.start_char,
         end=span.end_char,
     )
-    if match := SEX_RE.search(span.text):
-        trait['sex'] = SEX[match.group().lower()]
-    return trait
+
+    for token in span:
+        label = token._.label
+        value = token.text.lower()
+        if label == 'plant_part':
+            data['value'] = CATEGORIES.get(value, '')
+        elif label == 'plant_sex':
+            data['sex'] = SEX[value]
+        elif label == 'part_location':
+            data['location'] = value
+
+    return data
 
 
 PLANT_PART = {
@@ -44,7 +48,11 @@ PLANT_PART = {
         {
             'label': 'part',
             'on_match': part,
-            'patterns': [[{'_': {'label': 'plant_part'}}]],
+            'patterns': [[
+                {'_': {'label': {'IN': ['plant_sex', 'part_location']}},
+                 'OP': '*'},
+                {'_': {'label': 'plant_part'}}
+            ]],
         },
     ],
 }

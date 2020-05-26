@@ -13,17 +13,16 @@
 <table>
   <thead>
     <tr>
+      <th></th>
       <th>Family</th>
       <th>Taxon</th>
-      {% for header in headers %}
-        <th>{{ header | safe }}</th>
-      {% endfor %}
       <th>Text</th>
     </tr>
   </thead>
   <tbody>
     {% for _, row in rows.iterrows() %}
     <tr>
+      <td><button class="toggle closed" title="Show or hide the extractions"></button></td>
       <td>
         {{ row.family.capitalize() }}<hr/>
         <span class="smaller">({{ row.flora_name }})</span>
@@ -34,9 +33,6 @@
           {{ row.taxon }}
         </a>
       </td>
-      {% for trait in traits %}
-        <td>{{ row[trait] | safe }}</td>
-      {% endfor %}
       <td class="text">{{ row.text | safe }}</td>
     </tr>
     {% endfor %}

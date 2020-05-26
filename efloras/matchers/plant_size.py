@@ -1,6 +1,7 @@
 """Common color snippets."""
 
-import regex
+import re
+
 from traiter.util import to_positive_float  # pylint: disable=import-error
 
 from .shared import RANGE_GROUPS
@@ -52,7 +53,7 @@ def fill_data(span, dims):
 
         # Get the sex field if it's there
         if datum := dim.get('sex'):
-            value['sex'] = regex.sub(r'\W+', '', datum.lower())
+            value['sex'] = re.sub(r'\W+', '', datum.lower())
 
     data['value'] = value
 
@@ -101,9 +102,9 @@ def scan_tokens(span):
         elif label == 'dimension':
             dims[idx]['dimension'] = DIMENSIONS[token.text.lower()]
 
-        elif label == 'sex':
+        elif label in ('sex_enclosed', 'plant_sex'):
             value = token.text.lower()
-            value = regex.sub(r'\W+', '', value)
+            value = re.sub(r'\W+', '', value)
             dims[idx]['sex'] = value
 
         elif label == 'cross':
@@ -117,10 +118,10 @@ PLANT_SIZE = {
     'name': 'size',
     'groupers': {
         **RANGE_GROUPS,
-        'sex': [[
-            {'_': {'label': 'open'}, 'OP': '?'},
+        'sex_enclosed': [[
+            {'_': {'label': 'open'}},
             {'_': {'label': 'plant_sex'}},
-            {'_': {'label': 'close'}, 'OP': '?'},
+            {'_': {'label': 'close'}},
         ]],
     },
     'matchers': [
@@ -134,11 +135,15 @@ PLANT_SIZE = {
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
+                    {'_': {'label': {
+                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
+                        'OP': '*'},
                 ], [
                     {'_': {'label': 'high'}},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
+                    {'_': {'label': {
+                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
+                        'OP': '*'},
                 ],
                 [
                     {'_': {'label': 'min'}, 'OP': '?'},
@@ -146,14 +151,18 @@ PLANT_SIZE = {
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}, 'OP': '?'},
-                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
+                    {'_': {'label': {
+                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
+                        'OP': '*'},
                     {'_': {'label': 'cross'}},
                     {'_': {'label': 'min'}, 'OP': '?'},
                     {'_': {'label': 'low'}},
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
+                    {'_': {'label': {
+                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
+                        'OP': '*'},
                 ],
             ],
         },
