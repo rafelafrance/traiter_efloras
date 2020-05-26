@@ -9,7 +9,7 @@ RANGE_GROUPS = {
         ]],
     'low': [[{'_': {'label': 'number'}}]],
     'high': [[
-            {'_': {'label': {'IN': ['dash', 'prep', 'conj']}}},
+            {'_': {'label': {'IN': ['dash', 'prep']}}},
             {'_': {'label': 'number'}},
         ]],
     'max': [[

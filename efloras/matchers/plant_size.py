@@ -52,7 +52,7 @@ def fill_data(span, dims):
 
         # Get the sex field if it's there
         if datum := dim.get('sex'):
-            value['sex'] = datum.lower()
+            value['sex'] = regex.sub(r'\W+', '', datum.lower())
 
     data['value'] = value
 
@@ -115,7 +115,14 @@ def scan_tokens(span):
 
 PLANT_SIZE = {
     'name': 'size',
-    'groupers': RANGE_GROUPS,
+    'groupers': {
+        **RANGE_GROUPS,
+        'sex': [[
+            {'_': {'label': 'open'}, 'OP': '?'},
+            {'_': {'label': 'plant_sex'}},
+            {'_': {'label': 'close'}, 'OP': '?'},
+        ]],
+    },
     'matchers': [
         {
             'label': 'size',
@@ -127,32 +134,28 @@ PLANT_SIZE = {
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': 'dimension'}, 'OP': '?'},
+                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
                 ], [
                     {'_': {'label': 'high'}},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': 'dimension'}, 'OP': '?'},
+                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
+                ],
+                [
+                    {'_': {'label': 'min'}, 'OP': '?'},
+                    {'_': {'label': 'low'}},
+                    {'_': {'label': 'high'}, 'OP': '?'},
+                    {'_': {'label': 'max'}, 'OP': '?'},
+                    {'_': {'label': 'length_units'}, 'OP': '?'},
+                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
+                    {'_': {'label': 'cross'}},
+                    {'_': {'label': 'min'}, 'OP': '?'},
+                    {'_': {'label': 'low'}},
+                    {'_': {'label': 'high'}, 'OP': '?'},
+                    {'_': {'label': 'max'}, 'OP': '?'},
+                    {'_': {'label': 'length_units'}},
+                    {'_': {'label': {'IN': ['dimension', 'sex']}}, 'OP': '*'},
                 ],
             ],
-        },
-        {
-            'label': 'size',
-            'on_match': size,  # cross
-            'patterns': [[
-                {'_': {'label': 'min'}, 'OP': '?'},
-                {'_': {'label': 'low'}},
-                {'_': {'label': 'high'}, 'OP': '?'},
-                {'_': {'label': 'max'}, 'OP': '?'},
-                {'_': {'label': 'length_units'}, 'OP': '?'},
-                {'_': {'label': 'dimension'}, 'OP': '?'},
-                {'_': {'label': 'cross'}},
-                {'_': {'label': 'min'}, 'OP': '?'},
-                {'_': {'label': 'low'}},
-                {'_': {'label': 'high'}, 'OP': '?'},
-                {'_': {'label': 'max'}, 'OP': '?'},
-                {'_': {'label': 'length_units'}},
-                {'_': {'label': 'dimension'}, 'OP': '?'},
-            ]],
         },
     ]
 }
