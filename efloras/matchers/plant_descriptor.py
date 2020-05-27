@@ -13,7 +13,7 @@ IS_DESCRIPTOR = {t['pattern'] for t in TERMS
 def descriptor(span):
     """Enrich a phrase match."""
     token = span[0]
-    value = token.text.lower()
+    value = token.lower_
     label = token._.label
     if value not in IS_DESCRIPTOR:
         return {}

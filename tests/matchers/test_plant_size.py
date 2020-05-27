@@ -15,11 +15,11 @@ class TestPlantSize(unittest.TestCase):
             MATCHER.parse('Leaf (12-)23-34 × 45-56 cm'),
             [{'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
               'leaf_size': [{'start': 5, 'end': 26,
-                             'length_min': 120.0,
-                             'length_low': 230.0,
-                             'length_high': 340.0,
-                             'width_low': 450.0,
-                             'width_high': 560.0,
+                             'length_min': 12.0,
+                             'length_low': 23.0,
+                             'length_high': 34.0,
+                             'width_low': 45.0,
+                             'width_high': 56.0,
                              'width_units': 'cm'}]}]
         )
 
@@ -34,9 +34,9 @@ class TestPlantSize(unittest.TestCase):
             MATCHER.parse('blade 1.5–5(–7) cm'),
             [{'part': [{'start': 0, 'end': 5, 'value': 'leaf'}],
               'leaf_size': [{'start': 6, 'end': 18,
-                             'length_low': 15.0,
-                             'length_high': 50.0,
-                             'length_max': 70.0,
+                             'length_low': 1.5,
+                             'length_high': 5.0,
+                             'length_max': 7.0,
                              'length_units': 'cm'}]}]
         )
 
@@ -51,8 +51,8 @@ class TestPlantSize(unittest.TestCase):
             MATCHER.parse('leaf 4–10 cm wide'),
             [{'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
               'leaf_size': [{'start': 5, 'end': 17,
-                             'width_low': 40.0,
-                             'width_high': 100.0,
+                             'width_low': 4.0,
+                             'width_high': 10.0,
                              'width_units': 'cm'}]}]
         )
 
@@ -95,8 +95,8 @@ class TestPlantSize(unittest.TestCase):
             [{'part': [{'start': 0, 'end': 6, 'value': 'leaf'}]},
              {'part': [{'start': 8, 'end': 15, 'value': 'petiole'}],
               'petiole_size': [{'start': 16, 'end': 23,
-                                'length_low': 20.0,
-                                'length_high': 150.0,
+                                'length_low': 2.0,
+                                'length_high': 15.0,
                                 'length_units': 'cm'}]}]
         )
 
@@ -118,8 +118,8 @@ class TestPlantSize(unittest.TestCase):
             MATCHER.parse('leaf 2–4 cm × 2–10 mm'),
             [{'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
               'leaf_size': [{'start': 5, 'end': 21,
-                             'length_low': 20.0,
-                             'length_high': 40.0,
+                             'length_low': 2.0,
+                             'length_high': 4.0,
                              'length_units': 'cm',
                              'width_low': 2.0,
                              'width_high': 10.0,
@@ -132,9 +132,9 @@ class TestPlantSize(unittest.TestCase):
                 'leaf deeply to shallowly lobed, 4–5(–7) cm wide,'),
             [{'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
               'leaf_size': [{'start': 32, 'end': 47,
-                             'width_low': 40.0,
-                             'width_high': 50.0,
-                             'width_max': 70.0,
+                             'width_low': 4.0,
+                             'width_high': 5.0,
+                             'width_max': 7.0,
                              'width_units': 'cm'}]}]
         )
 
@@ -161,15 +161,20 @@ class TestPlantSize(unittest.TestCase):
             [{'part': [{'start': 0, 'end': 16, 'location': 'terminal',
                         'value': 'leaf'}],
               'leaf_size': [{'start': 17, 'end': 23,
-                             'length_low': 30.0,
-                             'length_high': 50.0,
-                             'length_units': 'cm'}]},
-             {'part': [{'start': 25, 'end': 30, 'value': 'leaf'}]},
-             {'part': [{'start': 31, 'end': 40, 'value': 'petiole'}],
+                             'length_low': 3.0,
+                             'length_high': 5.0,
+                             'length_units': 'cm',
+                             'location': 'terminal'}]},
+             {'part': [{'start': 25, 'end': 30, 'value': 'leaf',
+                        'location': 'terminal'}]},
+             {'part': [{'start': 31, 'end': 40,
+                        'value': 'petiole',
+                        'location': 'terminal'}],
               'petiole_size': [{'start': 41, 'end': 48,
                                 'length_low': 3.0,
                                 'length_high': 12.0,
-                                'length_units': 'mm'}]}]
+                                'length_units': 'mm',
+                                'location': 'terminal'}]}]
         )
 
     def test_plant_size_15(self):
@@ -178,12 +183,12 @@ class TestPlantSize(unittest.TestCase):
                           '5–25 × (8–)10–25(–30) cm,'),
             [{'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
               'leaf_size': [{'start': 30, 'end': 54,
-                             'length_low': 50.0,
-                             'length_high': 250.0,
-                             'width_min': 80.0,
-                             'width_low': 100.0,
-                             'width_high': 250.0,
-                             'width_max': 300.0,
+                             'length_low': 5.0,
+                             'length_high': 25.0,
+                             'width_min': 8.0,
+                             'width_low': 10.0,
+                             'width_high': 25.0,
+                             'width_max': 30.0,
                              'width_units': 'cm'}]}]
         )
 
@@ -200,7 +205,7 @@ class TestPlantSize(unittest.TestCase):
             MATCHER.parse('petiole to 11 cm;'),
             [{'part': [{'start': 0, 'end': 7, 'value': 'petiole'}],
               'petiole_size': [{'start': 8, 'end': 16,
-                                'length_high': 110.0,
+                                'length_high': 11.0,
                                 'length_units': 'cm'}]}]
         )
 
@@ -233,8 +238,8 @@ class TestPlantSize(unittest.TestCase):
                 'Flowers 5–10 cm diam.; hypanthium 4–8 mm,'),
             [{'part': [{'start': 0, 'end': 7, 'value': 'flower'}],
               'flower_size': [{'start': 8, 'end': 20,
-                               'diameter_low': 50.0,
-                               'diameter_high': 100.0,
+                               'diameter_low': 5.0,
+                               'diameter_high': 10.0,
                                'diameter_units': 'cm'}]},
              {'part': [{'start': 23, 'end': 33, 'value': 'hypanthium'}],
               'hypanthium_size': [{'start': 34, 'end': 40,
@@ -249,10 +254,10 @@ class TestPlantSize(unittest.TestCase):
                 'Flowers 5--16 × 4--12 cm'),
             [{'part': [{'start': 0, 'end': 7, 'value': 'flower'}],
               'flower_size': [{'start': 8, 'end': 24,
-                               'length_low': 50.0,
-                               'length_high': 160.0,
-                               'width_low': 40.0,
-                               'width_high': 120.0,
+                               'length_low': 5.0,
+                               'length_high': 16.0,
+                               'width_low': 4.0,
+                               'width_high': 12.0,
                                'width_units': 'cm'}]}]
         )
 
@@ -268,8 +273,8 @@ class TestPlantSize(unittest.TestCase):
                                        {'start': 116, 'end': 120, 'low': 2,
                                         'high': 5}],
               'inflorescences_size': [{'start': 122, 'end': 131,
-                                       'length_low': 30.0,
-                                       'length_high': 85.0,
+                                       'length_low': 3.0,
+                                       'length_high': 8.5,
                                        'length_units': 'cm'}]}]
         )
 
@@ -282,9 +287,9 @@ class TestPlantSize(unittest.TestCase):
              {'part': [{'start': 22, 'end': 27, 'value': 'leaf'}],
               'leaf_shape': [{'value': 'ovate', 'start': 28, 'end': 33}],
               'leaf_size': [{'start': 35, 'end': 49,
-                             'length_low': 80.0,
-                             'length_high': 150.0,
-                             'width_low': 40.0,
-                             'width_high': 150.0,
+                             'length_low': 8.0,
+                             'length_high': 15.0,
+                             'width_low': 4.0,
+                             'width_high': 15.0,
                              'width_units': 'cm'}]}]
         )

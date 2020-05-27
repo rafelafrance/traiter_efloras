@@ -42,7 +42,7 @@ def fill_data(span, dims):
         for field in """ min low high max """.split():
             if datum := dim.get(field):
                 key = f'{dim_name}_{field}'
-                data[key] = round(datum * dim['times'], 3)
+                data[key] = round(datum, 3)
 
         # Rename the unit fields
         if datum := dim.get('units'):
@@ -91,15 +91,15 @@ def scan_tokens(span):
 
         # Save the units and get the unit multiplier
         elif label == 'length_units':
-            units = UNITS[token.text.lower()]
+            units = UNITS[token.lower_]
             dims[idx]['units'] = units
             dims[idx]['times'] = MULTIPLY[units]
 
         elif label == 'dimension':
-            dims[idx]['dimension'] = DIMENSIONS[token.text.lower()]
+            dims[idx]['dimension'] = DIMENSIONS[token.lower_]
 
         elif label in ('sex_enclosed', 'plant_sex'):
-            value = token.text.lower()
+            value = token.lower_
             value = re.sub(r'\W+', '', value)
             dims[idx]['sex'] = value
 

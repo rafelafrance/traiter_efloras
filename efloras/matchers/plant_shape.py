@@ -9,7 +9,7 @@ def shape(span):
              if (r := REPLACE.get(t.text, t.text)) and t._.label == 'shape'}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    loc = [t.text.lower() for t in span if t._.label == 'part_location']
+    loc = [t.lower_ for t in span if t._.label == 'part_location']
     trait = dict(
         value=value,
         start=span.start_char,

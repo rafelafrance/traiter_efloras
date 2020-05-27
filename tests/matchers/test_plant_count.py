@@ -33,8 +33,8 @@ class TestPlantCount(unittest.TestCase):
             MATCHER.parse('blade 5–10 × 4–9 cm'),
             [{'part': [{'start': 0, 'end': 5, 'value': 'leaf'}],
               'leaf_size': [{'start': 6, 'end': 19,
-                             'length_low': 50.0, 'length_high': 100.0,
-                             'width_low': 40.0, 'width_high': 90.0,
+                             'length_low': 5.0, 'length_high': 10.0,
+                             'width_low': 4.0, 'width_high': 9.0,
                              'width_units': 'cm'}]}]
         )
 
@@ -63,7 +63,8 @@ class TestPlantCount(unittest.TestCase):
                 {'start': 0, 'end': 17, 'sex': 'male', 'value': 'flower'}],
               'flower_count': [{'start': 18, 'end': 31,
                                 'min': 3, 'low': 5,
-                                'high': 10, 'max': 20}]}]
+                                'high': 10, 'max': 20,
+                                'sex': 'male'}]}]
         )
 
     def test_plant_count_07(self):

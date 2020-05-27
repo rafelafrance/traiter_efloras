@@ -30,7 +30,7 @@ def part(span):
 
     for token in span:
         label = token._.label
-        value = token.text.lower()
+        value = token.lower_
         if label == 'plant_part':
             data['value'] = REPLACES.get(value, '')
         elif label == 'plant_sex':
