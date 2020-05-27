@@ -27,8 +27,8 @@ def main(args):
     if not futil.check_family_flora_ids(args, families):
         sys.exit(1)
 
-    df = efloras_reader(args, families)
-    OUTPUT_FORMATS[args.output_format](args, df)
+    rows = efloras_reader(args, families)
+    OUTPUT_FORMATS[args.output_format](args, rows)
 
 
 def parse_args():

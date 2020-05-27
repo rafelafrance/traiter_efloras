@@ -2,7 +2,6 @@
 
 from collections import defaultdict
 
-import pandas as pd
 from bs4 import BeautifulSoup
 
 import efloras.pylib.family_util as futil
@@ -14,6 +13,7 @@ def efloras_reader(args, families):
     """Perform the parsing."""
     matcher = Matcher()
     families_flora = futil.get_family_flora_ids(args, families)
+    flora_ids = futil.get_flora_ids()
 
     rows = []
 
@@ -30,10 +30,12 @@ def efloras_reader(args, families):
             row = {
                 'family': family['family'],
                 'flora_id': flora_id,
+                'flora_name': flora_ids[flora_id],
                 'taxon': taxa[taxon_id],
                 'taxon_id': taxon_id,
                 'link': futil.treatment_link(flora_id, taxon_id),
                 'text': '',
+                'traits': {},
             }
 
             if text is None:
@@ -41,15 +43,10 @@ def efloras_reader(args, families):
                 continue
 
             row['text'] = text
-
-            traits = match_traits(matcher, text)
-
-            row = {**row, **traits}
-
+            row['traits'] = match_traits(matcher, text)
             rows.append(row)
 
-    df = pd.DataFrame(rows)
-    return df
+    return rows
 
 
 def match_traits(matcher, text):

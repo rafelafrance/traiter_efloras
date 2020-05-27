@@ -1,7 +1,6 @@
 """Write output to an HTML file."""
 
 import html
-import re
 from collections import defaultdict, deque, namedtuple
 from datetime import datetime
 from itertools import cycle
@@ -9,9 +8,10 @@ from itertools import cycle
 from jinja2 import Environment, FileSystemLoader
 
 from ..matchers.matcher import MATCHERS
-from ..pylib.family_util import get_flora_ids
 
-# CSS colors -- We use 57 of them so far
+
+# TODO: Make coloring systematic
+# CSS colors -- We currently use 57 of them
 CLASSES = [f'c{i}' for i in range(57)]
 COLORS = cycle(CLASSES)
 
@@ -20,32 +20,19 @@ Cut = namedtuple('Cut', 'pos open len id end type title')
 TRAIT_SUFFIXES = [m['name'] for m in MATCHERS]
 
 
-def html_writer(args, df):
+def html_writer(args, rows):
     """Output the data frame."""
-    df = df.fillna('')
-
-    flora_ids = get_flora_ids()
-    df['flora_name'] = df['flora_id'].map(flora_ids)
-
-    trait_cols = {c for c in df.columns
-                  if c.split('_')[-1] in TRAIT_SUFFIXES}
-    trait_cols = {c for c in trait_cols if not re.match(r'[2x]|part', c)}
-    trait_cols = sorted(trait_cols)
-
-    df = df.sort_values(by=['family', 'taxon'])
-
     tags = build_tags()
-    colors = {t: next(COLORS) for t in trait_cols}
 
-    df['text'] = df.apply(
-        format_text, axis='columns',
-        colors=colors, tags=tags, trait_cols=trait_cols)
+    rows = sorted(rows, key=lambda r: (r['family'], r['taxon']))
 
-    for col in trait_cols:
-        df[col] = df[col].apply(format_trait)
+    colors = {label for r in rows for label in r['traits'].keys()}
+    colors -= {'part'}
+    colors = {label: next(COLORS) for label in sorted(colors)}
 
-    trait_headers = [f'<span class="{colors[c]}">{c}</span>'
-                     for c in trait_cols]
+    for row in rows:
+        row['text'] = format_text(row, tags, colors)
+        row['traits'] = format_traits(row, colors)
 
     env = Environment(
         loader=FileSystemLoader('./efloras/writers/templates'),
@@ -53,30 +40,48 @@ def html_writer(args, df):
 
     template = env.get_template('html_writer.html').render(
         now=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
-        traits=trait_cols,
-        headers=trait_headers,
-        rows=df)
+        rows=rows)
     args.output_file.write(template)
     args.output_file.close()
 
 
-def format_text(row, tags=None, colors=None, trait_cols=None):
+def format_traits(row, colors):
+    """Format the traits for HTML."""
+    new_dict = {}
+    for label, traits in row['traits'].items():
+        if label == 'part':
+            continue
+        new_label = f'<span class="{colors[label]}">{label}</span>'
+        new_traits = {}
+        for trait in traits:
+            del trait['start']
+            del trait['end']
+            trait = ', '.join(f'{k}:&nbsp;{v}' for k, v in trait.items())
+            new_traits[trait] = 1
+        new_dict[new_label] = '<br/>'.join(new_traits.keys())
+
+    return new_dict
+
+
+def format_text(row, tags=None, colors=None):
     """Colorize and format the text for HTML."""
     text = row['text']
     cuts = []
     cut_id = 0
 
-    for col in trait_cols:
-        title = ' '.join(col.split('_'))
-        for trait in row[col]:
+    for label, traits in row['traits'].items():
+        title = ' '.join(label.split('_'))
+        for trait in traits:
+            if not (color := colors.get(label)):
+                continue
             cut_id = append_endpoints(
-                cuts, cut_id,
-                trait['start'], trait['end'],
-                colors[col], title=title)
+                cuts, cut_id, trait['start'], trait['end'],
+                color, title=title)
 
-    for sent in row['part']:
-        cut_id = append_endpoints(
-            cuts, cut_id, sent['start'], sent['end'], 'bold')
+    if parts := row['traits'].get('part'):
+        for part in parts:
+            cut_id = append_endpoints(
+                cuts, cut_id, part['start'], part['end'], 'bold')
 
     return insert_markup(text, cuts, tags)
 
@@ -195,31 +200,3 @@ def build_tags():
         tags[(color, False)] = '</span>'
 
     return tags
-
-
-def format_trait(cell):
-    """Format the traits for HTML."""
-    pivot = defaultdict(list)
-    for trait in cell:
-        for key, value in trait.items():
-            if key not in ('start', 'end', 'raw_value'):
-                pivot[key].append(value)
-
-    output = []
-    for _, data in pivot.items():
-        simple = {}
-        compound = []
-        for datum in data:
-            if isinstance(datum, dict):
-                fields = []
-                for key, value in datum.items():
-                    value = str(value)
-                    field = f'{key}:&nbsp;{value}'
-                    fields.append(field)
-                compound.append('<br/>'.join(fields))
-            else:
-                simple[datum] = 1
-        simple = ', '.join(simple)
-        compound = '<hr/>'.join(compound)
-        output.append('<nr/>'.join([x for x in [simple, compound] if x]))
-    return '<hr/>'.join(output)

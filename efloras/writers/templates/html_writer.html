@@ -20,7 +20,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for _, row in rows.iterrows() %}
+    {% for row in rows %}
     <tr>
       <td><button class="toggle closed" title="Show or hide the extractions"></button></td>
       <td>
@@ -35,6 +35,13 @@
       </td>
       <td class="text">{{ row.text | safe }}</td>
     </tr>
+      {% for label, trait in row['traits'].items() %}
+      <tr>
+        <td colspan="2"></td>
+        <td>{{ label | safe }}</td>
+        <td>{{ trait | safe }}</td>
+      </tr>
+      {% endfor %}
     {% endfor %}
   </tbody>
 </table>
