@@ -35,8 +35,6 @@ def fill_data(span, dims):
         end=span.end_char,
     )
 
-    value = {}
-
     for dim in dims:
         dim_name = dim['dim_name']
 
@@ -44,18 +42,16 @@ def fill_data(span, dims):
         for field in """ min low high max """.split():
             if datum := dim.get(field):
                 key = f'{dim_name}_{field}'
-                value[key] = round(datum * dim['times'], 3)
+                data[key] = round(datum * dim['times'], 3)
 
         # Rename the unit fields
         if datum := dim.get('units'):
             key = f'{dim_name}_units'
-            value[key] = datum.lower()
+            data[key] = datum.lower()
 
         # Get the sex field if it's there
         if datum := dim.get('sex'):
-            value['sex'] = re.sub(r'\W+', '', datum.lower())
-
-    data['value'] = value
+            data['sex'] = re.sub(r'\W+', '', datum.lower())
 
     return data
 

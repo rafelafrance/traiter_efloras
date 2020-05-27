@@ -51,10 +51,9 @@ class Matcher(TraitMatcher):
             if label == 'part':
                 if traits:
                     parts.append(traits)
-                label = 'part'
                 part = data['value']
                 traits = defaultdict(list)
-                traits[label].append(data)
+                traits['part'].append(data)
 
             elif label == 'descriptor' and data.get('category'):
                 name = data['category']

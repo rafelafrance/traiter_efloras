@@ -15,19 +15,16 @@ def count(span):
         end=span.end_char,
     )
 
-    value = {}
     for token in span:
         label = token._.label
 
         if label in ('min', 'low', 'high', 'max'):
             if (as_int := to_positive_int(token.text)) is None:
                 return {}
-            value[label] = as_int
+            data[label] = as_int
 
         elif label in NO_COUNT:
             return {}
-
-    data['value'] = value
 
     return data
 
