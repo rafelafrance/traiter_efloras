@@ -94,8 +94,14 @@ def get_traits(treatment):
     """Find the trait paragraph in the treatment."""
     if not treatment:
         return ''
+    best = ''
+    high = 0
     for para in treatment.find_all('p'):
         text = ' '.join(para.get_text().split())
-        if PATTERN_RE.search(text):
-            return text
-    return ''
+        unique = {m for m in PATTERN_RE.findall(text)}
+        if len(unique) > high:
+            best = text
+            high = len(unique)
+        if high > 3:
+            return best
+    return best

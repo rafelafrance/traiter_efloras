@@ -8,7 +8,7 @@ from ..pylib.terms import TERMS
 
 PARTS = [t for t in TERMS if t['label'] == 'plant_part']
 
-CATEGORIES = {t['pattern']: t['category'] for t in PARTS}
+REPLACES = {t['pattern']: t['replace'] for t in PARTS}
 
 PATTERNS = sorted([t['pattern'] for t in PARTS], key=len, reverse=True)
 
@@ -17,8 +17,8 @@ PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)
 
 KEYS = set(PATTERNS)
 
-SEX = {t['pattern']: t['category'] for t in TERMS
-       if t['label'] == 'plant_sex'}
+SEX = {t['pattern']: t['replace'] for t in TERMS
+       if t['label'] in ('plant_sex', 'plant_sex2')}
 
 
 def part(span):
@@ -32,7 +32,7 @@ def part(span):
         label = token._.label
         value = token.text.lower()
         if label == 'plant_part':
-            data['value'] = CATEGORIES.get(value, '')
+            data['value'] = REPLACES.get(value, '')
         elif label == 'plant_sex':
             data['sex'] = SEX[value]
         elif label == 'part_location':
@@ -43,14 +43,13 @@ def part(span):
 
 PLANT_PART = {
     'name': 'part',
-    'trait_names': ['plant_part'],
     'matchers': [
         {
             'label': 'part',
             'on_match': part,
             'patterns': [[
-                {'_': {'label': {'IN': ['plant_sex', 'part_location']}},
-                 'OP': '*'},
+                {'_': {'label': {'IN': [
+                    'plant_sex', 'part_location']}}, 'OP': '*'},
                 {'_': {'label': 'plant_part'}}
             ]],
         },

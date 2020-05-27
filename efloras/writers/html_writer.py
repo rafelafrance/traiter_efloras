@@ -11,8 +11,8 @@ from jinja2 import Environment, FileSystemLoader
 from ..matchers.matcher import MATCHERS
 from ..pylib.family_util import get_flora_ids
 
-# CSS colors
-CLASSES = """c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12 c13 c14 c15 c16""".split()
+# CSS colors -- We use 57 of them so far
+CLASSES = [f'c{i}' for i in range(57)]
 COLORS = cycle(CLASSES)
 
 Cut = namedtuple('Cut', 'pos open len id end type title')

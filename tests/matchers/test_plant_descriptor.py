@@ -16,7 +16,7 @@ class TestPlantDescriptor(unittest.TestCase):
             MATCHER.parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
-            [{'sexual_descriptor': [
+            [{'plant_sex': [
                 {'value': 'bisexual', 'start': 0, 'end': 8},
                 {'value': 'unisexual', 'start': 10, 'end': 19},
                 {'value': 'gynodioecious', 'start': 41, 'end': 54},
@@ -30,7 +30,7 @@ class TestPlantDescriptor(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),
-            [{'symmetry_descriptor': [
+            [{'symmetry': [
                 {'value': 'actinomorphic', 'start': 16, 'end': 29},
                 {'value': 'zygomorphic', 'start': 38, 'end': 49}]},
              {'part': [{'value': 'flower', 'start': 0, 'end': 7}]}]

@@ -12,23 +12,37 @@ h2 {
   margin-left: 40px;
 }
 
-.c1 { background: #00FFFF66; }
-.c2 { background: #00000066; }
-.c3 { background: #0000FF66; }
-.c4 { background: #FF00FF66; }
-.c5 { background: #80808066; }
-.c6 { background: #00800066; }
-.c7 { background: #00FF0066; }
-.c8 { background: #80000066; }
-.c9 { background: #00008066; }
-.c10 { background: #80800066; }
-.c11 { background: #80008066; }
-.c12 { background: #FF000066; }
-.c13 { background: #C0C0C066; }
-.c14 { background: #00808066; }
-.c15 { background: #ffa50066; }
-.c16 { background: #FFFF0066; }
-.bold { font-weight: bold; }
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+button.toggle {
+  padding: 0 4px;
+}
+
+button.toggle:before {
+  content: '\2013';
+}
+
+button.toggle.closed:before {
+  content: '+';
+}
+
+tr {
+  animation: fadein 1s;
+}
+
+tr.closed {
+  animation: fadeout 1s;
+  display: none;
+}
+
 
 table {
   border-collapse: collapse;
@@ -74,3 +88,63 @@ td, th {
 .smaller {
     font-size: small;
 }
+
+.bold { font-weight: bold; }
+
+.c0 { background: #c0c0c0ff; }
+.c1 { background: #ff00ffff; }
+.c2 { background: #ffff00ff; }
+.c3 { background: #00ffffff; }
+.c4 { background: #ffa500ff; }
+.c5 { background: #7fffd4ff; }
+.c6 { background: #8a2be2ff; }
+.c7 { background: #deb887ff; }
+.c8 { background: #5f9ea0ff; }
+.c9 { background: #ff7f50ff; }
+.c10 { background: #6495edff; }
+.c11 { background: #a9a9a9ff; }
+.c12 { background: #bdb76bff; }
+.c13 { background: #ff8c00ff; }
+.c14 { background: #9932ccff; }
+.c15 { background: #e9967aff; }
+.c16 { background: #8fbc8fff; }
+.c17 { background: #00ced1ff; }
+.c18 { background: #ff1493ff; }
+.c19 { background: #00bfffff; }
+.c20 { background: #1e90ffff; }
+.c21 { background: #ffd700ff; }
+.c22 { background: #daa520ff; }
+.c23 { background: #adff2fff; }
+.c24 { background: #ff69b4ff; }
+.c25 { background: #cd5c5cff; }
+.c26 { background: #f0e68cff; }
+.c27 { background: #add8e6ff; }
+.c28 { background: #f08080ff; }
+.c29 { background: #90ee90ff; }
+.c30 { background: #ffa07aff; }
+.c31 { background: #87cefaff; }
+.c32 { background: #778899ff; }
+.c33 { background: #b0c4deff; }
+.c34 { background: #66cdaaff; }
+.c35 { background: #ba55d3ff; }
+.c36 { background: #9370dbff; }
+.c37 { background: #7b68eeff; }
+.c38 { background: #00fa9aff; }
+.c39 { background: #48d1ccff; }
+.c40 { background: #da70d6ff; }
+.c41 { background: #98fb98ff; }
+.c42 { background: #db7093ff; }
+.c43 { background: #cd853fff; }
+.c44 { background: #dda0ddff; }
+.c45 { background: #bc8f8fff; }
+.c46 { background: #4169e1ff; }
+.c47 { background: #fa8072ff; }
+.c48 { background: #f4a460ff; }
+.c49 { background: #87ceebff; }
+.c50 { background: #6a5acdff; }
+.c51 { background: #d2b48cff; }
+.c52 { background: #d8bfd8ff; }
+.c53 { background: #ff6347ff; }
+.c54 { background: #40e0d0ff; }
+.c55 { background: #ee82eeff; }
+.c56 { background: #9acd32ff; }

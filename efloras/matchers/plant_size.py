@@ -8,16 +8,16 @@ from .shared import RANGE_GROUPS
 from ..pylib.terms import TERMS
 
 # Normalize dimension notations
-DIMENSIONS = {t['pattern']: t['category'] for t in TERMS
+DIMENSIONS = {t['pattern']: t['replace'] for t in TERMS
               if t['label'] == 'dimension'}
 
 # Normalize unit notations
-UNITS = {t['pattern']: t['category'] for t in TERMS
+UNITS = {t['pattern']: t['replace'] for t in TERMS
          if t['label'] == 'length_units'}
 
 # Multiply units by this to normalize to millimeters
-MULTIPLY = {t['category']: to_positive_float(m) for t in TERMS
-            if t['label'] == 'length_units' if (m := t['replace'])}
+MULTIPLY = {t['replace']: to_positive_float(m) for t in TERMS
+            if t['label'] == 'length_units' if (m := t['category'])}
 
 
 def size(span):

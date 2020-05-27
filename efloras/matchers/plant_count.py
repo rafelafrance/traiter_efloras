@@ -41,7 +41,7 @@ PLANT_COUNT = {
             'on_match': count,
             'patterns': [
                 [
-                    {'_': {'label': {'IN': ['cross', 'slash']}},
+                    {'_': {'label': {'IN': ['cross', 'slash', 'no_count']}},
                      'OP': '?'},
                     {'_': {'label': 'min'}, 'OP': '?'},
                     {'_': {'label': 'low'}},

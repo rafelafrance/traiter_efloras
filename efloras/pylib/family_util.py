@@ -1,6 +1,7 @@
 """Common functions related to extracting families."""
 
 import csv
+import sys
 from datetime import datetime
 from itertools import product
 from pathlib import Path
@@ -92,6 +93,29 @@ def get_families():
             families[key] = {**family, **times}
 
     return families
+
+
+def print_families_csv(families):
+    """Display a list of all families."""
+    writer = csv.writer(sys.stdout)
+    writer.writerow([
+        'Family',
+        'Taxon Id',
+        'Flora Id',
+        'Flora Name',
+        'Directory Created',
+        'Directory Modified',
+        'Treatments'])
+
+    for family in families.values():
+        writer.writerow([
+            family['family'],
+            family['taxon_id'],
+            family['flora_id'],
+            family['flora_name'],
+            family['created'],
+            family['modified'],
+            family['count'] if family['count'] else ''])
 
 
 def print_families(families):
