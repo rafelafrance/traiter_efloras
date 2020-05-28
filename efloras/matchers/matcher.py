@@ -39,50 +39,71 @@ class Matcher(TraitMatcher):
         """Parse the traits."""
         doc = super().parse(text)
 
-        parts = []
-        descriptors = defaultdict(list)
         traits = defaultdict(list)
 
         for sent in doc.sents:
             part = ''
             augment = {}
+            suffix_label = {'ok': False, 'label': '', 'data': {}}
 
             for token in sent:
                 label = token._.label
                 data = token._.data
 
                 if label == 'part':
-                    if traits:
-                        parts.append(traits)
                     part = data['value']
-                    traits = defaultdict(list)
+
+                    # For plant parts we need to consider where the part falls
+                    # in a sentence. If it is the first part in a sentence it
+                    # is the "base" part and we need to push any fields (like
+                    # sex or location) in it to all of the remaining traits &
+                    # plant parts in the sentence. For example:
+                    #   "Male flowers: petals 4-6 red"
+                    # Should be parsed with all traits being "male" like so:
+                    #   part: [{'value': 'flower', 'sex': 'male'}
+                    #          {'value': 'petal', 'sex': 'male'}]
+                    #   petal_count; [{'low': 4, 'high': 6, 'sex': 'male'}]
+                    #   petal_color; [{'value': 'red', 'sex': 'male'}]
                     if not augment:
                         augment = {k: v for k, v in data.items()
                                    if k not in ('start', 'end', 'value')}
-                    for k, v in augment.items():
-                        if k not in data:
-                            data[k] = v
+                    else:
+                        data = {**augment, **data}
+
                     traits['part'].append(data)
 
+                    # Append traits w/ suffix labels like: "2-8(-20) stamens"
+                    if suffix_label['ok'] and suffix_label['label']:
+                        trait_label = f'{part}_{suffix_label["label"]}'
+                        trait_data = {**augment, **suffix_label['data']}
+                        traits[trait_label].append(trait_data)
+                    if suffix_label['ok']:
+                        suffix_label = {'ok': False, 'label': '', 'data': {}}
+
+                # Descriptors can occur anywhere and are not attached to any
+                # plant part
                 elif label == 'descriptor' and data.get('category'):
                     name = data['category']
                     del data['category']
-                    descriptors[name].append(data)
+                    traits[name].append(data)
 
+                elif label == 'suffix_label':
+                    suffix_label = {'ok': True, 'label': '', 'data': {}}
+
+                # A trait parse
                 elif data and part:
-                    label = f'{part}_{label}'
-                    for k, v in augment.items():
-                        if k not in data:
-                            data[k] = v
-                    traits[label].append(data)
-
-        if traits:
-            parts.append(traits)
-
-        if descriptors:
-            parts = [descriptors] + parts
+                    # Some traits are written like: with "2-8(-20) stamens"
+                    # TODO: Change the hardcoded "label in" to data driven
+                    if suffix_label['ok'] and label in ('count',):
+                        suffix_label['label'] = label
+                        suffix_label['data'] = {**augment, **data}
+                    else:
+                        label = f'{part}_{label}'
+                        data = {**augment, **data}
+                        traits[label].append(data)
+                        suffix_label = {'ok': False, 'label': '', 'data': {}}
 
         # from pprint import pp
-        # pp([dict(p) for p in parts])
+        # pp(dict(traits))
 
-        return parts
+        return traits

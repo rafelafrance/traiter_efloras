@@ -1,7 +1,7 @@
 """Write output to an HTML file."""
 
 import html
-from collections import defaultdict, deque, namedtuple
+from collections import deque, namedtuple
 from datetime import datetime
 from itertools import cycle
 
@@ -60,7 +60,7 @@ def format_traits(row, colors):
             new_traits[trait] = 1
         new_dict[new_label] = '<br/>'.join(new_traits.keys())
 
-    return new_dict
+    return sorted(new_dict)
 
 
 def format_text(row, tags=None, colors=None):

@@ -1,7 +1,5 @@
 """Use a custom ruler to parse efloras pages."""
 
-from collections import defaultdict
-
 from bs4 import BeautifulSoup
 
 import efloras.pylib.family_util as futil
@@ -43,21 +41,10 @@ def efloras_reader(args, families):
                 continue
 
             row['text'] = text
-            row['traits'] = match_traits(matcher, text)
+            row['traits'] = matcher.parse(text)
             rows.append(row)
 
     return rows
-
-
-def match_traits(matcher, text):
-    """Look for descriptor traits in the entire text."""
-    traits = defaultdict(list)
-
-    for part in matcher.parse(text):
-        for label, data in part.items():
-            traits[label] += data
-
-    return traits
 
 
 def get_family_tree(family):

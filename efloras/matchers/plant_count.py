@@ -23,6 +23,9 @@ def count(span):
                 return {}
             data[label] = as_int
 
+        if label == 'suffix_label':
+            data['suffix_label'] = True
+
         elif label in NO_COUNT:
             return {}
 
@@ -38,8 +41,8 @@ PLANT_COUNT = {
             'on_match': count,
             'patterns': [
                 [
-                    {'_': {'label': {'IN': ['cross', 'slash', 'no_count']}},
-                     'OP': '?'},
+                    {'_': {'label': {'IN': [
+                        'cross', 'slash', 'no_count', 'with']}}, 'OP': '?'},
                     {'_': {'label': 'min'}, 'OP': '?'},
                     {'_': {'label': 'low'}},
                     {'_': {'label': 'high'}, 'OP': '?'},

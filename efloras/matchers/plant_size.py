@@ -15,10 +15,6 @@ DIMENSIONS = {t['pattern']: t['replace'] for t in TERMS
 UNITS = {t['pattern']: t['replace'] for t in TERMS
          if t['label'] == 'length_units'}
 
-# Multiply units by this to normalize to millimeters
-MULTIPLY = {t['replace']: to_positive_float(m) for t in TERMS
-            if t['label'] == 'length_units' if (m := t['category'])}
-
 
 def size(span):
     """Enrich a phrase match."""
@@ -63,12 +59,6 @@ def fix_dimensions(dims):
         if (dims[0].get('dimension') == 'width'
                 or dims[1].get('dimension') == 'length'):
             dims[0], dims[1] = dims[1], dims[0]
-        # Missing units in the length (most likely)
-        if not dims[0].get('times'):
-            dims[0]['times'] = dims[1]['times']
-        # Missing units in the width
-        if not dims[1].get('times'):
-            dims[1]['times'] = dims[0]['times']
 
     dims[0]['dim_name'] = dims[0].get('dimension', 'length')
     if len(dims) > 1:
@@ -93,7 +83,6 @@ def scan_tokens(span):
         elif label == 'length_units':
             units = UNITS[token.lower_]
             dims[idx]['units'] = units
-            dims[idx]['times'] = MULTIPLY[units]
 
         elif label == 'dimension':
             dims[idx]['dimension'] = DIMENSIONS[token.lower_]
