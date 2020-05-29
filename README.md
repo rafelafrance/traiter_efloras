@@ -77,17 +77,13 @@ You will need to have Python installed. You can install the requirements into yo
 ```
 git clone https://github.com/rafelafrance/traiter_efloras.git
 cd traiter_efloras
+optional: virtualenv -p python3 venv
+optional: source venv/bin/activate
 python3 -m pip install --requirement requirements.txt
-```
-
-This project also depends on Spacy and the parent "traiter" project so you will need to install them too.
-
-```
 python3 -m pip install git+https://github.com/rafelafrance/traiter.git@master#egg=traiter
 python -m spacy download en
 ```
 
-  
 ## Run
 ```
 ./extract.py ... TODO ...
