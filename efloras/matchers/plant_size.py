@@ -50,7 +50,7 @@ def fill_data(span, dims):
             data['sex'] = re.sub(r'\W+', '', datum.lower())
 
         # Get the uncertain field if it's there
-        if datum := dim.get('uncertain'):
+        if dim.get('uncertain'):
             data['uncertain'] = 'true'
 
     return data
