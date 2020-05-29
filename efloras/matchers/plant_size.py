@@ -49,6 +49,10 @@ def fill_data(span, dims):
         if datum := dim.get('sex'):
             data['sex'] = re.sub(r'\W+', '', datum.lower())
 
+        # Get the uncertain field if it's there
+        if datum := dim.get('uncertain'):
+            data['uncertain'] = 'true'
+
     return data
 
 
@@ -92,11 +96,18 @@ def scan_tokens(span):
             value = re.sub(r'\W+', '', value)
             dims[idx]['sex'] = value
 
+        elif label in ('quest', 'quest_enclosed'):
+            dims[idx]['uncertain'] = True
+
         elif label == 'cross':
             idx += 1
             dims.append({})
 
     return dims
+
+
+_FOLLOW = """ dimension sex_enclosed plant_sex """.split()
+_UNCERTAIN = """ quest quest_enclosed """.split()
 
 
 PLANT_SIZE = {
@@ -106,6 +117,11 @@ PLANT_SIZE = {
         'sex_enclosed': [[
             {'_': {'label': 'open'}},
             {'_': {'label': 'plant_sex'}},
+            {'_': {'label': 'close'}},
+        ]],
+        'quest_enclosed': [[
+            {'_': {'label': 'open'}},
+            {'_': {'label': 'quest'}},
             {'_': {'label': 'close'}},
         ]],
     },
@@ -120,15 +136,12 @@ PLANT_SIZE = {
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': {
-                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
-                        'OP': '*'},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                 ], [
                     {'_': {'label': 'high'}},
+                    {'_': {'label': {'IN': _UNCERTAIN}}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': {
-                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
-                        'OP': '*'},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                 ],
                 [
                     {'_': {'label': 'min'}, 'OP': '?'},
@@ -136,18 +149,14 @@ PLANT_SIZE = {
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}, 'OP': '?'},
-                    {'_': {'label': {
-                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
-                        'OP': '*'},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                     {'_': {'label': 'cross'}},
                     {'_': {'label': 'min'}, 'OP': '?'},
                     {'_': {'label': 'low'}},
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
-                    {'_': {'label': {
-                        'IN': ['dimension', 'sex_enclosed', 'plant_sex']}},
-                        'OP': '*'},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                 ],
             ],
         },
