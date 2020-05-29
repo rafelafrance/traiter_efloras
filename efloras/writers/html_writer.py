@@ -10,9 +10,8 @@ from jinja2 import Environment, FileSystemLoader
 from ..matchers.matcher import MATCHERS
 
 
-# TODO: Make coloring systematic
-# CSS colors -- We currently use 57 of them
-CLASSES = [f'c{i}' for i in range(57)]
+# CSS colors
+CLASSES = [f'c{i}' for i in range(24)]
 COLORS = cycle(CLASSES)
 
 Cut = namedtuple('Cut', 'pos open len id end type title')
@@ -26,7 +25,7 @@ def html_writer(args, rows):
 
     rows = sorted(rows, key=lambda r: (r['family'], r['taxon']))
 
-    colors = {label for r in rows for label in r['traits'].keys()}
+    colors = {label for r in rows for label in r['traits']}
     colors -= {'part'}
     colors = {label: next(COLORS) for label in sorted(colors)}
 
@@ -48,7 +47,8 @@ def html_writer(args, rows):
 def format_traits(row, colors):
     """Format the traits for HTML."""
     new_dict = {}
-    for label, traits in row['traits'].items():
+    traits = dict(sorted(row['traits'].items(), key=lambda i: i[0]))
+    for label, traits in traits.items():
         if label == 'part':
             continue
         new_label = f'<span class="{colors[label]}">{label}</span>'
@@ -60,7 +60,7 @@ def format_traits(row, colors):
             new_traits[trait] = 1
         new_dict[new_label] = '<br/>'.join(new_traits.keys())
 
-    return sorted(new_dict)
+    return new_dict
 
 
 def format_text(row, tags=None, colors=None):
