@@ -14,7 +14,8 @@ def descriptor(span):
     """Enrich a phrase match."""
     token = span[0]
     value = token.lower_
-    label = token._.label
+    if (label := token._.label) == 'plant_sex':
+        label = 'reproduction'
     if value not in IS_DESCRIPTOR:
         return {}
     return dict(
