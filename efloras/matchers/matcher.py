@@ -10,11 +10,11 @@ from .plant_descriptor import PLANT_DESCRIPTOR
 from .plant_part import PLANT_PART
 from .plant_shape import PLANT_SHAPE
 from .plant_size import PLANT_SIZE
-from ..pylib.customize_pipeline import NLP
+from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
-MATCHERS = [PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_PART,
-            PLANT_SHAPE, PLANT_SIZE]
+MATCHERS = (PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_PART,
+            PLANT_SHAPE, PLANT_SIZE)
 
 
 class Matcher(TraitMatcher):

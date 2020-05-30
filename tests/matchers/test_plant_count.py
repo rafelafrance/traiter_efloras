@@ -47,7 +47,6 @@ class TestPlantCount(unittest.TestCase):
         )
 
     def test_plant_count_05(self):
-        """It handles ovary counts."""
         self.assertEqual(
             MATCHER.parse('ovules mostly 120–200.'),
             {'part': [{'start': 0, 'end': 6, 'value': 'ovary'}],
@@ -56,7 +55,6 @@ class TestPlantCount(unittest.TestCase):
         )
 
     def test_plant_count_06(self):
-        """We're not counting flowers yet."""
         self.assertEqual(
             MATCHER.parse('Staminate flowers (3–)5–10(–20)'),
             {'part': [
@@ -68,7 +66,6 @@ class TestPlantCount(unittest.TestCase):
         )
 
     def test_plant_count_07(self):
-        """It handles an ovary."""
         self.assertEqual(
             MATCHER.parse('Ovaries (4 or)5,'),
             {'part': [{'start': 0, 'end': 7, 'value': 'ovary'}],
@@ -76,7 +73,6 @@ class TestPlantCount(unittest.TestCase):
         )
 
     def test_plant_count_08(self):
-        """It handles a conjunction in place of a dash."""
         self.assertEqual(
             MATCHER.parse('Seeds 5(or 6)'),
             {'part': [{'start': 0, 'end': 5, 'value': 'seed'}],
@@ -107,7 +103,6 @@ class TestPlantCount(unittest.TestCase):
         )
 
     def test_plant_count_12(self):
-        """Units are required."""
         self.assertEqual(
             MATCHER.parse('Male flowers with 2-8(-20) stamens;'),
             {'part': [
@@ -118,7 +113,6 @@ class TestPlantCount(unittest.TestCase):
         )
 
     def test_plant_count_13(self):
-        """Units are required."""
         self.assertEqual(
             MATCHER.parse('Male flowers with 2-8(-20) stamens;'),
             {'part': [

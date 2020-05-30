@@ -4,12 +4,11 @@ from traiter.util import to_positive_int
 
 from .shared import RANGE_GROUPS
 
-
 NO_COUNT = """ cross length_units slash dash no_count """.split()
 
 
 def count(span):
-    """Enrich a phrase match."""
+    """Enrich the match with data."""
     data = dict(
         start=span.start_char,
         end=span.end_char,
