@@ -276,3 +276,17 @@ class TestPlantSize(unittest.TestCase):
                             'width_low': 4.0, 'width_high': 15.0,
                             'width_units': 'cm'}]}
         )
+
+    def test_plant_size_23(self):
+        self.assertEqual(
+            MATCHER.parse('calyx, 8-10 mm, 3-4 mm high,'),
+            {'part': [{'start': 0, 'end': 5, 'value': 'calyx'}],
+             'calyx_size': [{'start': 7, 'end': 14,
+                             'length_low': 8.0,
+                             'length_high': 10.0,
+                             'length_units': 'mm'},
+                            {'start': 16, 'end': 27,
+                             'height_low': 3.0,
+                             'height_high': 4.0,
+                             'height_units': 'mm'}]}
+        )

@@ -4,11 +4,9 @@ import re
 
 from traiter.util import FLAGS  # pylint: disable=import-error
 
-from ..pylib.terms import TERMS
+from ..pylib.terms import REPLACE, TERMS
 
 PARTS = [t for t in TERMS if t['label'] == 'plant_part']
-
-REPLACES = {t['pattern']: t['replace'] for t in PARTS}
 
 PATTERNS = sorted([t['pattern'] for t in PARTS], key=len, reverse=True)
 
@@ -32,7 +30,7 @@ def part(span):
         label = token._.label
         value = token.lower_
         if label == 'plant_part':
-            data['value'] = REPLACES.get(value, '')
+            data['value'] = REPLACE.get(value, '')
         elif label == 'plant_sex':
             data['sex'] = SEX[value]
         elif label == 'part_location':

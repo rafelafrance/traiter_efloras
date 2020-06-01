@@ -94,7 +94,7 @@ class Matcher(TraitMatcher):
                 elif data and part:
                     # Some traits are written like: with "2-8(-20) stamens"
                     # TODO: Change the hardcoded "label in" to data driven
-                    if suffix_label['ok'] and label in ('count',):
+                    if suffix_label['ok'] and label in ('count', 'color'):
                         suffix_label['label'] = label
                         suffix_label['data'] = {**augment, **data}
                     else:

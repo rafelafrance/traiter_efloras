@@ -121,3 +121,11 @@ class TestPlantCount(unittest.TestCase):
              'stamen_count': [{'sex': 'male', 'start': 18, 'end': 26,
                                'low': 2, 'high': 8, 'max': 20}]}
         )
+
+    def test_plant_count_14(self):
+        self.assertEqual(
+            MATCHER.parse('leaflets in 3 or 4 pairs,'),
+            {'part': [{'start': 0, 'end': 8, 'value': 'leaf'}],
+             'leaf_count': [
+                 {'start': 12, 'end': 24, 'low': 3, 'high': 4, 'as': 'pairs'}]}
+        )

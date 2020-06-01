@@ -129,10 +129,10 @@ class TestPlantColor(unittest.TestCase):
 
     def test_plant_color_11(self):
         self.assertEqual(
-            MATCHER.parse('petal yellow'),
+            MATCHER.parse('petal pale sulfur-yellow'),
             {'part': [{'value': 'petal', 'start': 0, 'end': 5}],
              'petal_color': [{'value': 'yellow',
-                              'start': 6, 'end': 12}]}
+                              'start': 11, 'end': 24}]}
         )
 
     def test_plant_color_12(self):
@@ -140,4 +140,13 @@ class TestPlantColor(unittest.TestCase):
             MATCHER.parse('sepal yellow'),
             {'part': [{'value': 'sepal', 'start': 0, 'end': 5}],
              'sepal_color': [{'value': 'yellow', 'start': 6, 'end': 12}]}
+        )
+
+    def test_plant_color_13(self):
+        self.assertEqual(
+            MATCHER.parse(
+                'Plants acaulescent or nearly so, with white hairs.'),
+            {'part': [{'start': 0, 'end': 6, 'value': 'plant'},
+                      {'start': 44, 'end': 49, 'value': 'hair'}],
+             'hair_color': [{'value': 'white', 'start': 38, 'end': 43}]}
         )

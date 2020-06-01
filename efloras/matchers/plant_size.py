@@ -5,15 +5,7 @@ import re
 from traiter.util import to_positive_float  # pylint: disable=import-error
 
 from .shared import RANGE_GROUPS
-from ..pylib.terms import TERMS
-
-# Normalize dimension notations
-DIMENSIONS = {t['pattern']: t['replace'] for t in TERMS
-              if t['label'] == 'dimension'}
-
-# Normalize unit notations
-UNITS = {t['pattern']: t['replace'] for t in TERMS
-         if t['label'] == 'length_units'}
+from ..pylib.terms import REPLACE
 
 
 def size(span):
@@ -85,11 +77,11 @@ def scan_tokens(span):
 
         # Save the units and get the unit multiplier
         elif label == 'length_units':
-            units = UNITS[token.lower_]
+            units = REPLACE[token.lower_]
             dims[idx]['units'] = units
 
         elif label == 'dimension':
-            dims[idx]['dimension'] = DIMENSIONS[token.lower_]
+            dims[idx]['dimension'] = REPLACE[token.lower_]
 
         elif label in ('sex_enclosed', 'plant_sex'):
             value = token.lower_
