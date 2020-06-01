@@ -42,6 +42,13 @@ def parse_args():
         '--family', '-f', action='append',
         help="""Which family to extract.""")
 
+    arg_parser.add_argument(
+        '--genus', '-g', action='append',
+        help="""Which genus to extract with in the family. Default is
+            to select all genera. Although this is designed for selecting
+            genera this is really just a filter on the taxa names so you
+            can put in anything that matches a taxon name.""")
+
     flora_ids = futil.get_flora_ids()
     arg_parser.add_argument(
         '--flora-id', '--id', '-F', action='append',

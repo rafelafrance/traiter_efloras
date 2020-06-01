@@ -22,5 +22,5 @@ def custom_sentencizer(doc):
     return doc
 
 
-NLP = spacy_nlp()
+NLP = spacy_nlp(disable=['ner'])
 NLP.add_pipe(custom_sentencizer, before='parser')

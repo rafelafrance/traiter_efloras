@@ -70,10 +70,13 @@ def format_text(row, tags=None, colors=None):
     cut_id = 0
 
     for label, traits in row['traits'].items():
-        title = ' '.join(label.split('_'))
+        title_label = ' '.join(label.split('_'))
         for trait in traits:
             if not (color := colors.get(label)):
                 continue
+            title = ', '.join(f'{k} = {v}' for k, v in trait.items()
+                              if k not in ('start', 'end'))
+            title = f'{title_label}: {title}'
             cut_id = append_endpoints(
                 cuts, cut_id, trait['start'], trait['end'],
                 color, title=title)

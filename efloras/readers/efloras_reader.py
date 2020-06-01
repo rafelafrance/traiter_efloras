@@ -1,6 +1,9 @@
 """Use a custom ruler to parse efloras pages."""
 
+import re
+
 from bs4 import BeautifulSoup
+from traiter.util import FLAGS
 
 import efloras.pylib.family_util as futil
 from efloras.matchers.matcher import Matcher
@@ -13,6 +16,11 @@ def efloras_reader(args, families):
     families_flora = futil.get_family_flora_ids(args, families)
     flora_ids = futil.get_flora_ids()
 
+    # Build a filter for the taxon names
+    genera = [g.lower() for g in args.genus] if args.genus else []
+    genera = [r'\s'.join(g.split()) for g in genera]
+    genera = '|'.join(genera)
+
     rows = []
 
     for family_name, flora_id in families_flora:
@@ -24,12 +32,17 @@ def efloras_reader(args, families):
             treatment = get_treatment(path)
             text = get_traits(treatment)
             taxon_id = futil.get_taxon_id(path)
+            taxon_name = taxa[taxon_id]
+
+            # Filter on the taxon name
+            if genera and not re.search(genera, taxon_name, flags=FLAGS):
+                continue
 
             row = {
                 'family': family['family'],
                 'flora_id': flora_id,
                 'flora_name': flora_ids[flora_id],
-                'taxon': taxa[taxon_id],
+                'taxon': taxon_name,
                 'taxon_id': taxon_id,
                 'link': futil.treatment_link(flora_id, taxon_id),
                 'text': '',
