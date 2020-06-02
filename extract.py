@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Use a custom ruler to parse efloras pages."""
+"""Parse efloras treatments."""
 
 import argparse
 import sys

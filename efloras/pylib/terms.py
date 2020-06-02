@@ -2,13 +2,13 @@
 
 import csv
 import json
-
 import re
+from pathlib import Path
+
 from traiter.util import FLAGS  # pylint: disable=import-error
 
-import efloras.pylib.family_util as futil
-
-TERM_PATH = futil.DATA_DIR / 'terms.csv'
+VOCAB_DIR = Path('.') / 'efloras' / 'vocabulary'
+TERM_PATH = VOCAB_DIR / 'terms.csv'
 
 DASH = '–-'
 QUOTE = """["']"""

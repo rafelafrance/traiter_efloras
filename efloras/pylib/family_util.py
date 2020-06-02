@@ -1,12 +1,11 @@
 """Common functions related to extracting families."""
 
 import csv
+import re
 import sys
 from datetime import datetime
 from itertools import product
 from pathlib import Path
-
-import re
 
 DATA_DIR = Path('.') / 'data'
 EFLORAS_DIR = DATA_DIR / 'eFloras'

@@ -9,7 +9,6 @@ from jinja2 import Environment, FileSystemLoader
 
 from ..matchers.matcher import MATCHERS
 
-
 # CSS colors
 CLASSES = [f'c{i}' for i in range(24)]
 COLORS = cycle(CLASSES)
@@ -108,8 +107,8 @@ def insert_markup(text, cuts, tags):
             tag = tags[(cut.type, True)]
             if cut.title:
                 tag = tag.replace('>', f' title="{cut.title}">')
-            parts.append(tag)       # Add tag to output
-            stack.appendleft(cut)   # Prepend open cut to stack
+            parts.append(tag)  # Add tag to output
+            stack.appendleft(cut)  # Prepend open cut to stack
 
         # Close tags are more complicated. We have to search for the
         # matching open tag on the stack & remove it. We also need to
