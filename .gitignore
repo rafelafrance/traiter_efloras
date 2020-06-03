@@ -23,5 +23,5 @@ data/
 !data/.gitkeep
 
 # Temp files
-old/
+doc/
 junk*
