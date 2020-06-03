@@ -3,76 +3,61 @@
 from collections import defaultdict
 
 import pandas as pd
-import traiter.util as util  # pylint: disable=import-error
+
+from ..pylib.util import convert
 
 
-def csv_writer(args, df):
+def csv_writer(args, rows):
     """Output the data frame."""
-    # Split the family name/flora ID into separate columns
-    df = merge_duplicates(args, df)
+    for row in rows:
+        row['raw_traits'] = dict(row['traits'])
+        del row['traits']
+        build_columns(row)
+
+    df = pd.DataFrame(rows)
     df.to_csv(args.output_file, index=False)
 
 
-def merge_duplicates(args, df):
-    """Merge duplicate extracts."""
-    data = df.fillna('').to_dict('records')
+def build_columns(row):
+    """Expand values into separate columns."""
+    extras = set(""" sex location as """.split())
+    skips = extras | {'start', 'end'}
 
-    location_fields = ('start', 'end', 'trait_group')
-    key_fields = ('value', 'part')
+    for label, traits in row['raw_traits'].items():
+        if label == 'part':
+            continue
+        columns = defaultdict(list)
+        for trait in traits:
+            header = sorted(v for k, v in trait.items() if k in extras)
+            header = '.'.join([label] + header)
+            value = {k: v for k, v in trait.items() if k not in skips}
+            columns[header].append(value)
 
-    new_data = []
+        for header, value_list in columns.items():
+            is_vocab = [len(v) == 1 and v.get('value') for v in value_list]
+            if all(is_vocab):
+                value = {v['value']: 1 for v in value_list}
+                row[header] = ', '.join(sorted(value.keys()))
+            elif header.endswith('_size'):
+                for i, extract in enumerate(value_list, 1):
 
-    for row in data:
-        new_row = {}
+                    length_units = extract.get(
+                        'length_units', extract.get('width_units'))
+                    width_units = extract.get(
+                        'width_units', extract.get('length_units'))
 
-        for header, cell in row.items():
+                    for field, value in extract.items():
+                        key = f'{header}.{i}.{field}'
+                        if field.endswith('_units'):
+                            row[key] = value
+                        elif field.startswith('length_'):
+                            row[key] = convert(value, length_units)
+                        elif field.startswith('width_'):
+                            row[key] = convert(value, width_units)
+            else:
+                for i, extract in enumerate(value_list, 1):
+                    for field, value in extract.items():
+                        key = f'{header}.{i}.{field}'
+                        row[key] = value
 
-            # If it isn't a trait then just copy it over to the new row
-            if header not in args.trait:
-                new_row[header] = cell
-                continue
-
-            dupes = defaultdict(lambda: defaultdict(set))
-
-            # Loop thru list of trait parses in the cell & merge duplicates
-            for trait in cell:
-
-                # The unique value
-                unique = tuple(util.as_tuple(sorted(util.as_list(v)))
-                               for k, v in trait.items() if k in key_fields)
-
-                # Merge locations into a single field
-                location = tuple((k, v) for k, v in trait.items()
-                                 if k in location_fields)
-                dupes[unique]['location'].add(location)
-
-                # Add other values
-                for key, value in trait.items():
-                    if key not in location_fields:
-                        dupes[unique][key].add(util.as_member(value))
-
-            # Pivot the separate extracts
-            for i, dupe in enumerate(dupes.values(), 1):
-                # Pivot fields for each extract
-                for field, value in dupe.items():
-                    if field == 'location':
-                        pass
-                    else:
-                        value = util.flatten(value)
-                    new_row[f'{header}_{i}_{field}'] = util.squash(value)
-
-        new_data.append(new_row)
-
-    # Build a dataframe and move some columns
-    df = pd.DataFrame(new_data)
-    df = df.sort_index(axis=1)
-
-    for name in """ taxon_id taxon flora_id flora_name family """.split():
-        column = df.pop(name)
-        df.insert(0, name, column)
-
-    for name in """ text link """.split():
-        column = df.pop(name)
-        df.insert(len(df.columns), name, column)
-
-    return df
+    return row

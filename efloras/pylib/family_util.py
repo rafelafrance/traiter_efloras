@@ -5,9 +5,9 @@ import re
 import sys
 from datetime import datetime
 from itertools import product
-from pathlib import Path
 
-DATA_DIR = Path('.') / 'data'
+from .util import DATA_DIR
+
 EFLORAS_DIR = DATA_DIR / 'eFloras'
 FAMILY_DIR = DATA_DIR / 'families'
 

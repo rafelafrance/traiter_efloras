@@ -3,11 +3,11 @@
 import csv
 import json
 import re
-from pathlib import Path
 
 from traiter.util import FLAGS  # pylint: disable=import-error
 
-VOCAB_DIR = Path('.') / 'efloras' / 'vocabulary'
+from .util import VOCAB_DIR
+
 TERM_PATH = VOCAB_DIR / 'terms.csv'
 
 DASH = '–-'
