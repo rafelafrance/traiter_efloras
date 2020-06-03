@@ -30,7 +30,7 @@ PLANT_SHAPE = {
                 [
                     {'_': {'label': {'IN': [
                         'shape', 'shape_leader', 'part_location']}},
-                        'OP': '*'},
+                     'OP': '*'},
                     {'_': {'label': 'dash'}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},
                     {'_': {'label': 'dash'}, 'OP': '?'},

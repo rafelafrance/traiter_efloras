@@ -52,7 +52,7 @@ def parse_args():
     flora_ids = futil.get_flora_ids()
     arg_parser.add_argument(
         '--flora-id', '--id', '-F', action='append',
-        choices=[str(k) for k in flora_ids.keys()],
+        choices=[str(k) for k in flora_ids],
         help="""Which flora ID to extract. Default 1.""")
 
     arg_parser.add_argument(

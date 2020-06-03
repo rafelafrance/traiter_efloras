@@ -1,5 +1,7 @@
 """Test plant size trait matcher."""
 
+# pylint: disable=missing-function-docstring, too-many-public-methods
+
 import unittest
 
 from efloras.matchers.matcher import Matcher

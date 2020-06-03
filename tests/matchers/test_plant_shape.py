@@ -1,5 +1,7 @@
 """Test the plant shape matcher."""
 
+# pylint: disable=missing-function-docstring
+
 import unittest
 
 from efloras.matchers.matcher import Matcher
@@ -13,9 +15,8 @@ class TestPlantShape(unittest.TestCase):
     def test_plant_shape_01(self):
         self.assertEqual(
             MATCHER.parse('leaf suborbiculate'),
-            {'part': [
-                {'value': 'leaf', 'start': 0, 'end': 4}],
-                'leaf_shape': [{'value': 'orbicular', 'start': 5, 'end': 18}]}
+            {'part': [{'value': 'leaf', 'start': 0, 'end': 4}],
+             'leaf_shape': [{'value': 'orbicular', 'start': 5, 'end': 18}]}
         )
 
     def test_plant_shape_02(self):
@@ -86,7 +87,6 @@ class TestPlantShape(unittest.TestCase):
         )
 
     def test_plant_shape_08(self):
-        self.maxDiff = None
         self.assertEqual(
             MATCHER.parse(
                 'blade broadly ovate-cordate to triangular-cordate or '
@@ -133,14 +133,11 @@ class TestPlantShape(unittest.TestCase):
             MATCHER.parse(
                 'blade lanceolate to narrowly or broadly lanceolate '
                 'or elliptic-lanceolate, '),
-            {'part': [
-                {'value': 'leaf', 'start': 0, 'end': 5}],
-                'leaf_shape': [{'value': 'lanceolate',
-                                'start': 6, 'end': 16},
-                               {'value': 'lanceolate',
-                                'start': 32, 'end': 50},
-                               {'value': 'elliptic-lanceolate',
-                                'start': 54, 'end': 73}]}
+            {'part': [{'value': 'leaf', 'start': 0, 'end': 5}],
+             'leaf_shape': [{'value': 'lanceolate', 'start': 6, 'end': 16},
+                            {'value': 'lanceolate', 'start': 32, 'end': 50},
+                            {'value': 'elliptic-lanceolate',
+                             'start': 54, 'end': 73}]}
         )
 
     def test_plant_shape_13(self):
@@ -148,15 +145,12 @@ class TestPlantShape(unittest.TestCase):
             MATCHER.parse(
                 'blade broadly ovate to rounded-cordate, subreniform, '
                 'or deltate'),
-            {'part': [
-                {'value': 'leaf', 'start': 0, 'end': 5}],
-                'leaf_shape': [{'value': 'ovate', 'start': 6, 'end': 19},
-                               {'value': 'orbicular-cordate',
-                                'start': 23, 'end': 38},
-                               {'value': 'reniform',
-                                'start': 40, 'end': 51},
-                               {'value': 'deltoid',
-                                'start': 56, 'end': 63}]}
+            {'part': [{'value': 'leaf', 'start': 0, 'end': 5}],
+             'leaf_shape': [{'value': 'ovate', 'start': 6, 'end': 19},
+                            {'value': 'orbicular-cordate',
+                             'start': 23, 'end': 38},
+                            {'value': 'reniform', 'start': 40, 'end': 51},
+                            {'value': 'deltoid', 'start': 56, 'end': 63}]}
         )
 
     def test_plant_shape_14(self):

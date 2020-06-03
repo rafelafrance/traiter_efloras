@@ -1,5 +1,7 @@
 """Write output to an HTML file."""
 
+# pylint: disable=superfluous-parens, too-many-arguments
+
 import html
 from collections import deque, namedtuple
 from datetime import datetime

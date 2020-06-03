@@ -1,5 +1,7 @@
 """Setup terms."""
 
+# pylint: disable=superfluous-parens
+
 import csv
 import json
 import re

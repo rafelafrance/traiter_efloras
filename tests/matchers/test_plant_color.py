@@ -1,5 +1,7 @@
 """Test the plant color matcher."""
 
+# pylint: disable=missing-function-docstring
+
 import unittest
 
 from efloras.matchers.matcher import Matcher
@@ -96,7 +98,6 @@ class TestPlantColor(unittest.TestCase):
         )
 
     def test_plant_color_07(self):
-        self.maxDiff = None
         self.assertEqual(
             MATCHER.parse('calyx yellow'),
             {'part': [{'value': 'calyx', 'start': 0, 'end': 5}],
@@ -119,7 +120,6 @@ class TestPlantColor(unittest.TestCase):
         )
 
     def test_plant_color_10(self):
-        self.maxDiff = None
         self.assertEqual(
             MATCHER.parse('hypanthium yellow'),
             {'part': [{'value': 'hypanthium', 'start': 0, 'end': 10}],

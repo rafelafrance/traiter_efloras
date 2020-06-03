@@ -1,5 +1,7 @@
 """Test plant count trait matcher."""
 
+# pylint: disable=missing-function-docstring
+
 import unittest
 
 from efloras.matchers.matcher import Matcher
@@ -59,10 +61,10 @@ class TestPlantCount(unittest.TestCase):
             MATCHER.parse('Staminate flowers (3–)5–10(–20)'),
             {'part': [
                 {'start': 0, 'end': 17, 'sex': 'male', 'value': 'flower'}],
-                'flower_count': [{'start': 18, 'end': 31,
-                                  'min': 3, 'low': 5,
-                                  'high': 10, 'max': 20,
-                                  'sex': 'male'}]}
+             'flower_count': [{'start': 18, 'end': 31,
+                               'min': 3, 'low': 5,
+                               'high': 10, 'max': 20,
+                               'sex': 'male'}]}
         )
 
     def test_plant_count_07(self):

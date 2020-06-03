@@ -17,7 +17,6 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from lxml import html
 
-import efloras.pylib.util as util
 from efloras.pylib import family_util as futil
 
 # Don't hit the site too hard
@@ -65,13 +64,13 @@ def main(args, families, flora_ids):
 def update_families():
     """Update the list of families for each flora ID."""
     floras = download_floras()
-    for flora_id in floras.keys():
+    for flora_id in floras:
         download_families(flora_id)
 
-    pattern = f'flora_id=*_page=*'
+    pattern = 'flora_id=*_page=*'
     families = []
 
-    for path in util.FAMILY_DIR.glob(pattern):
+    for path in futil.FAMILY_DIR.glob(pattern):
 
         with open(path) as in_file:
             page = in_file.read()
@@ -97,7 +96,7 @@ def update_families():
 def download_families(flora_id):
     """Get the families for the flora."""
     base_url = f'{futil.CITE}/browse.aspx?flora_id={flora_id}'
-    path = util.FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
+    path = futil.FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
     urllib.request.urlretrieve(base_url, path)
 
     with open(path) as in_file:
@@ -115,14 +114,14 @@ def download_families(flora_id):
 
     for page in pages:
         url = base_url + f'&page={page}'
-        path = util.FAMILY_DIR / f'flora_id={flora_id}_page={page}.html'
+        path = futil.FAMILY_DIR / f'flora_id={flora_id}_page={page}.html'
         urllib.request.urlretrieve(url, path)
 
 
 def download_floras():
     """Get the floras from the main page."""
     url = futil.CITE
-    path = util.FAMILY_DIR / 'home_page.html'
+    path = futil.FAMILY_DIR / 'home_page.html'
     urllib.request.urlretrieve(url, path)
 
     with open(path) as in_file:
@@ -264,7 +263,7 @@ def parse_args(flora_ids):
 
     arg_parser.add_argument(
         '--flora-id', '--id', '-F', type=int, default=1,
-        choices=[k for k in flora_ids.keys()],
+        choices=flora_ids.keys(),
         help="""Which flora ID to download. Default 1.""")
 
     arg_parser.add_argument(

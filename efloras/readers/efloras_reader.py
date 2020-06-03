@@ -3,7 +3,7 @@
 import re
 
 from bs4 import BeautifulSoup
-from traiter.util import FLAGS
+from traiter.util import FLAGS  # pylint: disable=import-error
 
 import efloras.pylib.family_util as futil
 from efloras.matchers.matcher import Matcher
@@ -28,21 +28,20 @@ def efloras_reader(args, families):
         family = families[(family_name, flora_id)]
         taxa = get_family_tree(family)
         root = futil.treatment_dir(flora_id, family['family'])
-        for i, path in enumerate(root.glob('*.html')):
-            treatment = get_treatment(path)
-            text = get_traits(treatment)
+        for path in root.glob('*.html'):
+            text = get_treatment(path)
+            text = get_traits(text)
             taxon_id = futil.get_taxon_id(path)
-            taxon_name = taxa[taxon_id]
 
             # Filter on the taxon name
-            if genera and not re.search(genera, taxon_name, flags=FLAGS):
+            if genera and not re.search(genera, taxa[taxon_id], flags=FLAGS):
                 continue
 
             row = {
                 'family': family['family'],
                 'flora_id': flora_id,
                 'flora_name': flora_ids[flora_id],
-                'taxon': taxon_name,
+                'taxon': taxa[taxon_id],
                 'taxon_id': taxon_id,
                 'link': futil.treatment_link(flora_id, taxon_id),
                 'text': '',
@@ -95,7 +94,7 @@ def get_traits(treatment):
     high = 0
     for para in treatment.find_all('p'):
         text = ' '.join(para.get_text().split())
-        unique = {m for m in PATTERN_RE.findall(text)}
+        unique = set(PATTERN_RE.findall(text))
         if len(unique) > high:
             best = text
             high = len(unique)

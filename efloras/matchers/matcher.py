@@ -17,7 +17,7 @@ MATCHERS = (PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_PART,
             PLANT_SHAPE, PLANT_SIZE)
 
 
-class Matcher(TraitMatcher):
+class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
     """Base matcher object."""
 
     def __init__(self):

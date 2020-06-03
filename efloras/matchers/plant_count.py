@@ -1,6 +1,6 @@
 """Common color snippets."""
 
-from traiter.util import to_positive_int
+from traiter.util import to_positive_int  # pylint: disable=import-error
 
 from .shared import RANGE_GROUPS
 from ..pylib.terms import REPLACE

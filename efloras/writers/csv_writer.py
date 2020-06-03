@@ -39,25 +39,35 @@ def build_columns(row):
                 value = {v['value']: 1 for v in value_list}
                 row[header] = ', '.join(sorted(value.keys()))
             elif header.endswith('_size'):
-                for i, extract in enumerate(value_list, 1):
-
-                    length_units = extract.get(
-                        'length_units', extract.get('width_units'))
-                    width_units = extract.get(
-                        'width_units', extract.get('length_units'))
-
-                    for field, value in extract.items():
-                        key = f'{header}.{i}.{field}'
-                        if field.endswith('_units'):
-                            row[key] = value
-                        elif field.startswith('length_'):
-                            row[key] = convert(value, length_units)
-                        elif field.startswith('width_'):
-                            row[key] = convert(value, width_units)
+                extract_sizes(row, header, value_list)
             else:
-                for i, extract in enumerate(value_list, 1):
-                    for field, value in extract.items():
-                        key = f'{header}.{i}.{field}'
-                        row[key] = value
+                extract_traits(row, header, value_list)
 
     return row
+
+
+def extract_traits(row, header, value_list):
+    """Extract non-size & non-value list traits."""
+    for i, extract in enumerate(value_list, 1):
+        for field, value in extract.items():
+            key = f'{header}.{i}.{field}'
+            row[key] = value
+
+
+def extract_sizes(row, header, value_list):
+    """Normalize size traits."""
+    for i, extract in enumerate(value_list, 1):
+
+        length_units = extract.get(
+            'length_units', extract.get('width_units'))
+        width_units = extract.get(
+            'width_units', extract.get('length_units'))
+
+        for field, value in extract.items():
+            key = f'{header}.{i}.{field}'
+            if field.endswith('_units'):
+                row[key] = value
+            elif field.startswith('length_'):
+                row[key] = convert(value, length_units)
+            elif field.startswith('width_'):
+                row[key] = convert(value, width_units)
