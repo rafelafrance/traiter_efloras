@@ -2,7 +2,6 @@
 
 ## All right, what's this all about then?
 **Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like:
-
  ```
  Shrubs or trees evergreen, monoecious, 1-3 m tall; trunk to 3 cm d.b.h.; bark
 grayish. Branchlets and buds densely tomentose or pubescent. Petiole 0-1 cm,
@@ -20,17 +19,16 @@ usually 1 per infructescence, red or white, usually ellipsoid, papilliferous,
 0.7-1 cm in diam. Fl. Oct-Nov, fr. Feb-May of following year.
  ```
 I should be able to extract:
-
 - anther_color: red
 - bark_color: gray
 - bract_color:
     - sex = male, golden
     - sex = female, golden
-- bract_count: low = 2, sex = female
+- bract_count: 2, sex = female
 - fruit_color: red, white
-- fruit_count: low = 1
+- fruit_count: 1
 - fruit_size :diameter_low = 0.7, diameter_high = 1.0, diameter_units = cm
-- inflorescences_size:  sex = male, length_low = 1.0, length_high = 2.0, length_units = cm
+- inflorescences_size: sex = male, length_low = 1.0, length_high = 2.0, length_units = cm
 - leaf_color: golden
 - leaf_shape:
     - elliptic-obovate
@@ -47,7 +45,7 @@ I should be able to extract:
 - seasonal: evergreen
 - stamen_count: low = 2, high = 6
 - stigma_color: red
-- stigma_count: low = 2
+- stigma_count: 2
 - trunk_size: dbh_high = 3.0, dbh_units = cm
 
 ## Parsing strategy
