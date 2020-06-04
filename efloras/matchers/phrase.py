@@ -1,6 +1,10 @@
 """Match unadorned phrases attached to a plant part."""
 
-from ..pylib.terms import REPLACE
+from ..pylib.terms import REPLACE, TERMS
+
+
+LITERAL_LABELS = {t['label'] for t in TERMS if t['category'] == 'literal'}
+LITERAL_LABELS = sorted(LITERAL_LABELS)
 
 
 def phrase(span):
@@ -9,7 +13,7 @@ def phrase(span):
 
     return dict(
         value=REPLACE.get(value, value),
-        # relabel=CATEGORY.get(value),
+        relabel=span[0]._.label,
         start=span.start_char,
         end=span.end_char,
     )
@@ -22,7 +26,7 @@ PHRASE = {
             'label': 'phrase',
             'on_match': phrase,
             'patterns': [[
-                {'_': {'label': 'habit'}},
+                {'_': {'label': {'IN': LITERAL_LABELS}}},
             ]],
         },
     ]
