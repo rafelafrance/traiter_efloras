@@ -84,8 +84,9 @@ def format_text(row, tags=None, colors=None):
 
     if parts := row['traits'].get('part'):
         for part in parts:
-            cut_id = append_endpoints(
-                cuts, cut_id, part['start'], part['end'], 'bold')
+            if part['end']:
+                cut_id = append_endpoints(
+                    cuts, cut_id, part['start'], part['end'], 'bold')
 
     return insert_markup(text, cuts, tags)
 

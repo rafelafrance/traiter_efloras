@@ -2,7 +2,7 @@
 
 from ..pylib.terms import TERMS
 
-LABELS = ('seasonal', 'plant_sex', 'symmetry', 'temporal')
+LABELS = """ seasonal plant_sex symmetry life_span """.split()
 
 IS_DESCRIPTOR = {t['pattern'] for t in TERMS
                  if t['label'] in LABELS and t['category'] == 'descriptor'}

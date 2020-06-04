@@ -7,14 +7,15 @@ from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 from .plant_color import PLANT_COLOR
 from .plant_count import PLANT_COUNT
 from .plant_descriptor import PLANT_DESCRIPTOR
+from .plant_habit import PLANT_HABIT
 from .plant_part import PLANT_PART
 from .plant_shape import PLANT_SHAPE
 from .plant_size import PLANT_SIZE
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
-MATCHERS = (PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_PART,
-            PLANT_SHAPE, PLANT_SIZE)
+MATCHERS = (PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_HABIT,
+            PLANT_PART, PLANT_SHAPE, PLANT_SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -41,8 +42,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         traits = defaultdict(list)
 
-        for sent in doc.sents:
-            part = ''
+        for i, sent in enumerate(doc.sents):
+            part = 'plant' if i == 0 else ''
             augment = {}
             suffix_label = {'ok': False, 'label': '', 'data': {}}
 
@@ -81,8 +82,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                         suffix_label = {'ok': False, 'label': '', 'data': {}}
 
                 # Descriptors can occur anywhere and are not attached to any
-                # plant part
-                elif label == 'descriptor' and data.get('category'):
+                # plant part.
+                elif label in ('descriptor', 'habit') and data.get('category'):
                     name = data['category']
                     del data['category']
                     traits[name].append(data)
@@ -93,7 +94,6 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                 # A trait parse
                 elif data and part:
                     # Some traits are written like: with "2-8(-20) stamens"
-                    # TODO: Change the hardcoded "label in" to data driven
                     if suffix_label['ok'] and label in ('count', 'color'):
                         suffix_label['label'] = label
                         suffix_label['data'] = {**augment, **data}
