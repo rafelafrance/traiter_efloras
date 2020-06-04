@@ -12,6 +12,7 @@ def habit(span):
 
     return dict(
         value=REPLACE.get(value, value),
+        relabel=span[0]._.label,
         start=span.start_char,
         end=span.end_char,
     )
@@ -24,7 +25,7 @@ HABIT = {
             'label': 'habit',
             'on_match': habit,
             'patterns': [[
-                {'_': {'label': 'habit'}},
+                {'_': {'label': {'IN': HABIT_LABELS}}},
             ]],
         },
     ]

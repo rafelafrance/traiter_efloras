@@ -19,3 +19,28 @@ class TestHabit(unittest.TestCase):
              'plant_size': [{'start': 9, 'end': 17,
                              'length_high': 1.5, 'length_units': 'm'}]}
         )
+
+    def test_habit_02(self):
+        self.assertEqual(
+            MATCHER.parse('Stems often caespitose'),
+            {'part': [{'start': 0, 'end': 5, 'value': 'stem'}],
+             'habit_shape': [{'value': 'cespitose', 'start': 12, 'end': 22}]}
+        )
+
+    def test_habit_03(self):
+        self.assertEqual(
+            MATCHER.parse('Herbs perennial or subshrubs, epiphytic '
+                          'or epilithic.'),
+            {'woodiness': [{'value': 'herbaceous', 'start': 0, 'end': 5}],
+             'life_span': [{'value': 'perennial', 'start': 6, 'end': 15}],
+             'habit': [{'value': 'shrub', 'start': 19, 'end': 28}],
+             'habitat': [{'value': 'epiphytic', 'start': 30, 'end': 39},
+                         {'value': 'epilithic', 'start': 43, 'end': 52}]}
+        )
+
+    def test_habit_04(self):
+        self.assertEqual(
+            MATCHER.parse('leaf blade herbaceous.'),
+            {'part': [{'start': 0, 'end': 10, 'value': 'leaf'}],
+             'woodiness': [{'value': 'herbaceous', 'start': 11, 'end': 21}]}
+        )
