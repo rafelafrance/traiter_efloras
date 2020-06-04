@@ -7,7 +7,7 @@ from traiter.util import FLAGS  # pylint: disable=import-error
 
 import efloras.pylib.family_util as futil
 from efloras.matchers.matcher import Matcher
-from efloras.matchers.plant_part import PATTERN_RE
+from efloras.matchers.part import PATTERN_RE
 
 
 def efloras_reader(args, families):

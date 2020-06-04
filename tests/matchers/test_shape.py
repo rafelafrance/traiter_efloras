@@ -9,7 +9,7 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestPlantShape(unittest.TestCase):
+class TestShape(unittest.TestCase):
     """Test the plant color trait parser."""
 
     def test_plant_shape_01(self):

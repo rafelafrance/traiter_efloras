@@ -4,13 +4,13 @@ from collections import defaultdict
 
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
-from .plant_color import PLANT_COLOR
-from .plant_count import PLANT_COUNT
-from .plant_descriptor import PLANT_DESCRIPTOR
-from .plant_habit import PLANT_HABIT
-from .plant_part import PLANT_PART
-from .plant_shape import PLANT_SHAPE
-from .plant_size import PLANT_SIZE
+from .color import PLANT_COLOR
+from .count import PLANT_COUNT
+from .descriptor import PLANT_DESCRIPTOR
+from .habit import PLANT_HABIT
+from .part import PLANT_PART
+from .shape import PLANT_SHAPE
+from .size import PLANT_SIZE
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 

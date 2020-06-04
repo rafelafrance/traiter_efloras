@@ -9,7 +9,7 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestPlantCount(unittest.TestCase):
+class TestCount(unittest.TestCase):
     """Test plant count trait matcher."""
 
     def test_plant_count_01(self):

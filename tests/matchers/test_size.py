@@ -9,7 +9,7 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestPlantSize(unittest.TestCase):
+class TestSize(unittest.TestCase):
     """Test plant size trait parsers."""
 
     def test_plant_size_01(self):

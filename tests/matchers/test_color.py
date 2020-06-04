@@ -9,7 +9,7 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestPlantColor(unittest.TestCase):
+class TestColor(unittest.TestCase):
     """Test the plant color trait parser."""
 
     def test_plant_color_01(self):
@@ -35,8 +35,7 @@ class TestPlantColor(unittest.TestCase):
             {'part': [{'value': 'hypanthium', 'start': 0, 'end': 10}],
              'hypanthium_color': [{'value': 'yellow', 'start': 11, 'end': 24},
                                   {'value': 'yellow', 'start': 28, 'end': 42},
-                                  {'value': 'yellow', 'start': 46,
-                                   'end': 59}]}
+                                  {'value': 'yellow', 'start': 46, 'end': 59}]}
         )
 
     def test_plant_color_03(self):
@@ -44,9 +43,7 @@ class TestPlantColor(unittest.TestCase):
             MATCHER.parse('sepals erect, green- or red-tipped'),
             {'part': [{'value': 'sepal', 'start': 0, 'end': 6}],
              'sepal_color': [{'value': 'green', 'start': 14, 'end': 20},
-                             {'value': 'red-tipped',
-                              'start': 24, 'end': 34}]}
-
+                             {'value': 'red-tipped', 'start': 24, 'end': 34}]}
         )
 
     def test_plant_color_04(self):
@@ -101,8 +98,7 @@ class TestPlantColor(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('calyx yellow'),
             {'part': [{'value': 'calyx', 'start': 0, 'end': 5}],
-             'calyx_color': [{'value': 'yellow',
-                              'start': 6, 'end': 12}]}
+             'calyx_color': [{'value': 'yellow', 'start': 6, 'end': 12}]}
         )
 
     def test_plant_color_08(self):
@@ -123,16 +119,14 @@ class TestPlantColor(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('hypanthium yellow'),
             {'part': [{'value': 'hypanthium', 'start': 0, 'end': 10}],
-             'hypanthium_color': [{'value': 'yellow',
-                                   'start': 11, 'end': 17}]}
+             'hypanthium_color': [{'value': 'yellow', 'start': 11, 'end': 17}]}
         )
 
     def test_plant_color_11(self):
         self.assertEqual(
             MATCHER.parse('petal pale sulfur-yellow'),
             {'part': [{'value': 'petal', 'start': 0, 'end': 5}],
-             'petal_color': [{'value': 'yellow',
-                              'start': 11, 'end': 24}]}
+             'petal_color': [{'value': 'yellow', 'start': 11, 'end': 24}]}
         )
 
     def test_plant_color_12(self):

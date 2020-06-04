@@ -7,7 +7,7 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestPlantHabit(unittest.TestCase):
+class TestHabit(unittest.TestCase):
     """Test the plant descriptor trait parser."""
 
     def test_plant_habit_01(self):
