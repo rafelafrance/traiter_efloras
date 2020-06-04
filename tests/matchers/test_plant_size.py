@@ -189,7 +189,13 @@ class TestPlantSize(unittest.TestCase):
     def test_plant_size_16(self):
         self.assertEqual(
             MATCHER.parse('(3–)5-lobed, 6–20(–30) × 6–25 cm,'),
-            {}
+            {'plant_size': [{'start': 13, 'end': 32,
+                             'length_low': 6.0,
+                             'length_high': 20.0,
+                             'length_max': 30.0,
+                             'width_low': 6.0,
+                             'width_high': 25.0,
+                             'width_units': 'cm'}]}
         )
 
     def test_plant_size_17(self):
