@@ -41,8 +41,8 @@ def html_writer(args, rows):
     template = env.get_template('html_writer.html').render(
         now=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
         rows=rows)
-    args.output_file.write(template)
-    args.output_file.close()
+    args.html_file.write(template)
+    args.html_file.close()
 
 
 def format_traits(row, colors):

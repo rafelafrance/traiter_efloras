@@ -5,15 +5,12 @@
 import argparse
 import sys
 import textwrap
+from copy import deepcopy
 
 import efloras.pylib.family_util as futil
 from efloras.readers.efloras_reader import efloras_reader
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.html_writer import html_writer
-
-OUTPUT_FORMATS = {
-    'csv': csv_writer,
-    'html': html_writer}
 
 
 def main(args):
@@ -28,7 +25,14 @@ def main(args):
         sys.exit(1)
 
     rows = efloras_reader(args, families)
-    OUTPUT_FORMATS[args.output_format](args, rows)
+
+    if args.csv_file:
+        copied = deepcopy(rows)
+        csv_writer(args, copied)
+
+    if args.html_file:
+        copied = deepcopy(rows)
+        html_writer(args, copied)
 
 
 def parse_args():
@@ -56,12 +60,12 @@ def parse_args():
         help="""Which flora ID to extract. Default 1.""")
 
     arg_parser.add_argument(
-        '--output-file', '-o', type=argparse.FileType('w'), default=sys.stdout,
-        help="""Output the results to this file. Defaults to stdout.""")
+        '--html-file', '-H', type=argparse.FileType('w'),
+        help="""Output the results to this HTML file.""")
 
     arg_parser.add_argument(
-        '--output-format', '-O', default='csv', choices=OUTPUT_FORMATS.keys(),
-        help="""Output the result in this format. The default is "csv".""")
+        '--csv-file', '-C', type=argparse.FileType('w'),
+        help="""Output the results to this CSV file.""")
 
     arg_parser.add_argument(
         '--list-families', '-l', action='store_true',
@@ -78,6 +82,9 @@ def parse_args():
         args.flora_id = [int(i) for i in args.flora_id]
     else:
         args.flora_id = [1]
+
+    if not (args.csv_file or args.html_file):
+        setattr(args, 'csv_file', sys.stdout)
 
     return args
 

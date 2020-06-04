@@ -15,7 +15,7 @@ def csv_writer(args, rows):
         build_columns(row)
 
     df = pd.DataFrame(rows)
-    df.to_csv(args.output_file, index=False)
+    df.to_csv(args.csv_file, index=False)
 
 
 def build_columns(row):
@@ -36,8 +36,8 @@ def build_columns(row):
         for header, value_list in columns.items():
             is_vocab = [len(v) == 1 and v.get('value') for v in value_list]
             if all(is_vocab):
-                value = {v['value']: 1 for v in value_list}
-                row[header] = ', '.join(sorted(value.keys()))
+                value = {v['value'] for v in value_list}
+                row[header] = ', '.join(sorted(value))
             elif header.endswith('_size'):
                 extract_sizes(row, header, value_list)
             else:
