@@ -24,7 +24,7 @@ def html_writer(args, rows):
     """Output the data frame."""
     tags = build_tags()
 
-    rows = sorted(rows, key=lambda r: (r['family'], r['taxon']))
+    rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
     colors = {label for r in rows for label in r['traits']}
     colors -= {'part'}

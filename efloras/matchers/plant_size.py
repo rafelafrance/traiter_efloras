@@ -83,7 +83,7 @@ def scan_tokens(span):
         elif label == 'dimension':
             dims[idx]['dimension'] = REPLACE[token.lower_]
 
-        elif label in ('sex_enclosed', 'plant_sex'):
+        elif label in ('sex_enclosed', 'sex'):
             value = token.lower_
             value = re.sub(r'\W+', '', value)
             dims[idx]['sex'] = value
@@ -98,7 +98,7 @@ def scan_tokens(span):
     return dims
 
 
-_FOLLOW = """ dimension sex_enclosed plant_sex """.split()
+_FOLLOW = """ dimension sex_enclosed sex """.split()
 _UNCERTAIN = """ quest quest_enclosed """.split()
 
 PLANT_SIZE = {
@@ -107,7 +107,7 @@ PLANT_SIZE = {
         **RANGE_GROUPS,
         'sex_enclosed': [[
             {'_': {'label': 'open'}},
-            {'_': {'label': 'plant_sex'}},
+            {'_': {'label': 'sex'}},
             {'_': {'label': 'close'}},
         ]],
         'quest_enclosed': [[

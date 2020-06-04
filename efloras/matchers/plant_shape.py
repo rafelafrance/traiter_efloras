@@ -9,7 +9,7 @@ def shape(span):
              if (r := REPLACE.get(t.text, t.text)) and t._.label == 'shape'}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    loc = [t.lower_ for t in span if t._.label == 'part_location']
+    loc = [t.lower_ for t in span if t._.label == 'location']
     trait = dict(
         value=value,
         start=span.start_char,
@@ -29,7 +29,7 @@ PLANT_SHAPE = {
             'patterns': [
                 [
                     {'_': {'label': {'IN': [
-                        'shape', 'shape_leader', 'part_location']}},
+                        'shape', 'shape_leader', 'location']}},
                      'OP': '*'},
                     {'_': {'label': 'dash'}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},

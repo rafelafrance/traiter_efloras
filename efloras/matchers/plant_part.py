@@ -16,7 +16,7 @@ PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)
 KEYS = set(PATTERNS)
 
 SEX = {t['pattern']: t['replace'] for t in TERMS
-       if t['label'] in ('plant_sex', 'plant_sex2')}
+       if t['label'] in ('sex', 'plant_sex2')}
 
 
 def part(span):
@@ -31,9 +31,9 @@ def part(span):
         value = token.lower_
         if label == 'plant_part':
             data['value'] = REPLACE.get(value, '')
-        elif label == 'plant_sex':
+        elif label == 'sex':
             data['sex'] = SEX[value]
-        elif label == 'part_location':
+        elif label == 'location':
             data['location'] = value
 
     return data
@@ -46,8 +46,7 @@ PLANT_PART = {
             'label': 'part',
             'on_match': part,
             'patterns': [[
-                {'_': {'label': {'IN': [
-                    'plant_sex', 'part_location']}}, 'OP': '*'},
+                {'_': {'label': {'IN': ['sex', 'location']}}, 'OP': '*'},
                 {'_': {'label': 'plant_part'}}
             ]],
         },

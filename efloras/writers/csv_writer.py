@@ -9,6 +9,8 @@ from ..pylib.util import convert
 
 def csv_writer(args, rows):
     """Output the data frame."""
+    rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
+
     for row in rows:
         row['raw_traits'] = dict(row['traits'])
         del row['traits']

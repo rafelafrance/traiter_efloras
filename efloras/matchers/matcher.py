@@ -81,8 +81,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                     if suffix_label['ok']:
                         suffix_label = {'ok': False, 'label': '', 'data': {}}
 
-                # Descriptors can occur anywhere and are not attached to any
-                # plant part.
+                # Descriptors and habits can occur anywhere and are not
+                # attached to any plant part.
                 elif label in ('descriptor', 'habit') and data.get('category'):
                     name = data['category']
                     del data['category']
