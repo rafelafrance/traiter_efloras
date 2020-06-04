@@ -101,7 +101,7 @@ def scan_tokens(span):
 _FOLLOW = """ dimension sex_enclosed sex """.split()
 _UNCERTAIN = """ quest quest_enclosed """.split()
 
-PLANT_SIZE = {
+SIZE = {
     'name': 'size',
     'groupers': {
         **RANGE_GROUPS,

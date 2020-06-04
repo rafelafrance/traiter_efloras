@@ -20,7 +20,7 @@ def shape(span):
     return trait
 
 
-PLANT_SHAPE = {
+SHAPE = {
     'name': 'shape',
     'matchers': [
         {

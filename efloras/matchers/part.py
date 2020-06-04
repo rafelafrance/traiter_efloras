@@ -6,17 +6,14 @@ from traiter.util import FLAGS  # pylint: disable=import-error
 
 from ..pylib.terms import REPLACE, TERMS
 
-PARTS = [t for t in TERMS if t['label'] == 'plant_part']
+_PATTERNS = [t for t in TERMS if t['label'] == 'plant_part']
+_PATTERNS = sorted([t['pattern'] for t in _PATTERNS], key=len, reverse=True)
 
-PATTERNS = sorted([t['pattern'] for t in PARTS], key=len, reverse=True)
-
-PATTERN_RE = '|'.join(PATTERNS)
+PATTERN_RE = '|'.join(_PATTERNS)
 PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)
 
-KEYS = set(PATTERNS)
-
-SEX = {t['pattern']: t['replace'] for t in TERMS
-       if t['label'] in ('sex', 'plant_sex2')}
+_SEX = {t['pattern']: t['replace'] for t in TERMS
+        if t['label'] in ('sex', 'plant_sex2')}
 
 
 def part(span):
@@ -30,16 +27,16 @@ def part(span):
         label = token._.label
         value = token.lower_
         if label == 'plant_part':
-            data['value'] = REPLACE.get(value, '')
+            data['value'] = REPLACE.get(value, value)
         elif label == 'sex':
-            data['sex'] = SEX[value]
+            data['sex'] = _SEX[value]
         elif label == 'location':
             data['location'] = value
 
     return data
 
 
-PLANT_PART = {
+PART = {
     'name': 'part',
     'matchers': [
         {

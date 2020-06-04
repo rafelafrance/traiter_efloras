@@ -1,28 +1,26 @@
-"""Plant habit snippets."""
+"""Match unadorned phrases attached to a plant part."""
 
-from ..pylib.terms import REPLACE, TERMS
-
-HABIT_LABELS = {t['label'] for t in TERMS if t['category'] == 'habit'}
-HABIT_LABELS = sorted(HABIT_LABELS)
+from ..pylib.terms import REPLACE
 
 
-def habit(span):
+def phrase(span):
     """Enrich the match."""
     value = span.lower_
 
     return dict(
         value=REPLACE.get(value, value),
+        # relabel=CATEGORY.get(value),
         start=span.start_char,
         end=span.end_char,
     )
 
 
-HABIT = {
-    'name': 'habit',
+PHRASE = {
+    'name': 'phrase',
     'matchers': [
         {
-            'label': 'habit',
-            'on_match': habit,
+            'label': 'phrase',
+            'on_match': phrase,
             'patterns': [[
                 {'_': {'label': 'habit'}},
             ]],

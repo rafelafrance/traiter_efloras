@@ -4,18 +4,18 @@ from collections import defaultdict
 
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
-from .color import PLANT_COLOR
-from .count import PLANT_COUNT
-from .descriptor import PLANT_DESCRIPTOR
-from .habit import PLANT_HABIT
-from .part import PLANT_PART
-from .shape import PLANT_SHAPE
-from .size import PLANT_SIZE
+from .color import COLOR
+from .count import COUNT
+from .descriptor import DESCRIPTOR, DESCRIPTOR_LABELS
+from .habit import HABIT, HABIT_LABELS
+from .phrase import PHRASE
+from .part import PART
+from .shape import SHAPE
+from .size import SIZE
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
-MATCHERS = (PLANT_COLOR, PLANT_COUNT, PLANT_DESCRIPTOR, PLANT_HABIT,
-            PLANT_PART, PLANT_SHAPE, PLANT_SIZE)
+MATCHERS = (COLOR, COUNT, DESCRIPTOR, HABIT, PHRASE, PART, SHAPE, SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -23,6 +23,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
     def __init__(self):
         super().__init__(NLP)
+
+        self.plant_wide_labels = set(DESCRIPTOR_LABELS + HABIT_LABELS)
 
         # Process the matchers
         trait_patterns = []
@@ -50,6 +52,9 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
             for token in sent:
                 label = token._.label
                 data = token._.data
+
+                if data.get('relabel'):
+                    del data['relabel']
 
                 if label == 'part':
                     part = data['value']
@@ -83,10 +88,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
                 # Descriptors and habits can occur anywhere and are not
                 # attached to any plant part.
-                elif label in ('descriptor', 'habit') and data.get('category'):
-                    name = data['category']
-                    del data['category']
-                    traits[name].append(data)
+                elif label in self.plant_wide_labels:
+                    traits[label].append(data)
 
                 elif label == 'suffix_label':
                     suffix_label = {'ok': True, 'label': '', 'data': {}}

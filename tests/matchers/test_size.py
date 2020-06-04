@@ -12,7 +12,7 @@ MATCHER = Matcher()
 class TestSize(unittest.TestCase):
     """Test plant size trait parsers."""
 
-    def test_plant_size_01(self):
+    def test_size_01(self):
         self.assertEqual(
             MATCHER.parse('Leaf (12-)23-34 × 45-56 cm'),
             {'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
@@ -25,13 +25,13 @@ class TestSize(unittest.TestCase):
                             'width_units': 'cm'}]}
         )
 
-    def test_plant_size_02(self):
+    def test_size_02(self):
         self.assertEqual(
             MATCHER.parse('leaf (12-)23-34 × 45-56'),
             {'part': [{'value': 'leaf', 'start': 0, 'end': 4}]}
         )
 
-    def test_plant_size_03(self):
+    def test_size_03(self):
         self.assertEqual(
             MATCHER.parse('blade 1.5–5(–7) cm'),
             {'part': [{'start': 0, 'end': 5, 'value': 'leaf'}],
@@ -42,13 +42,13 @@ class TestSize(unittest.TestCase):
                             'length_units': 'cm'}]}
         )
 
-    def test_plant_size_04(self):
+    def test_size_04(self):
         self.assertEqual(
             MATCHER.parse('leaf shallowly to deeply 5–7-lobed'),
             {'part': [{'value': 'leaf', 'start': 0, 'end': 4}]}
         )
 
-    def test_plant_size_05(self):
+    def test_size_05(self):
         self.assertEqual(
             MATCHER.parse('leaf 4–10 cm wide'),
             {'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
@@ -58,14 +58,14 @@ class TestSize(unittest.TestCase):
                             'width_units': 'cm'}]}
         )
 
-    def test_plant_size_06(self):
+    def test_size_06(self):
         self.assertEqual(
             MATCHER.parse('leaf sinuses 1/5–1/4 to base'),
             {'part': [{'start': 0, 'end': 4, 'value': 'leaf'},
                       {'start': 5, 'end': 12, 'value': 'sinus'}]}
         )
 
-    def test_plant_size_07(self):
+    def test_size_07(self):
         self.assertEqual(
             MATCHER.parse('petiolules 2–5 mm'),
             {'part': [{'start': 0, 'end': 10, 'value': 'petiole'}],
@@ -75,7 +75,7 @@ class TestSize(unittest.TestCase):
                                'length_units': 'mm'}]}
         )
 
-    def test_plant_size_08(self):
+    def test_size_08(self):
         self.assertEqual(
             MATCHER.parse(
                 'petiolules 2–5 mm; coarsely serrate; petioles 16–28 mm.'),
@@ -90,7 +90,7 @@ class TestSize(unittest.TestCase):
 
         )
 
-    def test_plant_size_09(self):
+    def test_size_09(self):
         self.assertEqual(
             MATCHER.parse('Leaves: petiole 2–15 cm;'),
             {'part': [{'start': 0, 'end': 6, 'value': 'leaf'},
@@ -100,7 +100,7 @@ class TestSize(unittest.TestCase):
                                'length_units': 'cm'}]}
         )
 
-    def test_plant_size_10(self):
+    def test_size_10(self):
         self.assertEqual(
             MATCHER.parse(
                 'petiole [5–]7–25[–32] mm, glabrous,'),
@@ -113,7 +113,7 @@ class TestSize(unittest.TestCase):
                                'length_units': 'mm'}]}
         )
 
-    def test_plant_size_11(self):
+    def test_size_11(self):
         self.assertEqual(
             MATCHER.parse('leaf 2–4 cm × 2–10 mm'),
             {'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
@@ -126,7 +126,7 @@ class TestSize(unittest.TestCase):
                             'width_units': 'mm'}]}
         )
 
-    def test_plant_size_12(self):
+    def test_size_12(self):
         self.assertEqual(
             MATCHER.parse(
                 'leaf deeply to shallowly lobed, 4–5(–7) cm wide,'),
@@ -138,7 +138,7 @@ class TestSize(unittest.TestCase):
                             'width_units': 'cm'}]}
         )
 
-    def test_plant_size_13(self):
+    def test_size_13(self):
         self.assertEqual(
             MATCHER.parse(
                 'Leaves 3-foliolate, lateral pair of leaflets '
@@ -151,7 +151,7 @@ class TestSize(unittest.TestCase):
                                'length_units': 'mm'}]}
         )
 
-    def test_plant_size_14(self):
+    def test_size_14(self):
         self.assertEqual(
             MATCHER.parse(
                 'terminal leaflet 3–5 cm, blade '
@@ -171,7 +171,7 @@ class TestSize(unittest.TestCase):
 
         )
 
-    def test_plant_size_15(self):
+    def test_size_15(self):
         self.assertEqual(
             MATCHER.parse('leaf shallowly 3–5(–7)-lobed, '
                           '5–25 × (8–)10–25(–30) cm,'),
@@ -186,7 +186,7 @@ class TestSize(unittest.TestCase):
                             'width_units': 'cm'}]}
         )
 
-    def test_plant_size_16(self):
+    def test_size_16(self):
         self.assertEqual(
             MATCHER.parse('(3–)5-lobed, 6–20(–30) × 6–25 cm,'),
             {'plant_size': [{'start': 13, 'end': 32,
@@ -198,7 +198,7 @@ class TestSize(unittest.TestCase):
                              'width_units': 'cm'}]}
         )
 
-    def test_plant_size_17(self):
+    def test_size_17(self):
         self.assertEqual(
             MATCHER.parse('petiole to 11 cm;'),
             {'part': [{'start': 0, 'end': 7, 'value': 'petiole'}],
@@ -207,7 +207,7 @@ class TestSize(unittest.TestCase):
                                'length_units': 'cm'}]}
         )
 
-    def test_plant_size_18(self):
+    def test_size_18(self):
         self.assertEqual(
             MATCHER.parse(
                 'petals (1–)3–10(–12) mm (pistillate) '
@@ -228,7 +228,7 @@ class TestSize(unittest.TestCase):
                              'sex': 'staminate'}]}
         )
 
-    def test_plant_size_19(self):
+    def test_size_19(self):
         self.assertEqual(
             MATCHER.parse(
                 'Flowers 5–10 cm diam.; hypanthium 4–8 mm,'),
@@ -244,7 +244,7 @@ class TestSize(unittest.TestCase):
                                   'length_units': 'mm'}]}
         )
 
-    def test_plant_size_20(self):
+    def test_size_20(self):
         self.assertEqual(
             MATCHER.parse(
                 'Flowers 5--16 × 4--12 cm'),
@@ -255,7 +255,7 @@ class TestSize(unittest.TestCase):
                               'width_units': 'cm'}]}
         )
 
-    def test_plant_size_21(self):
+    def test_size_21(self):
         self.assertEqual(
             MATCHER.parse(
                 'Inflorescences formed season before flowering and exposed '
@@ -272,7 +272,7 @@ class TestSize(unittest.TestCase):
                                       'length_units': 'cm'}]}
         )
 
-    def test_plant_size_22(self):
+    def test_size_22(self):
         self.assertEqual(
             MATCHER.parse(
                 'Leaflets petiolulate; blade ovate, 8-15 × 4-15 cm,'),
@@ -285,7 +285,7 @@ class TestSize(unittest.TestCase):
                             'width_units': 'cm'}]}
         )
 
-    def test_plant_size_23(self):
+    def test_size_23(self):
         self.assertEqual(
             MATCHER.parse('calyx, 8-10 mm, 3-4 mm high,'),
             {'part': [{'start': 0, 'end': 5, 'value': 'calyx'}],

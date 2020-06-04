@@ -5,7 +5,7 @@ from traiter.util import to_positive_int  # pylint: disable=import-error
 from .shared import RANGE_GROUPS
 from ..pylib.terms import REPLACE
 
-NO_COUNT = """ cross length_units slash dash no_count """.split()
+_NO_COUNT = """ cross length_units slash dash no_count """.split()
 
 
 def count(span):
@@ -32,13 +32,13 @@ def count(span):
         if label == 'per_count':
             data['as'] = REPLACE.get(token.lower_, token.lower_)
 
-        elif label in NO_COUNT:
+        elif label in _NO_COUNT:
             return {}
 
     return data
 
 
-PLANT_COUNT = {
+COUNT = {
     'name': 'count',
     'groupers': RANGE_GROUPS,
     'matchers': [
@@ -50,7 +50,7 @@ PLANT_COUNT = {
                     {'_': {'label': 'low'}},
                     {'LOWER': 'or'},
                     {'_': {'label': 'low'}},
-                    {'_': {'label': {'IN': NO_COUNT}}, 'OP': '?'},
+                    {'_': {'label': {'IN': _NO_COUNT}}, 'OP': '?'},
                     {'_': {'label': 'per_count'}, 'OP': '?'},
                 ],
                 [
@@ -60,7 +60,7 @@ PLANT_COUNT = {
                     {'_': {'label': 'low'}},
                     {'_': {'label': 'high'}, 'OP': '?'},
                     {'_': {'label': 'max'}, 'OP': '?'},
-                    {'_': {'label': {'IN': NO_COUNT}}, 'OP': '?'},
+                    {'_': {'label': {'IN': _NO_COUNT}}, 'OP': '?'},
                     {'_': {'label': 'per_count'}, 'OP': '?'},
                     {'_': {'label': {'IN': ['min', 'low', 'high', 'max']}},
                      'OP': '?'},

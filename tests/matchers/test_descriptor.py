@@ -1,5 +1,7 @@
 """Test the plant descriptor matcher."""
 
+# pylint: disable=missing-function-docstring
+
 import unittest
 
 from efloras.matchers.matcher import Matcher
@@ -10,8 +12,7 @@ MATCHER = Matcher()
 class TestDescriptor(unittest.TestCase):
     """Test the plant descriptor trait parser."""
 
-    def test_plant_descriptor_01(self):
-        """It parses a compound sex notation."""
+    def test_descriptor_01(self):
         self.assertEqual(
             MATCHER.parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
@@ -25,8 +26,7 @@ class TestDescriptor(unittest.TestCase):
                       {'start': 59, 'end': 65, 'value': 'plant'}]}
         )
 
-    def test_plant_descriptor_02(self):
-        """It parses a symmetry descriptor."""
+    def test_descriptor_02(self):
         self.assertEqual(
             MATCHER.parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),

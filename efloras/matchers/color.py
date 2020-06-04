@@ -16,7 +16,7 @@ def color(span):
     )
 
 
-PLANT_COLOR = {
+COLOR = {
     'name': 'color',
     'matchers': [
         {
