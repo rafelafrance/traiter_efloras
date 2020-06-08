@@ -1,4 +1,4 @@
-"""Common color snippets."""
+"""Common size snippets."""
 
 import re
 

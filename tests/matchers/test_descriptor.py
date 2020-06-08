@@ -17,11 +17,11 @@ class TestDescriptor(unittest.TestCase):
             MATCHER.parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
-            {'reproduction': [{'value': 'bisexual', 'start': 0, 'end': 8},
-                              {'value': 'unisexual', 'start': 10, 'end': 19},
-                              {'value': 'gynodioecious', 'start': 41,
-                               'end': 54},
-                              {'value': 'dioecious', 'start': 66, 'end': 75}],
+            {'plant_reproduction': [
+                {'value': 'bisexual', 'start': 0, 'end': 8},
+                {'value': 'unisexual', 'start': 10, 'end': 19},
+                {'value': 'gynodioecious', 'start': 41, 'end': 54},
+                {'value': 'dioecious', 'start': 66, 'end': 75}],
              'part': [{'start': 24, 'end': 30, 'value': 'plant'},
                       {'start': 59, 'end': 65, 'value': 'plant'}]}
         )
@@ -31,6 +31,7 @@ class TestDescriptor(unittest.TestCase):
             MATCHER.parse(
                 'flowers usually actinomorphic, rarely zygomorphic;'),
             {'part': [{'start': 0, 'end': 7, 'value': 'flower'}],
-             'symmetry': [{'value': 'actinomorphic', 'start': 16, 'end': 29},
-                          {'value': 'zygomorphic', 'start': 38, 'end': 49}]}
+             'plant_symmetry': [
+                 {'value': 'actinomorphic', 'start': 16, 'end': 29},
+                 {'value': 'zygomorphic', 'start': 38, 'end': 49}]}
         )

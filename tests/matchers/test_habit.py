@@ -15,7 +15,7 @@ class TestHabit(unittest.TestCase):
     def test_habit_01(self):
         self.assertEqual(
             MATCHER.parse('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
-            {'habit': [{'value': 'shrub', 'start': 0, 'end': 6}],
+            {'plant_habit': [{'value': 'shrub', 'start': 0, 'end': 6}],
              'plant_size': [{'start': 9, 'end': 17,
                              'length_high': 1.5, 'length_units': 'm'}]}
         )
@@ -24,23 +24,29 @@ class TestHabit(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('Stems often caespitose'),
             {'part': [{'start': 0, 'end': 5, 'value': 'stem'}],
-             'habit_shape': [{'value': 'cespitose', 'start': 12, 'end': 22}]}
+             'plant_habit_shape': [
+                 {'value': 'cespitose', 'start': 12, 'end': 22}]}
         )
 
     def test_habit_03(self):
         self.assertEqual(
             MATCHER.parse('Herbs perennial or subshrubs, epiphytic '
                           'or epilithic.'),
-            {'woodiness': [{'value': 'herbaceous', 'start': 0, 'end': 5}],
-             'life_span': [{'value': 'perennial', 'start': 6, 'end': 15}],
-             'habit': [{'value': 'shrub', 'start': 19, 'end': 28}],
-             'habitat': [{'value': 'epiphytic', 'start': 30, 'end': 39},
-                         {'value': 'epilithic', 'start': 43, 'end': 52}]}
+            {
+                'plant_woodiness': [
+                    {'value': 'herbaceous', 'start': 0, 'end': 5}],
+                'plant_life_span': [
+                    {'value': 'perennial', 'start': 6, 'end': 15}],
+                'plant_habit': [{'value': 'shrub', 'start': 19, 'end': 28}],
+                'plant_habitat': [
+                    {'value': 'epiphytic', 'start': 30, 'end': 39},
+                    {'value': 'epilithic', 'start': 43, 'end': 52}]}
         )
 
     def test_habit_04(self):
         self.assertEqual(
             MATCHER.parse('leaf blade herbaceous.'),
             {'part': [{'start': 0, 'end': 10, 'value': 'leaf'}],
-             'woodiness': [{'value': 'herbaceous', 'start': 11, 'end': 21}]}
+             'plant_woodiness': [
+                 {'value': 'herbaceous', 'start': 11, 'end': 21}]}
         )

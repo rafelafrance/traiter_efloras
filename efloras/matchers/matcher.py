@@ -89,6 +89,7 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                 # Descriptors and habits can occur anywhere and are not
                 # attached to any plant part.
                 elif label in self.plant_wide_labels:
+                    label = f'plant_{label}'
                     traits[label].append(data)
 
                 elif label == 'suffix_label':

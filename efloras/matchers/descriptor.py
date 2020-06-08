@@ -1,4 +1,4 @@
-"""Common color snippets."""
+"""Common descriptors snippets, plant-wide traits (words or phrases)."""
 
 from ..pylib.terms import TERMS
 

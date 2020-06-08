@@ -1,4 +1,4 @@
-"""Common color snippets."""
+"""Common count snippets."""
 
 from traiter.util import to_positive_int  # pylint: disable=import-error
 
