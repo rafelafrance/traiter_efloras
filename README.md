@@ -40,9 +40,9 @@ I should be able to extract:
     - length_low = 1.5, length_high = 7.0, width_low = 0.5, width_high = 3.0, width_units: cm
     - sex = female, length_high = 1.5, length_units = cm
 - petiole_size: length_high = 1.0, length_units = cm
+- plant_reproduction: monoecious
+- plant_seasonal: evergreen
 - plant_size: height_low = 1.0, height_high = 3.0, height_units = m
-- reproduction: monoecious
-- seasonal: evergreen
 - stamen_count: low = 2, high = 6
 - stigma_color: red
 - stigma_count: 2
