@@ -268,15 +268,15 @@ class TestSize(unittest.TestCase):
                 'Inflorescences formed season before flowering and exposed '
                 'during winter; staminate catkins in 1 or more clusters '
                 'of 2--5, 3--8.5 cm,'),
-            {'part': [{'start': 0, 'end': 14, 'value': 'inflorescences'}],
-             'inflorescences_count': [{'start': 94, 'end': 95, 'low': 1},
-                                      {'start': 116, 'end': 120, 'low': 2,
-                                       'high': 5}],
-             'inflorescences_size': [{'start': 122,
-                                      'end': 131,
-                                      'length_low': 3.0,
-                                      'length_high': 8.5,
-                                      'length_units': 'cm'}]}
+            {'part': [{'start': 0, 'end': 14, 'value': 'inflorescence'}],
+             'inflorescence_count': [{'start': 94, 'end': 95, 'low': 1},
+                                     {'start': 116, 'end': 120, 'low': 2,
+                                      'high': 5}],
+             'inflorescence_size': [{'start': 122,
+                                     'end': 131,
+                                     'length_low': 3.0,
+                                     'length_high': 8.5,
+                                     'length_units': 'cm'}]}
         )
 
     def test_size_22(self):
