@@ -45,7 +45,8 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('petals 5, connate 1/2–2/3 length'),
             {'part': [{'start': 0, 'end': 6, 'value': 'petal'}],
-             'petal_count': [{'start': 7, 'end': 8, 'low': 5}]}
+             'petal_count': [{'start': 7, 'end': 8, 'low': 5}],
+             'petal_shape': [{'value': 'connate', 'start': 10, 'end': 17}]}
         )
 
     def test_count_05(self):

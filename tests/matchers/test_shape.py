@@ -10,7 +10,7 @@ MATCHER = Matcher()
 
 
 class TestShape(unittest.TestCase):
-    """Test the plant color trait parser."""
+    """Test the plant shape trait parser."""
 
     def test_shape_01(self):
         self.assertEqual(

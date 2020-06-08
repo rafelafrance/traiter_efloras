@@ -29,8 +29,7 @@ SHAPE = {
             'patterns': [
                 [
                     {'_': {'label': {'IN': [
-                        'shape', 'shape_leader', 'location']}},
-                     'OP': '*'},
+                        'shape', 'shape_leader', 'location']}}, 'OP': '*'},
                     {'_': {'label': 'dash'}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},
                     {'_': {'label': 'dash'}, 'OP': '?'},

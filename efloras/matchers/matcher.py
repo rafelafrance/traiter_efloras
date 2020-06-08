@@ -8,14 +8,16 @@ from .color import COLOR
 from .count import COUNT
 from .descriptor import DESCRIPTOR, DESCRIPTOR_LABELS
 from .habit import HABIT, HABIT_LABELS
+from .margin import MARGIN_SHAPE
+from .part import BAN, PART
 from .phrase import PHRASE
-from .part import PART
 from .shape import SHAPE
 from .size import SIZE
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
-MATCHERS = (COLOR, COUNT, DESCRIPTOR, HABIT, PHRASE, PART, SHAPE, SIZE)
+MATCHERS = (
+    COLOR, COUNT, DESCRIPTOR, HABIT, MARGIN_SHAPE, PHRASE, PART, SHAPE, SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -89,8 +91,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                 # Descriptors and habits can occur anywhere and are not
                 # attached to any plant part.
                 elif label in self.plant_wide_labels:
-                    label = f'plant_{label}'
-                    traits[label].append(data)
+                    if label := self._format_label('plant', label):
+                        traits[label].append(data)
 
                 elif label == 'suffix_label':
                     suffix_label = {'ok': True, 'label': '', 'data': {}}
@@ -102,12 +104,18 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                         suffix_label['label'] = label
                         suffix_label['data'] = {**augment, **data}
                     else:
-                        label = f'{part}_{label}'
-                        data = {**augment, **data}
-                        traits[label].append(data)
+                        if label := self._format_label(part, label):
+                            data = {**augment, **data}
+                            traits[label].append(data)
                         suffix_label = {'ok': False, 'label': '', 'data': {}}
 
         # from pprint import pp
         # pp(dict(traits))
 
         return traits
+
+    @staticmethod
+    def _format_label(part, label):
+        if label in BAN.get(part, set()):
+            return None
+        return label if part == label.split('_')[0] else f'{part}_{label}'

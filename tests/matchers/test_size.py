@@ -82,11 +82,15 @@ class TestSize(unittest.TestCase):
             {'part': [{'start': 0, 'end': 10, 'value': 'petiole'},
                       {'start': 37, 'end': 45, 'value': 'petiole'}],
              'petiole_size': [{'start': 11, 'end': 17,
-                               'length_low': 2.0, 'length_high': 5.0,
+                               'length_low': 2.0,
+                               'length_high': 5.0,
                                'length_units': 'mm'},
                               {'start': 46, 'end': 54,
-                               'length_low': 16.0, 'length_high': 28.0,
-                               'length_units': 'mm'}]}
+                               'length_low': 16.0,
+                               'length_high': 28.0,
+                               'length_units': 'mm'}],
+             'petiole_margin_shape': [
+                 {'start': 28, 'end': 35, 'value': 'serrate'}]}
 
         )
 
