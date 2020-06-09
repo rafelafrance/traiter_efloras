@@ -3,13 +3,14 @@
 from collections import defaultdict
 
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
-from traiter.util import Step                   # pylint: disable=import-error
+from traiter.util import Step  # pylint: disable=import-error
 
 from .attach import ATTACH
 from .color import COLOR
 from .count import COUNT
 from .descriptor import DESCRIPTOR
 from .habit import HABIT
+from .lobe import LOBE
 from .margin import MARGIN_SHAPE
 from .part import PART
 from .phrase import PHRASE
@@ -19,7 +20,8 @@ from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
 MATCHERS = (
-    COLOR, COUNT, DESCRIPTOR, HABIT, MARGIN_SHAPE, PHRASE, PART, SHAPE, SIZE)
+    COLOR, COUNT, DESCRIPTOR, HABIT, LOBE, MARGIN_SHAPE, PHRASE, PART,
+    SHAPE, SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -54,12 +56,12 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                 label = token._.label
                 data = token._.data
 
-                # For plant parts we need to consider where a part falls
-                # in a sentence. If it is the first part in a sentence it
-                # is the "base" part and we need to push any fields (like
-                # sex or location) in it to all of the remaining traits &
-                # plant parts in the sentence. For example:
-                #   "Male flowers: petals 4-6 red"
+                # We need to consider where a plant part falls in a sentence.
+                # If it is the first part in a sentence it is the "base" part
+                # and we need to push any fields (like sex or location) in it
+                # to all of the remaining traits & plant parts in the sentence.
+                # For example:
+                #   "Male flowers: petals 4-6 red."
                 # Should be parsed with all traits being "male" like so:
                 #   part: [{'value': 'flower', 'sex': 'male'}
                 #          {'value': 'petal', 'sex': 'male'}]

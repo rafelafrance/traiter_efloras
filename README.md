@@ -47,12 +47,13 @@ I should be able to extract:
 - stigma_color: red
 - stigma_count: 2
 - trunk_size: dbh_high = 3.0, dbh_units = cm
+- etc.
 
 ## Parsing strategy
 1. I first, split the text into sentences using a simple rule-based parser.
 1. Next I label terms using Spacy's phrase and rule-based matchers.
 1. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
-1. I then associate traits with plant parts using a very simple finite state machine.
+1. I then associate traits with plant parts using a another set of rule-based matchers.
 
 For example, given the sentence: `Petiole 1-2 cm`:
 - I recognize the tokens:
