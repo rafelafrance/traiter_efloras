@@ -27,7 +27,7 @@ def attach(span):
         else:
             token._.label = f'plant_{label}'
 
-    return {'retokenize': False}
+    return {'_retokenize': False}
 
 
 ATTACH = {

@@ -12,7 +12,7 @@ def habit(span):
 
     return dict(
         value=REPLACE.get(value, value),
-        relabel=span[0]._.label,
+        _relabel=span[0]._.label,
         start=span.start_char,
         end=span.end_char,
     )

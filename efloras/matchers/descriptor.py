@@ -21,7 +21,7 @@ def descriptor(span):
 
     return dict(
         value=value,
-        relabel=label,
+        _relabel=label,
         start=span.start_char,
         end=span.end_char,
     )
