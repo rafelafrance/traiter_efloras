@@ -2,22 +2,21 @@
 
 from ..pylib.terms import TERMS
 
-_DESCRIPTORS = {t['label']: t['label'] for t in TERMS
-                if t['category'] == 'descriptor'}
-_DESCRIPTORS['sex'] = 'reproduction'
+DESCRIPTORS_DICT = {t['label']: t['label'] for t in TERMS
+                    if t['category'] == 'descriptor'}
+DESCRIPTORS_DICT['sex'] = 'reproduction'
 
-DESCRIPTOR_LABELS = sorted(_DESCRIPTORS.values())
-_LABELS = list(_DESCRIPTORS.keys())
+DESCRIPTOR_LABELS = sorted(DESCRIPTORS_DICT.values())
 
-_IS_DESCRIPTOR = {t['pattern'] for t in TERMS if t['category'] == 'descriptor'}
+IS_DESCRIPTOR = {t['pattern'] for t in TERMS if t['category'] == 'descriptor'}
 
 
 def descriptor(span):
     """Enrich a phrase match."""
-    label = _DESCRIPTORS[span[0]._.label]
+    label = DESCRIPTORS_DICT[span[0]._.label]
     value = span.lower_
 
-    if value not in _IS_DESCRIPTOR:
+    if value not in IS_DESCRIPTOR:
         return {}
 
     return dict(
@@ -35,7 +34,7 @@ DESCRIPTOR = {
             'label': 'descriptor',
             'on_match': descriptor,
             'patterns': [[
-                {'_': {'label': {'IN': _LABELS}}},
+                {'_': {'label': {'IN': list(DESCRIPTORS_DICT.keys())}}},
             ]],
         },
     ]
