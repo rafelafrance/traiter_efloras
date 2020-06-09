@@ -103,19 +103,24 @@ _UNCERTAIN = """ quest quest_enclosed """.split()
 
 SIZE = {
     'name': 'size',
-    'groupers': {
-        **RANGE_GROUPS,
-        'sex_enclosed': [[
-            {'_': {'label': 'open'}},
-            {'_': {'label': 'sex'}},
-            {'_': {'label': 'close'}},
-        ]],
-        'quest_enclosed': [[
-            {'_': {'label': 'open'}},
-            {'_': {'label': 'quest'}},
-            {'_': {'label': 'close'}},
-        ]],
-    },
+    'groupers': RANGE_GROUPS + [
+        {
+            'label': 'sex_enclosed',
+            'patterns': [[
+                {'_': {'label': 'open'}},
+                {'_': {'label': 'sex'}},
+                {'_': {'label': 'close'}},
+            ]],
+        },
+        {
+            'label': 'quest_enclosed',
+            'patterns': [[
+                {'_': {'label': 'open'}},
+                {'_': {'label': 'quest'}},
+                {'_': {'label': 'close'}},
+            ]],
+        },
+    ],
     'matchers': [
         {
             'label': 'size',

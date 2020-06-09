@@ -3,6 +3,7 @@
 from collections import defaultdict
 
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
+from traiter.util import Step                   # pylint: disable=import-error
 
 from .attach import ATTACH
 from .color import COLOR
@@ -28,18 +29,16 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         super().__init__(NLP)
 
         # Process the matchers
-        trait_patterns = []
-        group_patterns = {}
+        traiters = []
+        groupers = []
 
         for matcher in MATCHERS:
-            trait_patterns += matcher['matchers']
-            group_patterns = {**group_patterns, **matcher.get('groupers', {})}
+            traiters += matcher.get('matchers', [])
+            groupers += matcher.get('groupers', [])
 
-        self.add_trait_patterns(trait_patterns)
-        self.add_group_patterns(group_patterns)
-
-        self.add_final_patterns(ATTACH['matchers'])
-
+        self.add_patterns(groupers, Step.GROUP)
+        self.add_patterns(traiters, Step.TRAIT)
+        self.add_patterns(ATTACH['matchers'], Step.FINAL)
         self.add_terms(TERMS)
 
     def parse(self, text):
