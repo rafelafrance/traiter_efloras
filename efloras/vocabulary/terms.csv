@@ -298,7 +298,6 @@ plant_part,x =,lower,x,,
 plant_part,x=,lower,x,,
 plant_part?,gland,lower,gland,,
 plant_part?,glands,lower,gland,,
-prep,to,lower,,,TODO: Use POS instead
 season,deciduous,lower,,literal,
 season,evergreen,lower,,literal,
 season,persistent,lower,,literal,
