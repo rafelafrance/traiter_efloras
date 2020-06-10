@@ -4,7 +4,6 @@ import re
 
 from traiter.util import to_positive_float  # pylint: disable=import-error
 
-from .shared import RANGE_GROUPS
 from ..pylib.terms import REPLACE
 
 
@@ -103,7 +102,7 @@ _UNCERTAIN = """ quest quest_enclosed """.split()
 
 SIZE = {
     'name': 'size',
-    'groupers': RANGE_GROUPS + [
+    'groupers': [
         {
             'label': 'sex_enclosed',
             'patterns': [[

@@ -15,13 +15,14 @@ from .margin import MARGIN_SHAPE
 from .part import PART
 from .phrase import PHRASE
 from .shape import SHAPE
+from .shared import SHARED
 from .size import SIZE
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
 MATCHERS = (
     COLOR, COUNT, DESCRIPTOR, HABIT, LOBE, MARGIN_SHAPE, PHRASE, PART,
-    SHAPE, SIZE)
+    SHAPE, SHARED, SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods

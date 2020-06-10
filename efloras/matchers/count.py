@@ -2,7 +2,6 @@
 
 from traiter.util import to_positive_int  # pylint: disable=import-error
 
-from .shared import RANGE_GROUPS
 from ..pylib.terms import REPLACE
 
 _NO_COUNT = """ cross length_units slash dash no_count """.split()
@@ -40,7 +39,6 @@ def count(span):
 
 COUNT = {
     'name': 'count',
-    'groupers': RANGE_GROUPS,
     'matchers': [
         {
             'label': 'count',
