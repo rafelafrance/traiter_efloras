@@ -1,6 +1,9 @@
 """Parse the trait."""
 
 from ..pylib.terms import REPLACE
+from .shared import DASH
+
+_DASH_TO = DASH + ['to']
 
 
 def shape(span):
@@ -30,16 +33,16 @@ SHAPE = {
                 [
                     {'_': {'label': {'IN': [
                         'shape', 'shape_leader', 'location']}}, 'OP': '*'},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '?'},
                 ],
                 [
                     {'_': {'label': 'shape_leader'}},
-                    {'_': {'label': {'IN': ['dash', 'prep']}}},
-                    {'_': {'label': {'IN': ['shape_leader']}}},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'LOWER': {'IN': _DASH_TO}},
+                    {'_': {'label': 'shape_leader'}},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},
                 ],
             ],

@@ -1,18 +1,68 @@
 """Common size snippets."""
 
 import re
+from functools import partial
 
-from traiter.util import to_positive_float  # pylint: disable=import-error
-
+from .shared import CLOSE, CROSS, NUMBER, OPEN, QUEST
 from ..pylib.terms import REPLACE
 
 
-def size(span):
+def size(span, high_only=False):
     """Enrich a phrase match."""
-    dims = scan_tokens(span)
+    dims = scan_tokens(span, high_only)
     dims = fix_dimensions(dims)
     data = fill_data(span, dims)
     return data
+
+
+def scan_tokens(span, high_only):
+    """Scan tokens for the various fields."""
+    dims = [{}]
+
+    for token in span:
+        label = token._.label
+
+        if label == 'range':
+            for key, value in token._.data.items():
+                dims[-1][key] = value
+            if high_only:
+                dims[-1]['high'] = dims[-1]['low']
+                del dims[-1]['low']
+
+        elif label == 'length_units':
+            dims[-1]['units'] = REPLACE[token.lower_]
+
+        elif label == 'dimension':
+            dims[-1]['dimension'] = REPLACE[token.lower_]
+
+        elif label in ('sex_enclosed', 'sex'):
+            dims[-1]['sex'] = re.sub(r'\W+', '', token.lower_)
+
+        elif label == 'quest':
+            dims[-1]['uncertain'] = True
+
+        elif label == 'quest':
+            dims[-1]['uncertain'] = True
+
+        elif token.lower_ in CROSS:
+            dims.append({})
+
+    return dims
+
+
+def fix_dimensions(dims):
+    """Handle width comes before length and one of them is missing units."""
+    if len(dims) > 1:
+        # Length & width are reversed
+        if (dims[0].get('dimension') == 'width'
+                or dims[1].get('dimension') == 'length'):
+            dims[0], dims[1] = dims[1], dims[0]
+
+    dims[0]['dim_name'] = dims[0].get('dimension', 'length')
+    if len(dims) > 1:
+        dims[1]['dim_name'] = dims[1].get('dimension', 'width')
+
+    return dims
 
 
 def fill_data(span, dims):
@@ -20,6 +70,7 @@ def fill_data(span, dims):
     data = dict(
         start=span.start_char,
         end=span.end_char,
+        _relabel='size',
     )
 
     for dim in dims:
@@ -47,56 +98,6 @@ def fill_data(span, dims):
     return data
 
 
-def fix_dimensions(dims):
-    """Handle width comes before length and one of them is missing units."""
-    if len(dims) > 1:
-        # Length & width are reversed
-        if (dims[0].get('dimension') == 'width'
-                or dims[1].get('dimension') == 'length'):
-            dims[0], dims[1] = dims[1], dims[0]
-
-    dims[0]['dim_name'] = dims[0].get('dimension', 'length')
-    if len(dims) > 1:
-        dims[1]['dim_name'] = dims[1].get('dimension', 'width')
-
-    return dims
-
-
-def scan_tokens(span):
-    """Scan tokens for the various fields."""
-    dims = [{}]
-    idx = 0
-
-    for token in span:
-        label = token._.label
-
-        # Convert the size fields to floats
-        if label in """ min low high max """.split():
-            dims[idx][label] = to_positive_float(token.text)
-
-        # Save the units and get the unit multiplier
-        elif label == 'length_units':
-            units = REPLACE[token.lower_]
-            dims[idx]['units'] = units
-
-        elif label == 'dimension':
-            dims[idx]['dimension'] = REPLACE[token.lower_]
-
-        elif label in ('sex_enclosed', 'sex'):
-            value = token.lower_
-            value = re.sub(r'\W+', '', value)
-            dims[idx]['sex'] = value
-
-        elif label in ('quest', 'quest_enclosed'):
-            dims[idx]['uncertain'] = True
-
-        elif label == 'cross':
-            idx += 1
-            dims.append({})
-
-    return dims
-
-
 _FOLLOW = """ dimension sex_enclosed sex """.split()
 _UNCERTAIN = """ quest quest_enclosed """.split()
 
@@ -106,17 +107,9 @@ SIZE = {
         {
             'label': 'sex_enclosed',
             'patterns': [[
-                {'_': {'label': 'open'}},
+                {'TEXT': {'IN': OPEN}},
                 {'_': {'label': 'sex'}},
-                {'_': {'label': 'close'}},
-            ]],
-        },
-        {
-            'label': 'quest_enclosed',
-            'patterns': [[
-                {'_': {'label': 'open'}},
-                {'_': {'label': 'quest'}},
-                {'_': {'label': 'close'}},
+                {'TEXT': {'IN': CLOSE}},
             ]],
         },
     ],
@@ -126,30 +119,29 @@ SIZE = {
             'on_match': size,
             'patterns': [
                 [
-                    {'_': {'label': 'min'}, 'OP': '?'},
-                    {'_': {'label': 'low'}},
-                    {'_': {'label': 'high'}, 'OP': '?'},
-                    {'_': {'label': 'max'}, 'OP': '?'},
-                    {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
-                ], [
-                    {'_': {'label': 'high'}},
-                    {'_': {'label': {'IN': _UNCERTAIN}}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
                     {'_': {'label': 'length_units'}},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                 ],
                 [
-                    {'_': {'label': 'min'}, 'OP': '?'},
-                    {'_': {'label': 'low'}},
-                    {'_': {'label': 'high'}, 'OP': '?'},
-                    {'_': {'label': 'max'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
                     {'_': {'label': 'length_units'}, 'OP': '?'},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
-                    {'_': {'label': 'cross'}},
-                    {'_': {'label': 'min'}, 'OP': '?'},
-                    {'_': {'label': 'low'}},
-                    {'_': {'label': 'high'}, 'OP': '?'},
-                    {'_': {'label': 'max'}, 'OP': '?'},
+                    {'LOWER': {'IN': CROSS}},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                ],
+            ],
+        },
+        {
+            'label': 'size_high_only',
+            'on_match': partial(size, high_only=True),
+            'patterns': [
+                [
+                    {'LOWER': 'to'},
+                    {'LOWER': {'REGEX': NUMBER}},
+                    {'_': {'label': QUEST}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                 ],

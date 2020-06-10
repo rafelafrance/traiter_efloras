@@ -166,11 +166,6 @@ margin_shape,scalloped,lower,,,
 margin_shape,serrate,lower,,,
 margin_shape,sinuate,lower,,,
 margin_shape,undulate,lower,,,
-no_count,average,lower,,,Stops a numeric count match
-no_count,side,lower,,,Stops a numeric count match
-no_count,times,lower,,,Stops a numeric count match
-per_count,pair,lower,pairs,,
-per_count,pairs,lower,pairs,,
 plant_part,2 n,lower,2n,,
 plant_part,2n,lower,2n,,
 plant_part,achene,lower,fruit,,
@@ -528,10 +523,3 @@ woodiness,herb,lower,herbaceous,habit,
 woodiness,herbaceous,lower,herbaceous,habit,
 woodiness,herbs,lower,herbaceous,habit,
 woodiness,woody,lower,woody,habit,
-close,^[)\]]$,regex,,,
-cross,^[x×]$,regex,,,
-dash,^[\–\-]+$,regex,,,
-number,^\d+(\.\d*)?$,regex,,,"Floats and ints conflict, so combine them"
-open,^[(\[]$,regex,,,
-quest,^[?]$,regex,,,
-slash,^[/\\]+$,regex,,,

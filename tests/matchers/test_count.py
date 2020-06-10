@@ -13,7 +13,6 @@ class TestCount(unittest.TestCase):
     """Test plant count trait matcher."""
 
     def test_count_01(self):
-        """It parses a simple count."""
         self.assertEqual(
             MATCHER.parse('Seeds [1–]3–12[–30]'),
             {'part': [{'start': 0, 'end': 5, 'value': 'seed'}],
@@ -30,7 +29,6 @@ class TestCount(unittest.TestCase):
         )
 
     def test_count_03(self):
-        """It does not parse a length measurement."""
         self.assertEqual(
             MATCHER.parse('blade 5–10 × 4–9 cm'),
             {'part': [{'start': 0, 'end': 5, 'value': 'leaf'}],
@@ -41,7 +39,6 @@ class TestCount(unittest.TestCase):
         )
 
     def test_count_04(self):
-        """It does not parse a length measurement."""
         self.assertEqual(
             MATCHER.parse('petals 5, connate 1/2–2/3 length'),
             {'part': [{'start': 0, 'end': 6, 'value': 'petal'}],
@@ -83,7 +80,6 @@ class TestCount(unittest.TestCase):
         )
 
     def test_count_09(self):
-        """It parses a sepal count."""
         self.assertEqual(
             MATCHER.parse('Stamen [1–]3–12[–30]'),
             {'part': [{'start': 0, 'end': 6, 'value': 'stamen'}],
@@ -92,14 +88,12 @@ class TestCount(unittest.TestCase):
         )
 
     def test_count_10(self):
-        """Units are required."""
         self.assertEqual(
             MATCHER.parse('leaf (12-)23-34 × 45-56'),
             {'part': [{'value': 'leaf', 'start': 0, 'end': 4}]}
         )
 
     def test_count_11(self):
-        """Units are required."""
         self.assertEqual(
             MATCHER.parse('stigma papillose on 1 side,'),
             {'part': [{'value': 'stigma', 'start': 0, 'end': 6}]}

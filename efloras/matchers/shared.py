@@ -1,38 +1,27 @@
 """Shared patterns."""
 
-SHARED = {
-    'name': 'shared',
+CLOSE = [')', ']']
+CROSS = ['x', '×']
+DASH = ['–', '-', '––', '--']
+INT = r'^\d+$'
+NUMBER = r'^\d+(\.\d*)?$'
+OPEN = ['(', '[']
+SLASH = ['/']
+
+
+QUEST = {
+    'name': 'range',
     'groupers': [
         {
-            'label': 'min',
-            'patterns': [[
-                {'_': {'label': 'open'}},
-                {'_': {'label': 'number'}},
-                {'_': {'label': {'IN': ['dash', 'prep', 'conj']}}},
-                {'_': {'label': 'close'}},
-            ]],
+            'label': 'quest',
+            'patterns': [
+                [
+                    {'TEXT': {'IN': OPEN}},
+                    {'TEXT': '?'},
+                    {'TEXT': {'IN': CLOSE}},
+                ],
+                [{'LOWER': '?'}],
+            ]
         },
-        {
-            'label': 'low',
-            'patterns': [[
-                {'_': {'label': 'number'}},
-            ]],
-        },
-        {
-            'label': 'high',
-            'patterns': [[
-                {'_': {'label': {'IN': ['dash', 'prep']}}},
-                {'_': {'label': 'number'}},
-            ]],
-        },
-        {
-            'label': 'max',
-            'patterns': [[
-                {'_': {'label': 'open'}},
-                {'_': {'label': {'IN': ['dash', 'prep', 'conj']}}},
-                {'_': {'label': 'number'}},
-                {'_': {'label': 'close'}},
-            ]],
-        },
-    ]
+    ],
 }

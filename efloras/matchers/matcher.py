@@ -14,15 +14,15 @@ from .lobe import LOBE
 from .margin import MARGIN_SHAPE
 from .part import PART
 from .phrase import PHRASE
+from .range import RANGE
 from .shape import SHAPE
-from .shared import SHARED
 from .size import SIZE
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
 MATCHERS = (
     COLOR, COUNT, DESCRIPTOR, HABIT, LOBE, MARGIN_SHAPE, PHRASE, PART,
-    SHAPE, SHARED, SIZE)
+    SHAPE, RANGE, SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -55,7 +55,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
             for token in sent:
                 label = token._.label
-                data = token._.data
+                data = {k: v for k, v in token._.data.items()
+                        if not k.startswith('_')}
 
                 # We need to consider where a plant part falls in a sentence.
                 # If it is the first part in a sentence it is the "base" part

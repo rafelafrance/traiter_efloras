@@ -1,6 +1,7 @@
 """Common color snippets."""
 
 from ..pylib.terms import DASH, REPLACE
+from .shared import DASH
 
 
 def color(span):
@@ -25,9 +26,9 @@ COLOR = {
             'patterns': [
                 [
                     {'_': {'label': 'color_leader'}, 'OP': '?'},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'color'}, 'OP': '+'},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'color_follower'}, 'OP': '*'},
                 ],
                 [{'_': {'label': 'color_leader'}}],

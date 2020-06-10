@@ -1,4 +1,5 @@
 """Parse the trait."""
+from .shared import DASH
 
 _LEADERS = """ shape shape_leader """.split()
 _KEEP = {'margin_shape', 'shape'}
@@ -24,9 +25,9 @@ MARGIN_SHAPE = {
             'patterns': [
                 [
                     {'_': {'label': {'IN': _LEADERS}}, 'OP': '*'},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'margin_shape'}, 'OP': '+'},
-                    {'_': {'label': 'dash'}, 'OP': '?'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'margin_shape'}, 'OP': '?'},
                 ],
             ],

@@ -1,10 +1,13 @@
 """Common count snippets."""
 
-from traiter.util import to_positive_int  # pylint: disable=import-error
-
+from .shared import CROSS, DASH, NUMBER, OPEN, SLASH
 from ..pylib.terms import REPLACE
 
-_NO_COUNT = """ cross length_units slash dash no_count """.split()
+_NO_COUNTS = CROSS + SLASH + DASH + OPEN + """ average side times """.split()
+_NO_COUNT = set(_NO_COUNTS)
+
+_PER_COUNTS = ['pair', 'pairs']
+_PER_COUNT = set(_PER_COUNTS)
 
 
 def count(span):
@@ -12,26 +15,19 @@ def count(span):
     data = dict(
         start=span.start_char,
         end=span.end_char,
+        _relabel='count',
     )
 
     for token in span:
         label = token._.label
 
-        if label in ('min', 'low', 'high', 'max'):
-            if (as_int := to_positive_int(token.text)) is None:
-                return {}
-            if label == 'low' and data.get('low') is not None:
-                data['high'] = as_int
-            else:
-                data[label] = as_int
+        if label == 'range' and token._.data['_all_ints']:
+            data = {**token._.data, **data}
 
-        if label == 'suffix_label':
-            data['suffix_label'] = True
-
-        if label == 'per_count':
+        elif token.lower_ in _PER_COUNT:
             data['as'] = REPLACE.get(token.lower_, token.lower_)
 
-        elif label in _NO_COUNT:
+        else:
             return {}
 
     return data
@@ -45,23 +41,29 @@ COUNT = {
             'on_match': count,
             'patterns': [
                 [
-                    {'_': {'label': 'low'}},
-                    {'LOWER': 'or'},
-                    {'_': {'label': 'low'}},
-                    {'_': {'label': {'IN': _NO_COUNT}}, 'OP': '?'},
-                    {'_': {'label': 'per_count'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'LOWER': {'IN': _PER_COUNTS}, 'OP': '?'},
                 ],
                 [
-                    {'_': {'label': {'IN': [
-                        'cross', 'slash', 'no_count', 'with']}}, 'OP': '?'},
-                    {'_': {'label': 'min'}, 'OP': '?'},
-                    {'_': {'label': 'low'}},
-                    {'_': {'label': 'high'}, 'OP': '?'},
-                    {'_': {'label': 'max'}, 'OP': '?'},
-                    {'_': {'label': {'IN': _NO_COUNT}}, 'OP': '?'},
-                    {'_': {'label': 'per_count'}, 'OP': '?'},
-                    {'_': {'label': {'IN': ['min', 'low', 'high', 'max']}},
-                     'OP': '?'},
+                    {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'LOWER': {'IN': _PER_COUNTS}, 'OP': '?'},
+                    {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
+                    {'LOWER': {'REGEX': NUMBER}, 'OP': '?'},
+                ],
+            ],
+        },
+        {
+            'label': 'not_a_count',
+            'on_match': lambda x: {},
+            'patterns': [
+                [
+                    {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'LOWER': {'IN': _PER_COUNTS}, 'OP': '?'},
+                    {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
+                    {'_': {'label': 'length_units'}, 'OP': '?'},
+                    {'_': {'label': 'range'}, 'OP': '?'},
                 ],
             ],
         },
