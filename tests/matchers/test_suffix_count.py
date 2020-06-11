@@ -9,11 +9,10 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestLobe(unittest.TestCase):
+class TestSuffixCount(unittest.TestCase):
     """Test plant count trait matcher."""
 
-    def test_lobe_01(self):
-        """It parses a simple count."""
+    def test_suffix_count_01(self):
         self.assertEqual(
             MATCHER.parse('perianth lobes elliptic, ca. 1 mm'),
             {'part': [{'start': 0, 'end': 8, 'value': 'perianth'}],
@@ -24,8 +23,7 @@ class TestLobe(unittest.TestCase):
                  'length_low': 1.0, 'length_units': 'mm'}]}
         )
 
-    def test_lobe_02(self):
-        """It parses a simple count."""
+    def test_suffix_count_02(self):
         self.assertEqual(
             MATCHER.parse('fruits (1--)3-lobed,'),
             {'part': [{'start': 0, 'end': 6, 'value': 'fruit'}],
@@ -33,8 +31,7 @@ class TestLobe(unittest.TestCase):
                  'start': 7, 'end': 19, 'min': 1, 'low': 3}]}
         )
 
-    def test_lobe_03(self):
-        """It parses a simple count."""
+    def test_suffix_count_03(self):
         self.assertEqual(
             MATCHER.parse('petals spreading, pink, unlobed,'),
             {'part': [{'start': 0, 'end': 6, 'value': 'petal'}],

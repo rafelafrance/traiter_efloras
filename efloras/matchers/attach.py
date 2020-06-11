@@ -4,8 +4,12 @@ from traiter.util import Step  # pylint: disable=import-error
 
 from .descriptor import DESCRIPTOR_LABELS
 from .habit import HABIT_LABELS
+from ..pylib.terms import TERMS
 
 PLANT_LABELS = set(DESCRIPTOR_LABELS + HABIT_LABELS)
+
+SUBPARTS = {t['label']: t['replace'] for t in TERMS
+            if t['category'] == 'subpart'}
 
 
 def attach(span):
@@ -15,22 +19,21 @@ def attach(span):
     if tokens and tokens[0]._.label:
         part = tokens[0]._.data['value']
 
-    lobe = ''
+    subpart = ''
 
     for token in span:
         label = token._.label
 
-        if label == 'lobe':
-            lobe = '_lobe'
-            continue
+        if label in SUBPARTS:
+            subpart = f'_{SUBPARTS[label]}'
 
-        if token._.step != Step.TRAIT or label == 'part':
-            continue
+        elif token._.step != Step.TRAIT or label == 'part':
+            pass
 
         # Relabel the trait to match the plant part
-        if label not in PLANT_LABELS:
+        elif label not in PLANT_LABELS:
             dupe = part == label.split('_')[0]
-            token._.label = label if dupe else f'{part}{lobe}_{label}'
+            token._.label = label if dupe else f'{part}{subpart}_{label}'
         else:
             token._.label = f'plant_{label}'
 

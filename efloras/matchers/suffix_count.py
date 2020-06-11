@@ -1,14 +1,13 @@
 """Common lobe count snippets."""
 
-# NOTE: We also handle lobes in the attach matcher.
+from ..pylib.terms import REPLACE
 
 
-def lobe_count(span):
+def suffixed_count(span):
     """Enrich the match with data."""
     data = dict(
         start=span.start_char,
         end=span.end_char,
-        _relabel='lobe_count',
     )
 
     for token in span:
@@ -17,8 +16,9 @@ def lobe_count(span):
         if label == 'range' and token._.data['_all_ints']:
             data = {**token._.data, **data}
 
-        elif label == 'lobe_suffix':
-            continue
+        elif label == 'suffix_count':
+            relabel = f'{REPLACE[token.lower_]}_count'
+            data['_relabel'] = relabel
 
         else:
             return {}
@@ -26,35 +26,35 @@ def lobe_count(span):
     return data
 
 
-def lobe_zero(span):
+def count_zero(span):
     """Enrich the match with data."""
     return dict(
         start=span.start_char,
         end=span.end_char,
         low=0,
-        _relabel='lobe_count',
+        _relabel=f'{REPLACE[span.lower_]}_count',
     )
 
 
-LOBE = {
+SUFFIX_COUNT = {
     'name': 'lobe',
     'matchers': [
         {
-            'label': 'lobe_count',
-            'on_match': lobe_count,
+            'label': 'suffixed_count',
+            'on_match': suffixed_count,
             'patterns': [
                 [
                     {'_': {'label': 'range'}},
-                    {'_': {'label': 'lobe_suffix'}}
+                    {'_': {'label': 'suffix_count'}}
                 ],
             ],
         },
         {
-            'label': 'lobe_zero',
-            'on_match': lobe_zero,
+            'label': 'count_zero',
+            'on_match': count_zero,
             'patterns': [
                 [
-                    {'_': {'label': 'lobe_none'}}
+                    {'_': {'label': 'count_none'}}
                 ],
             ],
         },

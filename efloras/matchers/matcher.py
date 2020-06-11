@@ -10,18 +10,18 @@ from .color import COLOR
 from .count import COUNT
 from .descriptor import DESCRIPTOR
 from .habit import HABIT
-from .lobe import LOBE
 from .margin import MARGIN_SHAPE
 from .part import PART
 from .phrase import PHRASE
 from .range import RANGE
 from .shape import SHAPE
 from .size import SIZE
+from .suffix_count import SUFFIX_COUNT
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 
 MATCHERS = (
-    COLOR, COUNT, DESCRIPTOR, HABIT, LOBE, MARGIN_SHAPE, PHRASE, PART,
+    COLOR, COUNT, DESCRIPTOR, HABIT, SUFFIX_COUNT, MARGIN_SHAPE, PHRASE, PART,
     SHAPE, RANGE, SIZE)
 
 
