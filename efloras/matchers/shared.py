@@ -7,6 +7,7 @@ INT = r'^\d+$'
 NUMBER = r'^\d+(\.\d*)?$'
 OPEN = ['(', '[']
 SLASH = ['/']
+QUOTE = """["']"""
 
 
 QUEST = {

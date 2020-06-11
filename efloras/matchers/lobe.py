@@ -1,26 +1,62 @@
 """Common lobe count snippets."""
 
-# from traiter.util import to_positive_int  # pylint: disable=import-error
-#
-# from .shared import RANGE_GROUPS
-# from ..pylib.terms import REPLACE
+# NOTE: We also handle lobes in the attach matcher.
 
 
-def lobe(span):
+def lobe_count(span):
     """Enrich the match with data."""
     data = dict(
         start=span.start_char,
         end=span.end_char,
+        _relabel='lobe_count',
     )
+
+    for token in span:
+        label = token._.label
+
+        if label == 'range' and token._.data['_all_ints']:
+            data = {**token._.data, **data}
+
+        elif label == 'lobe_suffix':
+            continue
+
+        else:
+            return {}
 
     return data
 
 
+def lobe_zero(span):
+    """Enrich the match with data."""
+    return dict(
+        start=span.start_char,
+        end=span.end_char,
+        low=0,
+        _relabel='lobe_count',
+    )
+
+
 LOBE = {
     'name': 'lobe',
-    'on_match': lobe,
-    'patterns': [
-        [
-        ],
-    ],
+    'matchers': [
+        {
+            'label': 'lobe_count',
+            'on_match': lobe_count,
+            'patterns': [
+                [
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'lobe_suffix'}}
+                ],
+            ],
+        },
+        {
+            'label': 'lobe_zero',
+            'on_match': lobe_zero,
+            'patterns': [
+                [
+                    {'_': {'label': 'lobe_none'}}
+                ],
+            ],
+        },
+    ]
 }

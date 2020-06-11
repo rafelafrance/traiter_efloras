@@ -53,20 +53,20 @@ I should be able to extract:
 1. I first, split the text into sentences using a simple rule-based parser.
 1. Next I label terms using Spacy's phrase and rule-based matchers.
 1. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
-1. I then associate traits with plant parts using a another set of rule-based matchers.
+1. Finally, I associate traits with plant parts using a another set of rule-based matchers.
 
-For example, given the sentence: `Petiole 1-2 cm`:
-- I recognize the tokens:
-    - `Petiole` = plant_part
+For example, given the sentence: `Petiole 1-2 cm. Leaf blade 2-4 cm.`:
+- First I split this into two sentences: `Petiole 1-2 cm` and `Leaf blade 2-4 cm.`. Taking the first sentence I then do the following.
+- I recognize the tokens in the sentence:
+    - `Petiole` = plant part
     - `1` = number
     - `-` = dash
     - `2` = number
     - `cm` = units
-- Then I group tokens. In this case I only group two sets:
-    - `1` = lower part of a range
-    - `-2` = upper part of a range
+- Then I group tokens. In this sentence I only group one set:
+    - `1-2` = a range
 - Next I recognize a size trait:
-    - `1-2 cm` = lower and upper part of a range plus the units.
+    - `1-2 cm` = a range with units.
 - Finally, I associate the size with the plant part: `Petiole`
 
 There are, of course, complications and subtleties not outlined above but you should get the gist of what is going on here.

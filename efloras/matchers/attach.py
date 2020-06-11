@@ -15,15 +15,22 @@ def attach(span):
     if tokens and tokens[0]._.label:
         part = tokens[0]._.data['value']
 
+    lobe = ''
+
     for token in span:
         label = token._.label
+
+        if label == 'lobe':
+            lobe = '_lobe'
+            continue
+
         if token._.step != Step.TRAIT or label == 'part':
             continue
 
         # Relabel the trait to match the plant part
         if label not in PLANT_LABELS:
             dupe = part == label.split('_')[0]
-            token._.label = label if dupe else f'{part}_{label}'
+            token._.label = label if dupe else f'{part}{lobe}_{label}'
         else:
             token._.label = f'plant_{label}'
 
