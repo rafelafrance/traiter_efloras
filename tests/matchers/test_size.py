@@ -45,7 +45,9 @@ class TestSize(unittest.TestCase):
     def test_size_04(self):
         self.assertEqual(
             MATCHER.parse('leaf shallowly to deeply 5–7-lobed'),
-            {'part': [{'value': 'leaf', 'start': 0, 'end': 4}]}
+            {'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
+             'leaf_lobe_count': [
+                 {'start': 25, 'end': 34, 'low': 5, 'high': 7}]}
         )
 
     def test_size_05(self):
@@ -183,25 +185,28 @@ class TestSize(unittest.TestCase):
             MATCHER.parse('leaf shallowly 3–5(–7)-lobed, '
                           '5–25 × (8–)10–25(–30) cm,'),
             {'part': [{'start': 0, 'end': 4, 'value': 'leaf'}],
+             'leaf_lobe_count': [
+                 {'start': 15, 'end': 28, 'low': 3, 'high': 5, 'max': 7}],
              'leaf_size': [{'start': 30, 'end': 54,
-                            'length_low': 5.0,
-                            'length_high': 25.0,
-                            'width_min': 8.0,
-                            'width_low': 10.0,
-                            'width_high': 25.0,
-                            'width_max': 30.0,
+                            'length_low': 5,
+                            'length_high': 25,
+                            'width_min': 8,
+                            'width_low': 10,
+                            'width_high': 25,
+                            'width_max': 30,
                             'width_units': 'cm'}]}
         )
 
     def test_size_16(self):
         self.assertEqual(
             MATCHER.parse('(3–)5-lobed, 6–20(–30) × 6–25 cm,'),
-            {'plant_size': [{'start': 13, 'end': 32,
-                             'length_low': 6.0,
-                             'length_high': 20.0,
-                             'length_max': 30.0,
-                             'width_low': 6.0,
-                             'width_high': 25.0,
+            {'plant_lobe_count': [{'start': 0, 'end': 11, 'min': 3, 'low': 5}],
+             'plant_size': [{'start': 13, 'end': 32,
+                             'length_low': 6,
+                             'length_high': 20,
+                             'length_max': 30,
+                             'width_low': 6,
+                             'width_high': 25,
                              'width_units': 'cm'}]}
         )
 
