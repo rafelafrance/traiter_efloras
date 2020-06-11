@@ -30,6 +30,8 @@ def attach(span):
     return {'_retokenize': False}
 
 
+_PART_LABELS = ['part', 'suffix_label']
+
 ATTACH = {
     'name': 'attach',
     'matchers': [
@@ -39,18 +41,15 @@ ATTACH = {
             'patterns': [
                 [
                     {'_': {'label': 'part'}},
-                    {'_': {'label': {'NOT_IN': ['part', 'suffix_label']}},
-                     'OP': '*'},
+                    {'_': {'label': {'NOT_IN': _PART_LABELS}}, 'OP': '*'},
                 ],
                 [
                     {'_': {'label': 'suffix_label'}},
-                    {'_': {'label': {'NOT_IN': ['part', 'suffix_label']}},
-                     'OP': '+'},
+                    {'_': {'label': {'NOT_IN': _PART_LABELS}}, 'OP': '+'},
                     {'_': {'label': 'part'}},
                 ],
                 [
-                    {'_': {'label': {'NOT_IN': ['part', 'suffix_label']}},
-                     'OP': '+'},
+                    {'_': {'label': {'NOT_IN': _PART_LABELS}}, 'OP': '+'},
                 ],
             ],
         },

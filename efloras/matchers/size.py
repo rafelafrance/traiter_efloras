@@ -41,9 +41,6 @@ def scan_tokens(span, high_only):
         elif label == 'quest':
             dims[-1]['uncertain'] = True
 
-        elif label == 'quest':
-            dims[-1]['uncertain'] = True
-
         elif token.lower_ in CROSS:
             dims.append({})
 
@@ -52,16 +49,16 @@ def scan_tokens(span, high_only):
 
 def fix_dimensions(dims):
     """Handle width comes before length and one of them is missing units."""
-    if len(dims) > 1:
-        # Length & width are reversed
-        if (dims[0].get('dimension') == 'width'
-                or dims[1].get('dimension') == 'length'):
-            dims[0], dims[1] = dims[1], dims[0]
-
-    dims[0]['dim_name'] = dims[0].get('dimension', 'length')
-    if len(dims) > 1:
-        dims[1]['dim_name'] = dims[1].get('dimension', 'width')
-
+    dim = ''
+    if len(dims) == 1:
+        dims[0]['dimension'] = dims[0].get('dimension', 'length')
+    elif not dims[0].get('dimension') and (dim := dims[1].get('dimension')):
+        dims[0]['dimension'] = 'length' if dim == 'width' else 'width'
+    elif not dims[1].get('dimension') and (dim := dims[0].get('dimension')):
+        dims[1]['dimension'] = 'length' if dim == 'width' else 'width'
+    else:
+        dims[0]['dimension'] = 'length'
+        dims[1]['dimension'] = 'width'
     return dims
 
 
@@ -74,24 +71,20 @@ def fill_data(span, dims):
     )
 
     for dim in dims:
-        dim_name = dim['dim_name']
+        dimension = dim['dimension']
 
-        # Rename value fields & multiply values to put into millimeters
         for field in """ min low high max """.split():
             if datum := dim.get(field):
-                key = f'{dim_name}_{field}'
+                key = f'{dimension}_{field}'
                 data[key] = round(datum, 3)
 
-        # Rename the unit fields
         if datum := dim.get('units'):
-            key = f'{dim_name}_units'
+            key = f'{dimension}_units'
             data[key] = datum.lower()
 
-        # Get the sex field if it's there
         if datum := dim.get('sex'):
-            data['sex'] = re.sub(r'\W+', '', datum.lower())
+            data['sex'] = datum
 
-        # Get the uncertain field if it's there
         if dim.get('uncertain'):
             data['uncertain'] = 'true'
 
