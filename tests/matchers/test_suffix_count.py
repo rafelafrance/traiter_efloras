@@ -38,3 +38,11 @@ class TestSuffixCount(unittest.TestCase):
              'petal_color': [{'value': 'pink', 'start': 18, 'end': 22}],
              'petal_lobe_count': [{'start': 24, 'end': 31, 'low': 0}]}
         )
+
+    def test_suffix_count_04(self):
+        self.assertEqual(
+            MATCHER.parse('Inflorescences 10+-flowered'),
+            {'part': [{'start': 0, 'end': 14, 'value': 'inflorescence'}],
+             'inflorescence_flower_count': [
+                 {'start': 15, 'end': 27, 'low': 10, 'plus': True}]}
+        )

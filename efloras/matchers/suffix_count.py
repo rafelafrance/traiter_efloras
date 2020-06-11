@@ -1,5 +1,6 @@
 """Common lobe count snippets."""
 
+from .shared import PLUS
 from ..pylib.terms import REPLACE
 
 
@@ -19,6 +20,9 @@ def suffixed_count(span):
         elif label == 'suffix_count':
             relabel = f'{REPLACE[token.lower_]}_count'
             data['_relabel'] = relabel
+
+        elif token.text in PLUS:
+            data['plus'] = True
 
         else:
             return {}
@@ -45,6 +49,7 @@ SUFFIX_COUNT = {
             'patterns': [
                 [
                     {'_': {'label': 'range'}},
+                    {'TEXT': {'IN': PLUS}, 'OP': '?'},
                     {'_': {'label': 'suffix_count'}}
                 ],
             ],

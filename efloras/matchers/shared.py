@@ -6,8 +6,9 @@ DASH = ['–', '-', '––', '--']
 INT = r'^\d+$'
 NUMBER = r'^\d+(\.\d*)?$'
 OPEN = ['(', '[']
+PLUS = ['+']
 SLASH = ['/']
-QUOTE = """["']"""
+QUOTE = ['"', "'"]
 
 
 QUEST = {

@@ -152,11 +152,11 @@ class TestSize(unittest.TestCase):
             {'part': [{'start': 0, 'end': 6, 'value': 'leaf'},
                       {'start': 36, 'end': 44, 'value': 'leaf'},
                       {'start': 59, 'end': 69, 'value': 'petiole'}],
+             'leaf_count': [{'start': 7, 'end': 18, 'low': 3}],
              'leaf_location': [{'value': 'lateral', 'start': 20, 'end': 27}],
-             'petiole_size': [{'start': 70,
-                               'end': 76,
-                               'length_low': 2.0,
-                               'length_high': 5.0,
+             'petiole_size': [{'start': 70, 'end': 76,
+                               'length_low': 2,
+                               'length_high': 5,
                                'length_units': 'mm'}]}
         )
 
