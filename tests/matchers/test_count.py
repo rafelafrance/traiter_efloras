@@ -111,18 +111,16 @@ class TestCount(unittest.TestCase):
 
     def test_count_13(self):
         self.assertEqual(
-            MATCHER.parse('Male flowers with 2-8(-20) stamens;'),
-            {'part': [
-                {'start': 0, 'end': 12, 'sex': 'male', 'value': 'flower'},
-                {'sex': 'male', 'start': 27, 'end': 34, 'value': 'stamen'}],
-             'stamen_count': [{'sex': 'male', 'start': 18, 'end': 26,
-                               'low': 2, 'high': 8, 'max': 20}]}
-        )
-
-    def test_count_14(self):
-        self.assertEqual(
             MATCHER.parse('leaflets in 3 or 4 pairs,'),
             {'part': [{'start': 0, 'end': 8, 'value': 'leaf'}],
              'leaf_count': [
                  {'start': 12, 'end': 24, 'low': 3, 'high': 4, 'as': 'pairs'}]}
+        )
+
+    def test_count_14(self):
+        self.assertEqual(
+            MATCHER.parse('leaflets/lobes 11–23,'),
+            {'part': [{'start': 0, 'end': 8, 'value': 'leaf'}],
+             'leaf_lobe_count': [
+                 {'start': 15, 'end': 20, 'low': 11, 'high': 23}]}
         )

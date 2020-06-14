@@ -31,7 +31,6 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
     def __init__(self):
         super().__init__(NLP)
 
-        # Process the matchers
         traiters = []
         groupers = []
 

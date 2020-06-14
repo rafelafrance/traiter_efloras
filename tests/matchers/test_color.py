@@ -142,5 +142,5 @@ class TestColor(unittest.TestCase):
                 'Plants acaulescent or nearly so, with white hairs.'),
             {'part': [{'start': 0, 'end': 6, 'value': 'plant'},
                       {'start': 44, 'end': 49, 'value': 'hair'}],
-             'hair_color': [{'value': 'white', 'start': 38, 'end': 43}]}
+             'plant_hair_color': [{'value': 'white', 'start': 38, 'end': 43}]}
         )

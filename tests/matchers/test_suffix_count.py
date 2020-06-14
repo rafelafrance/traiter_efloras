@@ -44,5 +44,5 @@ class TestSuffixCount(unittest.TestCase):
             MATCHER.parse('Inflorescences 10+-flowered'),
             {'part': [{'start': 0, 'end': 14, 'value': 'inflorescence'}],
              'inflorescence_flower_count': [
-                 {'start': 15, 'end': 27, 'low': 10, 'plus': True}]}
+                 {'start': 15, 'end': 27, 'low': 10, 'indefinite': True}]}
         )

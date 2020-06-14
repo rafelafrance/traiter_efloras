@@ -25,6 +25,7 @@ def read_terms():
 TERMS = read_terms()
 LABELS = sorted({t['label'] for t in TERMS})
 REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
+CATEGORY = {t['pattern']: c for t in TERMS if (c := t.get('category'))}
 
 PATTERN_RE = re.compile(rf"""
     {QUOTE} term {QUOTE} \s* : \s* {QUOTE} (\w+) {QUOTE}

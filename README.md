@@ -53,7 +53,7 @@ I should be able to extract:
 1. I first, split the text into sentences using a simple rule-based parser.
 1. Next I label terms using Spacy's phrase and rule-based matchers.
 1. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
-1. Finally, I associate traits with plant parts using a another set of rule-based matchers.
+1. Finally, I associate traits with plant parts.
 
 For example, given the sentence: `Petiole 1-2 cm. Leaf blade 2-4 cm.`:
 - First I split this into two sentences: `Petiole 1-2 cm` and `Leaf blade 2-4 cm.`. Taking the first sentence I then do the following.

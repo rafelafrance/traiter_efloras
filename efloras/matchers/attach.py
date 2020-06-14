@@ -4,12 +4,8 @@ from traiter.util import Step  # pylint: disable=import-error
 
 from .descriptor import DESCRIPTOR_LABELS
 from .habit import HABIT_LABELS
-from ..pylib.terms import TERMS
 
 PLANT_LABELS = set(DESCRIPTOR_LABELS + HABIT_LABELS)
-
-SUBPARTS = {t['label']: t['replace'] for t in TERMS
-            if t['category'] == 'subpart'}
 
 
 def attach(span):
@@ -24,8 +20,8 @@ def attach(span):
     for token in span:
         label = token._.label
 
-        if label in SUBPARTS:
-            subpart = f'_{SUBPARTS[label]}'
+        if label == 'subpart':
+            subpart = f'_{label}'
 
         elif token._.step != Step.TRAIT or label == 'part':
             pass
@@ -40,7 +36,17 @@ def attach(span):
     return {'_retokenize': False}
 
 
-_PART_LABELS = ['part', 'suffix_label']
+def attach_suffix(span):
+    """Attach traits to a plant part that is using a suffix notation."""
+    for token in span:
+        label = token._.label
+        print(label, token.text)
+
+    return {'_retokenize': False}
+
+
+_STOP_PREFIX = ['part', 'suffix_label']
+_STOP_SUFFIX = _STOP_PREFIX + ['subpart']
 
 ATTACH = {
     'name': 'attach',
@@ -51,15 +57,19 @@ ATTACH = {
             'patterns': [
                 [
                     {'_': {'label': 'part'}},
-                    {'_': {'label': {'NOT_IN': _PART_LABELS}}, 'OP': '*'},
+                    {'_': {'label': {'NOT_IN': _STOP_PREFIX}}, 'OP': '*'},
                 ],
+                [{'_': {'label': {'NOT_IN': _STOP_PREFIX}}, 'OP': '+'}],
+            ],
+        },
+        {
+            'label': 'attach_suffix',
+            'on_match': attach,
+            'patterns': [
                 [
                     {'_': {'label': 'suffix_label'}},
-                    {'_': {'label': {'NOT_IN': _PART_LABELS}}, 'OP': '+'},
-                    {'_': {'label': 'part'}},
-                ],
-                [
-                    {'_': {'label': {'NOT_IN': _PART_LABELS}}, 'OP': '+'},
+                    {'_': {'label': {'NOT_IN': _STOP_SUFFIX}}, 'OP': '+'},
+                    {'_': {'label': 'subpart'}},
                 ],
             ],
         },

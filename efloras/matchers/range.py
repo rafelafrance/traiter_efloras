@@ -1,4 +1,4 @@
-"""Shared patterns."""
+"""Shared range patterns."""
 
 import re
 from functools import partial
