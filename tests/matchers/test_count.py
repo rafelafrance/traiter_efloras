@@ -15,7 +15,7 @@ class TestCount(unittest.TestCase):
     def test_count_01(self):
         self.assertEqual(
             MATCHER.parse('Seeds [1–]3–12[–30]'),
-            {'part': [{'start': 0, 'end': 5, 'value': 'seed'}],
+            {'part': [{'start': 0, 'end': 5, 'part': 'seed'}],
              'seed_count': [{'start': 6, 'end': 19,
                              'min': 1, 'low': 3, 'high': 12, 'max': 30}]}
         )
@@ -24,14 +24,14 @@ class TestCount(unittest.TestCase):
         """It parses a seed count."""
         self.assertEqual(
             MATCHER.parse('Seeds 3–12'),
-            {'part': [{'start': 0, 'end': 5, 'value': 'seed'}],
+            {'part': [{'start': 0, 'end': 5, 'part': 'seed'}],
              'seed_count': [{'start': 6, 'end': 10, 'low': 3, 'high': 12}]}
         )
 
     def test_count_03(self):
         self.assertEqual(
             MATCHER.parse('blade 5–10 × 4–9 cm'),
-            {'part': [{'start': 0, 'end': 5, 'value': 'leaf'}],
+            {'part': [{'start': 0, 'end': 5, 'part': 'leaf'}],
              'leaf_size': [{'start': 6, 'end': 19,
                             'length_low': 5.0, 'length_high': 10.0,
                             'width_low': 4.0, 'width_high': 9.0,
@@ -41,15 +41,15 @@ class TestCount(unittest.TestCase):
     def test_count_04(self):
         self.assertEqual(
             MATCHER.parse('petals 5, connate 1/2–2/3 length'),
-            {'part': [{'start': 0, 'end': 6, 'value': 'petal'}],
+            {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
              'petal_count': [{'start': 7, 'end': 8, 'low': 5}],
-             'petal_shape': [{'value': 'connate', 'start': 10, 'end': 17}]}
+             'petal_shape': [{'shape': 'connate', 'start': 10, 'end': 17}]}
         )
 
     def test_count_05(self):
         self.assertEqual(
             MATCHER.parse('ovules mostly 120–200.'),
-            {'part': [{'start': 0, 'end': 6, 'value': 'ovary'}],
+            {'part': [{'start': 0, 'end': 6, 'part': 'ovary'}],
              'ovary_count': [
                  {'start': 14, 'end': 21, 'low': 120, 'high': 200}]}
         )
@@ -58,7 +58,7 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('Staminate flowers (3–)5–10(–20)'),
             {'part': [
-                {'start': 0, 'end': 17, 'sex': 'male', 'value': 'flower'}],
+                {'start': 0, 'end': 17, 'sex': 'male', 'part': 'flower'}],
              'flower_count': [{'start': 18, 'end': 31,
                                'min': 3, 'low': 5,
                                'high': 10, 'max': 20,
@@ -68,21 +68,21 @@ class TestCount(unittest.TestCase):
     def test_count_07(self):
         self.assertEqual(
             MATCHER.parse('Ovaries (4 or)5,'),
-            {'part': [{'start': 0, 'end': 7, 'value': 'ovary'}],
+            {'part': [{'start': 0, 'end': 7, 'part': 'ovary'}],
              'ovary_count': [{'start': 8, 'end': 15, 'min': 4, 'low': 5}]}
         )
 
     def test_count_08(self):
         self.assertEqual(
             MATCHER.parse('Seeds 5(or 6)'),
-            {'part': [{'start': 0, 'end': 5, 'value': 'seed'}],
+            {'part': [{'start': 0, 'end': 5, 'part': 'seed'}],
              'seed_count': [{'start': 6, 'end': 13, 'low': 5, 'max': 6}]}
         )
 
     def test_count_09(self):
         self.assertEqual(
             MATCHER.parse('Stamen [1–]3–12[–30]'),
-            {'part': [{'start': 0, 'end': 6, 'value': 'stamen'}],
+            {'part': [{'start': 0, 'end': 6, 'part': 'stamen'}],
              'stamen_count': [{'start': 7, 'end': 20,
                                'min': 1, 'low': 3, 'high': 12, 'max': 30}]}
         )
@@ -90,21 +90,21 @@ class TestCount(unittest.TestCase):
     def test_count_10(self):
         self.assertEqual(
             MATCHER.parse('leaf (12-)23-34 × 45-56'),
-            {'part': [{'value': 'leaf', 'start': 0, 'end': 4}]}
+            {'part': [{'part': 'leaf', 'start': 0, 'end': 4}]}
         )
 
     def test_count_11(self):
         self.assertEqual(
             MATCHER.parse('stigma papillose on 1 side,'),
-            {'part': [{'value': 'stigma', 'start': 0, 'end': 6}]}
+            {'part': [{'part': 'stigma', 'start': 0, 'end': 6}]}
         )
 
     def test_count_12(self):
         self.assertEqual(
             MATCHER.parse('Male flowers with 2-8(-20) stamens;'),
             {'part': [
-                {'start': 0, 'end': 12, 'sex': 'male', 'value': 'flower'},
-                {'sex': 'male', 'start': 27, 'end': 34, 'value': 'stamen'}],
+                {'start': 0, 'end': 12, 'sex': 'male', 'part': 'flower'},
+                {'sex': 'male', 'start': 27, 'end': 34, 'part': 'stamen'}],
              'stamen_count': [{'sex': 'male', 'start': 18, 'end': 26,
                                'low': 2, 'high': 8, 'max': 20}]}
         )
@@ -112,7 +112,7 @@ class TestCount(unittest.TestCase):
     def test_count_13(self):
         self.assertEqual(
             MATCHER.parse('leaflets in 3 or 4 pairs,'),
-            {'part': [{'start': 0, 'end': 8, 'value': 'leaf'}],
+            {'part': [{'start': 0, 'end': 8, 'part': 'leaf'}],
              'leaf_count': [
                  {'start': 12, 'end': 24, 'low': 3, 'high': 4, 'as': 'pairs'}]}
         )
@@ -120,7 +120,7 @@ class TestCount(unittest.TestCase):
     def test_count_14(self):
         self.assertEqual(
             MATCHER.parse('leaflets/lobes 11–23,'),
-            {'part': [{'start': 0, 'end': 8, 'value': 'leaf'}],
+            {'part': [{'start': 0, 'end': 8, 'part': 'leaf'}],
              'leaf_lobe_count': [
                  {'start': 15, 'end': 20, 'low': 11, 'high': 23}]}
         )

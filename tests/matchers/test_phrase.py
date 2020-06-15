@@ -16,7 +16,8 @@ class TestPhrase(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('Pistillate flowers  usually sessile; hypogynous'),
             {'part': [{'start': 0, 'end': 18,
-                       'sex': 'female', 'value': 'flower'}],
-             'flower_floral_location': [{'sex': 'female', 'value': 'superior',
+                       'sex': 'female', 'part': 'flower'}],
+             'flower_floral_location': [{'sex': 'female',
+                                         'floral_location': 'superior',
                                          'start': 37, 'end': 47}]}
         )

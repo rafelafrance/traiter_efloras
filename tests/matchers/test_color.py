@@ -17,13 +17,13 @@ class TestColor(unittest.TestCase):
             MATCHER.parse(
                 'hypanthium green or greenish yellow, '
                 'usually not purple-spotted, rarely purple-spotted distally'),
-            {'part': [{'value': 'hypanthium', 'start': 0, 'end': 10}],
-             'hypanthium_color': [{'value': 'green', 'start': 11, 'end': 16},
-                                  {'value': 'green-yellow', 'start': 20,
+            {'part': [{'part': 'hypanthium', 'start': 0, 'end': 10}],
+             'hypanthium_color': [{'color': 'green', 'start': 11, 'end': 16},
+                                  {'color': 'green-yellow', 'start': 20,
                                    'end': 35},
-                                  {'value': 'purple-spotted', 'start': 49,
+                                  {'color': 'purple-spotted', 'start': 49,
                                    'end': 63},
-                                  {'value': 'purple-spotted', 'start': 72,
+                                  {'color': 'purple-spotted', 'start': 72,
                                    'end': 86}]}
         )
 
@@ -32,30 +32,30 @@ class TestColor(unittest.TestCase):
             MATCHER.parse(
                 'hypanthium straw-colored to '
                 'sulphur-yellow or golden-yellow'),
-            {'part': [{'value': 'hypanthium', 'start': 0, 'end': 10}],
-             'hypanthium_color': [{'value': 'yellow', 'start': 11, 'end': 24},
-                                  {'value': 'yellow', 'start': 28, 'end': 42},
-                                  {'value': 'yellow', 'start': 46, 'end': 59}]}
+            {'part': [{'part': 'hypanthium', 'start': 0, 'end': 10}],
+             'hypanthium_color': [{'color': 'yellow', 'start': 11, 'end': 24},
+                                  {'color': 'yellow', 'start': 28, 'end': 42},
+                                  {'color': 'yellow', 'start': 46, 'end': 59}]}
         )
 
     def test_color_03(self):
         self.assertEqual(
             MATCHER.parse('sepals erect, green- or red-tipped'),
-            {'part': [{'value': 'sepal', 'start': 0, 'end': 6}],
-             'sepal_color': [{'value': 'green', 'start': 14, 'end': 20},
-                             {'value': 'red-tipped', 'start': 24, 'end': 34}]}
+            {'part': [{'part': 'sepal', 'start': 0, 'end': 6}],
+             'sepal_color': [{'color': 'green', 'start': 14, 'end': 20},
+                             {'color': 'red-tipped', 'start': 24, 'end': 34}]}
         )
 
     def test_color_04(self):
         self.assertEqual(
             MATCHER.parse(
                 'petals white, cream, or pale green [orange to yellow], '),
-            {'part': [{'value': 'petal', 'start': 0, 'end': 6}],
-             'petal_color': [{'value': 'white', 'start': 7, 'end': 12},
-                             {'value': 'white', 'start': 14, 'end': 19},
-                             {'value': 'green', 'start': 29, 'end': 34},
-                             {'value': 'orange', 'start': 36, 'end': 42},
-                             {'value': 'yellow', 'start': 46, 'end': 52}]}
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_color': [{'color': 'white', 'start': 7, 'end': 12},
+                             {'color': 'white', 'start': 14, 'end': 19},
+                             {'color': 'green', 'start': 29, 'end': 34},
+                             {'color': 'orange', 'start': 36, 'end': 42},
+                             {'color': 'yellow', 'start': 46, 'end': 52}]}
         )
 
     def test_color_05(self):
@@ -65,14 +65,14 @@ class TestColor(unittest.TestCase):
                 'petals distinct, white to cream, greenish yellow, '
                 'maturing yellowish or pale brown, commonly mottled or with '
                 'light green or white longitudinal stripes'),
-            {'part': [{'value': 'petal', 'start': 0, 'end': 6}],
-             'petal_color': [{'value': 'white', 'start': 17, 'end': 22},
-                             {'value': 'white', 'start': 26, 'end': 31},
-                             {'value': 'green-yellow', 'start': 33, 'end': 48},
-                             {'value': 'yellow', 'start': 59, 'end': 68},
-                             {'value': 'brown', 'start': 77, 'end': 82},
-                             {'value': 'green', 'start': 115, 'end': 120},
-                             {'value': 'white-longitudinal-stripes',
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_color': [{'color': 'white', 'start': 17, 'end': 22},
+                             {'color': 'white', 'start': 26, 'end': 31},
+                             {'color': 'green-yellow', 'start': 33, 'end': 48},
+                             {'color': 'yellow', 'start': 59, 'end': 68},
+                             {'color': 'brown', 'start': 77, 'end': 82},
+                             {'color': 'green', 'start': 115, 'end': 120},
+                             {'color': 'white-longitudinal-stripes',
                               'start': 124, 'end': 150}]}
         )
 
@@ -82,65 +82,65 @@ class TestColor(unittest.TestCase):
                 'Petals distinct, white to cream, greenish white, '
                 'or yellowish green, or yellowish, usually green-throated '
                 'and faintly green-lined,'),
-            {'part': [{'start': 0, 'end': 6, 'value': 'petal'}],
-             'petal_color': [{'value': 'white', 'start': 17, 'end': 22},
-                             {'value': 'white', 'start': 26, 'end': 31},
-                             {'value': 'green-white', 'start': 33, 'end': 47},
-                             {'value': 'yellow-green', 'start': 52, 'end': 67},
-                             {'value': 'yellow', 'start': 72, 'end': 81},
-                             {'value': 'green-throated', 'start': 91,
+            {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
+             'petal_color': [{'color': 'white', 'start': 17, 'end': 22},
+                             {'color': 'white', 'start': 26, 'end': 31},
+                             {'color': 'green-white', 'start': 33, 'end': 47},
+                             {'color': 'yellow-green', 'start': 52, 'end': 67},
+                             {'color': 'yellow', 'start': 72, 'end': 81},
+                             {'color': 'green-throated', 'start': 91,
                               'end': 105},
-                             {'value': 'green-lined', 'start': 118,
+                             {'color': 'green-lined', 'start': 118,
                               'end': 129}]}
         )
 
     def test_color_07(self):
         self.assertEqual(
             MATCHER.parse('calyx yellow'),
-            {'part': [{'value': 'calyx', 'start': 0, 'end': 5}],
-             'calyx_color': [{'value': 'yellow', 'start': 6, 'end': 12}]}
+            {'part': [{'part': 'calyx', 'start': 0, 'end': 5}],
+             'calyx_color': [{'color': 'yellow', 'start': 6, 'end': 12}]}
         )
 
     def test_color_08(self):
         self.assertEqual(
             MATCHER.parse('corolla yellow'),
-            {'part': [{'value': 'corolla', 'start': 0, 'end': 7}],
-             'corolla_color': [{'value': 'yellow', 'start': 8, 'end': 14}]}
+            {'part': [{'part': 'corolla', 'start': 0, 'end': 7}],
+             'corolla_color': [{'color': 'yellow', 'start': 8, 'end': 14}]}
         )
 
     def test_color_09(self):
         self.assertEqual(
             MATCHER.parse('flower yellow'),
-            {'part': [{'value': 'flower', 'start': 0, 'end': 6}],
-             'flower_color': [{'value': 'yellow', 'start': 7, 'end': 13}]}
+            {'part': [{'part': 'flower', 'start': 0, 'end': 6}],
+             'flower_color': [{'color': 'yellow', 'start': 7, 'end': 13}]}
         )
 
     def test_color_10(self):
         self.assertEqual(
             MATCHER.parse('hypanthium yellow'),
-            {'part': [{'value': 'hypanthium', 'start': 0, 'end': 10}],
-             'hypanthium_color': [{'value': 'yellow', 'start': 11, 'end': 17}]}
+            {'part': [{'part': 'hypanthium', 'start': 0, 'end': 10}],
+             'hypanthium_color': [{'color': 'yellow', 'start': 11, 'end': 17}]}
         )
 
     def test_color_11(self):
         self.assertEqual(
             MATCHER.parse('petal pale sulfur-yellow'),
-            {'part': [{'value': 'petal', 'start': 0, 'end': 5}],
-             'petal_color': [{'value': 'yellow', 'start': 11, 'end': 24}]}
+            {'part': [{'part': 'petal', 'start': 0, 'end': 5}],
+             'petal_color': [{'color': 'yellow', 'start': 11, 'end': 24}]}
         )
 
     def test_color_12(self):
         self.assertEqual(
             MATCHER.parse('sepal yellow'),
-            {'part': [{'value': 'sepal', 'start': 0, 'end': 5}],
-             'sepal_color': [{'value': 'yellow', 'start': 6, 'end': 12}]}
+            {'part': [{'part': 'sepal', 'start': 0, 'end': 5}],
+             'sepal_color': [{'color': 'yellow', 'start': 6, 'end': 12}]}
         )
 
     def test_color_13(self):
         self.assertEqual(
             MATCHER.parse(
                 'Plants acaulescent or nearly so, with white hairs.'),
-            {'part': [{'start': 0, 'end': 6, 'value': 'plant'},
-                      {'start': 44, 'end': 49, 'value': 'hair'}],
-             'plant_hair_color': [{'value': 'white', 'start': 38, 'end': 43}]}
+            {'part': [{'start': 0, 'end': 6, 'part': 'plant'},
+                      {'start': 44, 'end': 49, 'part': 'hair'}],
+             'plant_hair_color': [{'color': 'white', 'start': 38, 'end': 43}]}
         )

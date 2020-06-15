@@ -11,7 +11,7 @@ def color(span):
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
     return dict(
-        value=value,
+        color=value,
         start=span.start_char,
         end=span.end_char,
     )

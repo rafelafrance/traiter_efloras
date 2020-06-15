@@ -19,11 +19,11 @@ class TestDescriptor(unittest.TestCase):
                 'or plants dioecious'),
             {
                 'plant_reproduction': [
-                    {'value': 'bisexual', 'start': 0, 'end': 8},
-                    {'value': 'unisexual', 'start': 10, 'end': 19},
-                    {'value': 'gynodioecious', 'start': 41, 'end': 54},
-                    {'value': 'dioecious', 'start': 66, 'end': 75}],
+                    {'descriptor': 'bisexual', 'start': 0, 'end': 8},
+                    {'descriptor': 'unisexual', 'start': 10, 'end': 19},
+                    {'descriptor': 'gynodioecious', 'start': 41, 'end': 54},
+                    {'descriptor': 'dioecious', 'start': 66, 'end': 75}],
                 'part': [
-                    {'start': 24, 'end': 30, 'value': 'plant'},
-                    {'start': 59, 'end': 65, 'value': 'plant'}]}
+                    {'start': 24, 'end': 30, 'part': 'plant'},
+                    {'start': 59, 'end': 65, 'part': 'plant'}]}
         )

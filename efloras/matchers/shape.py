@@ -14,7 +14,7 @@ def shape(span):
     value = REPLACE.get(value, value)
     loc = [t.lower_ for t in span if t._.label == 'location']
     trait = dict(
-        value=value,
+        shape=value,
         start=span.start_char,
         end=span.end_char,
     )

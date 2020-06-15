@@ -20,7 +20,7 @@ def descriptor(span):
         return {}
 
     return dict(
-        value=value,
+        descriptor=value,
         _relabel=label,
         start=span.start_char,
         end=span.end_char,

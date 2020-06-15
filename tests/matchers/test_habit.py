@@ -15,7 +15,7 @@ class TestHabit(unittest.TestCase):
     def test_habit_01(self):
         self.assertEqual(
             MATCHER.parse('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
-            {'plant_habit': [{'value': 'shrub', 'start': 0, 'end': 6}],
+            {'plant_habit': [{'habit': 'shrub', 'start': 0, 'end': 6}],
              'plant_size': [{'start': 9, 'end': 17,
                              'length_high': 1.5, 'length_units': 'm'}]}
         )
@@ -23,9 +23,9 @@ class TestHabit(unittest.TestCase):
     def test_habit_02(self):
         self.assertEqual(
             MATCHER.parse('Stems often caespitose'),
-            {'part': [{'start': 0, 'end': 5, 'value': 'stem'}],
+            {'part': [{'start': 0, 'end': 5, 'part': 'stem'}],
              'plant_habit_shape': [
-                 {'value': 'cespitose', 'start': 12, 'end': 22}]}
+                 {'habit': 'cespitose', 'start': 12, 'end': 22}]}
         )
 
     def test_habit_03(self):
@@ -34,19 +34,19 @@ class TestHabit(unittest.TestCase):
                           'or epilithic.'),
             {
                 'plant_woodiness': [
-                    {'value': 'herbaceous', 'start': 0, 'end': 5}],
+                    {'habit': 'herbaceous', 'start': 0, 'end': 5}],
                 'plant_life_span': [
-                    {'value': 'perennial', 'start': 6, 'end': 15}],
-                'plant_habit': [{'value': 'shrub', 'start': 19, 'end': 28}],
+                    {'descriptor': 'perennial', 'start': 6, 'end': 15}],
+                'plant_habit': [{'habit': 'shrub', 'start': 19, 'end': 28}],
                 'plant_habitat': [
-                    {'value': 'epiphytic', 'start': 30, 'end': 39},
-                    {'value': 'epilithic', 'start': 43, 'end': 52}]}
+                    {'habit': 'epiphytic', 'start': 30, 'end': 39},
+                    {'habit': 'epilithic', 'start': 43, 'end': 52}]}
         )
 
     def test_habit_04(self):
         self.assertEqual(
             MATCHER.parse('leaf blade herbaceous.'),
-            {'part': [{'start': 0, 'end': 10, 'value': 'leaf'}],
+            {'part': [{'start': 0, 'end': 10, 'part': 'leaf'}],
              'plant_woodiness': [
-                 {'value': 'herbaceous', 'start': 11, 'end': 21}]}
+                 {'habit': 'herbaceous', 'start': 11, 'end': 21}]}
         )

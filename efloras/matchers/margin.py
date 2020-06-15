@@ -12,7 +12,7 @@ def margin(span):
         end=span.end_char,
     )
     value = [t.lower_ for t in span if t._.label in _KEEP]
-    data['value'] = '-'.join(value)
+    data['margin_shape'] = '-'.join(value)
     return data
 
 
