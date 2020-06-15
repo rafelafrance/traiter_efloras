@@ -16,11 +16,11 @@ class TestSuffixCount(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('perianth lobes elliptic, ca. 1 mm'),
             {'part': [{'start': 0, 'end': 8, 'part': 'perianth'}],
+             'subpart': [{'subpart': 'lobe', 'start': 9, 'end': 14}],
              'perianth_lobe_shape': [
-                 {'start': 15, 'end': 23, 'part': 'elliptic'}],
-             'perianth_lobe_size': [{
-                 'start': 29, 'end': 33,
-                 'length_low': 1.0, 'length_units': 'mm'}]}
+                 {'shape': 'elliptic', 'start': 15, 'end': 23}],
+             'perianth_lobe_size': [{'start': 29, 'end': 33,
+                                     'length_low': 1, 'length_units': 'mm'}]}
         )
 
     def test_suffix_count_02(self):
@@ -35,7 +35,7 @@ class TestSuffixCount(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse('petals spreading, pink, unlobed,'),
             {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
-             'petal_color': [{'part': 'pink', 'start': 18, 'end': 22}],
+             'petal_color': [{'color': 'pink', 'start': 18, 'end': 22}],
              'petal_lobe_count': [{'start': 24, 'end': 31, 'low': 0}]}
         )
 

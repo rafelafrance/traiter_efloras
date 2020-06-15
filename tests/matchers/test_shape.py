@@ -102,9 +102,11 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             MATCHER.parse(
                 'Leaf blades lobe apex rounded'),
-            {'part': [{'start': 0, 'end': 11, 'part': 'leaf'},
-                      {'start': 17, 'end': 21, 'part': 'apex'}],
-             'apex_shape': [{'shape': 'orbicular', 'start': 22, 'end': 29}]}
+            {'part': [{'start': 0, 'end': 11, 'part': 'leaf'}],
+             'subpart': [{'subpart': 'lobe', 'start': 12, 'end': 16},
+                         {'subpart': 'apex', 'start': 17, 'end': 21}],
+             'leaf_apex_shape': [
+                 {'shape': 'orbicular', 'start': 22, 'end': 29}]}
         )
 
     def test_shape_10(self):

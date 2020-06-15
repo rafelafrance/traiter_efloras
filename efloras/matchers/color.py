@@ -10,11 +10,7 @@ def color(span):
              if (r := REPLACE.get(t.text, t.text)) not in DASH}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
-    return dict(
-        color=value,
-        start=span.start_char,
-        end=span.end_char,
-    )
+    return dict(color=value)
 
 
 COLOR = {

@@ -139,8 +139,8 @@ class TestColor(unittest.TestCase):
     def test_color_13(self):
         self.assertEqual(
             MATCHER.parse(
-                'Plants acaulescent or nearly so, with white hairs.'),
-            {'part': [{'start': 0, 'end': 6, 'part': 'plant'},
-                      {'start': 44, 'end': 49, 'part': 'hair'}],
-             'plant_hair_color': [{'color': 'white', 'start': 38, 'end': 43}]}
+                'Leaves acaulescent or nearly so, with white hairs.'),
+            {'part': [{'start': 0, 'end': 6, 'part': 'leaf'}],
+             'leaf_hair_color': [{'color': 'white', 'start': 38, 'end': 43}],
+             'subpart': [{'subpart': 'hair', 'start': 44, 'end': 49}]}
         )

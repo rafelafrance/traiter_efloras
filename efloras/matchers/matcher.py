@@ -5,24 +5,10 @@ from collections import defaultdict
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 from traiter.util import Step  # pylint: disable=import-error
 
-from .color import COLOR
-from .count import COUNT
-from .descriptor import DESCRIPTOR
-from .habit import HABIT
-from .margin import MARGIN_SHAPE
-from .part import PART
-from .phrase import PHRASE
-from .range import RANGE
-from .shape import SHAPE
-from .size import SIZE
-from .suffix_count import SUFFIX_COUNT
+from .all_matchers import MATCHERS
 from ..pylib.attach import attach_traits_to_parts
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
-
-MATCHERS = (
-    COLOR, COUNT, DESCRIPTOR, HABIT, SUFFIX_COUNT, MARGIN_SHAPE, PHRASE, PART,
-    SHAPE, RANGE, SIZE)
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -54,9 +40,11 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
             if token._.step == Step.TRAIT and token._.data:
                 data = {k: v for k, v in token._.data.items()
                         if not k.startswith('_')}
+                data['start'] = token.idx
+                data['end'] = token.idx + len(token)
                 traits[token._.label].append(data)
 
-        from pprint import pp
-        pp(dict(traits))
+        # from pprint import pp
+        # pp(dict(traits))
 
         return traits

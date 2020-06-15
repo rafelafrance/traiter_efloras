@@ -14,10 +14,6 @@ PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)
 
 _SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex', )}
 
-BAN = {
-    'margin': set(""" shape """.split()),
-}
-
 
 def part(span):
     """Enrich a plant part match."""

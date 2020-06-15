@@ -1,4 +1,6 @@
 label,pattern,attr,replace,category,notes
+conj_phrase,and with,lower,,,Needed because we treat with specially
+conj_phrase,or with,lower,,,Needed because we treat with specially
 color,black,lower,,,
 color,blue,lower,,,
 color,brown,lower,,,
@@ -515,7 +517,6 @@ subpart,veins,lower,vein,,
 subpart,wing,lower,wing,,
 subpart,wings,lower,wing,,
 suffix_count,-callose,lower,callose,,
-suffix_count,-crenate,lower,crenate,,
 suffix_count,-dentate,lower,dentate,,
 suffix_count,-flowered,lower,flower,,
 suffix_count,-foliolate,lower,leaf,,

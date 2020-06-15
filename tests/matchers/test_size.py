@@ -63,8 +63,8 @@ class TestSize(unittest.TestCase):
     def test_size_06(self):
         self.assertEqual(
             MATCHER.parse('leaf sinuses 1/5–1/4 to base'),
-            {'part': [{'start': 0, 'end': 4, 'part': 'leaf'},
-                      {'start': 5, 'end': 12, 'part': 'sinus'}]}
+            {'part': [{'start': 0, 'end': 4, 'part': 'leaf'}],
+             'subpart': [{'subpart': 'sinus', 'start': 5, 'end': 12}]}
         )
 
     def test_size_07(self):
@@ -153,10 +153,10 @@ class TestSize(unittest.TestCase):
                       {'start': 36, 'end': 44, 'part': 'leaf'},
                       {'start': 59, 'end': 69, 'part': 'petiole'}],
              'leaf_count': [{'start': 7, 'end': 18, 'low': 3}],
-             'leaf_location': [{'value': 'lateral', 'start': 20, 'end': 27}],
+             'leaf_location': [{'location': 'lateral',
+                                'start': 20, 'end': 27}],
              'petiole_size': [{'start': 70, 'end': 76,
-                               'length_low': 2,
-                               'length_high': 5,
+                               'length_low': 2, 'length_high': 5,
                                'length_units': 'mm'}]}
         )
 
