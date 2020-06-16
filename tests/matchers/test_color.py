@@ -141,6 +141,7 @@ class TestColor(unittest.TestCase):
             MATCHER.parse(
                 'Leaves acaulescent or nearly so, with white hairs.'),
             {'part': [{'start': 0, 'end': 6, 'part': 'leaf'}],
+             'plant_habit': [{'habit': 'acaulescent', 'start': 7, 'end': 18}],
              'leaf_hair_color': [{'color': 'white', 'start': 38, 'end': 43}],
              'subpart': [{'subpart': 'hair', 'start': 44, 'end': 49}]}
         )

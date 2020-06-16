@@ -112,16 +112,16 @@ class TestCount(unittest.TestCase):
     def test_count_13(self):
         self.assertEqual(
             MATCHER.parse('leaflets in 3 or 4 pairs,'),
-            {'part': [{'start': 0, 'end': 8, 'part': 'leaf'}],
-             'leaf_count': [
+            {'part': [{'start': 0, 'end': 8, 'part': 'leaflet'}],
+             'leaflet_count': [
                  {'start': 12, 'end': 24, 'low': 3, 'high': 4, 'as': 'pairs'}]}
         )
 
     def test_count_14(self):
         self.assertEqual(
             MATCHER.parse('leaflets/lobes 11–23,'),
-            {'part': [{'start': 0, 'end': 8, 'part': 'leaf'}],
+            {'part': [{'start': 0, 'end': 8, 'part': 'leaflet'}],
              'subpart': [{'subpart': 'lobe', 'start': 9, 'end': 14}],
-             'leaf_lobe_count': [
+             'leaflet_lobe_count': [
                  {'start': 15, 'end': 20, 'low': 11, 'high': 23}]}
         )

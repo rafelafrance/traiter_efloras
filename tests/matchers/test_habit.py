@@ -35,7 +35,7 @@ class TestHabit(unittest.TestCase):
             {
                 'plant_woodiness': [
                     {'habit': 'herbaceous', 'start': 0, 'end': 5}],
-                'plant_life_span': [
+                'plant_duration': [
                     {'descriptor': 'perennial', 'start': 6, 'end': 15}],
                 'plant_habit': [{'habit': 'shrub', 'start': 19, 'end': 28}],
                 'plant_habitat': [
