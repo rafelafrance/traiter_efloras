@@ -112,15 +112,18 @@ SIZE = {
             'on_match': size,
             'patterns': [
                 [
+                    {'_': {'label': 'about'}, 'OP': '?'},
                     {'_': {'label': 'range'}},
                     {'_': {'label': 'length_units'}},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                 ],
                 [
+                    {'_': {'label': 'about'}, 'OP': '?'},
                     {'_': {'label': 'range'}},
                     {'_': {'label': 'length_units'}, 'OP': '?'},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                     {'LOWER': {'IN': CROSS}},
+                    {'_': {'label': 'about'}, 'OP': '?'},
                     {'_': {'label': 'range'}},
                     {'_': {'label': 'length_units'}},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},

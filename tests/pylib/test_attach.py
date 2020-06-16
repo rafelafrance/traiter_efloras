@@ -23,8 +23,9 @@ class TestAttach(unittest.TestCase):
                          {'subpart': 'wing', 'start': 74, 'end': 79}],
              'plant_keel_color': [
                  {'color': 'blue-tip', 'start': 10, 'end': 18}],
-             'plant_keel_size': [{'start': 39, 'end': 43,
-                                  'length_low': 6, 'length_units': 'mm'}],
+             'plant_keel_size': [{'start': 29, 'end': 43,
+                                  'length_low': 8, 'length_high': 9,
+                                  'width_low': 6, 'width_units': 'mm'}],
              'plant_keel_shape': [
                  {'shape': 'elliptic', 'start': 52, 'end': 60},
                  {'shape': 'emarginate', 'start': 62, 'end': 72}]}
@@ -37,10 +38,10 @@ class TestAttach(unittest.TestCase):
                 teeth ca. 2.5 mm.
                 """)),
             {'part': [{'start': 0, 'end': 5, 'part': 'calyx'}],
-             'calyx_size': [{'start': 10, 'end': 14,
-                             'length_low': 5, 'length_units': 'mm'}],
+             'calyx_size': [{'start': 6, 'end': 14, 'length_low': 5,
+                             'length_units': 'mm'}],
              'subpart': [{'subpart': 'tooth', 'start': 59, 'end': 64}],
-             'calyx_tooth_size': [{'start': 69, 'end': 75,
+             'calyx_tooth_size': [{'start': 65, 'end': 75,
                                    'length_low': 2.5, 'length_units': 'mm'}]}
         )
 
@@ -98,8 +99,9 @@ class TestAttach(unittest.TestCase):
                 hastate-auriculate, apex emarginate;""")),
             {'part': [{'start': 0, 'end': 5, 'part': 'calyx'},
                       {'start': 126, 'end': 132, 'part': 'petal'}],
-             'calyx_size': [{'start': 6, 'end': 14, 'length_low': 10,
-                             'length_high': 12, 'length_units': 'mm'}],
+             'calyx_size': [{'start': 6, 'end': 14,
+                             'length_low': 10, 'length_high': 12,
+                             'length_units': 'mm'}],
              'subpart': [{'subpart': 'hair', 'start': 96, 'end': 101},
                          {'subpart': 'tooth', 'start': 110, 'end': 115},
                          {'subpart': 'base', 'start': 217, 'end': 221},
@@ -107,12 +109,13 @@ class TestAttach(unittest.TestCase):
              'calyx_hair_size': [{'start': 102, 'end': 108,
                                   'length_low': 1, 'length_high': 2,
                                   'length_units': 'mm'}],
-             'calyx_tooth_size': [{'start': 120, 'end': 124, 'length_low': 4,
-                                   'length_units': 'mm'}],
+             'calyx_tooth_size': [{'start': 116, 'end': 124,
+                                   'length_low': 4, 'length_units': 'mm'}],
              'petal_color': [{'color': 'white', 'start': 133, 'end': 138}],
              'petal_shape': [
                  {'shape': 'oblong-pandurate', 'start': 149, 'end': 165}],
-             'petal_size': [{'start': 171, 'end': 180, 'length_low': 25,
+             'petal_size': [{'start': 167, 'end': 180,
+                             'length_low': 25,
                              'width_low': 8, 'width_units': 'mm'}],
              'petal_base_shape': [{'shape': 'hastate-auriculate',
                                    'start': 231, 'end': 249}],

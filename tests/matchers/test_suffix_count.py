@@ -19,7 +19,7 @@ class TestSuffixCount(unittest.TestCase):
              'subpart': [{'subpart': 'lobe', 'start': 9, 'end': 14}],
              'perianth_lobe_shape': [
                  {'shape': 'elliptic', 'start': 15, 'end': 23}],
-             'perianth_lobe_size': [{'start': 29, 'end': 33,
+             'perianth_lobe_size': [{'start': 25, 'end': 33,
                                      'length_low': 1, 'length_units': 'mm'}]}
         )
 

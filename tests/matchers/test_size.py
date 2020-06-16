@@ -295,3 +295,12 @@ class TestSize(unittest.TestCase):
                              'height_high': 4.0,
                              'height_units': 'mm'}]}
         )
+
+    def test_size_24(self):
+        self.assertEqual(
+            MATCHER.parse('Petals 15-21 × ca. 8 mm,'),
+            {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
+             'petal_size': [{'start': 7, 'end': 23,
+                             'length_low': 15, 'length_high': 21,
+                             'width_low': 8, 'width_units': 'mm'}]}
+        )
