@@ -125,3 +125,12 @@ class TestCount(unittest.TestCase):
              'leaflet_lobe_count': [
                  {'start': 15, 'end': 20, 'low': 11, 'high': 23}]}
         )
+
+    def test_count_15(self):
+        self.assertEqual(
+            MATCHER.parse('leaflets in 3 or 4(or 5) pairs,'),
+            {'part': [{'start': 0, 'end': 8, 'part': 'leaflet'}],
+             'leaflet_count': [
+                 {'start': 12, 'end': 30, 'low': 3, 'high': 4, 'max': 5,
+                  'as': 'pairs'}]}
+        )

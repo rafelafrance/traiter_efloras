@@ -21,3 +21,11 @@ class TestPhrase(unittest.TestCase):
                                          'floral_location': 'superior',
                                          'start': 37, 'end': 47}]}
         )
+
+    def test_phrase_02(self):
+        self.assertEqual(
+            MATCHER.parse('Petals glabrous, deciduous;'),
+            {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
+             'petal_duration': [
+                 {'start': 17, 'end': 26, 'duration': 'deciduous'}]}
+        )

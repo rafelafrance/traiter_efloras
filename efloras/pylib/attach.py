@@ -94,7 +94,8 @@ def attach_traits_to_parts(sent):
             token._.data = {**token._.data, **augment}
 
         elif label in PLANT_LEVEL_LABELS:
-            token._.label = f'plant_{label}'
+            if not label.startswith('plant_'):
+                token._.label = f'plant_{label}'
 
         else:
             update_token(token, label, part, subpart, augment)

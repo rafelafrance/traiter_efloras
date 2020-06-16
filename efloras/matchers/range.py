@@ -172,5 +172,20 @@ RANGE = {
                 ],
             ]
         },
+        {
+            'label': 'range_lhx_or',
+            'on_match': partial(range_, fields='low high max'),
+            'patterns': [
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': OPEN}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': CLOSE}},
+                ],
+            ]
+        },
     ],
 }
