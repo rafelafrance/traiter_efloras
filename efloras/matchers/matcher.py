@@ -44,7 +44,7 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                 data['end'] = token.idx + len(token)
                 traits[token._.label].append(data)
 
-        from pprint import pp
-        pp(dict(traits))
+        # from pprint import pp
+        # pp(dict(traits))
 
         return traits

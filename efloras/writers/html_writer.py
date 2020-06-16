@@ -27,7 +27,7 @@ def html_writer(args, rows):
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
     colors = {label for r in rows for label in r['traits']}
-    colors -= {'part'}
+    colors -= {'part', 'subpart'}
     colors = {label: next(COLORS) for label in sorted(colors)}
 
     for row in rows:
@@ -50,7 +50,7 @@ def format_traits(row, colors):
     new_dict = {}
     traits = dict(sorted(row['traits'].items(), key=lambda i: i[0]))
     for label, traits in traits.items():
-        if label == 'part':
+        if label in ('part', 'subpart'):
             continue
         new_label = f'<span class="{colors[label]}">{label}</span>'
         new_traits = {}
@@ -87,6 +87,11 @@ def format_text(row, tags=None, colors=None):
             if part['end']:
                 cut_id = append_endpoints(
                     cuts, cut_id, part['start'], part['end'], 'bold')
+
+    if parts := row['traits'].get('subpart'):
+        for part in parts:
+            cut_id = append_endpoints(
+                cuts, cut_id, part['start'], part['end'], 'bold_italic')
 
     return insert_markup(text, cuts, tags)
 
@@ -198,6 +203,8 @@ def build_tags():
     tags = {
         ('bold', True): '<strong>',
         ('bold', False): '</strong>',
+        ('bold_italic', True): '<strong><i>',
+        ('bold_italic', False): '</i></strong>',
     }
 
     for color in CLASSES:
