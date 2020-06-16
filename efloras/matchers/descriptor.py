@@ -21,8 +21,8 @@ def descriptor(span):
 
     data = dict(
         start=span.start_char,
-        _relabel=label,
         end=span.end_char,
+        _relabel=label,
     )
     data[label] = REPLACE.get(value, value)
 

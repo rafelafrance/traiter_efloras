@@ -9,14 +9,14 @@ LITERAL_LABELS = sorted(LITERAL_LABELS)
 
 def phrase(span):
     """Enrich the match."""
-    value = span.lower_
     label = span[0]._.label
+    value = span.lower_
 
     data = dict(
-        _relabel=label,
         start=span.start_char,
-        end=span.end_char)
-
+        end=span.end_char,
+        _relabel=label,
+    )
     data[label] = REPLACE.get(value, value)
 
     return data

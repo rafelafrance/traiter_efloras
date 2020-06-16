@@ -30,14 +30,18 @@ def suffixed_count(span):
     return data
 
 
-def count_zero(span):
+def count_phrase(span):
     """Enrich the match with data."""
-    return dict(
+    data = dict(
         start=span.start_char,
         end=span.end_char,
         low=int(REPLACE[span.lower_]),
-        _relabel=f'{CATEGORY[span.lower_]}_count',
+        _relabel='count',
     )
+    if category := CATEGORY.get(span.lower_):
+        data['_relabel'] = f'{category}_count'
+
+    return data
 
 
 SUFFIX_COUNT = {
@@ -55,8 +59,8 @@ SUFFIX_COUNT = {
             ],
         },
         {
-            'label': 'count_zero',
-            'on_match': count_zero,
+            'label': 'count_phrase',
+            'on_match': count_phrase,
             'patterns': [
                 [
                     {'_': {'label': 'count_word'}}

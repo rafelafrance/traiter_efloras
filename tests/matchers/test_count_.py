@@ -134,3 +134,10 @@ class TestCount(unittest.TestCase):
                  {'start': 12, 'end': 30, 'low': 3, 'high': 4, 'max': 5,
                   'as': 'pairs'}]}
         )
+
+    def test_count_16(self):
+        self.assertEqual(
+            MATCHER.parse('Bracteoles absent.'),
+            {'part': [{'start': 0, 'end': 10, 'part': 'bract'}],
+             'bract_count': [{'start': 11, 'end': 17, 'low': 0}]}
+        )

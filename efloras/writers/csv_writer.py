@@ -26,7 +26,7 @@ def build_columns(row):
     skips = extras | {'start', 'end'}
 
     for label, traits in row['raw_traits'].items():
-        if label == 'part':
+        if label in ('part', 'subpart'):
             continue
         columns = defaultdict(list)
         for trait in traits:
