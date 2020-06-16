@@ -1,6 +1,6 @@
 """Common descriptors snippets, plant-wide traits (words or phrases)."""
 
-from ..pylib.terms import TERMS
+from ..pylib.terms import TERMS, REPLACE
 
 DESCRIPTORS_DICT = {t['label']: t['label'] for t in TERMS
                     if t['category'] == 'descriptor'}
@@ -19,12 +19,14 @@ def descriptor(span):
     if value not in IS_DESCRIPTOR:
         return {}
 
-    return dict(
-        descriptor=value,
-        _relabel=label,
+    data = dict(
         start=span.start_char,
+        _relabel=label,
         end=span.end_char,
     )
+    data[label] = REPLACE.get(value, value)
+
+    return data
 
 
 DESCRIPTOR = {

@@ -2,7 +2,6 @@
 from .color import COLOR
 from .count import COUNT
 from .descriptor import DESCRIPTOR
-from .habit import HABIT
 from .margin import MARGIN_SHAPE
 from .part import PART
 from .phrase import PHRASE
@@ -14,7 +13,7 @@ from .suffix_count import SUFFIX_COUNT
 
 PARTS = [PART, SUBPART]
 TRAITS = [
-    COLOR, COUNT, DESCRIPTOR, HABIT, MARGIN_SHAPE, PHRASE, RANGE,
+    COLOR, COUNT, DESCRIPTOR, MARGIN_SHAPE, PHRASE, RANGE,
     SHAPE, SIZE, SUFFIX_COUNT]
 
 MATCHERS = PARTS + TRAITS

@@ -31,11 +31,10 @@ from traiter.util import Step  # pylint: disable=import-error
 
 from ..matchers.all_matchers import PART_LABELS, SUBPART_LABELS, TRAIT_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
-from ..matchers.habit import HABIT_LABELS
 from .terms import REPLACE
 
 # Labels that indicate plant-level parts
-PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS + HABIT_LABELS)
+PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 
 # The set of all values that get transferred to other parts
 TRANSFER = set(""" sex location """.split())
