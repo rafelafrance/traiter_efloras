@@ -136,6 +136,7 @@ SIZE = {
             'patterns': [
                 [
                     {'LOWER': 'to'},
+                    {'_': {'label': 'about'}, 'OP': '?'},
                     {'LOWER': {'REGEX': NUMBER}},
                     {'_': {'label': QUEST}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
