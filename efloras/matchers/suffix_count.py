@@ -1,6 +1,6 @@
 """Common lobe count snippets."""
 
-from .shared import PLUS
+from .shared import CLOSE, OPEN, PLUS
 from ..pylib.terms import CATEGORY, REPLACE
 
 
@@ -23,6 +23,9 @@ def suffixed_count(span):
 
         elif token.text in PLUS:
             data['indefinite'] = True
+
+        elif token.text in OPEN + CLOSE:
+            continue
 
         else:
             return {}
@@ -52,9 +55,11 @@ SUFFIX_COUNT = {
             'on_match': suffixed_count,
             'patterns': [
                 [
+                    {'TEXT': {'IN': OPEN}, 'OP': '?'},
                     {'_': {'label': 'range'}},
                     {'TEXT': {'IN': PLUS}, 'OP': '?'},
-                    {'_': {'label': 'suffix_count'}}
+                    {'_': {'label': 'suffix_count'}},
+                    {'TEXT': {'IN': CLOSE}, 'OP': '?'},
                 ],
             ],
         },
@@ -63,7 +68,7 @@ SUFFIX_COUNT = {
             'on_match': count_phrase,
             'patterns': [
                 [
-                    {'_': {'label': 'count_word'}}
+                    {'_': {'label': 'count_word'}},
                 ],
             ],
         },

@@ -22,7 +22,7 @@ def csv_writer(args, rows):
 
 def build_columns(row):
     """Expand values into separate columns."""
-    extras = set(""" sex location as """.split())
+    extras = set(""" sex location group """.split())
     skips = extras | {'start', 'end'}
 
     for label, traits in row['raw_traits'].items():

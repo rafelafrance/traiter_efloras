@@ -114,7 +114,8 @@ class TestCount(unittest.TestCase):
             MATCHER.parse('leaflets in 3 or 4 pairs,'),
             {'part': [{'start': 0, 'end': 8, 'part': 'leaflet'}],
              'leaflet_count': [
-                 {'start': 12, 'end': 24, 'low': 3, 'high': 4, 'as': 'pairs'}]}
+                 {'start': 12, 'end': 24, 'low': 3, 'high': 4,
+                  'group': 'pairs'}]}
         )
 
     def test_count_14(self):
@@ -132,12 +133,5 @@ class TestCount(unittest.TestCase):
             {'part': [{'start': 0, 'end': 8, 'part': 'leaflet'}],
              'leaflet_count': [
                  {'start': 12, 'end': 30, 'low': 3, 'high': 4, 'max': 5,
-                  'as': 'pairs'}]}
-        )
-
-    def test_count_16(self):
-        self.assertEqual(
-            MATCHER.parse('Bracteoles absent.'),
-            {'part': [{'start': 0, 'end': 10, 'part': 'bract'}],
-             'bract_count': [{'start': 11, 'end': 17, 'low': 0}]}
+                  'group': 'pairs'}]}
         )

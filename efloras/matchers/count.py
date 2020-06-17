@@ -25,7 +25,7 @@ def count(span):
             data = {**token._.data, **data}
 
         elif token.lower_ in _PER_COUNT:
-            data['as'] = REPLACE.get(token.lower_, token.lower_)
+            data['group'] = REPLACE.get(token.lower_, token.lower_)
 
         else:
             return {}

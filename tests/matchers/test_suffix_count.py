@@ -46,3 +46,10 @@ class TestSuffixCount(unittest.TestCase):
              'inflorescence_flower_count': [
                  {'start': 15, 'end': 27, 'low': 10, 'indefinite': True}]}
         )
+
+    def test_suffix_count_05(self):
+        self.assertEqual(
+            MATCHER.parse('blade [3–5-foliolate]'),
+            {'part': [{'start': 0, 'end': 5, 'part': 'leaf'}],
+             'leaf_count': [{'start': 6, 'end': 21, 'low': 3, 'high': 5}]}
+        )

@@ -28,7 +28,7 @@ def hyphenate_terms(terms):
     new_terms = []
     for term in terms:
         if term['hyphenate']:
-            parts = term['hyphenate'].split()
+            parts = term['hyphenate'].split('-')
         else:
             parts = hyphenate_word(term['pattern'])
         for i in range(1, len(parts)):
