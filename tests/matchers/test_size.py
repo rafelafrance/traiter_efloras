@@ -324,3 +324,11 @@ class TestSize(unittest.TestCase):
                   'height_low': 2.8, 'height_high': 4.5, 'height_units': 'mm',
                   'width_low': 2.8, 'width_high': 4.5, 'width_units': 'mm'}]}
         )
+
+    def test_size_27(self):
+        self.assertEqual(
+            MATCHER.parse('Ra­cemes 3-4 cm,'),
+            {'part': [{'start': 0, 'end': 8, 'part': 'inflorescence'}],
+             'inflorescence_size': [{'start': 9, 'end': 15, 'length_low': 3,
+                                     'length_high': 4, 'length_units': 'cm'}]}
+        )

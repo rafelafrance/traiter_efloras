@@ -27,7 +27,10 @@ def hyphenate_terms(terms):
     """Systematically handle hyphenated terms."""
     new_terms = []
     for term in terms:
-        parts = hyphenate_word(term['pattern'])
+        if term['hyphenate']:
+            parts = term['hyphenate'].split()
+        else:
+            parts = hyphenate_word(term['pattern'])
         for i in range(1, len(parts)):
             replace = term['replace']
             hyphenated = ''.join(parts[:i]) + '-' + ''.join(parts[i:])
