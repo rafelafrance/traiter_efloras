@@ -29,8 +29,16 @@ def hyphenate_terms(terms):
     for term in terms:
         parts = hyphenate_word(term['pattern'])
         for i in range(1, len(parts)):
-            hyphenated = ''.join(parts[:i]) + '-' + ''.join(parts[i:])
             replace = term['replace']
+            hyphenated = ''.join(parts[:i]) + '-' + ''.join(parts[i:])
+            new_terms.append({
+                'label': term['label'],
+                'pattern': hyphenated,
+                'attr': term['attr'],
+                'replace': replace if replace else term['pattern'],
+                'category': term['category'],
+            })
+            hyphenated = ''.join(parts[:i]) + '\xad' + ''.join(parts[i:])
             new_terms.append({
                 'label': term['label'],
                 'pattern': hyphenated,

@@ -173,3 +173,13 @@ class TestShape(unittest.TestCase):
             {'part': [{'part': 'leaf', 'start': 0, 'end': 5}],
              'leaf_shape': [{'shape': 'polygonal', 'start': 6, 'end': 17}]}
         )
+
+    def test_shape_16(self):
+        self.assertEqual(
+            MATCHER.parse('Petals standard rhombic-ellip­tic to obovate,'),
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_shape': [
+                 {'shape': 'rhomboic-elliptic', 'start': 16, 'end': 33},
+                 {'shape': 'obovate', 'start': 37, 'end': 44}
+             ]}
+        )
