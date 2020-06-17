@@ -175,6 +175,7 @@ class TestShape(unittest.TestCase):
         )
 
     def test_shape_16(self):
+        """There is a soft hyphen in ellip­tic."""
         self.assertEqual(
             MATCHER.parse('Petals standard rhombic-ellip­tic to obovate,'),
             {'part': [{'part': 'petal', 'start': 0, 'end': 6}],

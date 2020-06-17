@@ -91,6 +91,26 @@ def fill_data(span, dims):
     return data
 
 
+def size_double_dim(span):
+    """Handle the case when the dimensions are doubled but values are not.
+
+    Like: Legumes 2.8-4.5 mm high and wide
+    """
+    data = size(span)
+    dims = [REPLACE.get(t.lower_, t.lower_) for t in span
+            if t._.label == 'dimension']
+
+    new_data = {}
+    for key, value in data.items():
+        parts = key.split('_')
+        if parts[0] in dims:
+            parts[0] = dims[1] if parts[0] == dims[0] else dims[0]
+            new_key = '_'.join(parts)
+            new_data[new_key] = value
+
+    return {**data, **new_data}
+
+
 _FOLLOW = """ dimension sex_enclosed sex """.split()
 _UNCERTAIN = """ quest quest_enclosed """.split()
 
@@ -141,6 +161,21 @@ SIZE = {
                     {'_': {'label': QUEST}, 'OP': '?'},
                     {'_': {'label': 'length_units'}},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                ],
+            ],
+        },
+        {
+            'label': 'size_double_dim',
+            'on_match': size_double_dim,
+            'patterns': [
+                [
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}},
+                    {'_': {'label': {'IN': 'sex_enclosed' 'sex'}}, 'OP': '?'},
+                    {'_': {'label': 'dimension'}},
+                    {'LOWER': 'and'},
+                    {'_': {'label': 'dimension'}},
                 ],
             ],
         },

@@ -312,3 +312,15 @@ class TestSize(unittest.TestCase):
              'petal_size': [{'start': 7, 'end': 15,
                              'length_low': 8.0, 'length_units': 'mm'}]}
         )
+
+    def test_size_26(self):
+        self.assertEqual(
+            MATCHER.parse('Legumes 7-10 mm, 2.8-4.5 mm high and wide'),
+            {'part': [{'start': 0, 'end': 7, 'part': 'legume'}],
+             'legume_size': [
+                 {'start': 8, 'end': 15, 'length_low': 7.0,
+                  'length_high': 10.0, 'length_units': 'mm'},
+                 {'start': 17, 'end': 41,
+                  'height_low': 2.8, 'height_high': 4.5, 'height_units': 'mm',
+                  'width_low': 2.8, 'width_high': 4.5, 'width_units': 'mm'}]}
+        )
