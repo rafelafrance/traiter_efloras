@@ -29,9 +29,9 @@ import re
 
 from traiter.util import Step  # pylint: disable=import-error
 
+from .terms import REPLACE
 from ..matchers.all_matchers import PART_LABELS, SUBPART_LABELS, TRAIT_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
-from .terms import REPLACE
 
 # Labels that indicate plant-level parts
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
@@ -43,6 +43,7 @@ SUFFIX_START = {'with'}
 SUFFIX_END = {';', '.'}
 
 
+# TODO: Replace as much of this function as practical with "attach" patterns
 def attach_traits_to_parts(sent):
     """Attach traits to a plant part."""
     augment = {}
@@ -60,7 +61,10 @@ def attach_traits_to_parts(sent):
     for token in sent:
         label = token._.label
 
-        if token.lower_ in SUFFIX_START:
+        if token._.step == Step.FINAL:
+            continue
+
+        elif token.lower_ in SUFFIX_START:
             suffix = True
 
         elif token.lower_ in SUFFIX_END:

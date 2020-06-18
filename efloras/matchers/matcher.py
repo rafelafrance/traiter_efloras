@@ -6,6 +6,7 @@ from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 from traiter.util import Step  # pylint: disable=import-error
 
 from .all_matchers import MATCHERS
+from .attach import ATTACH
 from ..pylib.attach import attach_traits_to_parts
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
@@ -26,6 +27,7 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         self.add_patterns(groupers, Step.GROUP)
         self.add_patterns(traiters, Step.TRAIT)
+        self.add_patterns(ATTACH['matchers'], Step.FINAL)
         self.add_terms(TERMS)
 
     def parse(self, text):
@@ -37,7 +39,7 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         traits = defaultdict(list)
         for token in doc:
-            if token._.step == Step.TRAIT and token._.data:
+            if token._.step >= Step.TRAIT and token._.data:
                 data = {k: v for k, v in token._.data.items()
                         if not k.startswith('_')}
                 data['start'] = token.idx

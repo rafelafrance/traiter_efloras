@@ -1,4 +1,4 @@
-"""Common lobe count snippets."""
+"""Common suffix count snippets."""
 
 from .shared import CLOSE, OPEN, PLUS
 from ..pylib.terms import CATEGORY, REPLACE

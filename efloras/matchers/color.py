@@ -1,6 +1,6 @@
 """Common color snippets."""
 
-from ..pylib.terms import DASH, REPLACE
+from ..pylib.terms import REPLACE
 from .shared import DASH
 
 

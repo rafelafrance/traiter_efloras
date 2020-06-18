@@ -12,8 +12,7 @@ from .util import VOCAB_DIR
 
 TERM_PATH = VOCAB_DIR / 'terms.csv'
 
-DASH = '–-'
-QUOTE = """["']"""
+_QUOTE = """["']"""
 
 
 def read_terms():
@@ -60,6 +59,6 @@ REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
 CATEGORY = {t['pattern']: c for t in TERMS if (c := t.get('category'))}
 
 PATTERN_RE = re.compile(rf"""
-    {QUOTE} term {QUOTE} \s* : \s* {QUOTE} (\w+) {QUOTE}
-    | {QUOTE} term {QUOTE} \s* : \s*  \{{ {QUOTE} IN {QUOTE} ( [^}}]+ )
+    {_QUOTE} term {_QUOTE} \s* : \s* {_QUOTE} (\w+) {_QUOTE}
+    | {_QUOTE} term {_QUOTE} \s* : \s*  \{{ {_QUOTE} IN {_QUOTE} ( [^}}]+ )
     """, FLAGS)

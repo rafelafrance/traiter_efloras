@@ -1,14 +1,15 @@
 """Shared patterns."""
 
-CLOSE = [')', ']']
-CROSS = ['x', '×']
-DASH = ['–', '-', '––', '--']
+CLOSE = ' ) ] '.split()
+CROSS = ' x × '.split()
+DASH = '– - –– --'.split()
+DOT = ' . '.split()
 INT = r'^\d+$'
 NUMBER = r'^\d+(\.\d*)?$'
-OPEN = ['(', '[']
-PLUS = ['+']
-SLASH = ['/']
-QUOTE = ['"', "'"]
+OPEN = ' ( [ '.split()
+PLUS = ' + '.split()
+SLASH = ' / '.split()
+QUOTE = ' " \' '.split()
 
 
 QUEST = {

@@ -2,7 +2,9 @@
 from .shared import DASH
 
 _LEADERS = """ shape shape_leader """.split()
-_KEEP = {'margin_shape', 'shape'}
+_FOLLOWERS = """ margin_shape margin_follower """.split()
+_SHAPES = """ margin_shape shape """.split()
+_KEEP = set(_SHAPES)
 
 
 def margin(span):
@@ -28,7 +30,12 @@ MARGIN_SHAPE = {
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'margin_shape'}, 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'margin_shape'}, 'OP': '?'},
+                    {'_': {'label': {'IN': _FOLLOWERS}}, 'OP': '*'},
+                ],
+                [
+                    {'_': {'label': {'IN': _SHAPES}}, 'OP': '+'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
+                    {'_': {'label': {'IN': _FOLLOWERS}}, 'OP': '+'},
                 ],
             ],
         },
