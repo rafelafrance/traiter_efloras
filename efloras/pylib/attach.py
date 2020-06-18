@@ -29,7 +29,6 @@ import re
 
 from traiter.util import Step  # pylint: disable=import-error
 
-from .terms import REPLACE
 from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 
@@ -43,18 +42,22 @@ SUFFIX_START = {'with'}
 SUFFIX_END = {';', '.'}
 
 
-# TODO: Replace as much of this function as practical with "attach" patterns
 def attach_traits_to_parts(sent):
     """Attach traits to a plant part."""
-    augment = {}
-    part = 'plant'
     subpart = ''
     suffix = False  # Does the trait follow the part or lead it
     stack = []
 
+    part = 'plant'
+    augment_stack = [{}]
+    parts = [t for t in sent if t._.label == 'part']
+    if parts:
+        data = parts[0]._.data
+        part = data['part']
+        augment_stack = [({k: v for k, v in data.items() if k in TRANSFER})]
+
     for token in sent:
         label = token._.label
-        data = token._.data
 
         if token._.aux.get('attached'):
             continue
@@ -63,7 +66,7 @@ def attach_traits_to_parts(sent):
             suffix = True
 
         elif token.lower_ in SUFFIX_END:
-            stack, suffix = adjust_stack(stack, part, subpart, augment)
+            stack, suffix = adjust_stack(stack, part, subpart, augment_stack)
 
         elif token._.step != Step.TRAIT:
             continue
@@ -72,50 +75,54 @@ def attach_traits_to_parts(sent):
             stack.append(token)
 
         elif suffix and label in PART_LABELS:
-            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
-                augment = transfer
-            token._.data = {**token._.data, **augment}
+            augment_stack = augment_data(augment_stack, token)
             part = token._.data['part']
-            stack, suffix = adjust_stack(stack, part, subpart, augment)
+            stack, suffix = adjust_stack(stack, part, subpart, augment_stack)
 
         elif suffix and label in SUBPART_LABELS:
-            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
-                augment = transfer
-            token._.data = {**token._.data, **augment}
+            augment_stack = augment_data(augment_stack, token)
             subpart = token._.data['subpart']
-            stack, suffix = adjust_stack(stack, part, subpart, augment)
+            stack, suffix = adjust_stack(stack, part, subpart, augment_stack)
 
         elif label in PART_LABELS:
-            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
-                augment = transfer
+            augment_stack = augment_data(augment_stack, token)
             part = token._.data['part']
-            token._.data = {**token._.data, **augment}
 
         elif label in SUBPART_LABELS:
-            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
-                augment = transfer
+            augment_stack = augment_data(augment_stack, token)
             subpart = token._.data['subpart']
-            token._.data = {**token._.data, **augment}
 
         elif label in PLANT_LEVEL_LABELS:
             if not label.startswith('plant_'):
                 token._.label = f'plant_{label}'
 
         else:
-            update_token(token, label, part, subpart, augment)
+            update_token(token, label, part, subpart, augment_stack)
 
 
-def adjust_stack(stack, part, subpart, augment):
+def augment_data(augment_stack, token):
+    """Update the token's data field."""
+    if augment := {k: v for k, v in token._.data.items() if k in TRANSFER}:
+        if len(augment_stack) > 1:
+            augment_stack[-1] = augment
+        else:
+            augment_stack.append(augment)
+    token._.data = {**token._.data, **augment_stack[-1]}
+    return augment_stack
+
+
+def adjust_stack(stack, part, subpart, augment_stack):
     """Adjust all tokens on the suffix stack."""
     for saved_token in stack:
         label = saved_token._.label
-        update_token(saved_token, label, part, subpart, augment)
+        update_token(saved_token, label, part, subpart, augment_stack)
     return [], False
 
 
-def update_token(token, label, part, subpart, augment):
+def update_token(token, label, part, subpart, augment_stack):
     """Relabel the token and add the augment data."""
     label = f'{part}_{subpart}_{label}' if subpart else f'{part}_{label}'
     label = re.sub(r'_([^_]+)_\1', r'_\1', label)
     token._.label = re.sub(r'^([^_]+)_\1', r'\1', label)
-    token._.data = {**token._.data, **augment}
+    aug = augment_stack.pop() if len(augment_stack) > 1 else augment_stack[0]
+    token._.data = {**token._.data, **aug}
