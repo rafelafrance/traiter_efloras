@@ -52,14 +52,9 @@ def attach_traits_to_parts(sent):
     suffix = False  # Does the trait follow the part or lead it
     stack = []
 
-    parts = [t for t in sent if t._.label == 'part']
-    if parts:
-        data = parts[0]._.data
-        part = data['part']
-        augment = {k: v for k, v in data.items() if k in TRANSFER}
-
     for token in sent:
         label = token._.label
+        data = token._.data
 
         if token._.aux.get('attached'):
             continue
@@ -77,23 +72,29 @@ def attach_traits_to_parts(sent):
             stack.append(token)
 
         elif suffix and label in PART_LABELS:
+            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
+                augment = transfer
             token._.data = {**token._.data, **augment}
             part = token._.data['part']
             stack, suffix = adjust_stack(stack, part, subpart, augment)
 
         elif suffix and label in SUBPART_LABELS:
+            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
+                augment = transfer
             token._.data = {**token._.data, **augment}
             subpart = token._.data['subpart']
-            subpart = REPLACE.get(subpart, subpart)
             stack, suffix = adjust_stack(stack, part, subpart, augment)
 
         elif label in PART_LABELS:
+            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
+                augment = transfer
             part = token._.data['part']
             token._.data = {**token._.data, **augment}
 
         elif label in SUBPART_LABELS:
+            if transfer := {k: v for k, v in data.items() if k in TRANSFER}:
+                augment = transfer
             subpart = token._.data['subpart']
-            subpart = REPLACE.get(subpart, subpart)
             token._.data = {**token._.data, **augment}
 
         elif label in PLANT_LEVEL_LABELS:
