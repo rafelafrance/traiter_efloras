@@ -10,7 +10,7 @@ MATCHER = Matcher()
 
 
 class TestSubpart(unittest.TestCase):
-    """Test the plant descriptor trait parser."""
+    """Test the plant subpart parser."""
 
     def test_subpart_01(self):
         self.assertEqual(

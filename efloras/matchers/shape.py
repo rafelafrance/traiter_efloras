@@ -45,6 +45,12 @@ SHAPE = {
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},
                 ],
+                [
+                    {'_': {'label': {'IN': [
+                        'shape', 'shape_leader']}}, 'OP': '+'},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
+                    {'_': {'label': 'shape'}, 'OP': '+'},
+                ],
             ],
         },
     ]

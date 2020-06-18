@@ -2,7 +2,7 @@
 from .shared import DASH
 
 _LEADERS = """ shape shape_leader margin_leader """.split()
-_FOLLOWERS = """ margin_shape margin_follower """.split()
+_FOLLOWERS = """ shape margin_shape margin_follower """.split()
 _SHAPES = """ margin_shape shape """.split()
 _KEEP = set(_SHAPES)
 

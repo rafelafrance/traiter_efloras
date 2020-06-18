@@ -26,9 +26,11 @@ We consider 3 levels of parts to a treatment sentence. For example:
 """
 
 import re
+from collections import namedtuple
 
 from traiter.util import Step  # pylint: disable=import-error
 
+from ..pylib.terms import LABELS
 from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 
@@ -38,14 +40,18 @@ PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 # The set of all values that get transferred to other parts
 TRANSFER = set(""" sex location """.split())
 
-SUFFIX_START = {'with'}
+Suffix = namedtuple('Suffix', 'is_suffix leader')
+SUFFIXES = {
+    'with': '',
+    'without': 'not ',
+}
 SUFFIX_END = {';', '.'}
 
 
 def attach_traits_to_parts(sent):
     """Attach traits to a plant part."""
     subpart = ''
-    suffix = False  # Does the trait follow the part or lead it
+    suffix = Suffix(is_suffix=False, leader='')
     stack = []
 
     part = 'plant'
@@ -62,27 +68,30 @@ def attach_traits_to_parts(sent):
         if token._.aux.get('attached'):
             continue
 
-        elif token.lower_ in SUFFIX_START:
-            suffix = True
+        elif token.lower_ in SUFFIXES:
+            suffix = Suffix(is_suffix=True, leader=SUFFIXES.get(token.lower_))
 
         elif token.lower_ in SUFFIX_END:
-            stack, suffix = adjust_stack(stack, part, subpart, augment_stack)
+            stack, suffix = adjust_stack(
+                stack, part, subpart, augment_stack, suffix)
 
         elif token._.step != Step.TRAIT:
             continue
 
-        elif suffix and label and label not in ALL_PARTS:
+        elif suffix.is_suffix and label and label not in ALL_PARTS:
             stack.append(token)
 
-        elif suffix and label in PART_LABELS:
+        elif suffix.is_suffix and label in PART_LABELS:
             augment_stack = augment_data(augment_stack, token)
             part = token._.data['part']
-            stack, suffix = adjust_stack(stack, part, subpart, augment_stack)
+            stack, suffix = adjust_stack(
+                stack, part, subpart, augment_stack, suffix)
 
-        elif suffix and label in SUBPART_LABELS:
+        elif suffix.is_suffix and label in SUBPART_LABELS:
             augment_stack = augment_data(augment_stack, token)
             subpart = token._.data['subpart']
-            stack, suffix = adjust_stack(stack, part, subpart, augment_stack)
+            stack, suffix = adjust_stack(
+                stack, part, subpart, augment_stack, suffix)
 
         elif label in PART_LABELS:
             augment_stack = augment_data(augment_stack, token)
@@ -111,12 +120,16 @@ def augment_data(augment_stack, token):
     return augment_stack
 
 
-def adjust_stack(stack, part, subpart, augment_stack):
+def adjust_stack(stack, part, subpart, augment_stack, suffix):
     """Adjust all tokens on the suffix stack."""
-    for saved_token in stack:
-        label = saved_token._.label
-        update_token(saved_token, label, part, subpart, augment_stack)
-    return [], False
+    for token in stack:
+        label = token._.label
+        if suffix.leader:
+            for key, value in token._.data.items():
+                if key in LABELS and isinstance(value, str):
+                    token._.data[key] = suffix.leader + token._.data[key]
+        update_token(token, label, part, subpart, augment_stack)
+    return [], Suffix(is_suffix=False, leader='')
 
 
 def update_token(token, label, part, subpart, augment_stack):

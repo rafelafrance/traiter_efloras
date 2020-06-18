@@ -58,11 +58,3 @@ class TestDescriptor(unittest.TestCase):
                     {'habitat': 'epiphytic', 'start': 30, 'end': 39},
                     {'habitat': 'epilithic', 'start': 43, 'end': 52}]}
         )
-
-    def test_descriptor_05(self):
-        self.assertEqual(
-            MATCHER.parse('leaf blade herbaceous.'),
-            {'part': [{'start': 0, 'end': 10, 'part': 'leaf'}],
-             'plant_woodiness': [
-                 {'woodiness': 'herbaceous', 'start': 11, 'end': 21}]}
-        )

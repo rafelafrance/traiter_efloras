@@ -149,3 +149,13 @@ class TestAttach(unittest.TestCase):
                       {'start': 36, 'end': 41, 'part': 'ovary'}],
              'ovary_lobe_count': [{'start': 28, 'end': 35, 'low': 3}]}
         )
+
+    def test_attach_08(self):
+        self.assertEqual(
+            MATCHER.parse(shorten("""
+                roots thin, without thick, woody rootstock""")),
+            {'part': [{'start': 0, 'end': 5, 'part': 'root'},
+                      {'start': 33, 'end': 42, 'part': 'rootstock'}],
+             'rootstock_woodiness': [
+                 {'start': 27, 'end': 32, 'woodiness': 'not woody'}]}
+        )

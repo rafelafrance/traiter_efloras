@@ -4,6 +4,8 @@
 
 import unittest
 
+from traiter.util import shorten
+
 from efloras.matchers.matcher import Matcher
 
 MATCHER = Matcher()
@@ -47,4 +49,16 @@ class TestMargin(unittest.TestCase):
             {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 7}],
              'plant_margin_shape': [
                  {'start': 8, 'end': 28, 'margin_shape': 'corrugated'}]}
+        )
+
+    def test_margin_05(self):
+        self.assertEqual(
+            MATCHER.parse(shorten("""
+                margins coarsely toothed or remotely sinuate-dentate
+                to serrate,""")),
+            {'subpart': [{'start': 0, 'end': 7, 'subpart': 'margin'}],
+             'plant_margin_shape': [
+                 {'start': 8, 'end': 24, 'margin_shape': 'toothed'},
+                 {'start': 28, 'end': 52, 'margin_shape': 'sinuate-dentate'},
+                 {'start': 56, 'end': 63, 'margin_shape': 'serrate'}]}
         )
