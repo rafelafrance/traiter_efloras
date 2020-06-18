@@ -30,7 +30,7 @@ import re
 from traiter.util import Step  # pylint: disable=import-error
 
 from .terms import REPLACE
-from ..matchers.all_matchers import PART_LABELS, SUBPART_LABELS, TRAIT_LABELS
+from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 
 # Labels that indicate plant-level parts
@@ -61,7 +61,7 @@ def attach_traits_to_parts(sent):
     for token in sent:
         label = token._.label
 
-        if token._.step == Step.FINAL:
+        if token._.aux.get('attached'):
             continue
 
         elif token.lower_ in SUFFIX_START:
@@ -73,7 +73,7 @@ def attach_traits_to_parts(sent):
         elif token._.step != Step.TRAIT:
             continue
 
-        elif suffix and label in TRAIT_LABELS:
+        elif suffix and label and label not in ALL_PARTS:
             stack.append(token)
 
         elif suffix and label in PART_LABELS:

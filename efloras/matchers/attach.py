@@ -1,3 +1,4 @@
+"""Patterns for attaching traits to plant parts."""
 
 from traiter.util import Step  # pylint: disable=import-error
 from ..matchers.shared import DOT
@@ -11,7 +12,7 @@ def attach_final_suffix(span):
             part = token._.data['part']
         elif token._.step == Step.TRAIT:
             token._.label = f'{part}_{token._.label}'
-        token._.step = Step.FINAL
+        token._.aux['attached'] = True
     return {'_retokenize': False}
 
 

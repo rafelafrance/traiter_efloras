@@ -139,3 +139,13 @@ class TestAttach(unittest.TestCase):
                              'length_high': 1.0, 'length_units': 'mm'}],
              'bract_color': [{'color': 'white', 'start': 98, 'end': 103}]}
         )
+
+    def test_attach_07(self):
+        self.assertEqual(
+            MATCHER.parse(shorten("""
+                hypanthium  pistillodes with 3-lobed ovary.""")),
+            {'part': [{'start': 0, 'end': 10, 'part': 'hypanthium'},
+                      {'start': 11, 'end': 22, 'part': 'pistol'},
+                      {'start': 36, 'end': 41, 'part': 'ovary'}],
+             'ovary_lobe_count': [{'start': 28, 'end': 35, 'low': 3}]}
+        )

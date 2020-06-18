@@ -18,12 +18,6 @@ TRAITS = [
 
 MATCHERS = PARTS + TRAITS
 
-PART_NAMES = {p['name'] for p in PARTS}
-ALL_PART_LABELS = {m['label'] for p in PARTS for m in p.get('matchers', [])}
 PART_LABELS = {p['label'] for p in PART.get('matchers', [])}
 SUBPART_LABELS = {s['label'] for s in SUBPART.get('matchers', [])}
-
-TRAIT_NAMES = {t['name'] for t in TRAITS}
-TRAIT_LABELS = {m['label'] for t in TRAITS for m in t.get('matchers', [])}
-
-GROUP_LABELS = {g['label'] for m in MATCHERS for g in m.get('groupers', [])}
+ALL_PARTS = PART_LABELS | SUBPART_LABELS

@@ -51,7 +51,7 @@ SUFFIX_COUNT = {
     'name': 'lobe',
     'matchers': [
         {
-            'label': 'suffixed_count',
+            'label': 'suffix_count',
             'on_match': suffixed_count,
             'patterns': [
                 [

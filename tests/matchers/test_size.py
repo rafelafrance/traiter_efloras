@@ -84,8 +84,7 @@ class TestSize(unittest.TestCase):
                  {'start': 46, 'end': 54, 'length_low': 16.0,
                   'length_high': 28.0, 'length_units': 'mm'}],
              'petiole_margin_shape': [
-                 {'start': 28, 'end': 35, 'margin_shape': 'serrate'}]}
-
+                 {'start': 19, 'end': 35, 'margin_shape': 'serrate'}]}
         )
 
     def test_size_09(self):

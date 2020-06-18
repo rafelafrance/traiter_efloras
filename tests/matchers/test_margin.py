@@ -35,9 +35,16 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_03(self):
         self.assertEqual(
-            MATCHER.parse(
-                'reniform, undulate-margined'),
+            MATCHER.parse('reniform, undulate-margined'),
             {'plant_shape': [{'shape': 'reniform', 'start': 0, 'end': 8}],
              'plant_margin_shape': [
                  {'start': 10, 'end': 27, 'margin_shape': 'undulate'}]}
+        )
+
+    def test_margin_04(self):
+        self.assertEqual(
+            MATCHER.parse('margins thickened-corrugated'),
+            {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 7}],
+             'plant_margin_shape': [
+                 {'start': 8, 'end': 28, 'margin_shape': 'corrugated'}]}
         )
