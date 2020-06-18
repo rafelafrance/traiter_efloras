@@ -7,10 +7,7 @@ _SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex', )}
 
 def subpart(span):
     """Enrich a plant subpart match."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-    )
+    data = {}
 
     for token in span:
         label = token._.label

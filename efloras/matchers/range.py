@@ -14,11 +14,7 @@ _DASH_TO_CONJ = _DASH_TO + ['or', 'and']
 
 def range_(span, fields=''):
     """Build the range parts."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-        _relabel='range',
-    )
+    data = dict(_relabel='range')
 
     fields = fields.split()
     values = [t.text for t in span if re.match(NUMBER, t.text)]

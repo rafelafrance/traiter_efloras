@@ -12,12 +12,8 @@ def shape(span):
              if (r := REPLACE.get(t.text, t.text)) and t._.label == 'shape'}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
+    trait = dict(shape=value)
     loc = [t.lower_ for t in span if t._.label == 'location']
-    trait = dict(
-        shape=value,
-        start=span.start_char,
-        end=span.end_char,
-    )
     if loc:
         trait['location'] = loc[0]
     return trait

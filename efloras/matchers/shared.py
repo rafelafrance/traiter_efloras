@@ -10,6 +10,7 @@ OPEN = ' ( [ '.split()
 PLUS = ' + '.split()
 SLASH = ' / '.split()
 QUOTE = ' " \' '.split()
+LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split()
 
 
 QUEST = {

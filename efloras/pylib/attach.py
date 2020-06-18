@@ -65,7 +65,7 @@ def attach_traits_to_parts(sent):
     for token in sent:
         label = token._.label
 
-        if token._.aux.get('attached'):
+        if token._.aux.get('attached') or token._.aux.get('skip'):
             continue
 
         elif token.lower_ in SUFFIXES:

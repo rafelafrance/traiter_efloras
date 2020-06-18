@@ -64,11 +64,7 @@ def fix_dimensions(dims):
 
 def fill_data(span, dims):
     """Move fields into correct place & give them consistent names."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-        _relabel='size',
-    )
+    data = dict(_relabel='size')
 
     for dim in dims:
         dimension = dim['dimension']

@@ -9,10 +9,7 @@ _KEEP = set(_SHAPES)
 
 def margin(span):
     """Enrich a phrase match."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-    )
+    data = {}
     value = [t.lower_ for t in span if t._.label in _KEEP]
     data['margin_shape'] = '-'.join(value)
     return data

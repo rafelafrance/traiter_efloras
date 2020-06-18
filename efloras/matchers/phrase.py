@@ -12,11 +12,7 @@ def phrase(span):
     label = span[0]._.label
     value = span.lower_
 
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-        _relabel=label,
-    )
+    data = dict(_relabel=label)
     data[label] = REPLACE.get(value, value)
 
     return data

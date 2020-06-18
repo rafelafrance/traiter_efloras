@@ -19,11 +19,7 @@ def descriptor(span):
     if value not in IS_DESCRIPTOR:
         return {}
 
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-        _relabel=label,
-    )
+    data = dict(_relabel=label)
     data[label] = REPLACE.get(value, value)
 
     return data

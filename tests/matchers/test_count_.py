@@ -4,6 +4,8 @@
 
 import unittest
 
+from traiter.util import shorten
+
 from efloras.matchers.matcher import Matcher
 
 MATCHER = Matcher()
@@ -134,4 +136,24 @@ class TestCount(unittest.TestCase):
              'leaflet_count': [
                  {'start': 12, 'end': 30, 'low': 3, 'high': 4, 'max': 5,
                   'group': 'pairs'}]}
+        )
+
+    def test_count_16(self):
+        self.assertEqual(
+            MATCHER.parse('plants weigh up to 200 pounds'),
+            {'part': [{'start': 0, 'end': 6, 'part': 'plant'}]}
+        )
+
+    def test_count_17(self):
+        self.assertEqual(
+            MATCHER.parse(shorten("""
+                Pistillate flowers: hyaline bristle at apex of hypanthial 
+                aculei 0.5–1 times as long as opaque base.""")),
+            {'part': [
+                {'start': 0, 'end': 18, 'sex': 'female', 'part': 'flower'}],
+             'subpart': [
+                 {'start': 39, 'end': 43, 'subpart': 'apex', 'sex': 'female'},
+                 {'start': 58, 'end': 64, 'subpart': 'aculeus',
+                  'sex': 'female'},
+                 {'start': 95, 'end': 99, 'subpart': 'base', 'sex': 'female'}]}
         )

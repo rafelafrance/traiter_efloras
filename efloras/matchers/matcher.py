@@ -39,7 +39,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         traits = defaultdict(list)
         for token in doc:
-            if token._.step >= Step.TRAIT and token._.data:
+            if (token._.step >= Step.TRAIT and token._.data
+                    and not token._.aux.get('skip')):
                 data = {k: v for k, v in token._.data.items()
                         if not k.startswith('_')}
                 data['start'] = token.idx

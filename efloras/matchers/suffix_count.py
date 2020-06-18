@@ -6,10 +6,7 @@ from ..pylib.terms import CATEGORY, REPLACE
 
 def suffixed_count(span):
     """Enrich the match with data."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-    )
+    data = {}
 
     for token in span:
         label = token._.label
