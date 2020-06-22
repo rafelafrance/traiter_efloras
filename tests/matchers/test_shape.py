@@ -4,6 +4,8 @@
 
 import unittest
 
+from traiter.util import shorten
+
 from efloras.matchers.matcher import Matcher
 
 MATCHER = Matcher()
@@ -186,6 +188,15 @@ class TestShape(unittest.TestCase):
         )
 
     def test_shape_17(self):
+        self.assertEqual(
+            MATCHER.parse('<base truncate to cordate>'),
+            {'subpart': [{'start': 1, 'end': 5, 'subpart': 'base'}],
+             'plant_base_shape': [
+                 {'shape': 'truncate', 'start': 6, 'end': 14},
+                 {'shape': 'cordate', 'start': 18, 'end': 25}]}
+        )
+
+    def test_shape_18(self):
         self.assertEqual(
             MATCHER.parse('<base truncate to cordate>'),
             {'subpart': [{'start': 1, 'end': 5, 'subpart': 'base'}],

@@ -19,3 +19,10 @@ class TestPart(unittest.TestCase):
                 {'start': 12, 'end': 17, 'woodiness': 'woody'}],
              'part': [{'start': 18, 'end': 27, 'part': 'rootstock'}]}
         )
+
+    def test_part_02(self):
+        self.assertEqual(
+            MATCHER.parse('leaf­lets mostly 1 or 3'),
+            {'part': [{'part': 'leaflet', 'start': 0, 'end': 9}],
+             'leaflet_count': [{'low': 1, 'high': 3, 'start': 17, 'end': 23}]}
+        )

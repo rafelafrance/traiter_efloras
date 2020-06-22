@@ -95,6 +95,7 @@ def attach_traits_to_parts(sent):
 
         elif label in PART_LABELS:
             augment_stack = augment_data(augment_stack, token)
+            subpart = ''
             part = token._.data['part']
 
         elif label in SUBPART_LABELS:

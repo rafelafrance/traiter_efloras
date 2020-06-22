@@ -1,6 +1,6 @@
 """Common count snippets."""
 
-from .shared import CROSS, DASH, NUMBER, OPEN, SLASH
+from .shared import CROSS, DASH, OPEN, PER_COUNT, PER_COUNTS, SLASH
 from ..pylib.terms import REPLACE
 
 _NO_COUNTS = (CROSS + SLASH + DASH + OPEN
@@ -8,9 +8,6 @@ _NO_COUNTS = (CROSS + SLASH + DASH + OPEN
 _NO_COUNT = set(_NO_COUNTS)
 
 _COUNT_KILLER = """ length_units mass_units """.split()
-
-_PER_COUNTS = ['pair', 'pairs']
-_PER_COUNT = set(_PER_COUNTS)
 
 
 def count(span):
@@ -23,7 +20,7 @@ def count(span):
         if label == 'range' and token._.data['_all_ints']:
             data = {**token._.data, **data}
 
-        elif token.lower_ in _PER_COUNT:
+        elif token.lower_ in PER_COUNT:
             data['group'] = REPLACE.get(token.lower_, token.lower_)
 
         else:
@@ -48,7 +45,7 @@ COUNT = {
             'patterns': [
                 [
                     {'_': {'label': 'range'}},
-                    {'LOWER': {'IN': _PER_COUNTS}, 'OP': '?'},
+                    {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
                 ],
             ],
         },

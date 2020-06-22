@@ -11,7 +11,7 @@ def size(span, high_only=False):
     """Enrich a phrase match."""
     dims = scan_tokens(span, high_only)
     dims = fix_dimensions(dims)
-    data = fill_data(span, dims)
+    data = fill_data(dims)
     return data
 
 
@@ -62,7 +62,7 @@ def fix_dimensions(dims):
     return dims
 
 
-def fill_data(span, dims):
+def fill_data(dims):
     """Move fields into correct place & give them consistent names."""
     data = dict(_relabel='size')
 
@@ -175,5 +175,5 @@ SIZE = {
                 ],
             ],
         },
-    ]
+    ],
 }

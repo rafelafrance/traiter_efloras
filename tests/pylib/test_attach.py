@@ -50,24 +50,17 @@ class TestAttach(unittest.TestCase):
             MATCHER.parse(shorten("""
                 Plants to 30 cm tall, strongly branched, with appressed to 
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
-                Calyx 12-15 mm, hairy; teeth 2-5 mm.
                 """)),
-            {'part': [{'start': 0, 'end': 6, 'part': 'plant'},
-                      {'start': 101, 'end': 106, 'part': 'calyx'},
-                      {'start': 119, 'end': 124, 'part': 'calyx'}],
+            {'part': [{'start': 0, 'end': 6, 'part': 'plant'}],
              'plant_size': [{'start': 7, 'end': 20,
                              'height_high': 30, 'height_units': 'cm'}],
              'plant_hair_color': [{'color': 'white', 'start': 74, 'end': 79}],
-             'subpart': [{'subpart': 'hair', 'start': 80, 'end': 85},
-                         {'subpart': 'tooth', 'start': 142, 'end': 147}],
-             'plant_hair_size': [{'start': 86, 'end': 96, 'length_low': 0.2,
-                                  'length_high': 1.5, 'length_units': 'mm'}],
-             'calyx_hair_size': [{'start': 110, 'end': 117,
-                                  'length_high': 3, 'length_units': 'mm'}],
-             'calyx_size': [{'start': 125, 'end': 133, 'length_low': 12,
-                             'length_high': 15, 'length_units': 'mm'}],
-             'calyx_tooth_size': [{'start': 148, 'end': 154, 'length_low': 2,
-                                   'length_high': 5, 'length_units': 'mm'}]}
+             'subpart': [{'subpart': 'hair', 'start': 80, 'end': 85}],
+             'plant_hair_size': [
+                 {'start': 86, 'end': 96, 'length_low': 0.2,
+                  'length_high': 1.5, 'length_units': 'mm'},
+                 {'start': 110, 'end': 117, 'length_high': 3.0,
+                  'length_units': 'mm'}]}
         )
 
     def test_attach_04(self):

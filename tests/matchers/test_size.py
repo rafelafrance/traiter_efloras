@@ -133,15 +133,16 @@ class TestSize(unittest.TestCase):
             MATCHER.parse(
                 'Leaves 3-foliolate, lateral pair of leaflets '
                 'deeply lobed, petiolules 2–5 mm,'),
-            {'part': [{'start': 0, 'end': 6, 'part': 'leaf'},
-                      {'start': 36, 'end': 44, 'part': 'leaflet'},
-                      {'start': 59, 'end': 69, 'part': 'petiole'}],
-             'leaf_count': [{'start': 7, 'end': 18, 'low': 3}],
-             'leaf_location': [{'location': 'lateral',
-                                'start': 20, 'end': 27}],
-             'petiole_size': [{'start': 70, 'end': 76,
-                               'length_low': 2, 'length_high': 5,
-                               'length_units': 'mm'}]}
+            {'part': [{'part': 'leaf', 'start': 0, 'end': 6},
+                      {'location': 'lateral', 'group': 'pair',
+                       'part': 'leaflet', 'start': 20, 'end': 44},
+                      {'part': 'petiole', 'location': 'lateral', 'start': 59,
+                       'end': 69}],
+             'leaf_count': [{'low': 3, 'start': 7, 'end': 18}],
+             'petiole_size': [{'length_low': 2, 'length_high': 5,
+                               'length_units': 'mm',
+                               'location': 'lateral',
+                               'start': 70, 'end': 76}]}
         )
 
     def test_size_14(self):
