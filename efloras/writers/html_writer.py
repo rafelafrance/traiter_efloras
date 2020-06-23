@@ -31,6 +31,7 @@ def html_writer(args, rows):
     colors = {label: next(COLORS) for label in sorted(colors)}
 
     for row in rows:
+        row['raw_text'] = row['text']
         row['text'] = format_text(row, tags, colors)
         row['traits'] = format_traits(row, colors)
 
@@ -55,9 +56,11 @@ def format_traits(row, colors):
         new_label = f'<span class="{colors[label]}">{label}</span>'
         new_traits = {}
         for trait in traits:
+            text = row['raw_text'][trait['start']:trait['end']]
             del trait['start']
             del trait['end']
-            trait = ', '.join(f'{k}:&nbsp;{v}' for k, v in trait.items())
+            trait = ', '.join(f'<span title="{text}">{k}:&nbsp;{v}</span>'
+                              for k, v in trait.items())
             new_traits[trait] = 1
         new_dict[new_label] = '<br/>'.join(new_traits.keys())
 

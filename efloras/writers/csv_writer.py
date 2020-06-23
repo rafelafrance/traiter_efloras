@@ -4,7 +4,10 @@ from collections import defaultdict
 
 import pandas as pd
 
+from ..pylib.terms import TERMS
 from ..pylib.util import convert
+
+DIMENSIONS = {t['replace'] for t in TERMS if t['label'] == 'dimension'}
 
 
 def csv_writer(args, rows):
@@ -35,10 +38,23 @@ def build_columns(row):
             value = {k: v for k, v in trait.items() if k not in skips}
             columns[header].append(value)
 
+            columns[f'{header}.raw'].append(
+                row['text'][trait['start']:trait['end']])
+
         for header, value_list in columns.items():
-            is_vocab = [len(v) == 1 and v.get('value') for v in value_list]
-            if all(is_vocab):
-                value = {v['value'] for v in value_list}
+            if header.endswith('.raw'):
+                row[header] = value_list
+                continue
+
+            keys = set()
+            all_strings = True
+            for data in value_list:
+                for key, value in data.items():
+                    keys.add(key)
+                    all_strings &= isinstance(value, str)
+
+            if len(keys) == 1 and all_strings:
+                value = {v[k] for v in value_list for k in v.keys()}
                 row[header] = ', '.join(sorted(value))
             elif header.endswith('_size'):
                 extract_sizes(row, header, value_list)
@@ -67,9 +83,13 @@ def extract_sizes(row, header, value_list):
 
         for field, value in extract.items():
             key = f'{header}.{i}.{field}'
-            if field.endswith('_units'):
+            parts = field.split('_')
+            if parts[1] == 'units':
                 row[key] = value
-            elif field.startswith('length_'):
+            elif parts[0] == 'length':
                 row[key] = convert(value, length_units)
-            elif field.startswith('width_'):
+            elif parts[0] == 'width':
                 row[key] = convert(value, width_units)
+            else:
+                units = f'{parts[0]}_units'
+                row[key] = convert(value, extract.get(units))

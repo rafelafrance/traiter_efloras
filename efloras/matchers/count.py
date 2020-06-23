@@ -4,7 +4,7 @@ from .shared import CROSS, OPEN, PER_COUNT, PER_COUNTS, SLASH
 from ..pylib.terms import REPLACE
 
 _NO_COUNTS = (CROSS + SLASH + OPEN
-              + """ average side times days weeks """.split())
+              + """ average side times days weeks by """.split())
 _NO_COUNT = set(_NO_COUNTS)
 
 _COUNT_KILLER = """ length_units mass_units """.split()
