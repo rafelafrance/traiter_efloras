@@ -58,6 +58,13 @@ SUFFIX_COUNT = {
                     {'_': {'label': 'suffix_count'}},
                     {'TEXT': {'IN': CLOSE}, 'OP': '?'},
                 ],
+                [
+                    {'_': {'label': 'range'}},
+                    {'LOWER': 'or'},
+                    {'_': {'label': 'range'}},
+                    {'TEXT': {'IN': PLUS}, 'OP': '?'},
+                    {'_': {'label': 'suffix_count'}},
+                ],
             ],
         },
         {

@@ -107,8 +107,16 @@ def size_double_dim(span):
     return {**data, **new_data}
 
 
+def not_a_size(span):
+    """Flag this as a token to be deleted."""
+    for token in span:
+        token._.aux['skip'] = True
+    return {}
+
+
 _FOLLOW = """ dimension sex_enclosed sex """.split()
 _UNCERTAIN = """ quest quest_enclosed """.split()
+_NOT_A_SIZE = """ for """.split()
 
 SIZE = {
     'name': 'size',
@@ -172,6 +180,28 @@ SIZE = {
                     {'_': {'label': 'dimension'}},
                     {'LOWER': 'and'},
                     {'_': {'label': 'dimension'}},
+                ],
+            ],
+        },
+        {
+            'label': 'not_a_size',
+            'on_match': not_a_size,
+            'patterns': [
+                [
+                    {'LOWER': {'IN': _NOT_A_SIZE}},
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}},
+                ],
+                [
+                    {'LOWER': {'IN': _NOT_A_SIZE}},
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}, 'OP': '?'},
+                    {'LOWER': {'IN': CROSS}},
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}},
                 ],
             ],
         },

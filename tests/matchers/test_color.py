@@ -145,3 +145,14 @@ class TestColor(unittest.TestCase):
              'leaf_hair_color': [{'color': 'white', 'start': 38, 'end': 43}],
              'subpart': [{'subpart': 'hair', 'start': 44, 'end': 49}]}
         )
+
+    def test_color_14(self):
+        self.assertEqual(
+            MATCHER.parse(
+                'leaflets surfaces rather densely spotted with minute '
+                'blackish dots,'),
+            {'part': [{'part': 'leaflet', 'start': 0, 'end': 8}],
+             'subpart': [{'subpart': 'surface', 'start': 9, 'end': 17}],
+             'leaflet_surface_color': [
+                 {'color': 'black-dots', 'start': 53, 'end': 66}]}
+        )

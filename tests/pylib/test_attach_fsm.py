@@ -11,10 +11,10 @@ from efloras.matchers.matcher import Matcher
 MATCHER = Matcher()
 
 
-class TestAttach(unittest.TestCase):
+class TestAttachFSM(unittest.TestCase):
     """Test attaching traits to plant parts."""
 
-    def test_attach_01(self):
+    def test_attach_fsm_01(self):
         self.assertEqual(
             MATCHER.parse(
                 'keel with blue tip; standard 8-9 × ca. 6 mm, '
@@ -31,7 +31,7 @@ class TestAttach(unittest.TestCase):
                  {'shape': 'emarginate', 'start': 62, 'end': 72}]}
         )
 
-    def test_attach_02(self):
+    def test_attach_fsm_02(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 Calyx ca. 5 mm, loosely to rather densely appressed hairy;
@@ -45,7 +45,7 @@ class TestAttach(unittest.TestCase):
                                    'length_low': 2.5, 'length_units': 'mm'}]}
         )
 
-    def test_attach_03(self):
+    def test_attach_fsm_03(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 Plants to 30 cm tall, strongly branched, with appressed to 
@@ -63,7 +63,7 @@ class TestAttach(unittest.TestCase):
                   'length_units': 'mm'}]}
         )
 
-    def test_attach_04(self):
+    def test_attach_fsm_04(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 Calyx shortly tubular, 8-9 mm, subglabrous or in upper part
@@ -82,7 +82,7 @@ class TestAttach(unittest.TestCase):
                                    'length_high': 1.0, 'length_units': 'mm'}]}
         )
 
-    def test_attach_05(self):
+    def test_attach_fsm_05(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 Calyx 10-12 mm, densely covered with extremely asymmetrically
@@ -116,7 +116,7 @@ class TestAttach(unittest.TestCase):
                  {'shape': 'emarginate', 'start': 256, 'end': 266}]}
         )
 
-    def test_attach_06(self):
+    def test_attach_fsm_06(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 Racemes short, 3-9-flowered; peduncle 0.5-2 cm, loosely to
@@ -133,7 +133,7 @@ class TestAttach(unittest.TestCase):
              'bract_color': [{'color': 'white', 'start': 98, 'end': 103}]}
         )
 
-    def test_attach_07(self):
+    def test_attach_fsm_07(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 hypanthium  pistillodes with 3-lobed ovary.""")),
@@ -143,7 +143,7 @@ class TestAttach(unittest.TestCase):
              'ovary_lobe_count': [{'start': 28, 'end': 35, 'low': 3}]}
         )
 
-    def test_attach_08(self):
+    def test_attach_fsm_08(self):
         self.assertEqual(
             MATCHER.parse(shorten("""
                 roots thin, without thick, woody rootstock""")),
@@ -151,4 +151,22 @@ class TestAttach(unittest.TestCase):
                       {'start': 33, 'end': 42, 'part': 'rootstock'}],
              'rootstock_woodiness': [
                  {'start': 27, 'end': 32, 'woodiness': 'not woody'}]}
+        )
+
+    def test_attach_fsm_09(self):
+        self.assertEqual(
+            MATCHER.parse(shorten("""
+                Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
+                1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
+            {'part': [{'part': 'legume', 'start': 0, 'end': 7}],
+             'legume_stipe_size': [{'length_low': 6, 'length_high': 7,
+                                    'length_units': 'mm',
+                                    'start': 8, 'end': 27}],
+             'legume_shape': [{'shape': 'ellipsoid', 'start': 41, 'end': 59}],
+             'legume_size': [{'length_low': 1.5, 'length_high': 2.4,
+                              'length_units': 'cm', 'start': 61, 'end': 71},
+                             {'width_low': 6, 'width_high': 7,
+                              'width_units': 'mm', 'start': 73, 'end': 84},
+                             {'height_low': 4, 'height_high': 5,
+                              'height_units': 'mm', 'start': 89, 'end': 100}]}
         )

@@ -16,7 +16,7 @@ PART_LOCATION = {
             'label': 'part_location',
             'on_match': part_location,
             'patterns': [[
-                {'POS': 'ADP'},
+                {'POS': {'IN': ['PART', 'ADP']}},
                 {'_': {'label': 'part'}}
             ]],
         },

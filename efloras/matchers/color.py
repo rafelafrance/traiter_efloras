@@ -27,7 +27,10 @@ COLOR = {
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'color_follower'}, 'OP': '*'},
                 ],
-                [{'_': {'label': 'color_leader'}}],
+                [
+                    {'_': {'label': 'color_leader'}},
+                    {'_': {'label': 'color_follower'}, 'OP': '*'},
+                ],
             ],
         },
     ]

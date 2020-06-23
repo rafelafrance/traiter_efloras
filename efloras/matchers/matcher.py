@@ -7,7 +7,7 @@ from traiter.util import Step  # pylint: disable=import-error
 
 from .all_matchers import MATCHERS
 from .attach import ATTACH
-from ..pylib.attach import attach_traits_to_parts
+from ..pylib.attach_fsm import attach_traits_to_parts
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
 

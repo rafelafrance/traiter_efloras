@@ -163,6 +163,7 @@ RANGE = {
             'patterns': [
                 [
                     {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'LOWER': 'or'},
                     {'TEXT': {'REGEX': NUMBER}},
                 ],

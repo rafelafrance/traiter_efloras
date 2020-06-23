@@ -140,8 +140,7 @@ class TestSize(unittest.TestCase):
                        'end': 69}],
              'leaf_count': [{'low': 3, 'start': 7, 'end': 18}],
              'petiole_size': [{'length_low': 2, 'length_high': 5,
-                               'length_units': 'mm',
-                               'location': 'lateral',
+                               'length_units': 'mm', 'location': 'lateral',
                                'start': 70, 'end': 76}]}
         )
 
@@ -173,12 +172,9 @@ class TestSize(unittest.TestCase):
              'leaf_lobe_count': [
                  {'start': 15, 'end': 28, 'low': 3, 'high': 5, 'max': 7}],
              'leaf_size': [{'start': 30, 'end': 54,
-                            'length_low': 5,
-                            'length_high': 25,
-                            'width_min': 8,
-                            'width_low': 10,
-                            'width_high': 25,
-                            'width_max': 30,
+                            'length_low': 5, 'length_high': 25,
+                            'width_min': 8, 'width_low': 10,
+                            'width_high': 25, 'width_max': 30,
                             'width_units': 'cm'}]}
         )
 
@@ -187,12 +183,9 @@ class TestSize(unittest.TestCase):
             MATCHER.parse('(3–)5-lobed, 6–20(–30) × 6–25 cm,'),
             {'plant_lobe_count': [{'start': 0, 'end': 11, 'min': 3, 'low': 5}],
              'plant_size': [{'start': 13, 'end': 32,
-                             'length_low': 6,
-                             'length_high': 20,
-                             'length_max': 30,
-                             'width_low': 6,
-                             'width_high': 25,
-                             'width_units': 'cm'}]}
+                             'length_low': 6, 'length_high': 20,
+                             'length_max': 30, 'width_low': 6,
+                             'width_high': 25, 'width_units': 'cm'}]}
         )
 
     def test_size_17(self):
@@ -211,17 +204,13 @@ class TestSize(unittest.TestCase):
                 'or 5–8(–10) mm (staminate)'),
             {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
              'petal_size': [{'start': 7, 'end': 36,
-                             'length_min': 1.0,
-                             'length_low': 3.0,
-                             'length_high': 10.0,
-                             'length_max': 12.0,
+                             'length_min': 1.0, 'length_low': 3.0,
+                             'length_high': 10.0, 'length_max': 12.0,
                              'length_units': 'mm',
                              'sex': 'pistillate'},
                             {'start': 40, 'end': 63,
-                             'length_low': 5.0,
-                             'length_high': 8.0,
-                             'length_max': 10.0,
-                             'length_units': 'mm',
+                             'length_low': 5.0, 'length_high': 8.0,
+                             'length_max': 10.0, 'length_units': 'mm',
                              'sex': 'staminate'}]}
         )
 
@@ -232,12 +221,10 @@ class TestSize(unittest.TestCase):
             {'part': [{'start': 0, 'end': 7, 'part': 'flower'},
                       {'start': 23, 'end': 33, 'part': 'hypanthium'}],
              'flower_size': [{'start': 8, 'end': 20,
-                              'diameter_low': 5.0,
-                              'diameter_high': 10.0,
+                              'diameter_low': 5.0, 'diameter_high': 10.0,
                               'diameter_units': 'cm'}],
              'hypanthium_size': [{'start': 34, 'end': 40,
-                                  'length_low': 4.0,
-                                  'length_high': 8.0,
+                                  'length_low': 4.0, 'length_high': 8.0,
                                   'length_units': 'mm'}]}
         )
 
@@ -262,10 +249,8 @@ class TestSize(unittest.TestCase):
              'inflorescence_count': [{'start': 94, 'end': 95, 'low': 1},
                                      {'start': 116, 'end': 120, 'low': 2,
                                       'high': 5}],
-             'inflorescence_size': [{'start': 122,
-                                     'end': 131,
-                                     'length_low': 3.0,
-                                     'length_high': 8.5,
+             'inflorescence_size': [{'start': 122, 'end': 131,
+                                     'length_low': 3.0, 'length_high': 8.5,
                                      'length_units': 'cm'}]}
         )
 

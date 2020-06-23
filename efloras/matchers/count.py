@@ -1,9 +1,9 @@
 """Common count snippets."""
 
-from .shared import CROSS, DASH, OPEN, PER_COUNT, PER_COUNTS, SLASH
+from .shared import CROSS, OPEN, PER_COUNT, PER_COUNTS, SLASH
 from ..pylib.terms import REPLACE
 
-_NO_COUNTS = (CROSS + SLASH + DASH + OPEN
+_NO_COUNTS = (CROSS + SLASH + OPEN
               + """ average side times days weeks """.split())
 _NO_COUNT = set(_NO_COUNTS)
 

@@ -41,10 +41,7 @@ PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 TRANSFER = set(""" sex location """.split())
 
 Suffix = namedtuple('Suffix', 'is_suffix leader')
-SUFFIXES = {
-    'with': '',
-    'without': 'not ',
-}
+SUFFIXES = {'with': '', 'without': 'not '}
 SUFFIX_END = {';', '.'}
 
 
@@ -75,7 +72,7 @@ def attach_traits_to_parts(sent):
             stack, suffix = adjust_stack(
                 stack, part, subpart, augment_stack, suffix)
 
-        elif token._.step != Step.TRAIT:
+        elif token._.step < Step.TRAIT:
             continue
 
         elif suffix.is_suffix and label and label not in ALL_PARTS:
@@ -106,8 +103,14 @@ def attach_traits_to_parts(sent):
             if not label.startswith('plant_'):
                 token._.label = f'plant_{label}'
 
+        elif token._.aux.get('subpart_attached'):
+            update_token(token, label, part, '', augment_stack)
+
         else:
             update_token(token, label, part, subpart, augment_stack)
+
+    if stack:
+        adjust_stack(stack, part, subpart, augment_stack, suffix)
 
 
 def augment_data(augment_stack, token):
