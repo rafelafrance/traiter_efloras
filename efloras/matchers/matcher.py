@@ -15,8 +15,10 @@ from ..pylib.terms import TERMS
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
     """Base matcher object."""
 
-    def __init__(self):
+    def __init__(self, attach=True):
         super().__init__(NLP)
+
+        self.attach = attach
 
         traiters = []
         groupers = []
@@ -27,8 +29,10 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         self.add_patterns(groupers, Step.GROUP)
         self.add_patterns(traiters, Step.TRAIT)
-        self.add_patterns(ATTACH['matchers'], Step.FINAL)
         self.add_terms(TERMS)
+
+        if self.attach:
+            self.add_patterns(ATTACH['matchers'], Step.FINAL)
 
     def parse(self, text):
         """Parse the traits."""
@@ -36,8 +40,13 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         traits = defaultdict(list)
 
+        sents = []
+
         for sent in doc.sents:
-            attach_traits_to_parts(sent)
+            sents.append((sent.start_char, sent.end_char))
+
+            if self.attach:
+                attach_traits_to_parts(sent)
 
             for token in sent:
                 if (token._.step >= Step.TRAIT and token._.data
@@ -51,4 +60,4 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         # from pprint import pp
         # pp(dict(traits))
 
-        return traits
+        return traits, sents

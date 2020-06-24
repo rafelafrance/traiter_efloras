@@ -11,12 +11,13 @@ DIMENSIONS = {t['replace'] for t in TERMS if t['label'] == 'dimension'}
 
 
 def csv_writer(args, rows):
-    """Output the data frame."""
+    """Output the data."""
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
     for row in rows:
         row['raw_traits'] = dict(row['traits'])
         del row['traits']
+        del row['sents']
         build_columns(row)
 
     df = pd.DataFrame(rows)

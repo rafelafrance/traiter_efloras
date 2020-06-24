@@ -6,13 +6,11 @@ from bs4 import BeautifulSoup
 from traiter.util import FLAGS  # pylint: disable=import-error
 
 import efloras.pylib.family_util as futil
-from efloras.matchers.matcher import Matcher
 from efloras.matchers.part import PATTERN_RE
 
 
 def efloras_reader(args, families):
     """Perform the parsing."""
-    matcher = Matcher()
     families_flora = futil.get_family_flora_ids(args, families)
     flora_ids = futil.get_flora_ids()
 
@@ -53,7 +51,6 @@ def efloras_reader(args, families):
                 continue
 
             row['text'] = text
-            row['traits'] = matcher.parse(text)
             rows.append(row)
 
     return rows

@@ -1,7 +1,5 @@
 """Write output to an HTML file."""
 
-# pylint: disable=superfluous-parens, too-many-arguments
-
 import html
 from collections import deque, namedtuple
 from datetime import datetime
@@ -21,7 +19,7 @@ TRAIT_SUFFIXES = [m['name'] for m in MATCHERS]
 
 
 def html_writer(args, rows):
-    """Output the data frame."""
+    """Output the data."""
     tags = build_tags()
 
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
