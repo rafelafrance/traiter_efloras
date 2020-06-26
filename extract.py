@@ -7,12 +7,12 @@ import sys
 import textwrap
 from copy import deepcopy
 
-from efloras.matchers.matcher import Matcher
 import efloras.pylib.family_util as futil
+from efloras.matchers.matcher import Matcher
 from efloras.readers.efloras_reader import efloras_reader
 from efloras.writers.csv_writer import csv_writer
+from efloras.writers.data_writer import ner_writer
 from efloras.writers.html_writer import html_writer
-from efloras.writers.training_data_writer import training_data_writer
 
 
 def main(args):
@@ -28,7 +28,7 @@ def main(args):
 
     rows = efloras_reader(args, families)
 
-    attach = not bool(args.training_data)
+    attach = not bool(args.data_file)
     matcher = Matcher(attach=attach)
 
     for row in rows:
@@ -42,9 +42,9 @@ def main(args):
         copied = deepcopy(rows)
         html_writer(args, copied)
 
-    if args.training_data:
+    if args.data_file:
         copied = deepcopy(rows)
-        training_data_writer(args, copied)
+        ner_writer(args, copied)
 
 
 def parse_args():
@@ -80,8 +80,8 @@ def parse_args():
         help="""Output the results to this CSV file.""")
 
     arg_parser.add_argument(
-        '--training-data', '-T', type=argparse.FileType('w'),
-        help="""Output training data in JSON format to this file.""")
+        '--data-file', '-D', type=argparse.FileType('a'),
+        help="""Append formatted data to this file.""")
 
     arg_parser.add_argument(
         '--list-families', '-l', action='store_true',
@@ -99,7 +99,7 @@ def parse_args():
     else:
         args.flora_id = [1]
 
-    if not (args.csv_file or args.html_file or args.training_data):
+    if not (args.csv_file or args.html_file or args.data_file):
         setattr(args, 'csv_file', sys.stdout)
 
     return args

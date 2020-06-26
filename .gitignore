@@ -25,6 +25,9 @@ data/
 notebooks/
 .ipynb_checkpoints/
 
+# models
+models/
+
 # Temp files
 doc/
 junk*

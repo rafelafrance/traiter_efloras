@@ -34,7 +34,7 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         if self.attach:
             self.add_patterns(ATTACH['matchers'], Step.FINAL)
 
-    def parse(self, text):
+    def parse(self, text, with_sents=False):
         """Parse the traits."""
         doc = super().parse(text)
 
@@ -60,4 +60,5 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         # from pprint import pp
         # pp(dict(traits))
 
-        return traits, sents
+        # TODO: FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        return (traits, sents) if with_sents else traits

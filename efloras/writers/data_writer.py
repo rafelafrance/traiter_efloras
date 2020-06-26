@@ -3,16 +3,12 @@
 import json
 from collections import namedtuple
 
-
 Sents = namedtuple('Sent', 'start end traits')
 Trait = namedtuple('Trait', 'start end label')
 
 
-def training_data_writer(args, rows):
+def ner_writer(args, rows):
     """Output the data."""
-
-    train_data = []
-
     for row in rows:
         # Initialize sentences
         sents = [Sents(start=s[0], end=s[1], traits=[]) for s in row['sents']]
@@ -30,12 +26,11 @@ def training_data_writer(args, rows):
                 s += 1
             sents[s].traits.append(trait)
 
-        # Annotations
+        # Write the data
         for sent in sents:
             text = row['text'][sent.start:sent.end]
             traits = [(t.start - sent.start, t.end - sent.start, t.label)
                       for t in sent.traits]
-            train_data.append([text, {'entities': traits}])
-
-    # Write the data
-    json.dump(train_data, args.training_data)
+            line = json.dumps([text, {'entities': traits}])
+            args.data_file.write(line)
+            args.data_file.write('\n')
