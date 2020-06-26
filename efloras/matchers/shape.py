@@ -21,7 +21,7 @@ def shape(span):
 
 SHAPE = {
     'name': 'shape',
-    'matchers': [
+    'traits': [
         {
             'label': 'shape',
             'on_match': shape,

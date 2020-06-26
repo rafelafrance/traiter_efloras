@@ -11,7 +11,7 @@ def part_location(_):
 
 PART_LOCATION = {
     'name': 'part_location',
-    'matchers': [
+    'traits': [
         {
             'label': 'part_location',
             'on_match': part_location,

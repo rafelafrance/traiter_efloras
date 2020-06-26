@@ -5,11 +5,10 @@ from collections import defaultdict
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
 from .all_matchers import MATCHERS
-from .attach import ATTACH
-from ..pylib.attach_fsm import ATTACH_STEPS, FINAL_STEP, GROUP_STEP, \
-    TRAIT_STEP, attach_traits_to_parts
+from ..pylib.attach_fsm import attach_traits_to_parts
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
+from ..pylib.util import ATTACH_STEPS, FINAL_STEP, GROUP_STEP, TRAIT_STEP
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -24,16 +23,16 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         traiters = []
         groupers = []
+        attachers = []
 
         for matcher in MATCHERS:
-            traiters += matcher.get('matchers', [])
+            traiters += matcher.get('traits', [])
             groupers += matcher.get('groupers', [])
+            attachers += matcher.get('attachers', [])
 
         self.add_patterns(groupers, GROUP_STEP)
         self.add_patterns(traiters, TRAIT_STEP)
-
-        if self.attach:
-            self.add_patterns(ATTACH['matchers'], FINAL_STEP)
+        self.add_patterns(attachers, FINAL_STEP)
 
     def parse(self, text, with_sents=False):
         """Parse the traits."""

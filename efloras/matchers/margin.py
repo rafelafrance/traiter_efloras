@@ -17,7 +17,7 @@ def margin(span):
 
 MARGIN_SHAPE = {
     'name': 'margin_shape',
-    'matchers': [
+    'traits': [
         {
             'label': 'margin_shape',
             'on_match': margin,

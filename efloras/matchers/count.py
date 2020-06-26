@@ -38,7 +38,7 @@ def not_a_count(span):
 
 COUNT = {
     'name': 'count',
-    'matchers': [
+    'traits': [
         {
             'label': 'count',
             'on_match': count,

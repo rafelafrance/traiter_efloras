@@ -20,7 +20,7 @@ def phrase(span):
 
 PHRASE = {
     'name': 'phrase',
-    'matchers': [
+    'traits': [
         {
             'label': 'phrase',
             'on_match': phrase,

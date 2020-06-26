@@ -15,7 +15,7 @@ def color(span):
 
 COLOR = {
     'name': 'color',
-    'matchers': [
+    'traits': [
         {
             'label': 'color',
             'on_match': color,

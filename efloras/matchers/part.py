@@ -37,7 +37,7 @@ def part(span):
 
 PART = {
     'name': 'part',
-    'matchers': [
+    'traits': [
         {
             'label': 'part',
             'on_match': part,

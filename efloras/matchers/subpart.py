@@ -24,7 +24,7 @@ def subpart(span):
 
 SUBPART = {
     'name': 'subpart',
-    'matchers': [
+    'traits': [
         {
             'label': 'subpart',
             'on_match': subpart,

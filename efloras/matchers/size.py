@@ -130,7 +130,7 @@ SIZE = {
             ]],
         },
     ],
-    'matchers': [
+    'traits': [
         {
             'label': 'size',
             'on_match': size,

@@ -46,7 +46,7 @@ def count_phrase(span):
 
 SUFFIX_COUNT = {
     'name': 'lobe',
-    'matchers': [
+    'traits': [
         {
             'label': 'suffix_count',
             'on_match': suffixed_count,

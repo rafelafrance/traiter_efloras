@@ -27,7 +27,7 @@ def descriptor(span):
 
 DESCRIPTOR = {
     'name': 'descriptor',
-    'matchers': [
+    'traits': [
         {
             'label': 'descriptor',
             'on_match': descriptor,

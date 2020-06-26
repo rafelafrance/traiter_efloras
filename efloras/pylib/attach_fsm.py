@@ -28,14 +28,11 @@ We consider 3 levels of parts to a treatment sentence. For example:
 import re
 from collections import namedtuple
 
-from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, SUBPART_LABELS
+from .util import ATTACH_STEPS
+from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, \
+    SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 from ..pylib.terms import LABELS
-
-GROUP_STEP = 'group'
-TRAIT_STEP = 'trait'
-FINAL_STEP = 'final'
-ATTACH_STEPS = {TRAIT_STEP, FINAL_STEP}
 
 # Labels that indicate plant-level parts
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
