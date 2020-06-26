@@ -1,7 +1,7 @@
 """Patterns for attaching traits to plant parts."""
 
-from traiter.util import Step  # pylint: disable=import-error
 from ..matchers.shared import DOT
+from ..pylib.attach_fsm import TRAIT_STEP
 
 
 def attach_final_suffix(span):
@@ -10,7 +10,7 @@ def attach_final_suffix(span):
     for token in list(span)[::-1]:
         if token._.label == 'part':
             part = token._.data['part']
-        elif token._.step == Step.TRAIT:
+        elif token._.step == TRAIT_STEP:
             token._.label = f'{part}_{token._.label}'
         token._.aux['attached'] = True
     return {'_retokenize': False}
@@ -22,7 +22,7 @@ def attach_retokenize(span):
     for token in list(span):
         if token._.label == 'subpart':
             subpart = token._.data['subpart']
-        elif token._.step == Step.TRAIT:
+        elif token._.step == TRAIT_STEP:
             data = token._.data
             label = token._.label
         token._.aux['subpart_attached'] = True
@@ -39,7 +39,7 @@ ATTACH = {
             'patterns': [
                 [
                     {'LOWER': 'and'},
-                    {'_': {'step': Step.TRAIT}},
+                    {'_': {'step': TRAIT_STEP}},
                     {'_': {'label': 'part'}},
                     {'TEXT': {'IN': DOT}}
                 ],
@@ -53,7 +53,7 @@ ATTACH = {
                     {'LOWER': {'IN': ['with', 'having']}},
                     {'LOWER': 'a', 'OP': '?'},
                     {'_': {'label': 'subpart'}},
-                    {'_': {'step': Step.TRAIT}},
+                    {'_': {'step': TRAIT_STEP}},
                 ],
             ],
         },
