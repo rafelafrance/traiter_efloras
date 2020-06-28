@@ -1,8 +1,9 @@
 """Plant subpart parser."""
 
 from ..pylib.terms import REPLACE, TERMS
+from ..pylib.util import TRAIT_STEP
 
-_SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex', )}
+_SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex',)}
 
 
 def subpart(span):
@@ -24,7 +25,7 @@ def subpart(span):
 
 SUBPART = {
     'name': 'subpart',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'subpart',
             'on_match': subpart,

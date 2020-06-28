@@ -6,9 +6,9 @@ DATA_DIR = Path('.') / 'data'
 VOCAB_DIR = Path('.') / 'efloras' / 'vocabulary'
 
 GROUP_STEP = 'group'
-TRAIT_STEP = 'trait'
-FINAL_STEP = 'final'
-ATTACH_STEPS = {TRAIT_STEP, FINAL_STEP}
+TRAIT_STEP = 'traits'
+ATTACH_STEP = 'attach'
+STEPS2ATTACH = {TRAIT_STEP, ATTACH_STEP}
 
 CONVERT = {
     'cm': 10.0,

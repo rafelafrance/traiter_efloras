@@ -28,7 +28,7 @@ We consider 3 levels of parts to a treatment sentence. For example:
 import re
 from collections import namedtuple
 
-from .util import ATTACH_STEPS
+from .util import STEPS2ATTACH
 from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, \
     SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
@@ -72,7 +72,7 @@ def attach_traits_to_parts(sent):
             stack, suffix = adjust_stack(
                 stack, part, subpart, augment_stack, suffix)
 
-        elif token._.step not in ATTACH_STEPS:
+        elif token._.step not in STEPS2ATTACH:
             continue
 
         elif suffix.is_suffix and label and label not in ALL_PARTS:

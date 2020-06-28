@@ -1,7 +1,7 @@
 """Match unadorned phrases attached to a plant part."""
 
 from ..pylib.terms import REPLACE, TERMS
-
+from ..pylib.util import TRAIT_STEP
 
 LITERAL_LABELS = {t['label'] for t in TERMS if t['category'] == 'literal'}
 LITERAL_LABELS = sorted(LITERAL_LABELS)
@@ -20,7 +20,7 @@ def phrase(span):
 
 PHRASE = {
     'name': 'phrase',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'phrase',
             'on_match': phrase,

@@ -4,8 +4,9 @@ import re
 
 from traiter.util import FLAGS  # pylint: disable=import-error
 
+from .shared import PER_COUNT, PER_COUNTS
 from ..pylib.terms import REPLACE, TERMS
-from .shared import PER_COUNTS, PER_COUNT
+from ..pylib.util import TRAIT_STEP
 
 _PATTERNS = [t for t in TERMS if t['label'] == 'part']
 _PATTERNS = sorted([t['pattern'] for t in _PATTERNS], key=len, reverse=True)
@@ -37,7 +38,7 @@ def part(span):
 
 PART = {
     'name': 'part',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'part',
             'on_match': part,

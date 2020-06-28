@@ -1,5 +1,6 @@
 """Parse the trait."""
 from .shared import DASH
+from ..pylib.util import TRAIT_STEP
 
 _LEADERS = """ shape shape_leader margin_leader """.split()
 _FOLLOWERS = """ shape margin_shape margin_follower """.split()
@@ -17,7 +18,7 @@ def margin(span):
 
 MARGIN_SHAPE = {
     'name': 'margin_shape',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'margin_shape',
             'on_match': margin,

@@ -1,6 +1,7 @@
 """Common color snippets."""
 
 from ..pylib.terms import REPLACE
+from ..pylib.util import TRAIT_STEP
 from .shared import DASH
 
 
@@ -15,7 +16,7 @@ def color(span):
 
 COLOR = {
     'name': 'color',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'color',
             'on_match': color,

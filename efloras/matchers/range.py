@@ -4,9 +4,10 @@ import re
 from functools import partial
 
 # pylint: disable=import-error
-from traiter.util import to_positive_int, to_positive_float
+from traiter.util import to_positive_float, to_positive_int
 
 from .shared import CLOSE, DASH, INT, NUMBER, OPEN
+from ..pylib.util import GROUP_STEP
 
 _DASH_TO = DASH + ['to']
 _DASH_TO_CONJ = _DASH_TO + ['or', 'and']
@@ -32,7 +33,7 @@ def range_(span, fields=''):
 
 RANGE = {
     'name': 'range',
-    'groupers': [
+    GROUP_STEP: [
         {
             'label': 'range_mlhx',
             'on_match': partial(range_, fields='min low high max'),

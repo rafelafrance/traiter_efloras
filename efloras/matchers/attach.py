@@ -1,7 +1,7 @@
 """Patterns for attaching traits to plant parts."""
 
 from ..matchers.shared import DOT
-from ..pylib.util import TRAIT_STEP
+from ..pylib.util import ATTACH_STEP, TRAIT_STEP
 
 
 def attach_final_suffix(span):
@@ -32,7 +32,7 @@ def attach_retokenize(span):
 
 ATTACH = {
     'name': 'attach',
-    'attachers': [
+    ATTACH_STEP: [
         {
             'label': 'attach',
             'on_match': attach_final_suffix,

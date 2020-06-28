@@ -1,5 +1,7 @@
 """Plant part is being  used as a location parser."""
 
+from ..pylib.util import TRAIT_STEP
+
 
 def part_location(_):
     """Handle a part that is being used as a location."""
@@ -11,7 +13,7 @@ def part_location(_):
 
 PART_LOCATION = {
     'name': 'part_location',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'part_location',
             'on_match': part_location,

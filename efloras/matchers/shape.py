@@ -1,7 +1,8 @@
 """Parse the trait."""
 
-from ..pylib.terms import REPLACE
 from .shared import DASH
+from ..pylib.terms import REPLACE
+from ..pylib.util import TRAIT_STEP
 
 _DASH_TO = DASH + ['to']
 
@@ -21,7 +22,7 @@ def shape(span):
 
 SHAPE = {
     'name': 'shape',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'shape',
             'on_match': shape,

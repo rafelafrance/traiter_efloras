@@ -5,6 +5,7 @@ from functools import partial
 
 from .shared import CLOSE, CROSS, NUMBER, OPEN, QUEST
 from ..pylib.terms import REPLACE
+from ..pylib.util import GROUP_STEP, TRAIT_STEP
 
 
 def size(span, high_only=False):
@@ -120,7 +121,7 @@ _NOT_A_SIZE = """ for """.split()
 
 SIZE = {
     'name': 'size',
-    'groupers': [
+    GROUP_STEP: [
         {
             'label': 'sex_enclosed',
             'patterns': [[
@@ -130,7 +131,7 @@ SIZE = {
             ]],
         },
     ],
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'size',
             'on_match': size,

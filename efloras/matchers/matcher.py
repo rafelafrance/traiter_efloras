@@ -8,7 +8,7 @@ from .all_matchers import MATCHERS
 from ..pylib.attach_fsm import attach_traits_to_parts
 from ..pylib.sentencizer import NLP
 from ..pylib.terms import TERMS
-from ..pylib.util import ATTACH_STEPS, FINAL_STEP, GROUP_STEP, TRAIT_STEP
+from ..pylib.util import STEPS2ATTACH, ATTACH_STEP, GROUP_STEP, TRAIT_STEP
 
 
 class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
@@ -21,18 +21,18 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         self.add_terms(TERMS)
 
-        traiters = []
-        groupers = []
-        attachers = []
+        groups = []
+        traits = []
+        attaches = []
 
         for matcher in MATCHERS:
-            traiters += matcher.get('traits', [])
-            groupers += matcher.get('groupers', [])
-            attachers += matcher.get('attachers', [])
+            groups += matcher.get(GROUP_STEP, [])
+            traits += matcher.get(TRAIT_STEP, [])
+            attaches += matcher.get(ATTACH_STEP, [])
 
-        self.add_patterns(groupers, GROUP_STEP)
-        self.add_patterns(traiters, TRAIT_STEP)
-        self.add_patterns(attachers, FINAL_STEP)
+        self.add_patterns(groups, GROUP_STEP)
+        self.add_patterns(traits, TRAIT_STEP)
+        self.add_patterns(attaches, ATTACH_STEP)
 
     def parse(self, text, with_sents=False):
         """Parse the traits."""
@@ -49,7 +49,7 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
                 attach_traits_to_parts(sent)
 
             for token in sent:
-                if (token._.step in ATTACH_STEPS and token._.data
+                if (token._.step in STEPS2ATTACH and token._.data
                         and not token._.aux.get('skip')):
                     data = {k: v for k, v in token._.data.items()
                             if not k.startswith('_')}

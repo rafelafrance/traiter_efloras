@@ -2,6 +2,7 @@
 
 from .shared import CLOSE, OPEN, PLUS
 from ..pylib.terms import CATEGORY, REPLACE
+from ..pylib.util import TRAIT_STEP
 
 
 def suffixed_count(span):
@@ -46,7 +47,7 @@ def count_phrase(span):
 
 SUFFIX_COUNT = {
     'name': 'lobe',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'suffix_count',
             'on_match': suffixed_count,

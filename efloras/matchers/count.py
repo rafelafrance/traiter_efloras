@@ -2,6 +2,7 @@
 
 from .shared import CROSS, OPEN, PER_COUNT, PER_COUNTS, SLASH
 from ..pylib.terms import REPLACE
+from ..pylib.util import TRAIT_STEP
 
 _NO_COUNTS = (CROSS + SLASH + OPEN
               + """ average side times days weeks by """.split())
@@ -38,7 +39,7 @@ def not_a_count(span):
 
 COUNT = {
     'name': 'count',
-    'traits': [
+    TRAIT_STEP: [
         {
             'label': 'count',
             'on_match': count,

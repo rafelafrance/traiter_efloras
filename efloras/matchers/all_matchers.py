@@ -12,6 +12,7 @@ from .shape import SHAPE
 from .size import SIZE
 from .subpart import SUBPART
 from .suffix_count import SUFFIX_COUNT
+from ..pylib.util import TRAIT_STEP
 
 PARTS = [PART, SUBPART]
 TRAITS = [
@@ -20,6 +21,6 @@ TRAITS = [
 
 MATCHERS = PARTS + TRAITS
 
-PART_LABELS = {p['label'] for p in PART.get('traits', [])}
-SUBPART_LABELS = {s['label'] for s in SUBPART.get('traits', [])}
+PART_LABELS = {p['label'] for p in PART.get(TRAIT_STEP, [])}
+SUBPART_LABELS = {s['label'] for s in SUBPART.get(TRAIT_STEP, [])}
 ALL_PARTS = PART_LABELS | SUBPART_LABELS
