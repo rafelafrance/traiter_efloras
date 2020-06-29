@@ -4,7 +4,7 @@ from .shared import CROSS, OPEN, PER_COUNT, PER_COUNTS, SLASH
 from ..pylib.terms import REPLACE
 from ..pylib.util import TRAIT_STEP
 
-_NO_COUNTS = (CROSS + SLASH + OPEN
+_NO_COUNTS = (CROSS + SLASH
               + """ average side times days weeks by """.split())
 _NO_COUNT = set(_NO_COUNTS)
 
