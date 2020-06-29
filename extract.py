@@ -32,7 +32,8 @@ def main(args):
     matcher = Matcher(attach=attach)
 
     for row in rows:
-        row['traits'], row['sents'] = matcher.parse(row['text'])
+        row['traits'], row['sents'] = matcher.parse(
+            row['text'], with_sents=True)
 
     if args.csv_file:
         copied = deepcopy(rows)
