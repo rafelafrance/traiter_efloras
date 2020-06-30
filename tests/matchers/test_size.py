@@ -344,3 +344,13 @@ class TestSize(unittest.TestCase):
                                   'length_units': 'mm',
                                   'start': 42, 'end': 49}]}
         )
+
+    def test_size_30(self):
+        self.assertEqual(
+            MATCHER.parse('leaflets obovate, 1-2.5 × to 1.6 cm,'),
+            {'part': [{'part': 'leaflet', 'start': 0, 'end': 8}],
+             'leaflet_shape': [{'shape': 'obovate', 'start': 9, 'end': 16}],
+             'leaflet_size': [{'length_low': 1.0, 'length_high': 2.5,
+                               'width_low': 1.6, 'width_units': 'cm',
+                               'start': 18, 'end': 35}]}
+        )

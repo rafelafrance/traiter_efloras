@@ -182,7 +182,16 @@ RANGE = {
                     {'LOWER': 'or'},
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': OPEN}},
+                    {'TEXT': {'IN': _DASH_TO_CONJ}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': CLOSE}},
+                ],
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': OPEN}},
                     {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': _DASH_TO_CONJ}},
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': CLOSE}},
                 ],
@@ -200,6 +209,15 @@ RANGE = {
                     {'TEXT': {'IN': DASH}},
                     {'TEXT': {'REGEX': NUMBER}},
                 ],
+                [
+                    {'TEXT': {'IN': OPEN}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': _DASH_TO_CONJ}},
+                    {'TEXT': {'IN': CLOSE}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': _DASH_TO_CONJ}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                ],
             ]
         },
         {
@@ -215,6 +233,23 @@ RANGE = {
                     {'TEXT': {'IN': _DASH_TO_CONJ}},
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': CLOSE}},
+                ],
+            ]
+        },
+        {
+            'label': 'range_lhmx_or',
+            'on_match': partial(range_, fields='min low high max'),
+            'patterns': [
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'TEXT': {'REGEX': NUMBER}},
                 ],
             ]
         },

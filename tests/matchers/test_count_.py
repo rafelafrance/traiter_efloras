@@ -173,3 +173,27 @@ class TestCount(unittest.TestCase):
              'leaf_count': [
                  {'low': 5, 'high': 7, 'max': 9, 'start': 22, 'end': 45}]}
         )
+
+    def test_count_20(self):
+        self.assertEqual(
+            MATCHER.parse('Seeds (1 or)2 or 3 per legume,'),
+            {'part': [{'part': 'seed', 'start': 0, 'end': 5}],
+             'seed_count': [
+                 {'min': 1, 'low': 2, 'high': 3, 'start': 6, 'end': 18}]}
+        )
+
+    def test_count_21(self):
+        self.assertEqual(
+            MATCHER.parse('Racemes compact, 1- or 2- or 5-7-flowered'),
+            {'part': [{'part': 'inflorescence', 'start': 0, 'end': 7}],
+             'inflorescence_flower_count': [
+                 {'min': 1, 'low': 2, 'high': 5, 'max': 7,
+                  'start': 17, 'end': 41}]}
+        )
+
+    def test_count_22(self):
+        self.assertEqual(
+            MATCHER.parse('3(or 5-9)-foliolate;'),
+            {'plant_leaf_count': [
+                {'low': 3, 'high': 5, 'max': 9, 'start': 0, 'end': 19}]}
+        )
