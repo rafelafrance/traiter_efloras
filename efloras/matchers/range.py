@@ -215,7 +215,7 @@ RANGE = {
                     {'TEXT': {'IN': _DASH_TO_CONJ}},
                     {'TEXT': {'IN': CLOSE}},
                     {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': _DASH_TO_CONJ}},
+                    {'TEXT': {'IN': _DASH_TO_CONJ}, 'OP': '+'},
                     {'TEXT': {'REGEX': NUMBER}},
                 ],
             ]

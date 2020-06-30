@@ -208,3 +208,19 @@ class TestShape(unittest.TestCase):
             {'part': [{'part': 'seed', 'start': 0, 'end': 5}],
              'seed_shape': [{'shape': 'spheric', 'start': 6, 'end': 13}]}
         )
+
+    def test_shape_20(self):
+        self.assertEqual(
+            MATCHER.parse('bractlets narrowly to broadly ovate-triangular'),
+            {'part': [{'part': 'bract', 'start': 0, 'end': 9}],
+             'bract_shape': [{'shape': 'ovate-triangular',
+                              'start': 10, 'end': 46}]}
+        )
+
+    def test_shape_21(self):
+        self.assertEqual(
+            MATCHER.parse('Petals purple; bilobate;'),
+            {'part': [{'part': 'bract', 'start': 0, 'end': 9}],
+             'bract_shape': [{'shape': 'ovate-triangular',
+                              'start': 10, 'end': 46}]}
+        )

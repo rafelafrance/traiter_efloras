@@ -1,6 +1,6 @@
 """Common count snippets."""
 
-from .shared import CROSS, OPEN, PER_COUNT, PER_COUNTS, SLASH
+from .shared import CROSS, PER_COUNT, PER_COUNTS, SLASH
 from ..pylib.terms import REPLACE
 from ..pylib.util import TRAIT_STEP
 

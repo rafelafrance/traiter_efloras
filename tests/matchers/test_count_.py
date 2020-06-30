@@ -208,3 +208,11 @@ class TestCount(unittest.TestCase):
                  {'min': 2, 'low': 3, 'high': 4, 'max': 5,
                   'start': 9, 'end': 34}]}
         )
+
+    def test_count_24(self):
+        self.assertEqual(
+            MATCHER.parse('Leaves (19-)23- or 25-foliolate;'),
+            {'part': [{'part': 'leaf', 'start': 0, 'end': 6}],
+             'leaf_count': [
+                 {'min': 19, 'low': 23, 'high': 25, 'start': 7, 'end': 31}]}
+        )

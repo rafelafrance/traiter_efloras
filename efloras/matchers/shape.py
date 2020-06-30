@@ -44,7 +44,8 @@ SHAPE = {
                 [
                     {'_': {'label': 'shape_leader'}},
                     {'LOWER': {'IN': _DASH_TO}},
-                    {'_': {'label': 'shape_leader'}},
+                    {'_': {'label': {'IN': [
+                        'shape', 'shape_leader']}}, 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'_': {'label': 'shape'}, 'OP': '+'},
                 ],

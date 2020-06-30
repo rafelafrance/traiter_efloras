@@ -9,6 +9,19 @@ import textwrap
 
 def main(args):
     """Do it."""
+    if args.confusion_matrix:
+        confusion_matrix(args)
+
+    if args.error_detail:
+        error_detail(args)
+
+
+def confusion_matrix(args):
+    """Output a confusion matrix."""
+
+
+def error_detail(args):
+    """Output the error detail report."""
     for line in args.results_file:
         sent, results = json.loads(line)
         if (results['missing']) or (results['excess']):
@@ -38,6 +51,14 @@ def parse_args():
         '--results-file', '-r', type=argparse.FileType(), required=True,
         help="""Read data from this file.""")
 
+    arg_parser.add_argument(
+        '--confusion-matrix', '-s', action='store_true',
+        help="""Print a confusion matrix of the results.""")
+
+    arg_parser.add_argument(
+        '--error-detail', '-e', action='store_true',
+        help="""Print a detailed error report.""")
+
     args = arg_parser.parse_args()
     return args
 
@@ -45,4 +66,3 @@ def parse_args():
 if __name__ == '__main__':
     ARGS = parse_args()
     main(ARGS)
-
