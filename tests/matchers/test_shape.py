@@ -201,3 +201,10 @@ class TestShape(unittest.TestCase):
                  {'shape': 'truncate', 'start': 6, 'end': 14},
                  {'shape': 'cordate', 'start': 18, 'end': 25}]}
         )
+
+    def test_shape_19(self):
+        self.assertEqual(
+            MATCHER.parse('Seeds globose-angular'),
+            {'part': [{'part': 'seed', 'start': 0, 'end': 5}],
+             'seed_shape': [{'shape': 'spheric', 'start': 6, 'end': 13}]}
+        )

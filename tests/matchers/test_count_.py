@@ -61,10 +61,10 @@ class TestCount(unittest.TestCase):
             MATCHER.parse('Staminate flowers (3–)5–10(–20)'),
             {'part': [
                 {'start': 0, 'end': 17, 'sex': 'male', 'part': 'flower'}],
-             'flower_count': [{'start': 18, 'end': 31,
-                               'min': 3, 'low': 5,
-                               'high': 10, 'max': 20,
-                               'sex': 'male'}]}
+                'flower_count': [{'start': 18, 'end': 31,
+                                  'min': 3, 'low': 5,
+                                  'high': 10, 'max': 20,
+                                  'sex': 'male'}]}
         )
 
     def test_count_07(self):
@@ -107,8 +107,8 @@ class TestCount(unittest.TestCase):
             {'part': [
                 {'start': 0, 'end': 12, 'sex': 'male', 'part': 'flower'},
                 {'sex': 'male', 'start': 27, 'end': 34, 'part': 'stamen'}],
-             'stamen_count': [{'sex': 'male', 'start': 18, 'end': 26,
-                               'low': 2, 'high': 8, 'max': 20}]}
+                'stamen_count': [{'sex': 'male', 'start': 18, 'end': 26,
+                                  'low': 2, 'high': 8, 'max': 20}]}
         )
 
     def test_count_13(self):
@@ -151,11 +151,13 @@ class TestCount(unittest.TestCase):
                 aculei 0.5–1 times as long as opaque base.""")),
             {'part': [
                 {'start': 0, 'end': 18, 'sex': 'female', 'part': 'flower'}],
-             'subpart': [
-                 {'start': 39, 'end': 43, 'subpart': 'apex', 'sex': 'female'},
-                 {'start': 58, 'end': 64, 'subpart': 'aculeus',
-                  'sex': 'female'},
-                 {'start': 95, 'end': 99, 'subpart': 'base', 'sex': 'female'}]}
+                'subpart': [
+                    {'start': 39, 'end': 43, 'subpart': 'apex',
+                     'sex': 'female'},
+                    {'start': 58, 'end': 64, 'subpart': 'aculeus',
+                     'sex': 'female'},
+                    {'start': 95, 'end': 99, 'subpart': 'base',
+                     'sex': 'female'}]}
         )
 
     def test_count_18(self):
@@ -196,4 +198,13 @@ class TestCount(unittest.TestCase):
             MATCHER.parse('3(or 5-9)-foliolate;'),
             {'plant_leaf_count': [
                 {'low': 3, 'high': 5, 'max': 9, 'start': 0, 'end': 19}]}
+        )
+
+    def test_count_23(self):
+        self.assertEqual(
+            MATCHER.parse('leaflets (2or)3- or 4(or 5)-paired'),
+            {'part': [{'part': 'leaflet', 'start': 0, 'end': 8}],
+             'leaflet_pair_count': [
+                 {'min': 2, 'low': 3, 'high': 4, 'max': 5,
+                  'start': 9, 'end': 34}]}
         )

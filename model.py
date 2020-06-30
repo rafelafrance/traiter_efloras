@@ -126,7 +126,7 @@ def score_data(nlp, data, note, to_json=False):
 
 def parse_args():
     """Process command-line arguments."""
-    description = """Parse data from the eFloras website."""
+    description = """Create models from data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')

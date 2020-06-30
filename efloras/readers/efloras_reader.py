@@ -30,6 +30,8 @@ def efloras_reader(args, families):
             text = get_treatment(path)
             text = get_traits(text)
             taxon_id = futil.get_taxon_id(path)
+            if not taxa.get(taxon_id):
+                continue
 
             # Filter on the taxon name
             if genera and not re.search(genera, taxa[taxon_id], flags=FLAGS):
