@@ -354,3 +354,12 @@ class TestSize(unittest.TestCase):
                                'width_low': 1.6, 'width_units': 'cm',
                                'start': 18, 'end': 35}]}
         )
+
+    def test_size_31(self):
+        self.assertEqual(
+            MATCHER.parse('Shrubs, 0.5–1[–2.5] m.'),
+            {'plant_habit': [{'habit': 'shrub', 'start': 0, 'end': 6}],
+             'plant_size': [{'length_low': 0.5, 'length_high': 1.0,
+                             'length_max': 2.5, 'length_units': 'm',
+                             'start': 8, 'end': 22}]}
+        )

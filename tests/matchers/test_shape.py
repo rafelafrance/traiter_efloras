@@ -220,7 +220,7 @@ class TestShape(unittest.TestCase):
     def test_shape_21(self):
         self.assertEqual(
             MATCHER.parse('Petals purple; bilobate;'),
-            {'part': [{'part': 'bract', 'start': 0, 'end': 9}],
-             'bract_shape': [{'shape': 'ovate-triangular',
-                              'start': 10, 'end': 46}]}
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_color': [{'color': 'purple', 'start': 7, 'end': 13}],
+             'petal_lobe_count': [{'start': 15, 'end': 23, 'low': 2}]}
         )

@@ -12,6 +12,7 @@ STEPS2ATTACH = {TRAIT_STEP, ATTACH_STEP}
 
 CONVERT = {
     'cm': 10.0,
+    'dm': 100.0,
     'm': 1000.0,
     'mm': 1.0,
     'µm': 1.0e-3,
