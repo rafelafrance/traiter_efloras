@@ -157,3 +157,19 @@ class TestCount(unittest.TestCase):
                   'sex': 'female'},
                  {'start': 95, 'end': 99, 'subpart': 'base', 'sex': 'female'}]}
         )
+
+    def test_count_18(self):
+        self.assertEqual(
+            MATCHER.parse(shorten("""rarely 1- or 5-7-foliolate;""")),
+            {'plant_leaf_count': [
+                {'min': 1, 'low': 5, 'high': 7, 'start': 7, 'end': 26}]}
+        )
+
+    def test_count_19(self):
+        self.assertEqual(
+            MATCHER.parse(shorten(
+                """Leaves imparipinnate, 5- or 7(or 9)-foliolate;""")),
+            {'part': [{'part': 'leaf', 'start': 0, 'end': 6}],
+             'leaf_count': [
+                 {'low': 5, 'high': 7, 'max': 9, 'start': 22, 'end': 45}]}
+        )

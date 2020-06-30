@@ -60,6 +60,8 @@ def fix_dimensions(dims):
     else:
         dims[0]['dimension'] = 'length'
         dims[1]['dimension'] = 'width'
+        if len(dims) > 2:
+            dims[2]['dimension'] = 'thickness'
     return dims
 
 
@@ -148,6 +150,25 @@ SIZE = {
                     {'_': {'label': 'length_units'}, 'OP': '?'},
                     {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
                     {'LOWER': {'IN': CROSS}},
+                    {'LOWER': 'to', 'OP': '?'},
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                ],
+                [
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}, 'OP': '?'},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'LOWER': {'IN': CROSS}},
+                    {'LOWER': 'to', 'OP': '?'},
+                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'_': {'label': 'range'}},
+                    {'_': {'label': 'length_units'}, 'OP': '?'},
+                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'LOWER': {'IN': CROSS}},
+                    {'LOWER': 'to', 'OP': '?'},
                     {'_': {'label': 'about'}, 'OP': '?'},
                     {'_': {'label': 'range'}},
                     {'_': {'label': 'length_units'}},

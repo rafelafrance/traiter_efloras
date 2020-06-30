@@ -4,8 +4,6 @@
 
 import unittest
 
-from traiter.util import shorten
-
 from efloras.matchers.matcher import Matcher
 
 MATCHER = Matcher()
@@ -124,13 +122,12 @@ class TestShape(unittest.TestCase):
             MATCHER.parse(
                 'Leaves: petiole blade pentagonal-angulate to '
                 'reniform-angulate or shallowly 5-angulate'),
-            {'part': [{'start': 0, 'end': 6, 'part': 'leaf'},
-                      {'start': 8, 'end': 15, 'part': 'petiole'},
-                      {'start': 16, 'end': 21, 'part': 'leaf'}],
-             'leaf_shape': [{'shape': 'polygonal', 'start': 22, 'end': 41},
-                            {'shape': 'reniform-polygonal', 'start': 45,
-                             'end': 62},
-                            {'shape': 'polygonal', 'start': 66, 'end': 86}]}
+            {'part': [{'part': 'leaf', 'start': 0, 'end': 6},
+                      {'part': 'petiole', 'start': 8, 'end': 21}],
+             'petiole_shape': [{'shape': 'polygonal', 'start': 22, 'end': 32},
+                               {'shape': 'reniform-polygonal', 'start': 45,
+                                'end': 62},
+                               {'shape': 'polygonal', 'start': 66, 'end': 86}]}
         )
 
     def test_shape_12(self):

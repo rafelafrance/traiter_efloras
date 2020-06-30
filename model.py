@@ -40,7 +40,7 @@ def main(args):
 
     results = []
     if test_data:
-        results = score_data(nlp, test_data, 'Test score:', to_json=True)
+        results = score_data(nlp, test_data, 'Test:', to_json=True)
 
     if args.output_dir:
         output_dir = Path(args.output_dir)
@@ -83,7 +83,7 @@ def train(args, nlp, optimizer, disable_pipes, train_data, val_data):
 
     with nlp.disable_pipes(*disable_pipes) and warnings.catch_warnings():
         warnings.filterwarnings('once', category=UserWarning, module='spacy')
-        sizes = compounding(16.0, 32.0, 1.1)
+        sizes = compounding(1, args.max_batch_size, 1.1)
 
         for i in range(1, args.iterations + 1):
             random.shuffle(train_data)
@@ -94,7 +94,7 @@ def train(args, nlp, optimizer, disable_pipes, train_data, val_data):
                 nlp.update(texts, annotations,
                            sgd=optimizer, drop=0.35, losses=losses)
 
-            note = f'Validation score {i} loss = {losses["ner"]:0.4}:'
+            note = f'Epoch {i} validation loss = {losses["ner"]:0.4}:'
             score_data(nlp, val_data, note)
 
 
@@ -108,11 +108,11 @@ def score_data(nlp, data, note, to_json=False):
         actual = {(e.start_char, e.end_char, e.label_) for e in doc.ents}
         inter = expect & actual
         if to_json:
-            correct = [list(t) for t in inter]
+            agree = [list(t) for t in inter]
             missing = [list(t) for t in (expect - actual)]
             excess = [list(t) for t in (actual - expect)]
             rec = [sent[0],
-                   {'correct': correct, 'missing': missing, 'excess': excess}]
+                   {'agree': agree, 'missing': missing, 'excess': excess}]
             results.append(json.dumps(rec))
 
         union_count += len(expect | actual)
@@ -156,6 +156,10 @@ def parse_args():
     arg_parser.add_argument(
         '--seed', '-S', type=int, default=0,
         help="""Random number seed.""")
+
+    arg_parser.add_argument(
+        '--max-batch-size', '-b', type=int, default=32,
+        help="""Maximum batch size. Default = 32.""")
 
     arg_parser.add_argument(
         '--output-dir', '-O',

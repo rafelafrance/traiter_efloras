@@ -317,3 +317,30 @@ class TestSize(unittest.TestCase):
              'inflorescence_size': [{'start': 9, 'end': 15, 'length_low': 3,
                                      'length_high': 4, 'length_units': 'cm'}]}
         )
+
+    def test_size_28(self):
+        self.assertEqual(
+            MATCHER.parse('Petals pale violet, with darker keel; standard '
+                          'elliptic, 6-7 × 3-4;'),
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_color': [{'color': 'purple', 'start': 12, 'end': 18}],
+             'subpart': [{'subpart': 'keel', 'start': 32, 'end': 36}],
+             'petal_keel_shape': [
+                 {'shape': 'elliptic', 'start': 47, 'end': 55}]}
+        )
+
+    def test_size_29(self):
+        self.assertEqual(
+            MATCHER.parse(
+                'Seeds ca. 1.6 × 1-1.3 × 0.7-0.8 cm; hilum 8-10 mm.'),
+            {'part': [{'part': 'seed', 'start': 0, 'end': 5}],
+             'seed_size': [{'length_low': 1.6,
+                            'width_low': 1.0, 'width_high': 1.3,
+                            'thickness_low': 0.7, 'thickness_high': 0.8,
+                            'thickness_units': 'cm',
+                            'start': 6, 'end': 34}],
+             'subpart': [{'subpart': 'hilum', 'start': 36, 'end': 41}],
+             'seed_hilum_size': [{'length_low': 8, 'length_high': 10,
+                                  'length_units': 'mm',
+                                  'start': 42, 'end': 49}]}
+        )

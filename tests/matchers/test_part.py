@@ -26,3 +26,9 @@ class TestPart(unittest.TestCase):
             {'part': [{'part': 'leaflet', 'start': 0, 'end': 9}],
              'leaflet_count': [{'low': 1, 'high': 3, 'start': 17, 'end': 23}]}
         )
+
+    def test_part_03(self):
+        self.assertEqual(
+            MATCHER.parse('Receptacle discoid.'),
+            {}
+        )

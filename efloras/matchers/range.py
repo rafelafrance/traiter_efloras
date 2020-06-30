@@ -9,8 +9,10 @@ from traiter.util import to_positive_float, to_positive_int
 from .shared import CLOSE, DASH, INT, NUMBER, OPEN
 from ..pylib.util import GROUP_STEP
 
-_DASH_TO = DASH + ['to']
-_DASH_TO_CONJ = _DASH_TO + ['or', 'and']
+_TO = ['to']
+_CONJ = ['or', 'and']
+_DASH_TO = DASH + _TO
+_DASH_TO_CONJ = _DASH_TO + _CONJ
 
 
 def range_(span, fields=''):
@@ -128,6 +130,7 @@ RANGE = {
             'on_match': partial(range_, fields='low high'),
             'patterns': [
                 [
+                    {'LOWER': {'IN': _TO}, 'OP': '?'},
                     {'TEXT': {'REGEX': NUMBER}},
 
                     {'LOWER': {'IN': _DASH_TO}},
@@ -180,6 +183,36 @@ RANGE = {
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': OPEN}},
                     {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': CLOSE}},
+                ],
+            ]
+        },
+        {
+            'label': 'range_mlh_or',
+            'on_match': partial(range_, fields='min low high'),
+            'patterns': [
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                ],
+            ]
+        },
+        {
+            'label': 'range_lhm_or',
+            'on_match': partial(range_, fields='low high max'),
+            'patterns': [
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': OPEN}},
+                    {'TEXT': {'IN': _DASH_TO_CONJ}},
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': CLOSE}},
                 ],
