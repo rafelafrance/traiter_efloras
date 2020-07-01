@@ -22,16 +22,16 @@ COLOR = {
             'on_match': color,
             'patterns': [
                 [
-                    {'_': {'label': 'color_leader'}, 'OP': '?'},
+                    {'ENT_TYPE': 'color_leader', 'OP': '?'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'color'}, 'OP': '+'},
+                    {'ENT_TYPE': 'color', 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': {'IN': ['color', 'color_follower']}},
+                    {'ENT_TYPE': {'IN': ['color', 'color_follower']},
                      'OP': '*'},
                 ],
                 [
-                    {'_': {'label': 'color_leader'}},
-                    {'_': {'label': 'color_follower'}, 'OP': '*'},
+                    {'ENT_TYPE': 'color_leader'},
+                    {'ENT_TYPE': 'color_follower', 'OP': '*'},
                 ],
             ],
         },

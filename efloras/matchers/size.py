@@ -21,7 +21,7 @@ def scan_tokens(span, high_only):
     dims = [{}]
 
     for token in span:
-        label = token._.label
+        label = token.ent_type_
 
         if label == 'range':
             for key, value in token._.data.items():
@@ -97,7 +97,7 @@ def size_double_dim(span):
     """
     data = size(span)
     dims = [REPLACE.get(t.lower_, t.lower_) for t in span
-            if t._.label == 'dimension']
+            if t.ent_type_ == 'dimension']
 
     new_data = {}
     for key, value in data.items():
@@ -128,7 +128,7 @@ SIZE = {
             'label': 'sex_enclosed',
             'patterns': [[
                 {'TEXT': {'IN': OPEN}},
-                {'_': {'label': 'sex'}},
+                {'ENT_TYPE': 'sex'},
                 {'TEXT': {'IN': CLOSE}},
             ]],
         },
@@ -139,40 +139,40 @@ SIZE = {
             'on_match': size,
             'patterns': [
                 [
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 ],
                 [
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}, 'OP': '?'},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units', 'OP': '?'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                     {'LOWER': {'IN': CROSS}},
                     {'LOWER': 'to', 'OP': '?'},
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 ],
                 [
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}, 'OP': '?'},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units', 'OP': '?'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                     {'LOWER': {'IN': CROSS}},
                     {'LOWER': 'to', 'OP': '?'},
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}, 'OP': '?'},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units', 'OP': '?'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                     {'LOWER': {'IN': CROSS}},
                     {'LOWER': 'to', 'OP': '?'},
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 ],
             ],
         },
@@ -182,11 +182,11 @@ SIZE = {
             'patterns': [
                 [
                     {'LOWER': 'to'},
-                    {'_': {'label': 'about'}, 'OP': '?'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
                     {'LOWER': {'REGEX': NUMBER}},
-                    {'_': {'label': QUEST}, 'OP': '?'},
-                    {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': _FOLLOW}}, 'OP': '*'},
+                    {'ENT_TYPE': QUEST, 'OP': '?'},
+                    {'ENT_TYPE': 'length_units'},
+                    {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 ],
             ],
         },
@@ -195,13 +195,13 @@ SIZE = {
             'on_match': size_double_dim,
             'patterns': [
                 [
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}},
-                    {'_': {'label': {'IN': 'sex_enclosed' 'sex'}}, 'OP': '?'},
-                    {'_': {'label': 'dimension'}},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units'},
+                    {'ENT_TYPE': {'IN': 'sex_enclosed' 'sex'}, 'OP': '?'},
+                    {'ENT_TYPE': 'dimension'},
                     {'LOWER': 'and'},
-                    {'_': {'label': 'dimension'}},
+                    {'ENT_TYPE': 'dimension'},
                 ],
             ],
         },
@@ -211,19 +211,19 @@ SIZE = {
             'patterns': [
                 [
                     {'LOWER': {'IN': _NOT_A_SIZE}},
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units'},
                 ],
                 [
                     {'LOWER': {'IN': _NOT_A_SIZE}},
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}, 'OP': '?'},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units', 'OP': '?'},
                     {'LOWER': {'IN': CROSS}},
-                    {'_': {'label': 'about'}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'length_units'}},
+                    {'ENT_TYPE': 'about', 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'length_units'},
                 ],
             ],
         },

@@ -9,7 +9,7 @@ LITERAL_LABELS = sorted(LITERAL_LABELS)
 
 def phrase(span):
     """Enrich the match."""
-    label = span[0]._.label
+    label = span[0].ent_type_
     value = span.lower_
 
     data = dict(_relabel=label)
@@ -25,7 +25,7 @@ PHRASE = {
             'label': 'phrase',
             'on_match': phrase,
             'patterns': [[
-                {'_': {'label': {'IN': LITERAL_LABELS}}},
+                {'ENT_TYPE': {'IN': LITERAL_LABELS}},
             ]],
         },
     ]

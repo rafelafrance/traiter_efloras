@@ -16,7 +16,7 @@ def count(span):
     data = dict(_relabel='count')
 
     for token in span:
-        label = token._.label
+        label = token.ent_type_
 
         if label == 'range' and token._.data['_all_ints']:
             data = {**token._.data, **data}
@@ -45,7 +45,7 @@ COUNT = {
             'on_match': count,
             'patterns': [
                 [
-                    {'_': {'label': 'range'}},
+                    {'ENT_TYPE': 'range'},
                     {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
                 ],
             ],
@@ -56,10 +56,10 @@ COUNT = {
             'patterns': [
                 [
                     {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
-                    {'_': {'label': 'range'}},
+                    {'ENT_TYPE': 'range'},
                     {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
-                    {'_': {'label': {'IN': _COUNT_KILLER}}, 'OP': '?'},
-                    {'_': {'label': 'range'}, 'OP': '?'},
+                    {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
+                    {'ENT_TYPE': 'range', 'OP': '?'},
                 ],
             ],
         },

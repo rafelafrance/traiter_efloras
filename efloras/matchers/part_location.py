@@ -19,7 +19,7 @@ PART_LOCATION = {
             'on_match': part_location,
             'patterns': [[
                 {'POS': {'IN': ['PART', 'ADP']}},
-                {'_': {'label': 'part'}},
+                {'ENT_TYPE': 'part'},
             ]],
         },
     ],

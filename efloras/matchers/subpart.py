@@ -11,7 +11,7 @@ def subpart(span):
     data = {}
 
     for token in span:
-        label = token._.label
+        label = token.ent_type_
         value = token.lower_
         if label == 'subpart':
             data['subpart'] = REPLACE.get(value, value)
@@ -30,8 +30,8 @@ SUBPART = {
             'label': 'subpart',
             'on_match': subpart,
             'patterns': [[
-                {'_': {'label': {'IN': ['sex', 'location']}}, 'OP': '*'},
-                {'_': {'label': 'subpart'}}
+                {'ENT_TYPE': {'IN': ['sex', 'location']}, 'OP': '*'},
+                {'ENT_TYPE': 'subpart'},
             ]],
         },
     ],

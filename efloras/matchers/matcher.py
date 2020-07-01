@@ -43,20 +43,21 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         sents = []
 
-        for sent in doc.sents:
-            sents.append((sent.start_char, sent.end_char))
+        with doc.retokenize() as retokenizer:
+            for sent in doc.sents:
+                sents.append((sent.start_char, sent.end_char))
 
-            if self.attach:
-                attach_traits_to_parts(sent)
+                if self.attach:
+                    attach_traits_to_parts(doc, sent, retokenizer)
 
-            for token in sent:
-                if (token._.step in STEPS2ATTACH and token._.data
-                        and not token._.aux.get('skip')):
-                    data = {k: v for k, v in token._.data.items()
-                            if not k.startswith('_')}
-                    data['start'] = token.idx
-                    data['end'] = token.idx + len(token)
-                    traits[token._.label].append(data)
+        for token in doc:
+            if (token._.step in STEPS2ATTACH and token._.data
+                    and not token._.aux.get('skip')):
+                data = {k: v for k, v in token._.data.items()
+                        if not k.startswith('_')}
+                data['start'] = token.idx
+                data['end'] = token.idx + len(token)
+                traits[token.ent_type_].append(data)
 
         # from pprint import pp
         # pp(dict(traits))

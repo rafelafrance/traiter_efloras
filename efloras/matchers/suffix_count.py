@@ -9,7 +9,7 @@ def suffix_subpart(span):
     data = {}
 
     for token in span:
-        if token._.label == 'count_suffix':
+        if token.ent_type_ == 'count_suffix':
             data['_subpart'] = {
                 'subpart': REPLACE[token.lower_],
                 'start': token.idx,
@@ -35,7 +35,7 @@ SUFFIX_COUNT = {
             'on_match': suffix_subpart,
             'patterns': [
                 [
-                    {'_': {'label': 'count_suffix'}},
+                    {'ENT_TYPE': 'count_suffix'},
                 ],
             ],
         },
@@ -44,7 +44,7 @@ SUFFIX_COUNT = {
             'on_match': count_phrase,
             'patterns': [
                 [
-                    {'_': {'label': 'count_word'}},
+                    {'ENT_TYPE': 'count_word'},
                 ],
             ],
         },

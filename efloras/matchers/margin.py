@@ -11,7 +11,7 @@ _KEEP = set(_SHAPES)
 def margin(span):
     """Enrich a phrase match."""
     data = {}
-    value = [t.lower_ for t in span if t._.label in _KEEP]
+    value = [t.lower_ for t in span if t.ent_type_ in _KEEP]
     data['margin_shape'] = '-'.join(value)
     return data
 
@@ -24,16 +24,16 @@ MARGIN_SHAPE = {
             'on_match': margin,
             'patterns': [
                 [
-                    {'_': {'label': {'IN': _LEADERS}}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': _LEADERS}, 'OP': '*'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'margin_shape'}, 'OP': '+'},
+                    {'ENT_TYPE': 'margin_shape', 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': {'IN': _FOLLOWERS}}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': _FOLLOWERS}, 'OP': '*'},
                 ],
                 [
-                    {'_': {'label': {'IN': _SHAPES}}, 'OP': '+'},
+                    {'ENT_TYPE': {'IN': _SHAPES}, 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': {'IN': _FOLLOWERS}}, 'OP': '+'},
+                    {'ENT_TYPE': {'IN': _FOLLOWERS}, 'OP': '+'},
                 ],
             ],
         },

@@ -45,7 +45,7 @@ SUFFIXES = {'with': '', 'without': 'not '}
 SUFFIX_END = {';', '.'}
 
 
-def attach_traits_to_parts(sent):
+def attach_traits_to_parts(doc, sent, retokenizer):
     """Attach traits to a plant part."""
     subpart = ''
     suffix = Suffix(is_suffix=False, leader='')
@@ -53,14 +53,14 @@ def attach_traits_to_parts(sent):
 
     part = 'plant'
     augment_stack = [{}]
-    parts = [t for t in sent if t._.label == 'part']
+    parts = [t for t in sent if t.ent_type_ == 'part']
     if parts:
         data = parts[0]._.data
         part = data['part']
         augment_stack = [({k: v for k, v in data.items() if k in TRANSFER})]
 
     for token in sent:
-        label = token._.label
+        label = token.ent_type_
 
         if token._.aux.get('attached') or token._.aux.get('skip'):
             continue
@@ -70,7 +70,7 @@ def attach_traits_to_parts(sent):
 
         elif token.lower_ in SUFFIX_END:
             stack, suffix = adjust_stack(
-                stack, part, subpart, augment_stack, suffix)
+                doc, retokenizer, stack, part, subpart, augment_stack, suffix)
 
         elif token._.step not in STEPS2ATTACH:
             continue
@@ -82,13 +82,13 @@ def attach_traits_to_parts(sent):
             augment_stack = augment_data(augment_stack, token)
             part = token._.data['part']
             stack, suffix = adjust_stack(
-                stack, part, subpart, augment_stack, suffix)
+                doc, retokenizer, stack, part, subpart, augment_stack, suffix)
 
         elif suffix.is_suffix and label in SUBPART_LABELS:
             augment_stack = augment_data(augment_stack, token)
             subpart = token._.data['subpart']
             stack, suffix = adjust_stack(
-                stack, part, subpart, augment_stack, suffix)
+                doc, retokenizer, stack, part, subpart, augment_stack, suffix)
 
         elif label in PART_LABELS:
             augment_stack = augment_data(augment_stack, token)
@@ -101,16 +101,21 @@ def attach_traits_to_parts(sent):
 
         elif label in PLANT_LEVEL_LABELS:
             if not label.startswith('plant_'):
-                token._.label = f'plant_{label}'
+                sub_span = doc[token.i:token.i + 1]
+                attrs = {'ENT_TYPE': f'plant_{label}'}
+                retokenizer.merge(sub_span, attrs=attrs)
 
         elif token._.aux.get('subpart_attached'):
-            update_token(token, label, part, '', augment_stack)
+            update_token(
+                doc, retokenizer, token, label, part, '', augment_stack)
 
         else:
-            update_token(token, label, part, subpart, augment_stack)
+            update_token(
+                doc, retokenizer, token, label, part, subpart, augment_stack)
 
     if stack:
-        adjust_stack(stack, part, subpart, augment_stack, suffix)
+        adjust_stack(
+            doc, retokenizer, stack, part, subpart, augment_stack, suffix)
 
 
 def augment_data(augment_stack, token):
@@ -124,22 +129,27 @@ def augment_data(augment_stack, token):
     return augment_stack
 
 
-def adjust_stack(stack, part, subpart, augment_stack, suffix):
+def adjust_stack(
+        doc, retokenizer, stack, part, subpart, augment_stack, suffix):
     """Adjust all tokens on the suffix stack."""
     for token in stack:
-        label = token._.label
+        label = token.ent_type_
         if suffix.leader:
             for key, value in token._.data.items():
                 if key in LABELS and isinstance(value, str):
                     token._.data[key] = suffix.leader + token._.data[key]
-        update_token(token, label, part, subpart, augment_stack)
+        update_token(doc, retokenizer, token, label, part, subpart,
+                     augment_stack)
     return [], Suffix(is_suffix=False, leader='')
 
 
-def update_token(token, label, part, subpart, augment_stack):
+def update_token(doc, retokenizer, token, label, part, subpart, augment_stack):
     """Relabel the token and add the augment data."""
     label = f'{part}_{subpart}_{label}' if subpart else f'{part}_{label}'
     label = re.sub(r'_([^_]+)_\1', r'_\1', label)
-    token._.label = re.sub(r'^([^_]+)_\1', r'\1', label)
+    label = re.sub(r'^([^_]+)_\1', r'\1', label)
+    sub_span = doc[token.i:token.i + 1]
+    attrs = {'ENT_TYPE': label}
+    retokenizer.merge(sub_span, attrs=attrs)
     aug = augment_stack.pop() if len(augment_stack) > 1 else augment_stack[0]
     token._.data = {**token._.data, **aug}

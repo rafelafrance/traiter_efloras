@@ -22,7 +22,7 @@ def part(span):
     data = {}
 
     for token in span:
-        label = token._.label
+        label = token.ent_type_
         value = token.lower_
         if label == 'part':
             data['part'] = REPLACE.get(value, value)
@@ -44,19 +44,19 @@ PART = {
             'on_match': part,
             'patterns': [
                 [
-                    {'_': {'label': {'IN': ['sex', 'location']}}, 'OP': '*'},
-                    {'_': {'label': 'part'}},
+                    {'ENT_TYPE': {'IN': ['sex', 'location']}, 'OP': '*'},
+                    {'ENT_TYPE': 'part'},
                 ],
                 [
-                    {'_': {'label': 'location'}},
+                    {'ENT_TYPE': 'location'},
                     {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
                     {},
-                    {'_': {'label': 'part'}},
+                    {'ENT_TYPE': 'part'},
                 ],
                 [
-                    {'_': {'label': 'location'}},
+                    {'ENT_TYPE': 'location'},
                     {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
-                    {'_': {'label': 'part'}},
+                    {'ENT_TYPE': 'part'},
                 ],
             ],
         },

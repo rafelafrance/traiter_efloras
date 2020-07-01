@@ -14,7 +14,7 @@ IS_DESCRIPTOR = {t['pattern'] for t in TERMS if t['category'] == 'descriptor'}
 
 def descriptor(span):
     """Enrich a phrase match."""
-    label = DESCRIPTORS_DICT[span[0]._.label]
+    label = DESCRIPTORS_DICT[span[0].ent_type_]
     value = span.lower_
 
     if value not in IS_DESCRIPTOR:
@@ -33,7 +33,7 @@ DESCRIPTOR = {
             'label': 'descriptor',
             'on_match': descriptor,
             'patterns': [[
-                {'_': {'label': {'IN': list(DESCRIPTORS_DICT.keys())}}},
+                {'ENT_TYPE': {'IN': list(DESCRIPTORS_DICT.keys())}},
             ]],
         },
     ]

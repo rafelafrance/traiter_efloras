@@ -9,23 +9,23 @@ def attach_final_suffix(span):
     """Attach traits to a plant part."""
     part = ''
     for token in list(span)[::-1]:
-        if token._.label == 'part':
+        if token.ent_type_ == 'part':
             part = token._.data['part']
         elif token._.step == TRAIT_STEP:
-            token._.label = f'{part}_{token._.label}'
+            token._.data['_relabel'] = f'{part}_{token.ent_type_}'
         token._.aux['attached'] = True
-    return {'_retokenize': False}
+    return {'_merge': False}
 
 
 def attach_retokenize(span):
     """Attach traits to a subpart."""
     label, subpart, data = '', '', {}
     for token in list(span):
-        if token._.label == 'subpart':
+        if token.ent_type_ == 'subpart':
             subpart = token._.data['subpart']
         elif token._.step == TRAIT_STEP:
             data = token._.data
-            label = token._.label
+            label = token.ent_type_
         token._.aux['subpart_attached'] = True
     data['_relabel'] = f'{subpart}_{label}'
     return data
@@ -37,7 +37,7 @@ def suffixed_count(span):
     subpart = {}
 
     for token in span:
-        label = token._.label
+        label = token.ent_type_
 
         if label == 'count':
             data = {**token._.data, **data}
@@ -82,7 +82,7 @@ ATTACH = {
                 [
                     {'LOWER': 'and'},
                     {'_': {'step': TRAIT_STEP}},
-                    {'_': {'label': 'part'}},
+                    {'ENT_TYPE': 'part'},
                     {'TEXT': {'IN': DOT}}
                 ],
             ],
@@ -94,7 +94,7 @@ ATTACH = {
                 [
                     {'LOWER': {'IN': ['with', 'having']}},
                     {'LOWER': 'a', 'OP': '?'},
-                    {'_': {'label': 'subpart'}},
+                    {'ENT_TYPE': 'subpart'},
                     {'_': {'step': TRAIT_STEP}},
                 ],
             ],
@@ -105,17 +105,17 @@ ATTACH = {
             'patterns': [
                 [
                     {'TEXT': {'IN': OPEN}, 'OP': '?'},
-                    {'_': {'label': 'count'}},
+                    {'ENT_TYPE': 'count'},
                     {'TEXT': {'IN': PLUS}, 'OP': '?'},
-                    {'_': {'label': 'suffix_subpart'}},
+                    {'ENT_TYPE': 'suffix_subpart'},
                     {'TEXT': {'IN': CLOSE}, 'OP': '?'},
                 ],
                 [
-                    {'_': {'label': 'count'}},
+                    {'ENT_TYPE': 'count'},
                     {'LOWER': 'or'},
-                    {'_': {'label': 'count'}},
+                    {'ENT_TYPE': 'count'},
                     {'TEXT': {'IN': PLUS}, 'OP': '?'},
-                    {'_': {'label': 'suffix_subpart'}},
+                    {'ENT_TYPE': 'suffix_subpart'},
                 ],
             ],
         },
@@ -124,7 +124,7 @@ ATTACH = {
             'on_match': word_count,
             'patterns': [
                 [
-                    {'_': {'label': 'count_phrase'}},
+                    {'ENT_TYPE': 'count_phrase'},
                 ],
             ],
         },

@@ -10,11 +10,11 @@ _DASH_TO = DASH + ['to']
 def shape(span):
     """Enrich a phrase match."""
     parts = {r: 1 for t in span
-             if (r := REPLACE.get(t.text, t.text)) and t._.label == 'shape'}
+             if (r := REPLACE.get(t.text, t.text)) and t.ent_type_ == 'shape'}
     value = '-'.join(parts)
     value = REPLACE.get(value, value)
     data = dict(shape=value)
-    loc = [t.lower_ for t in span if t._.label == 'location']
+    loc = [t.lower_ for t in span if t.ent_type_ == 'location']
     if loc:
         data['location'] = loc[0]
     return data
@@ -34,26 +34,27 @@ SHAPE = {
             'on_match': shape,
             'patterns': [
                 [
-                    {'_': {'label': {'IN': [
-                        'shape', 'shape_leader', 'location']}}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': [
+                        'shape', 'shape_leader', 'location']}, 'OP': '*'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'shape'}, 'OP': '+'},
+                    {'ENT_TYPE': 'shape', 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'shape'}, 'OP': '?'},
+                    {'ENT_TYPE': 'shape', 'OP': '?'},
                 ],
                 [
-                    {'_': {'label': 'shape_leader'}},
+                    {'ENT_TYPE': 'shape_leader'},
                     {'LOWER': {'IN': _DASH_TO}},
-                    {'_': {'label': {'IN': [
-                        'shape', 'shape_leader']}}, 'OP': '+'},
+                    {'ENT_TYPE': {'IN': [
+                        'shape', 'shape_leader']}, 'OP': '+'},
+
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'shape'}, 'OP': '+'},
+                    {'ENT_TYPE': 'shape', 'OP': '+'},
                 ],
                 [
-                    {'_': {'label': {'IN': [
-                        'shape', 'shape_leader']}}, 'OP': '+'},
+                    {'ENT_TYPE': {'IN': [
+                        'shape', 'shape_leader']}, 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'_': {'label': 'shape'}, 'OP': '+'},
+                    {'ENT_TYPE': 'shape', 'OP': '+'},
                 ],
             ],
         },
@@ -62,10 +63,10 @@ SHAPE = {
             'on_match': n_shape,
             'patterns': [
                 [
-                    {'_': {'label': {'IN': [
-                        'shape', 'shape_leader', 'location']}}, 'OP': '*'},
-                    {'_': {'label': 'range'}},
-                    {'_': {'label': 'shape_suffix'}},
+                    {'ENT_TYPE': {'IN': [
+                        'shape', 'shape_leader', 'location']}, 'OP': '*'},
+                    {'ENT_TYPE': 'range'},
+                    {'ENT_TYPE': 'shape_suffix'},
                 ],
             ],
         },
