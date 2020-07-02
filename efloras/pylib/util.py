@@ -2,8 +2,11 @@
 
 from pathlib import Path
 
-DATA_DIR = Path('.') / 'data'
-VOCAB_DIR = Path('.') / 'efloras' / 'vocabulary'
+BASE_DIR = Path('.').resolve().parts[-1]
+BASE_DIR = Path('.') if BASE_DIR.find('efloras') > -1 else Path('..')
+
+DATA_DIR = BASE_DIR / 'data'
+VOCAB_DIR = BASE_DIR / 'efloras' / 'vocabulary'
 
 GROUP_STEP = 'group'
 TRAIT_STEP = 'traits'

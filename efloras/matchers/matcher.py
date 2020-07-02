@@ -35,9 +35,13 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         if self.attach:
             self.add_patterns(attaches, ATTACH_STEP)
 
+    def doc(self, text):
+        """Parse the traits."""
+        return super().parse(text)
+
     def parse(self, text, with_sents=False):
         """Parse the traits."""
-        doc = super().parse(text)
+        doc = self.doc(text)
 
         traits = defaultdict(list)
 

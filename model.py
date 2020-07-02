@@ -46,8 +46,8 @@ def main(args):
         output_dir = Path(args.output_dir)
         output_dir.mkdir(exist_ok=True)
         nlp.to_disk(output_dir)
-        if test_data:
-            with open(output_dir / 'results.json', 'w') as json_file:
+        if test_data and args.results_file:
+            with open(output_dir / args.results_file, 'w') as json_file:
                 for line in results:
                     json_file.write(f'{line}\n')
 
@@ -104,24 +104,49 @@ def score_data(nlp, data, note, to_json=False):
     results = []
     for sent in data:
         doc = nlp(sent[0])
-        expect = {(e[0], e[1], e[2]) for e in sent[1]['entities']}
-        actual = {(e.start_char, e.end_char, e.label_) for e in doc.ents}
-        inter = expect & actual
-        if to_json:
-            agree = [list(t) for t in inter]
-            missing = [list(t) for t in (expect - actual)]
-            excess = [list(t) for t in (actual - expect)]
-            rec = [sent[0],
-                   {'agree': agree, 'missing': missing, 'excess': excess}]
-            results.append(json.dumps(rec))
-
-        union_count += len(expect | actual)
+        expected = {(e[0], e[1], e[2]) for e in sent[1]['entities']}
+        actually = {(e.start_char, e.end_char, e.label_) for e in doc.ents}
+        inter = expected & actually
+        union_count += len(expected | actually)
         inter_count += len(inter)
+
+        if to_json:
+            result = [{'result': 'ok', 'expect': list(i)} for i in inter]
+
+            expect = expected - actually
+            actual = actually - expected
+
+            for e in expect:
+                result += [{'result': 'label', 'expect': e, 'actual': a}
+                           for a in actual if e[2] != a[2] and e[:2] == a[:2]]
+                actual -= {a for r in result if (a := r.get('actual'))}
+
+                result += [{'result': 'span', 'expect': e, 'actual': a}
+                           for a in actual if e[2] == a[2] and overlaps(e, a)]
+                actual -= {a for r in result if (a := r.get('actual'))}
+
+                result += [{'result': 'error', 'expect': e, 'actual': a}
+                           for a in actual if e[2] != a[2] and overlaps(e, a)]
+                actual -= {a for r in result if (a := r.get('actual'))}
+
+            result += [{'result': 'excess', 'actual': a} for a in actual]
+            maxi = len(sent[0])
+            result = sorted(result, key=lambda r: (
+                min(r.get('actual', [maxi])[0], r.get('expect', [maxi])[0]),
+                -max(r.get('actual', [0, 0])[1], r.get('expect', [0, 0])[1])))
+
+            results.append(json.dumps([sent[0], result]))
 
     score = inter_count / union_count if union_count else 0.0
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(f'{timestamp} {note} score = {score:0.4}')
     return results
+
+
+def overlaps(expect, actual):
+    """Check if the actual value overlaps the expected value."""
+    return (expect[0] <= actual[0] <= expect[1]
+            or expect[0] <= actual[1] <= expect[1])
 
 
 def parse_args():
@@ -164,6 +189,10 @@ def parse_args():
     arg_parser.add_argument(
         '--output-dir', '-O',
         help="""Output directory.""")
+
+    arg_parser.add_argument(
+        '--results-file', '-R',
+        help="""The results file name. It will go into the --output-dir.""")
 
     args = arg_parser.parse_args()
 

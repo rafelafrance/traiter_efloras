@@ -40,22 +40,20 @@ I should be able to extract:
     - length_low = 1.5, length_high = 7.0, width_low = 0.5, width_high = 3.0, width_units: cm
     - sex = female, length_high = 1.5, length_units = cm
 - petiole_size: length_high = 1.0, length_units = cm
-- plant_reproduction: monoecious
-- plant_seasonal: evergreen
-- plant_size: height_low = 1.0, height_high = 3.0, height_units = m
-- stamen_count: low = 2, high = 6
-- stigma_color: red
-- stigma_count: 2
-- trunk_size: dbh_high = 3.0, dbh_units = cm
 - etc.
 
-## Parsing strategy
+
+## Multiple methods for parsing
+1. Rule based parsing. Most machine learning models require a substantial training dataset. I use this method to bootstrap the training data. And, if other methods fail I can fall back to this.
+1. Machine learning models. (In progress)
+
+## Rule-based parsing strategy
 1. I first, split the text into sentences using a simple rule-based parser.
 1. Next I label terms using Spacy's phrase and rule-based matchers.
 1. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
 1. Finally, I associate traits with plant parts.
 
-For example, given the sentence: `Petiole 1-2 cm. Leaf blade 2-4 cm.`:
+For example, given the text: `Petiole 1-2 cm. Leaf blade 2-4 cm.`:
 - First I split this into two sentences: `Petiole 1-2 cm` and `Leaf blade 2-4 cm.`. Taking the first sentence I then do the following.
 - I recognize the tokens in the sentence:
     - `Petiole` = plant part

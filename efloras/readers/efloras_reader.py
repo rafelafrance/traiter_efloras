@@ -97,6 +97,6 @@ def get_traits(treatment):
         if len(unique) > high:
             best = text
             high = len(unique)
-        if high > 3:
+        if high >= 5:
             return best
-    return best
+    return best if high >= 5 else ''

@@ -156,3 +156,13 @@ class TestColor(unittest.TestCase):
              'leaflet_surface_color': [
                  {'color': 'black-dots', 'start': 53, 'end': 66}]}
         )
+
+    def test_color_15(self):
+        self.assertEqual(
+            MATCHER.parse(
+                'Petals purplish in life, whitish yel-lowish when dry;'),
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_color': [{'color': 'purple', 'start': 7, 'end': 15},
+                             {'color': 'white', 'start': 25, 'end': 32},
+                             {'color': 'yellow', 'start': 33, 'end': 43}]}
+        )
