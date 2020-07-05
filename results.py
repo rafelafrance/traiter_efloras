@@ -9,6 +9,8 @@ import textwrap
 
 import pandas as pd
 
+MISSING = '~nothing~'
+
 
 def main(args):
     """Do it."""
@@ -37,9 +39,9 @@ def matrix(args):
                 actually.append(actual[2])
             elif expect:
                 expected.append(expect[2])
-                actually.append('~missing~')
+                actually.append(MISSING)
             elif actual:
-                expected.append('~missing~')
+                expected.append(MISSING)
                 actually.append(actual[2])
             else:
                 sys.exit(result_dict)
@@ -47,8 +49,8 @@ def matrix(args):
     expected = pd.Series(expected)
     actually = pd.Series(actually)
 
-    df = pd.crosstab(expected, actually, rownames=['Expected'],
-                     colnames=['Predicted'], margins=True)
+    df = pd.crosstab(expected, actually, rownames=['Rule Prediction'],
+                     dropna=False, colnames=['CNN Prediction'], margins=True)
 
     if args.confusion_matrix:
         print(df.to_string())

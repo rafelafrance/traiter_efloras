@@ -22,8 +22,6 @@ def main(args):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(f'{timestamp} Started')
 
-    random.seed(args.seed)
-
     all_data = [json.loads(ln) for ln in args.data.readlines()]
     random.shuffle(all_data)
 
@@ -57,6 +55,7 @@ def main(args):
 
 def setup_model(args, all_data):
     """Create or load the model."""
+    spacy.util.fix_random_seed(args.seed)
     if args.old_model_name:
         nlp = spacy.load(args.old_model_name)
         ner = nlp.get_pipe('ner')
@@ -117,6 +116,10 @@ def score_data(nlp, data, note, to_json=False):
             actual = actually - expected
 
             for e in expect:
+                if not all(overlaps(e, a) for a in actual):
+                    result += [{'result': 'missing', 'expect': e}]
+                    continue
+
                 result += [{'result': 'label', 'expect': e, 'actual': a}
                            for a in actual if e[2] != a[2] and e[:2] == a[:2]]
                 actual -= {a for r in result if (a := r.get('actual'))}
@@ -130,6 +133,7 @@ def score_data(nlp, data, note, to_json=False):
                 actual -= {a for r in result if (a := r.get('actual'))}
 
             result += [{'result': 'excess', 'actual': a} for a in actual]
+
             maxi = len(sent[0])
             result = sorted(result, key=lambda r: (
                 min(r.get('actual', [maxi])[0], r.get('expect', [maxi])[0]),
