@@ -28,7 +28,7 @@ def main(args):
 
     rows = efloras_reader(args, families)
 
-    attach = not bool(args.data_file)
+    attach = not bool(args.ner_file)
     matcher = Matcher(attach=attach)
 
     for row in rows:
@@ -43,7 +43,7 @@ def main(args):
         copied = deepcopy(rows)
         html_writer(args, copied)
 
-    if args.data_file:
+    if args.ner_file:
         copied = deepcopy(rows)
         ner_writer(args, copied)
 
@@ -81,8 +81,12 @@ def parse_args():
         help="""Output the results to this CSV file.""")
 
     arg_parser.add_argument(
-        '--data-file', '-D', type=argparse.FileType('a'),
-        help="""Append formatted data to this file.""")
+        '--nel-file', '-N', type=argparse.FileType('a'),
+        help="""Append formatted NEL data to this file.""")
+
+    arg_parser.add_argument(
+        '--ner-file', '-n', type=argparse.FileType('a'),
+        help="""Append formatted NER data to this file.""")
 
     arg_parser.add_argument(
         '--list-families', '-l', action='store_true',
@@ -100,7 +104,7 @@ def parse_args():
     else:
         args.flora_id = [1]
 
-    if not (args.csv_file or args.html_file or args.data_file):
+    if not (args.csv_file or args.html_file or args.ner_file or args.nel_file):
         setattr(args, 'csv_file', sys.stdout)
 
     return args

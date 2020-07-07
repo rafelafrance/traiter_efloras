@@ -36,5 +36,5 @@ DESCRIPTOR = {
                 {'ENT_TYPE': {'IN': list(DESCRIPTORS_DICT.keys())}},
             ]],
         },
-    ]
+    ],
 }
