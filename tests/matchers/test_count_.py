@@ -1,6 +1,6 @@
 """Test plant count trait matcher."""
 
-# pylint: disable=missing-function-docstring
+# pylint: disable=missing-function-docstring, too-many-public-methods
 
 import unittest
 
@@ -57,8 +57,9 @@ class TestCount(unittest.TestCase):
     def test_count_06(self):
         self.assertEqual(
             parse('Staminate flowers (3–)5–10(–20)'),
-            {'part': [
-                {'start': 0, 'end': 17, 'sex': 'male', 'part': 'flower'}],
+            {
+                'part': [
+                    {'start': 0, 'end': 17, 'sex': 'male', 'part': 'flower'}],
                 'flower_count': [{'start': 18, 'end': 31,
                                   'min': 3, 'low': 5,
                                   'high': 10, 'max': 20,
@@ -102,9 +103,10 @@ class TestCount(unittest.TestCase):
     def test_count_12(self):
         self.assertEqual(
             parse('Male flowers with 2-8(-20) stamens;'),
-            {'part': [
-                {'start': 0, 'end': 12, 'sex': 'male', 'part': 'flower'},
-                {'sex': 'male', 'start': 27, 'end': 34, 'part': 'stamen'}],
+            {
+                'part': [
+                    {'start': 0, 'end': 12, 'sex': 'male', 'part': 'flower'},
+                    {'sex': 'male', 'start': 27, 'end': 34, 'part': 'stamen'}],
                 'stamen_count': [{'sex': 'male', 'start': 18, 'end': 26,
                                   'low': 2, 'high': 8, 'max': 20}]}
         )
@@ -147,8 +149,10 @@ class TestCount(unittest.TestCase):
             parse(shorten("""
                 Pistillate flowers: hyaline bristle at apex of hypanthial 
                 aculei 0.5–1 times as long as opaque base.""")),
-            {'part': [
-                {'start': 0, 'end': 18, 'sex': 'female', 'part': 'flower'}],
+            {
+                'part': [
+                    {'start': 0, 'end': 18, 'sex': 'female',
+                     'part': 'flower'}],
                 'subpart': [
                     {'start': 39, 'end': 43, 'subpart': 'apex',
                      'sex': 'female'},

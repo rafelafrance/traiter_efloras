@@ -44,8 +44,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_04(self):
         self.assertEqual(
-            parse('Herbs perennial or subshrubs, epiphytic '
-                          'or epilithic.'),
+            parse('Herbs perennial or subshrubs, epiphytic or epilithic.'),
             {
                 'plant_woodiness': [
                     {'woodiness': 'herbaceous', 'start': 0, 'end': 5}],

@@ -12,10 +12,8 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
     name = 'entity_matcher'
 
-    def __init__(self, nlp, attach=True):
-        super().__init__(nlp)
-
-        self.attach = attach
+    def __init__(self, nlp, attach=True, as_entities=True):
+        super().__init__(nlp, as_entities=as_entities)
 
         self.add_terms(TERMS)
 
@@ -30,5 +28,5 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
         self.add_patterns(groups, GROUP_STEP)
         self.add_patterns(traits, TRAIT_STEP)
-        if self.attach:
+        if attach:
             self.add_patterns(attaches, ATTACH_STEP)

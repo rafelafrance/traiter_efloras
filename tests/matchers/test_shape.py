@@ -1,6 +1,6 @@
 """Test the plant shape matcher."""
 
-# pylint: disable=missing-function-docstring
+# pylint: disable=missing-function-docstring, too-many-public-methods
 
 import unittest
 

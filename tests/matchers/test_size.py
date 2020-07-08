@@ -6,6 +6,7 @@ import unittest
 
 from efloras.pylib.pipeline import parse
 
+
 class TestSize(unittest.TestCase):
     """Test plant size trait parsers."""
 
@@ -71,8 +72,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_08(self):
         self.assertEqual(
-            parse(
-                'petiolules 2–5 mm; coarsely serrate; petioles 16–28 mm.'),
+            parse('petiolules 2–5 mm; coarsely serrate; petioles 16–28 mm.'),
             {'part': [{'start': 0, 'end': 10, 'part': 'petiole'},
                       {'start': 37, 'end': 45, 'part': 'petiole'}],
              'petiole_size': [
@@ -96,8 +96,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_10(self):
         self.assertEqual(
-            parse(
-                'petiole [5–]7–25[–32] mm, glabrous,'),
+            parse('petiole [5–]7–25[–32] mm, glabrous,'),
             {'part': [{'start': 0, 'end': 7, 'part': 'petiole'}],
              'petiole_size': [{'start': 8, 'end': 24,
                                'length_min': 5.0, 'length_low': 7.0,
@@ -117,8 +116,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_12(self):
         self.assertEqual(
-            parse(
-                'leaf deeply to shallowly lobed, 4–5(–7) cm wide,'),
+            parse('leaf deeply to shallowly lobed, 4–5(–7) cm wide,'),
             {'part': [{'start': 0, 'end': 4, 'part': 'leaf'}],
              'leaf_size': [{'start': 32, 'end': 47,
                             'width_low': 4.0, 'width_high': 5.0,
@@ -143,8 +141,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_14(self):
         self.assertEqual(
-            parse(
-                'terminal leaflet 3–5 cm, blade petiolule 3–12 mm,'),
+            parse('terminal leaflet 3–5 cm, blade petiolule 3–12 mm,'),
             {'part': [{'start': 0, 'end': 16, 'location': 'terminal',
                        'part': 'leaflet'},
                       {'location': 'terminal', 'start': 25, 'end': 30,
@@ -163,8 +160,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_15(self):
         self.assertEqual(
-            parse('leaf shallowly 3–5(–7)-lobed, '
-                          '5–25 × (8–)10–25(–30) cm,'),
+            parse('leaf shallowly 3–5(–7)-lobed, 5–25 × (8–)10–25(–30) cm,'),
             {'part': [{'start': 0, 'end': 4, 'part': 'leaf'}],
              'leaf_lobe_count': [
                  {'start': 15, 'end': 28, 'low': 3, 'high': 5, 'max': 7}],
@@ -213,8 +209,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_19(self):
         self.assertEqual(
-            parse(
-                'Flowers 5–10 cm diam.; hypanthium 4–8 mm,'),
+            parse('Flowers 5–10 cm diam.; hypanthium 4–8 mm,'),
             {'part': [{'start': 0, 'end': 7, 'part': 'flower'},
                       {'start': 23, 'end': 33, 'part': 'hypanthium'}],
              'flower_size': [{'start': 8, 'end': 20,
@@ -227,8 +222,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_20(self):
         self.assertEqual(
-            parse(
-                'Flowers 5--16 × 4--12 cm'),
+            parse('Flowers 5--16 × 4--12 cm'),
             {'part': [{'start': 0, 'end': 7, 'part': 'flower'}],
              'flower_size': [{'start': 8, 'end': 24,
                               'length_low': 5.0, 'length_high': 16.0,
@@ -253,8 +247,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_22(self):
         self.assertEqual(
-            parse(
-                'Leaflets petiolulate; blade ovate, 8-15 × 4-15 cm,'),
+            parse('Leaflets petiolulate; blade ovate, 8-15 × 4-15 cm,'),
             {'part': [{'start': 0, 'end': 8, 'part': 'leaflet'},
                       {'start': 22, 'end': 27, 'part': 'leaf'}],
              'leaf_shape': [{'shape': 'ovate', 'start': 28, 'end': 33}],
@@ -318,7 +311,7 @@ class TestSize(unittest.TestCase):
     def test_size_28(self):
         self.assertEqual(
             parse('Petals pale violet, with darker keel; standard '
-                          'elliptic, 6-7 × 3-4;'),
+                  'elliptic, 6-7 × 3-4;'),
             {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
              'petal_color': [{'color': 'purple', 'start': 12, 'end': 18}],
              'subpart': [{'subpart': 'keel', 'start': 32, 'end': 36}],
@@ -328,8 +321,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_29(self):
         self.assertEqual(
-            parse(
-                'Seeds ca. 1.6 × 1-1.3 × 0.7-0.8 cm; hilum 8-10 mm.'),
+            parse('Seeds ca. 1.6 × 1-1.3 × 0.7-0.8 cm; hilum 8-10 mm.'),
             {'part': [{'part': 'seed', 'start': 0, 'end': 5}],
              'seed_size': [{'length_low': 1.6,
                             'width_low': 1.0, 'width_high': 1.3,

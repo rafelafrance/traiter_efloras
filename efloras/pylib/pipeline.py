@@ -16,7 +16,7 @@ MATCHER = Matcher(NLP)
 NLP.add_pipe(MATCHER, after='parser')
 
 
-def parse(text, with_sents=False):
+def parse(text, with_sents=False, attach=True):
     """Parse the traits."""
     doc = NLP(text)
 
@@ -24,12 +24,11 @@ def parse(text, with_sents=False):
 
     sents = []
 
-    with doc.retokenize() as retokenizer:
-        for sent in doc.sents:
-            sents.append((sent.start_char, sent.end_char))
+    for sent in doc.sents:
+        sents.append((sent.start_char, sent.end_char))
 
-            if MATCHER.attach:
-                attach_traits_to_parts(doc, sent, retokenizer)
+        if attach:
+            attach_traits_to_parts(sent)
 
     for token in doc:
         if (token._.step in STEPS2ATTACH and token._.data
@@ -38,7 +37,7 @@ def parse(text, with_sents=False):
                     if not k.startswith('_')}
             data['start'] = token.idx
             data['end'] = token.idx + len(token)
-            traits[token.ent_type_].append(data)
+            traits[token._.label].append(data)
 
     # from pprint import pp
     # pp(dict(traits))
