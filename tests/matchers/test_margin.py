@@ -6,9 +6,7 @@ import unittest
 
 from traiter.util import shorten
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestMargin(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_01(self):
         self.assertEqual(
-            MATCHER.parse('margin shallowly undulate-crenate'),
+            parse('margin shallowly undulate-crenate'),
             {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 6}],
              'plant_margin_shape': [{'start': 7, 'end': 33,
                                      'margin_shape': 'undulate-crenate'}]}
@@ -24,7 +22,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_02(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'margins ciliate, apex acute to long-acuminate,'),
             {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 7},
                          {'subpart': 'apex', 'start': 17, 'end': 21}],
@@ -37,7 +35,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_03(self):
         self.assertEqual(
-            MATCHER.parse('reniform, undulate-margined'),
+            parse('reniform, undulate-margined'),
             {'plant_shape': [{'shape': 'reniform', 'start': 0, 'end': 8}],
              'plant_margin_shape': [
                  {'start': 10, 'end': 27, 'margin_shape': 'undulate'}]}
@@ -45,7 +43,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_04(self):
         self.assertEqual(
-            MATCHER.parse('margins thickened-corrugated'),
+            parse('margins thickened-corrugated'),
             {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 7}],
              'plant_margin_shape': [
                  {'start': 8, 'end': 28, 'margin_shape': 'corrugated'}]}
@@ -53,7 +51,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_05(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 margins coarsely toothed or remotely sinuate-dentate
                 to serrate,""")),
             {'subpart': [{'start': 0, 'end': 7, 'subpart': 'margin'}],

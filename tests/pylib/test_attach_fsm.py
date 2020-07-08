@@ -6,9 +6,7 @@ import unittest
 
 from traiter.util import shorten
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestAttachFSM(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_01(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'keel with blue tip; standard 8-9 × ca. 6 mm, '
                 'widely elliptic, emarginate; wings'),
             {'subpart': [{'subpart': 'keel', 'start': 0, 'end': 4},
@@ -33,7 +31,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_02(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 Calyx ca. 5 mm, loosely to rather densely appressed hairy;
                 teeth ca. 2.5 mm.
                 """)),
@@ -47,7 +45,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_03(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 Plants to 30 cm tall, strongly branched, with appressed to 
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
                 """)),
@@ -65,7 +63,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_04(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 Calyx shortly tubular, 8-9 mm, subglabrous or in upper part
                 with short spreading black hairs; teeth nearly equal, narrowly
                 triangular, 0.8-1 mm.""")),
@@ -84,7 +82,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_05(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 Calyx 10-12 mm, densely covered with extremely asymmetrically
                 bifurcate to basifixed, spreading hairs 1-2 mm; teeth ca.
                 4 mm. Petals white; standard oblong-pandurate, ca. 25 × 8 mm,
@@ -118,7 +116,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_06(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 Racemes short, 3-9-flowered; peduncle 0.5-2 cm, loosely to
                 rather densely hairy; bracts 0.5-1 mm, white hairy.""")),
             {'part': [{'start': 0, 'end': 7, 'part': 'inflorescence'},
@@ -135,7 +133,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_07(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 hypanthium  pistillodes with 3-lobed ovary.""")),
             {'part': [{'start': 0, 'end': 10, 'part': 'hypanthium'},
                       {'start': 11, 'end': 22, 'part': 'pistol'},
@@ -145,7 +143,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_08(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 roots thin, without thick, woody rootstock""")),
             {'part': [{'start': 0, 'end': 5, 'part': 'root'},
                       {'start': 33, 'end': 42, 'part': 'rootstock'}],
@@ -155,7 +153,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_09(self):
         self.assertEqual(
-            MATCHER.parse(shorten("""
+            parse(shorten("""
                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                 1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
             {'part': [{'part': 'legume', 'start': 0, 'end': 7}],

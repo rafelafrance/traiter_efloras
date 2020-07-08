@@ -4,9 +4,7 @@
 
 import unittest
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestColor(unittest.TestCase):
@@ -14,7 +12,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_01(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'hypanthium green or greenish yellow, '
                 'usually not purple-spotted, rarely purple-spotted distally'),
             {'part': [{'part': 'hypanthium', 'start': 0, 'end': 10}],
@@ -29,7 +27,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_02(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'hypanthium straw-colored to '
                 'sulphur-yellow or golden-yellow'),
             {'part': [{'part': 'hypanthium', 'start': 0, 'end': 10}],
@@ -40,7 +38,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_03(self):
         self.assertEqual(
-            MATCHER.parse('sepals erect, green- or red-tipped'),
+            parse('sepals erect, green- or red-tipped'),
             {'part': [{'part': 'sepal', 'start': 0, 'end': 6}],
              'sepal_color': [{'color': 'green', 'start': 14, 'end': 20},
                              {'color': 'red-tipped', 'start': 24, 'end': 34}]}
@@ -48,7 +46,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_04(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'petals white, cream, or pale green [orange to yellow], '),
             {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
              'petal_color': [{'color': 'white', 'start': 7, 'end': 12},
@@ -61,7 +59,7 @@ class TestColor(unittest.TestCase):
     def test_color_05(self):
         """It handles pattern notations within colors."""
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'petals distinct, white to cream, greenish yellow, '
                 'maturing yellowish or pale brown, commonly mottled or with '
                 'light green or white longitudinal stripes'),
@@ -78,7 +76,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_06(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'Petals distinct, white to cream, greenish white, '
                 'or yellowish green, or yellowish, usually green-throated '
                 'and faintly green-lined,'),
@@ -96,49 +94,49 @@ class TestColor(unittest.TestCase):
 
     def test_color_07(self):
         self.assertEqual(
-            MATCHER.parse('calyx yellow'),
+            parse('calyx yellow'),
             {'part': [{'part': 'calyx', 'start': 0, 'end': 5}],
              'calyx_color': [{'color': 'yellow', 'start': 6, 'end': 12}]}
         )
 
     def test_color_08(self):
         self.assertEqual(
-            MATCHER.parse('corolla yellow'),
+            parse('corolla yellow'),
             {'part': [{'part': 'corolla', 'start': 0, 'end': 7}],
              'corolla_color': [{'color': 'yellow', 'start': 8, 'end': 14}]}
         )
 
     def test_color_09(self):
         self.assertEqual(
-            MATCHER.parse('flower yellow'),
+            parse('flower yellow'),
             {'part': [{'part': 'flower', 'start': 0, 'end': 6}],
              'flower_color': [{'color': 'yellow', 'start': 7, 'end': 13}]}
         )
 
     def test_color_10(self):
         self.assertEqual(
-            MATCHER.parse('hypanthium yellow'),
+            parse('hypanthium yellow'),
             {'part': [{'part': 'hypanthium', 'start': 0, 'end': 10}],
              'hypanthium_color': [{'color': 'yellow', 'start': 11, 'end': 17}]}
         )
 
     def test_color_11(self):
         self.assertEqual(
-            MATCHER.parse('petal pale sulfur-yellow'),
+            parse('petal pale sulfur-yellow'),
             {'part': [{'part': 'petal', 'start': 0, 'end': 5}],
              'petal_color': [{'color': 'yellow', 'start': 11, 'end': 24}]}
         )
 
     def test_color_12(self):
         self.assertEqual(
-            MATCHER.parse('sepal yellow'),
+            parse('sepal yellow'),
             {'part': [{'part': 'sepal', 'start': 0, 'end': 5}],
              'sepal_color': [{'color': 'yellow', 'start': 6, 'end': 12}]}
         )
 
     def test_color_13(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'Leaves acaulescent or nearly so, with white hairs.'),
             {'part': [{'start': 0, 'end': 6, 'part': 'leaf'}],
              'plant_habit': [{'habit': 'acaulescent', 'start': 7, 'end': 18}],
@@ -148,7 +146,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_14(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'leaflets surfaces rather densely spotted with minute '
                 'blackish dots,'),
             {'part': [{'part': 'leaflet', 'start': 0, 'end': 8}],
@@ -159,7 +157,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_15(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'Petals purplish in life, whitish yel-lowish when dry;'),
             {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
              'petal_color': [{'color': 'purple', 'start': 7, 'end': 15},

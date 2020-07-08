@@ -2,7 +2,6 @@
 
 import re
 
-from traiter.spacy_nlp import spacy_nlp  # pylint: disable=import-error
 
 ABBREVS = '|'.join("""
     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec """.split())
@@ -20,7 +19,3 @@ def custom_sentencizer(doc):
             next_token.is_sent_start = False
 
     return doc
-
-
-NLP = spacy_nlp(disable=['ner'])
-NLP.add_pipe(custom_sentencizer, before='parser')

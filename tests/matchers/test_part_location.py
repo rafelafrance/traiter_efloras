@@ -4,9 +4,7 @@
 
 import unittest
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestPartLocation(unittest.TestCase):
@@ -14,7 +12,7 @@ class TestPartLocation(unittest.TestCase):
 
     def test_part_location_01(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'stipules 3-8 mm, semiamplexicaul, adnate to petiole for '
                 '1-2 mm'),
             {'part': [{'part': 'stipule', 'start': 0, 'end': 8}],

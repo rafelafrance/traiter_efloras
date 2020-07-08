@@ -4,9 +4,7 @@
 
 import unittest
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestDescriptor(unittest.TestCase):
@@ -14,7 +12,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_01(self):
         self.assertEqual(
-            MATCHER.parse(
+            parse(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             {
@@ -30,7 +28,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_02(self):
         self.assertEqual(
-            MATCHER.parse('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
+            parse('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
             {'plant_habit': [{'habit': 'shrub', 'start': 0, 'end': 6}],
              'plant_size': [{'start': 9, 'end': 17,
                              'length_high': 1.5, 'length_units': 'm'}]}
@@ -38,7 +36,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_03(self):
         self.assertEqual(
-            MATCHER.parse('Stems often caespitose'),
+            parse('Stems often caespitose'),
             {'part': [{'start': 0, 'end': 5, 'part': 'stem'}],
              'plant_habit_shape': [
                  {'habit_shape': 'cespitose', 'start': 12, 'end': 22}]}
@@ -46,7 +44,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_04(self):
         self.assertEqual(
-            MATCHER.parse('Herbs perennial or subshrubs, epiphytic '
+            parse('Herbs perennial or subshrubs, epiphytic '
                           'or epilithic.'),
             {
                 'plant_woodiness': [

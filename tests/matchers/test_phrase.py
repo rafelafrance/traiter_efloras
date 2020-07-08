@@ -4,9 +4,7 @@
 
 import unittest
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestPhrase(unittest.TestCase):
@@ -14,7 +12,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_01(self):
         self.assertEqual(
-            MATCHER.parse('Pistillate flowers  usually sessile; hypogynous'),
+            parse('Pistillate flowers  usually sessile; hypogynous'),
             {'part': [{'start': 0, 'end': 18,
                        'sex': 'female', 'part': 'flower'}],
              'flower_floral_location': [{'sex': 'female',
@@ -24,7 +22,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_02(self):
         self.assertEqual(
-            MATCHER.parse('Petals glabrous, deciduous;'),
+            parse('Petals glabrous, deciduous;'),
             {'part': [{'start': 0, 'end': 6, 'part': 'petal'}],
              'petal_duration': [
                  {'start': 17, 'end': 26, 'duration': 'deciduous'}]}
@@ -32,7 +30,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_03(self):
         self.assertEqual(
-            MATCHER.parse('leaf blade herbaceous.'),
+            parse('leaf blade herbaceous.'),
             {'part': [{'start': 0, 'end': 10, 'part': 'leaf'}],
              'leaf_woodiness': [
                  {'woodiness': 'herbaceous', 'start': 11, 'end': 21}]}

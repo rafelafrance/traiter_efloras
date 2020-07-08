@@ -4,9 +4,7 @@
 
 import unittest
 
-from efloras.matchers.matcher import Matcher
-
-MATCHER = Matcher()
+from efloras.pylib.pipeline import parse
 
 
 class TestSubpart(unittest.TestCase):
@@ -14,7 +12,7 @@ class TestSubpart(unittest.TestCase):
 
     def test_subpart_01(self):
         self.assertEqual(
-            MATCHER.parse('terminal lobe ovate-trullate,'),
+            parse('terminal lobe ovate-trullate,'),
             {'subpart': [{'start': 0, 'end': 13,
                           'location': 'terminal', 'subpart': 'lobe'}],
              'plant_lobe_shape': [{'location': 'terminal',
