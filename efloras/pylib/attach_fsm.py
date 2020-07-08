@@ -29,8 +29,7 @@ import re
 from collections import namedtuple
 
 from .util import STEPS2ATTACH
-from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, \
-    SUBPART_LABELS
+from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 from ..pylib.terms import LABELS
 
@@ -65,7 +64,7 @@ def attach_traits_to_parts(sent):
         if token._.aux.get('attached') or token._.aux.get('skip'):
             continue
 
-        if token.lower_ in SUFFIXES:
+        elif token.lower_ in SUFFIXES:
             suffix = Suffix(is_suffix=True, leader=SUFFIXES.get(token.lower_))
 
         elif token.lower_ in SUFFIX_END:
@@ -75,7 +74,7 @@ def attach_traits_to_parts(sent):
         elif token._.step not in STEPS2ATTACH:
             continue
 
-        if suffix.is_suffix and label and label not in ALL_PARTS:
+        elif suffix.is_suffix and label and label not in ALL_PARTS:
             stack.append(token)
 
         elif suffix.is_suffix and label in PART_LABELS:

@@ -77,10 +77,8 @@ def extract_sizes(row, header, value_list):
     """Normalize size traits."""
     for i, extract in enumerate(value_list, 1):
 
-        length_units = extract.get(
-            'length_units', extract.get('width_units'))
-        width_units = extract.get(
-            'width_units', extract.get('length_units'))
+        length_units = extract.get('length_units', extract.get('width_units'))
+        width_units = extract.get('width_units', extract.get('length_units'))
 
         for field, value in extract.items():
             key = f'{header}.{i}.{field}'

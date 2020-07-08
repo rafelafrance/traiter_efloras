@@ -14,6 +14,7 @@ CLASSES = [f'c{i}' for i in range(23)]
 COLORS = cycle(CLASSES)
 
 Cut = namedtuple('Cut', 'pos open len id end type title')
+Segment = namedtuple('Segment', 'start end')
 
 TRAIT_SUFFIXES = [m['name'] for m in MATCHERS]
 
@@ -74,25 +75,27 @@ def format_text(row, tags=None, colors=None):
     for label, traits in row['traits'].items():
         title_label = ' '.join(label.split('_'))
         for trait in traits:
-            if not (color := colors.get(label)):
+            color = colors.get(label)
+            if not color:
                 continue
             title = ', '.join(f'{k} = {v}' for k, v in trait.items()
                               if k not in ('start', 'end'))
             title = f'{title_label}: {title}'
             cut_id = append_endpoints(
-                cuts, cut_id, trait['start'], trait['end'],
+                cuts, cut_id, Segment(trait['start'], trait['end']),
                 color, title=title)
 
     if parts := row['traits'].get('part'):
         for part in parts:
             if part['end']:
                 cut_id = append_endpoints(
-                    cuts, cut_id, part['start'], part['end'], 'bold')
+                    cuts, cut_id, Segment(part['start'], part['end']), 'bold')
 
     if parts := row['traits'].get('subpart'):
         for part in parts:
             cut_id = append_endpoints(
-                cuts, cut_id, part['start'], part['end'], 'bold_italic')
+                cuts, cut_id,
+                Segment(part['start'], part['end']), 'bold_italic')
 
     return insert_markup(text, cuts, tags)
 
@@ -152,7 +155,7 @@ def insert_markup(text, cuts, tags):
     return ''.join(parts)
 
 
-def append_endpoints(cuts, cut_id, start, end, tag_type, title=None):
+def append_endpoints(cuts, cut_id, seg, tag_type, title=None):
     """
     Append endpoints to the cuts.
 
@@ -167,24 +170,24 @@ def append_endpoints(cuts, cut_id, start, end, tag_type, title=None):
     [open_cut(id=-2), open_cut(id=-1), close_cut(id=1), close_cut(id=2)]
     """
     cut_id += 1  # Absolute value is the ID
-    trait_len = end - start
+    trait_len = seg.end - seg.start
 
     cuts.append(Cut(
-        pos=start,
+        pos=seg.start,
         open=True,  # Close tags come before open tags
         len=-trait_len,  # Longest tags open first
         id=-cut_id,  # Force an order. Push open tags leftward
-        end=end,
+        end=seg.end,
         type=tag_type,
         title=title,
     ))
 
     cuts.append(Cut(
-        pos=end,
+        pos=seg.end,
         open=False,  # Close tags come before open tags
         len=trait_len,  # Longest tags close last
         id=cut_id,  # Force an order. Push close tags rightward
-        end=end,
+        end=seg.end,
         type=tag_type,
         title=None,
     ))
