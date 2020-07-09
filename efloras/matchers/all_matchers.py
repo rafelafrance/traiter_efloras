@@ -21,6 +21,8 @@ TRAITS = [
 
 MATCHERS = PARTS + TRAITS
 
+LABELS = {t['label'] for m in MATCHERS for t in m.get(TRAIT_STEP, [])}
+
 PART_LABELS = {p['label'] for p in PART.get(TRAIT_STEP, [])}
 SUBPART_LABELS = {s['label'] for s in SUBPART.get(TRAIT_STEP, [])}
 ALL_PARTS = PART_LABELS | SUBPART_LABELS

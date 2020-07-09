@@ -15,18 +15,18 @@ class TestAttachFSM(unittest.TestCase):
     def test_attach_fsm_01(self):
         self.assertEqual(
             parse(
-                'keel with blue tip; standard 8-9 × ca. 6 mm, '
-                'widely elliptic, emarginate; wings'),
-            {'subpart': [{'subpart': 'keel', 'start': 0, 'end': 4},
-                         {'subpart': 'wing', 'start': 74, 'end': 79}],
-             'plant_keel_color': [
-                 {'color': 'blue-tip', 'start': 10, 'end': 18}],
-             'plant_keel_size': [{'start': 29, 'end': 43,
-                                  'length_low': 8, 'length_high': 9,
-                                  'width_low': 6, 'width_units': 'mm'}],
-             'plant_keel_shape': [
-                 {'shape': 'elliptic', 'start': 52, 'end': 60},
-                 {'shape': 'emarginate', 'start': 62, 'end': 72}]}
+                'Petals purple, keel with blue tip; standard 8-9 × ca. 6 mm, '
+                'widely elliptic, emarginate;'),
+            {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
+             'petal_color': [{'color': 'purple', 'start': 7, 'end': 13}],
+             'subpart': [{'subpart': 'keel', 'start': 15, 'end': 19}],
+             'petal_keel_color': [
+                 {'color': 'blue-tip', 'start': 25, 'end': 33}],
+             'petal_size': [{'length_low': 8, 'length_high': 9,
+                             'width_low': 6, 'width_units': 'mm',
+                             'start': 44, 'end': 58}],
+             'petal_shape': [{'shape': 'elliptic', 'start': 67, 'end': 75},
+                             {'shape': 'emarginate', 'start': 77, 'end': 87}]}
         )
 
     def test_attach_fsm_02(self):
@@ -143,8 +143,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_08(self):
         self.assertEqual(
-            parse(shorten("""
-                roots thin, without thick, woody rootstock""")),
+            parse(shorten('roots thin, without thick, woody rootstock')),
             {'part': [{'start': 0, 'end': 5, 'part': 'root'},
                       {'start': 33, 'end': 42, 'part': 'rootstock'}],
              'rootstock_woodiness': [

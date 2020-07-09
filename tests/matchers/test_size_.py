@@ -131,8 +131,8 @@ class TestSize(unittest.TestCase):
             {'part': [{'part': 'leaf', 'start': 0, 'end': 6},
                       {'location': 'lateral', 'group': 'pair',
                        'part': 'leaflet', 'start': 20, 'end': 44},
-                      {'part': 'petiole', 'location': 'lateral', 'start': 59,
-                       'end': 69}],
+                      {'part': 'petiole', 'location': 'lateral',
+                       'start': 59, 'end': 69}],
              'leaf_count': [{'low': 3, 'start': 7, 'end': 18}],
              'petiole_size': [{'length_low': 2, 'length_high': 5,
                                'length_units': 'mm', 'location': 'lateral',
@@ -315,7 +315,7 @@ class TestSize(unittest.TestCase):
             {'part': [{'part': 'petal', 'start': 0, 'end': 6}],
              'petal_color': [{'color': 'purple', 'start': 12, 'end': 18}],
              'subpart': [{'subpart': 'keel', 'start': 32, 'end': 36}],
-             'petal_keel_shape': [
+             'petal_shape': [
                  {'shape': 'elliptic', 'start': 47, 'end': 55}]}
         )
 

@@ -26,12 +26,10 @@ We consider 3 levels of parts to a treatment sentence. For example:
 """
 
 import re
-from collections import namedtuple
 
-from .util import STEPS2ATTACH
-from ..matchers.all_matchers import ALL_PARTS, PART_LABELS, SUBPART_LABELS
+from ..matchers.all_matchers import PART_LABELS, SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
-from ..pylib.terms import LABELS
+from .terms import LABELS
 
 # Labels that indicate plant-level parts
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
@@ -39,106 +37,105 @@ PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 # The set of all values that get transferred to other parts
 TRANSFER = set(""" sex location """.split())
 
-Suffix = namedtuple('Suffix', 'is_suffix leader')
-SUFFIXES = {'with': '', 'without': 'not '}
-SUFFIX_END = {';', '.'}
+# Handle infix notation
+INFIX = {'with': '', 'without': 'not '}
+INFIX_END = {';', '.'}
+INFIX_SORT = {'part': 1, 'subpart': 0}
 
 
 def attach_traits_to_parts(sent):
     """Attach traits to a plant part."""
-    subpart = ''
-    suffix = Suffix(is_suffix=False, leader='')
-    stack = []
+    tokens = reorder_tokens(sent)
+    fsm(tokens)
 
-    part = 'plant'
-    augment_stack = [{}]
-    parts = [t for t in sent if t._.label == 'part']
-    if parts:
-        data = parts[0]._.data
-        part = data['part']
-        augment_stack = [({k: v for k, v in data.items() if k in TRANSFER})]
 
+def reorder_tokens(sent):
+    """Filter and reorder tokens to simplify the FSM."""
+    tokens = []
+    infix = []
+    forward = True
     for token in sent:
+        data = token._.data
+        if token._.aux.get('skip'):
+            continue
+        if token.lower_ in INFIX:
+            tokens.append(token)
+            forward = False
+        elif token.lower_ in INFIX_END:
+            tokens += sort_infix(infix)
+            forward = True
+            infix = []
+            tokens.append(token)
+        elif data and forward:
+            tokens.append(token)
+        elif data:
+            infix.append(token)
+    tokens += sort_infix(infix)
+    return tokens
+
+
+def fsm(tokens):
+    """Relabel the tokens and augment the data."""
+    aug = {}
+    part = 'plant'
+    subpart = ''
+    negate = ''
+
+    for token in tokens:
         label = token._.label
+        data = token._.data
 
         if token._.aux.get('attached') or token._.aux.get('skip'):
             continue
 
-        elif token.lower_ in SUFFIXES:
-            suffix = Suffix(is_suffix=True, leader=SUFFIXES.get(token.lower_))
-
-        elif token.lower_ in SUFFIX_END:
-            stack, suffix = adjust_stack(
-                stack, part, subpart, augment_stack, suffix)
-
-        elif token._.step not in STEPS2ATTACH:
-            continue
-
-        elif suffix.is_suffix and label and label not in ALL_PARTS:
-            stack.append(token)
-
-        elif suffix.is_suffix and label in PART_LABELS:
-            augment_stack = augment_data(augment_stack, token)
-            part = token._.data['part']
-            stack, suffix = adjust_stack(
-                stack, part, subpart, augment_stack, suffix)
-
-        elif suffix.is_suffix and label in SUBPART_LABELS:
-            augment_stack = augment_data(augment_stack, token)
-            subpart = token._.data['subpart']
-            stack, suffix = adjust_stack(
-                stack, part, subpart, augment_stack, suffix)
-
-        elif label in PART_LABELS:
-            augment_stack = augment_data(augment_stack, token)
+        if label in PART_LABELS:
+            part = data['part']
+            token._.data = {**token._.data, **aug}
             subpart = ''
-            part = token._.data['part']
+            aug = augment(aug, data)
 
         elif label in SUBPART_LABELS:
-            augment_stack = augment_data(augment_stack, token)
-            subpart = token._.data['subpart']
+            subpart = data['subpart']
+            aug = augment(aug, data)
+            token._.data = {**token._.data, **aug}
 
         elif label in PLANT_LEVEL_LABELS:
             if not label.startswith('plant_'):
                 token._.label = f'plant_{label}'
 
         elif token._.aux.get('subpart_attached'):
-            update_token(token, label, part, '', augment_stack)
+            token._.label = label_token(part, '', label)
+            token._.data = {**token._.data, **aug}
+
+        elif token.lower_ in INFIX:
+            negate = INFIX[token.lower_]
+
+        elif token.lower_ in INFIX_END:
+            subpart = ''
 
         else:
-            update_token(token, label, part, subpart, augment_stack)
-
-    if stack:
-        adjust_stack(stack, part, subpart, augment_stack, suffix)
-
-
-def augment_data(augment_stack, token):
-    """Update the token's data field."""
-    if augment := {k: v for k, v in token._.data.items() if k in TRANSFER}:
-        if len(augment_stack) > 1:
-            augment_stack[-1] = augment
-        else:
-            augment_stack.append(augment)
-    token._.data = {**token._.data, **augment_stack[-1]}
-    return augment_stack
+            token._.label = label_token(part, subpart, label)
+            if negate:
+                for key, value in token._.data.items():
+                    if key in LABELS and isinstance(value, str):
+                        token._.data[key] = negate + token._.data[key]
+            token._.data = {**token._.data, **aug}
 
 
-def adjust_stack(stack, part, subpart, augment_stack, suffix):
-    """Adjust all tokens on the suffix stack."""
-    for token in stack:
-        if suffix.leader:
-            for key, value in token._.data.items():
-                if key in LABELS and isinstance(value, str):
-                    token._.data[key] = suffix.leader + token._.data[key]
-        update_token(token, token._.label, part, subpart, augment_stack)
-    return [], Suffix(is_suffix=False, leader='')
+def sort_infix(tokens):
+    """Push the part and subpart tokens to the start of infix notation."""
+    return sorted(tokens, key=lambda t: (INFIX_SORT.get(t._.label, 9)))
 
 
-def update_token(token, label, part, subpart, augment_stack):
+def augment(aug, data):
+    """Get augmented data."""
+    aug2 = {k: v for k, v in data.items() if k in TRANSFER}
+    return aug2 if aug2 else aug
+
+
+def label_token(part, subpart, label):
     """Relabel the token and add the augment data."""
     label = f'{part}_{subpart}_{label}' if subpart else f'{part}_{label}'
     label = re.sub(r'_([^_]+)_\1', r'_\1', label)
     label = re.sub(r'^([^_]+)_\1', r'\1', label)
-    token._.label = label
-    aug = augment_stack.pop() if len(augment_stack) > 1 else augment_stack[0]
-    token._.data = {**token._.data, **aug}
+    return label
