@@ -71,6 +71,7 @@ class TestAttach(unittest.TestCase):
         )
 
     def test_attach_08(self):
+        self.maxDiff = None
         self.assertEqual(
             parse('Legumes with a slender stipe 2-5 mm, 10-12 mm, ca. '
                   '4 mm high and ca. 3 mm wide, '),
