@@ -69,3 +69,20 @@ class TestAttach(unittest.TestCase):
              'inflorescence_flower_count': [
                  {'start': 17, 'end': 34, 'low': 2, 'high': 3}]}
         )
+
+    def test_attach_08(self):
+        self.assertEqual(
+            parse('Legumes with a slender stipe 2-5 mm, 10-12 mm, ca. '
+                  '4 mm high and ca. 3 mm wide, '),
+            {'part': [{'part': 'legume', 'start': 0, 'end': 7}],
+             'legume_stipe_size': [{'length_low': 2, 'length_high': 5,
+                                    'length_units': 'mm',
+                                    'start': 8, 'end': 35}],
+             'legume_size': [{'length_low': 10, 'length_high': 12,
+                              'length_units': 'mm',
+                              'start': 37, 'end': 45},
+                             {'height_low': 4, 'height_units': 'mm',
+                              'start': 47, 'end': 60},
+                             {'width_low': 3, 'width_units': 'mm', 'start': 65,
+                              'end': 78}]}
+        )
