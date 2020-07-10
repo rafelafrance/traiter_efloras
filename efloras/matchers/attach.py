@@ -94,7 +94,7 @@ ATTACH = {
                 [
                     {'LOWER': {'IN': ['with', 'having']}},
                     {'LOWER': 'a', 'OP': '?'},
-                    {'POS': {'IN': ['NOUN', 'ADV']}, 'OP': '*'},
+                    {'POS': {'IN': ['NOUN', 'ADJ', 'ADV']}, 'OP': '*'},
                     {'ENT_TYPE': 'subpart'},
                     {'_': {'step': TRAIT_STEP}},
                 ],
