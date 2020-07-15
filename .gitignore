@@ -16,10 +16,8 @@ __pycache__
 
 # data
 output/
-!output/.gitkeep
 
 data/
-!data/.gitkeep
 
 # notebooks
 notebooks/
@@ -30,4 +28,5 @@ models/
 
 # Temp files
 doc/
+old/
 junk*

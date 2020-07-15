@@ -12,7 +12,7 @@ EFLORAS_DIR = DATA_DIR / 'eFloras'
 FAMILY_DIR = DATA_DIR / 'families'
 
 CITE = 'http://www.efloras.org'
-EFLORAS_FAMILIES = DATA_DIR / 'eFloras_family_list.csv'
+EFLORAS_FAMILIES = FAMILY_DIR / 'eFloras_family_list.csv'
 TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
 
