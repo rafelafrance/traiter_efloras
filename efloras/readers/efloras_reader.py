@@ -3,7 +3,7 @@
 import re
 
 from bs4 import BeautifulSoup
-from traiter.util import FLAGS  # pylint: disable=import-error
+from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
 import efloras.pylib.family_util as futil
 from efloras.matchers.part import PATTERN_RE

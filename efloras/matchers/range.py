@@ -4,7 +4,7 @@ import re
 from functools import partial
 
 # pylint: disable=import-error
-from traiter.util import to_positive_float, to_positive_int
+from traiter.pylib.util import to_positive_float, to_positive_int
 
 from .shared import CLOSE, DASH, INT, NUMBER, OPEN
 from ..pylib.util import GROUP_STEP

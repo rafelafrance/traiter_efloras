@@ -4,7 +4,7 @@
 
 import unittest
 
-from traiter.util import shorten
+from traiter.pylib.util import shorten
 
 from efloras.pylib.pipeline import parse
 

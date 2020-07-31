@@ -2,7 +2,7 @@
 
 import re
 
-from traiter.util import FLAGS  # pylint: disable=import-error
+from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
 from .shared import PER_COUNT, PER_COUNTS
 from ..pylib.terms import REPLACE, TERMS

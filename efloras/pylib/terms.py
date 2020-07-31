@@ -6,7 +6,7 @@ import csv
 import re
 
 from hyphenate import hyphenate_word
-from traiter.util import FLAGS  # pylint: disable=import-error
+from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
 from .util import VOCAB_DIR
 

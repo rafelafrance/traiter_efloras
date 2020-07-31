@@ -2,7 +2,7 @@
 
 import json
 
-from traiter.util import DotDict  # pylint: disable=import-error
+from traiter.pylib.util import DotDict  # pylint: disable=import-error
 
 
 def ner_writer(args, rows):

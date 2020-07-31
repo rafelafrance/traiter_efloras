@@ -1,6 +1,0 @@
-beautifulsoup4~=4.9.1
-html5lib~=1.1
-Hyphenate~=1.1.0
-Jinja2~=3.0.0a1
-lxml~=4.5.2
-pandas~=1.1.0
