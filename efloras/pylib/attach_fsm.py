@@ -82,7 +82,7 @@ def fsm(tokens):
     negate = ''
 
     for token in tokens:
-        label = token._.label
+        label = token.ent_type_
         data = token._.data
 
         if token._.aux.get('attached') or token._.aux.get('skip'):
@@ -101,10 +101,10 @@ def fsm(tokens):
 
         elif label in PLANT_LEVEL_LABELS:
             if not label.startswith('plant_'):
-                token._.label = f'plant_{label}'
+                token.ent_type_ = f'plant_{label}'
 
         elif token._.aux.get('subpart_attached'):
-            token._.label = label_token(part, '', label)
+            token.ent_type_ = label_token(part, '', label)
             token._.data = {**token._.data, **aug}
 
         elif token.lower_ in INFIX:
@@ -114,7 +114,7 @@ def fsm(tokens):
             subpart = ''
 
         else:
-            token._.label = label_token(part, subpart, label)
+            token.ent_type_ = label_token(part, subpart, label)
             if negate:
                 for key, value in token._.data.items():
                     if key in LABELS and isinstance(value, str):
@@ -124,7 +124,7 @@ def fsm(tokens):
 
 def sort_infix(tokens):
     """Push the part and subpart tokens to the start of infix notation."""
-    return sorted(tokens, key=lambda t: (INFIX_SORT.get(t._.label, 9)))
+    return sorted(tokens, key=lambda t: (INFIX_SORT.get(t.ent_type_, 9)))
 
 
 def augment(aug, data):

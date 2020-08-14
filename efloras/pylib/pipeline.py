@@ -37,7 +37,7 @@ def parse(text, with_sents=False, attach=True):
                     if not k.startswith('_')}
             data['start'] = token.idx
             data['end'] = token.idx + len(token)
-            traits[token._.label].append(data)
+            traits[token.ent_type_].append(data)
 
     # from pprint import pp
     # pp(dict(traits))
