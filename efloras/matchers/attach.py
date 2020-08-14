@@ -7,14 +7,17 @@ from ..pylib.util import ATTACH_STEP, TRAIT_STEP
 
 def attach_final_suffix(span):
     """Attach traits to a plant part."""
-    part = ''
+    data = {}
+    part, relabel = '', ''
     for token in list(span)[::-1]:
         if token.ent_type_ == 'part':
             part = token._.data['part']
         elif token._.step == TRAIT_STEP:
-            token._.data['_relabel'] = f'{part}_{token.ent_type_}'
+            data = token._.data
+            relabel = f'{part}_{token.ent_type_}'
+        data['_relabel'] = relabel
         token._.aux['attached'] = True
-    return {'_merge': False}
+    return data
 
 
 def attach_retokenize(span):

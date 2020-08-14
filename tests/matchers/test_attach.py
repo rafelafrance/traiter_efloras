@@ -15,9 +15,8 @@ class TestAttach(unittest.TestCase):
     def test_attach_01(self):
         self.assertEqual(
             parse(shorten("""leaves and yellow petals.""")),
-            {'part': [{'start': 0, 'end': 6, 'part': 'leaf'},
-                      {'start': 18, 'end': 24, 'part': 'petal'}],
-             'petal_color': [{'color': 'yellow', 'start': 11, 'end': 17}]}
+            {'part': [{'start': 0, 'end': 6, 'part': 'leaf'}],
+             'petal_color': [{'color': 'yellow', 'start': 7, 'end': 25}]}
         )
 
     def test_attach_02(self):
