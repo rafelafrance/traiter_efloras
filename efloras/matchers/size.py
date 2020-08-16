@@ -67,7 +67,7 @@ def fix_dimensions(dims):
 
 def fill_data(dims):
     """Move fields into correct place & give them consistent names."""
-    data = dict(_relabel='size')
+    data = {}
 
     for dim in dims:
         dimension = dim['dimension']
@@ -112,9 +112,7 @@ def size_double_dim(span):
 
 def not_a_size(span):
     """Flag this as a token to be deleted."""
-    for token in span:
-        token._.aux['skip'] = True
-    return {}
+    return {'_skip': True}
 
 
 _FOLLOW = """ dimension sex_enclosed sex """.split()
@@ -177,7 +175,7 @@ SIZE = {
             ],
         },
         {
-            'label': 'size_high_only',
+            'label': 'size',
             'on_match': partial(size, high_only=True),
             'patterns': [
                 [
@@ -191,7 +189,7 @@ SIZE = {
             ],
         },
         {
-            'label': 'size_double_dim',
+            'label': 'size',
             'on_match': size_double_dim,
             'patterns': [
                 [

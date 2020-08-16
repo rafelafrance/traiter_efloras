@@ -16,20 +16,20 @@ def attach_final_suffix(span):
             data = token._.data
             relabel = f'{part}_{token.ent_type_}'
         data['_relabel'] = relabel
-        token._.aux['attached'] = True
+    data['_attached'] = True
     return data
 
 
 def attach_retokenize(span):
     """Attach traits to a subpart."""
-    label, subpart, data = '', '', {}
+    label, subpart = '', ''
+    data = {'_subpart_attached': True}
     for token in list(span):
         if token.ent_type_ == 'subpart':
             subpart = token._.data['subpart']
         elif token._.step == TRAIT_STEP:
             data = token._.data
             label = token.ent_type_
-        token._.aux['subpart_attached'] = True
     data['_relabel'] = f'{subpart}_{label}'
     return data
 
@@ -53,10 +53,8 @@ def suffixed_count(span):
         elif token.text in PLUS:
             data['indefinite'] = True
 
-        token._.aux['subpart_attached'] = True
-
-    for token in span:
-        token._.aux['subpart'] = subpart
+    data['_subpart_attached'] = True
+    data['_subpart'] = subpart
 
     return data
 
@@ -67,7 +65,6 @@ def word_count(span):
         start=span.start_char,
         end=span.end_char,
         low=int(REPLACE[span.lower_]),
-        _relabel='count',
     )
     if category := CATEGORY.get(span.lower_):
         data['_relabel'] = f'{category}_count'

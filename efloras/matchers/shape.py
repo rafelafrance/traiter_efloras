@@ -22,7 +22,7 @@ def shape(span):
 
 def n_shape(_):
     """Handle 5-angular etc."""
-    data = {'shape': 'polygonal', '_relabel': 'shape'}
+    data = {'shape': 'polygonal'}
     return data
 
 
@@ -59,7 +59,7 @@ SHAPE = {
             ],
         },
         {
-            'label': 'n_shape',
+            'label': 'shape.n',
             'on_match': n_shape,
             'patterns': [
                 [

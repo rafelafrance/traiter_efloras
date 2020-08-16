@@ -5,10 +5,7 @@ from ..pylib.util import TRAIT_STEP
 
 def part_location(span):
     """Handle a part that is being used as a location."""
-    data = {'_relabel': 'part_location', 'location': span.lower_}
-    for token in span:
-        token._.aux['skip'] = True
-    return data
+    return {'location': span.lower_, '_skip': True}
 
 
 PART_LOCATION = {

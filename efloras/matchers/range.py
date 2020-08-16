@@ -17,7 +17,7 @@ _DASH_TO_CONJ = _DASH_TO + _CONJ
 
 def range_(span, fields=''):
     """Build the range parts."""
-    data = dict(_relabel='range')
+    data = {}
 
     fields = fields.split()
     values = [t.text for t in span if re.match(NUMBER, t.text)]
@@ -37,7 +37,7 @@ RANGE = {
     'name': 'range',
     GROUP_STEP: [
         {
-            'label': 'range_mlhx',
+            'label': 'range',
             'on_match': partial(range_, fields='min low high max'),
             'patterns': [
                 [
@@ -59,7 +59,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lhx',
+            'label': 'range',
             'on_match': partial(range_, fields='low high max'),
             'patterns': [
                 [
@@ -76,7 +76,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_mlx',
+            'label': 'range',
             'on_match': partial(range_, fields='min low max'),
             'patterns': [
                 [
@@ -95,7 +95,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_mlh',
+            'label': 'range',
             'on_match': partial(range_, fields='min low high'),
             'patterns': [
                 [
@@ -112,7 +112,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lx',
+            'label': 'range',
             'on_match': partial(range_, fields='low max'),
             'patterns': [
                 [
@@ -126,7 +126,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lh',
+            'label': 'range',
             'on_match': partial(range_, fields='low high'),
             'patterns': [
                 [
@@ -139,7 +139,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_ml',
+            'label': 'range',
             'on_match': partial(range_, fields='min low'),
             'patterns': [
                 [
@@ -153,7 +153,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_l',
+            'label': 'range',
             'on_match': partial(range_, fields='low'),
             'patterns': [
                 [
@@ -162,7 +162,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lh_or',
+            'label': 'range',
             'on_match': partial(range_, fields='low high'),
             'patterns': [
                 [
@@ -174,7 +174,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lhx_or',
+            'label': 'range',
             'on_match': partial(range_, fields='low high max'),
             'patterns': [
                 [
@@ -198,7 +198,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_mlh_or',
+            'label': 'range',
             'on_match': partial(range_, fields='min low high'),
             'patterns': [
                 [
@@ -221,7 +221,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lhm_or',
+            'label': 'range',
             'on_match': partial(range_, fields='low high max'),
             'patterns': [
                 [
@@ -237,7 +237,7 @@ RANGE = {
             ]
         },
         {
-            'label': 'range_lhmx_or',
+            'label': 'range',
             'on_match': partial(range_, fields='min low high max'),
             'patterns': [
                 [

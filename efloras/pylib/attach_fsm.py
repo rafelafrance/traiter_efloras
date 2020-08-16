@@ -56,7 +56,7 @@ def reorder_tokens(sent):
     forward = True
     for token in sent:
         data = token._.data
-        if token._.aux.get('skip'):
+        if token._.data.get('_skip'):
             continue
         if token.lower_ in INFIX:
             tokens.append(token)
@@ -85,7 +85,7 @@ def fsm(tokens):
         label = token.ent_type_
         data = token._.data
 
-        if token._.aux.get('attached') or token._.aux.get('skip'):
+        if token._.data.get('_attached') or token._.data.get('_skip'):
             continue
 
         if label in PART_LABELS:
@@ -103,7 +103,7 @@ def fsm(tokens):
             if not label.startswith('plant_'):
                 token.ent_type_ = f'plant_{label}'
 
-        elif token._.aux.get('subpart_attached'):
+        elif token._.data.get('_subpart_attached'):
             token.ent_type_ = label_token(part, '', label)
             token._.data = {**token._.data, **aug}
 

@@ -13,7 +13,7 @@ _COUNT_KILLER = """ length_units mass_units """.split()
 
 def count(span):
     """Enrich the match with data."""
-    data = dict(_relabel='count')
+    data = {}
 
     for token in span:
         label = token.ent_type_
@@ -32,9 +32,7 @@ def count(span):
 
 def not_a_count(span):
     """Flag this as a token to be deleted."""
-    for token in span:
-        token._.aux['skip'] = True
-    return {}
+    return {'_skip': True}
 
 
 COUNT = {

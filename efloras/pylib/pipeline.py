@@ -32,7 +32,7 @@ def parse(text, with_sents=False, attach=True):
 
     for token in doc:
         if (token._.step in STEPS2ATTACH and token._.data
-                and not token._.aux.get('skip')):
+                and not token._.data.get('_skip')):
             data = {k: v for k, v in token._.data.items()
                     if not k.startswith('_')}
             data['start'] = token.idx
