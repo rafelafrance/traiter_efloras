@@ -1,7 +1,5 @@
 """Build the NLP pipeline."""
 
-from collections import defaultdict
-
 from traiter.spacy_nlp import spacy_nlp  # pylint: disable=import-error
 
 from .sentencizer import custom_sentencizer
@@ -20,7 +18,7 @@ def parse(text, with_sents=False, attach=True):
     """Parse the traits."""
     doc = NLP(text)
 
-    traits = defaultdict(list)
+    traits = []
 
     sents = []
 
@@ -35,11 +33,12 @@ def parse(text, with_sents=False, attach=True):
                 and not token._.data.get('_skip')):
             data = {k: v for k, v in token._.data.items()
                     if not k.startswith('_')}
+            data['trait'] = token.ent_type_
             data['start'] = token.idx
             data['end'] = token.idx + len(token)
-            traits[token.ent_type_].append(data)
+            traits.append(data)
 
     # from pprint import pp
-    # pp(dict(traits))
+    # pp(traits)
 
     return (traits, sents) if with_sents else traits

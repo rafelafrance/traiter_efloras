@@ -15,7 +15,11 @@ class TestPartLocation(unittest.TestCase):
             parse(
                 'stipules 3-8 mm, semiamplexicaul, adnate to petiole for '
                 '1-2 mm'),
-            {'part': [{'part': 'stipule', 'start': 0, 'end': 8}],
-             'stipule_size': [{'length_low': 3, 'length_high': 8,
-                               'length_units': 'mm', 'start': 9, 'end': 15}]}
+            [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
+             {'length_low': 3,
+              'length_high': 8,
+              'length_units': 'mm',
+              'trait': 'stipule_size',
+              'start': 9,
+              'end': 15}]
         )

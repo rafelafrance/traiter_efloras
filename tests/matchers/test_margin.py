@@ -15,38 +15,48 @@ class TestMargin(unittest.TestCase):
     def test_margin_01(self):
         self.assertEqual(
             parse('margin shallowly undulate-crenate'),
-            {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 6}],
-             'plant_margin_shape': [{'start': 7, 'end': 33,
-                                     'margin_shape': 'undulate-crenate'}]}
+            [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 6},
+             {'margin_shape': 'undulate-crenate',
+              'trait': 'plant_margin_shape',
+              'start': 7,
+              'end': 33}]
         )
 
     def test_margin_02(self):
         self.assertEqual(
             parse(
                 'margins ciliate, apex acute to long-acuminate,'),
-            {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 7},
-                         {'subpart': 'apex', 'start': 17, 'end': 21}],
-             'plant_margin_shape': [
-                 {'start': 8, 'end': 15, 'margin_shape': 'ciliate'}],
-             'plant_apex_shape': [{'shape': 'acute', 'start': 22, 'end': 27},
-                                  {'shape': 'acuminate', 'start': 31,
-                                   'end': 45}]}
+            [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
+             {'margin_shape': 'ciliate',
+              'trait': 'plant_margin_shape',
+              'start': 8,
+              'end': 15},
+             {'subpart': 'apex', 'trait': 'subpart', 'start': 17, 'end': 21},
+             {'shape': 'acute', 'trait': 'plant_apex_shape', 'start': 22,
+              'end': 27},
+             {'shape': 'acuminate', 'trait': 'plant_apex_shape', 'start': 31,
+              'end': 45}]
         )
 
     def test_margin_03(self):
         self.assertEqual(
             parse('reniform, undulate-margined'),
-            {'plant_shape': [{'shape': 'reniform', 'start': 0, 'end': 8}],
-             'plant_margin_shape': [
-                 {'start': 10, 'end': 27, 'margin_shape': 'undulate'}]}
+            [{'shape': 'reniform', 'trait': 'plant_shape', 'start': 0,
+              'end': 8},
+             {'margin_shape': 'undulate',
+              'trait': 'plant_margin_shape',
+              'start': 10,
+              'end': 27}]
         )
 
     def test_margin_04(self):
         self.assertEqual(
             parse('margins thickened-corrugated'),
-            {'subpart': [{'subpart': 'margin', 'start': 0, 'end': 7}],
-             'plant_margin_shape': [
-                 {'start': 8, 'end': 28, 'margin_shape': 'corrugated'}]}
+            [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
+             {'margin_shape': 'corrugated',
+              'trait': 'plant_margin_shape',
+              'start': 8,
+              'end': 28}]
         )
 
     def test_margin_05(self):
@@ -54,9 +64,17 @@ class TestMargin(unittest.TestCase):
             parse(shorten("""
                 margins coarsely toothed or remotely sinuate-dentate
                 to serrate,""")),
-            {'subpart': [{'start': 0, 'end': 7, 'subpart': 'margin'}],
-             'plant_margin_shape': [
-                 {'start': 8, 'end': 24, 'margin_shape': 'toothed'},
-                 {'start': 28, 'end': 52, 'margin_shape': 'sinuate-dentate'},
-                 {'start': 56, 'end': 63, 'margin_shape': 'serrate'}]}
+            [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
+             {'margin_shape': 'toothed',
+              'trait': 'plant_margin_shape',
+              'start': 8,
+              'end': 24},
+             {'margin_shape': 'sinuate-dentate',
+              'trait': 'plant_margin_shape',
+              'start': 28,
+              'end': 52},
+             {'margin_shape': 'serrate',
+              'trait': 'plant_margin_shape',
+              'start': 56,
+              'end': 63}]
         )
