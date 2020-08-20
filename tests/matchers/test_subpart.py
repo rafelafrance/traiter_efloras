@@ -4,7 +4,7 @@
 
 import unittest
 
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 
 
 class TestSubpart(unittest.TestCase):
@@ -12,16 +12,9 @@ class TestSubpart(unittest.TestCase):
 
     def test_subpart_01(self):
         self.assertEqual(
-            parse('terminal lobe ovate-trullate,'),
-            [{'location': 'terminal',
-              'subpart': 'lobe',
-              'trait': 'subpart',
-              'start': 0,
-              'end': 13},
-             {'shape': 'ovate-trullate',
-              'location': 'terminal',
-              'trait': 'plant_lobe_shape',
-              'start': 14,
-              'end': 28}]
-
+            trait_list('terminal lobe ovate-trullate,'),
+            [{'location': 'terminal', 'subpart': 'lobe', 'trait': 'subpart',
+              'start': 0, 'end': 13},
+             {'shape': 'ovate-trullate', 'location': 'terminal',
+              'trait': 'plant_lobe_shape', 'start': 14, 'end': 28}]
         )

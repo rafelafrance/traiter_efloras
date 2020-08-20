@@ -8,7 +8,7 @@ import textwrap
 from copy import deepcopy
 
 import efloras.pylib.family_util as futil
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 from efloras.readers.efloras_reader import efloras_reader
 from efloras.writers.csv_writer import csv_writer
 from efloras.writers.data_writer import ner_writer
@@ -31,7 +31,7 @@ def main(args):
     attach = not bool(args.ner_file)
 
     for row in rows:
-        row['traits'], row['sents'] = parse(
+        row['traits'], row['sents'] = trait_list(
             row['text'], with_sents=True, attach=attach)
 
     if args.csv_file:

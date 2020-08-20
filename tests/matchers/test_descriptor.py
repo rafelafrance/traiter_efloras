@@ -4,7 +4,7 @@
 
 import unittest
 
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 
 
 class TestDescriptor(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_01(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             [{'reproduction': 'bisexual',
@@ -37,7 +37,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_02(self):
         self.assertEqual(
-            parse('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
+            trait_list('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
             [{'habit': 'shrub', 'trait': 'plant_habit', 'start': 0, 'end': 6},
              {'length_high': 1.5,
               'length_units': 'm',
@@ -48,7 +48,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_03(self):
         self.assertEqual(
-            parse('Stems often caespitose'),
+            trait_list('Stems often caespitose'),
             [{'part': 'stem', 'trait': 'part', 'start': 0, 'end': 5},
              {'habit_shape': 'cespitose',
               'trait': 'plant_habit_shape',
@@ -58,7 +58,8 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_04(self):
         self.assertEqual(
-            parse('Herbs perennial or subshrubs, epiphytic or epilithic.'),
+            trait_list(
+                'Herbs perennial or subshrubs, epiphytic or epilithic.'),
             [{'woodiness': 'herbaceous', 'trait': 'plant_woodiness',
               'start': 0, 'end': 5},
              {'plant_duration': 'perennial', 'trait': 'plant_duration',

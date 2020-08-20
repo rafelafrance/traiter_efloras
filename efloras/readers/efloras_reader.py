@@ -1,4 +1,4 @@
-"""Use a custom ruler to parse efloras pages."""
+"""Use a custom ruler to trait_list efloras pages."""
 
 import re
 

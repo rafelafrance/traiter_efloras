@@ -4,7 +4,7 @@
 
 import unittest
 
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 
 
 class TestPartLocation(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestPartLocation(unittest.TestCase):
 
     def test_part_location_01(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'stipules 3-8 mm, semiamplexicaul, adnate to petiole for '
                 '1-2 mm'),
             [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},

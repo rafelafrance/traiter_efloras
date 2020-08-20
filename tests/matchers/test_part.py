@@ -4,7 +4,7 @@
 
 import unittest
 
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 
 
 class TestPart(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestPart(unittest.TestCase):
 
     def test_part_01(self):
         self.assertEqual(
-            parse('with thick, woody rootstock.'),
+            trait_list('with thick, woody rootstock.'),
             [{'woodiness': 'woody', 'trait': 'rootstock_woodiness',
               'start': 12, 'end': 17},
              {'part': 'rootstock', 'trait': 'part', 'start': 18, 'end': 27}]
@@ -20,15 +20,14 @@ class TestPart(unittest.TestCase):
 
     def test_part_02(self):
         self.assertEqual(
-            parse('leaf­lets mostly 1 or 3'),
-            [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 9},
-             {'low': 1, 'high': 3, 'trait': 'leaflet_count', 'start': 17,
-              'end': 23}]
-
+            trait_list('leaflets mostly 1 or 3'),
+            [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
+             {'low': 1, 'high': 3, 'trait': 'leaflet_count', 'start': 16,
+              'end': 22}]
         )
 
     def test_part_03(self):
         self.assertEqual(
-            parse('Receptacle discoid.'),
+            trait_list('Receptacle discoid.'),
             []
         )

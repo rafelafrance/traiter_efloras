@@ -3,8 +3,8 @@
 from datetime import datetime
 from pathlib import Path
 
-BASE_DIR = Path('.').resolve().parts[-1]
-BASE_DIR = Path('.') if BASE_DIR.find('efloras') > -1 else Path('..')
+BASE_DIR = Path.cwd().resolve().parts[-1]
+BASE_DIR = Path.cwd() if BASE_DIR.find('efloras') > -1 else Path.cwd().parent
 
 DATA_DIR = BASE_DIR / 'data'
 VOCAB_DIR = BASE_DIR / 'efloras' / 'vocabulary'

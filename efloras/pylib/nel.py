@@ -43,7 +43,7 @@ INFIX_END = {';', '.'}
 INFIX_SORT = {'part': 1, 'subpart': 0}
 
 
-def attach_traits_to_parts(sent):
+def nel(sent):
     """Attach traits to a plant part."""
     tokens = reorder_tokens(sent)
     fsm(tokens)

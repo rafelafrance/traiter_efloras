@@ -6,7 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten
 
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 
 
 class TestCount(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_01(self):
         self.assertEqual(
-            parse('Seeds [1–]3–12[–30]'),
+            trait_list('Seeds [1–]3–12[–30]'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
              {'min': 1,
               'low': 3,
@@ -28,7 +28,7 @@ class TestCount(unittest.TestCase):
     def test_count_02(self):
         """It parses a seed count."""
         self.assertEqual(
-            parse('Seeds 3–12'),
+            trait_list('Seeds 3–12'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
              {'low': 3, 'high': 12, 'trait': 'seed_count', 'start': 6,
               'end': 10}]
@@ -36,7 +36,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_03(self):
         self.assertEqual(
-            parse('blade 5–10 × 4–9 cm'),
+            trait_list('blade 5–10 × 4–9 cm'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 5,
               'length_high': 10,
@@ -50,7 +50,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_04(self):
         self.assertEqual(
-            parse('petals 5, connate 1/2–2/3 length'),
+            trait_list('petals 5, connate 1/2–2/3 length'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 5, 'trait': 'petal_count', 'start': 7, 'end': 8},
              {'shape': 'connate', 'trait': 'petal_shape', 'start': 10,
@@ -59,7 +59,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_05(self):
         self.assertEqual(
-            parse('ovules mostly 120–200.'),
+            trait_list('ovules mostly 120–200.'),
             [{'part': 'ovary', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 120, 'high': 200, 'trait': 'ovary_count', 'start': 14,
               'end': 21}]
@@ -67,7 +67,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_06(self):
         self.assertEqual(
-            parse('Staminate flowers (3–)5–10(–20)'),
+            trait_list('Staminate flowers (3–)5–10(–20)'),
             [{'sex': 'male', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 17},
              {'min': 3,
@@ -82,7 +82,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_07(self):
         self.assertEqual(
-            parse('Ovaries (4 or)5,'),
+            trait_list('Ovaries (4 or)5,'),
             [{'part': 'ovary', 'trait': 'part', 'start': 0, 'end': 7},
              {'min': 4, 'low': 5, 'trait': 'ovary_count', 'start': 8,
               'end': 15}]
@@ -90,7 +90,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_08(self):
         self.assertEqual(
-            parse('Seeds 5(or 6)'),
+            trait_list('Seeds 5(or 6)'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
              {'low': 5, 'max': 6, 'trait': 'seed_count', 'start': 6,
               'end': 13}]
@@ -98,7 +98,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_09(self):
         self.assertEqual(
-            parse('Stamen [1–]3–12[–30]'),
+            trait_list('Stamen [1–]3–12[–30]'),
             [{'part': 'stamen', 'trait': 'part', 'start': 0, 'end': 6},
              {'min': 1,
               'low': 3,
@@ -111,19 +111,19 @@ class TestCount(unittest.TestCase):
 
     def test_count_10(self):
         self.assertEqual(
-            parse('leaf (12-)23-34 × 45-56'),
+            trait_list('leaf (12-)23-34 × 45-56'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4}]
         )
 
     def test_count_11(self):
         self.assertEqual(
-            parse('stigma papillose on 1 side,'),
+            trait_list('stigma papillose on 1 side,'),
             [{'part': 'stigma', 'trait': 'part', 'start': 0, 'end': 6}]
         )
 
     def test_count_12(self):
         self.assertEqual(
-            parse('Male flowers with 2-8(-20) stamens;'),
+            trait_list('Male flowers with 2-8(-20) stamens;'),
             [{'sex': 'male', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 12},
              {'low': 2,
@@ -139,7 +139,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_13(self):
         self.assertEqual(
-            parse('leaflets in 3 or 4 pairs,'),
+            trait_list('leaflets in 3 or 4 pairs,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'low': 3,
               'high': 4,
@@ -151,7 +151,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_14(self):
         self.assertEqual(
-            parse('leaflets/lobes 11–23,'),
+            trait_list('leaflets/lobes 11–23,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'subpart': 'lobe', 'trait': 'subpart', 'start': 9, 'end': 14},
              {'low': 11, 'high': 23, 'trait': 'leaflet_lobe_count',
@@ -160,7 +160,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_15(self):
         self.assertEqual(
-            parse('leaflets in 3 or 4(or 5) pairs,'),
+            trait_list('leaflets in 3 or 4(or 5) pairs,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'low': 3,
               'high': 4,
@@ -173,13 +173,13 @@ class TestCount(unittest.TestCase):
 
     def test_count_16(self):
         self.assertEqual(
-            parse('plants weigh up to 200 pounds'),
+            trait_list('plants weigh up to 200 pounds'),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6}]
         )
 
     def test_count_17(self):
         self.assertEqual(
-            parse(shorten("""
+            trait_list(shorten("""
                 Pistillate flowers: hyaline bristle at apex of hypanthial 
                 aculei 0.5–1 times as long as opaque base.""")),
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
@@ -203,7 +203,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_18(self):
         self.assertEqual(
-            parse(shorten("""rarely 1- or 5-7-foliolate;""")),
+            trait_list(shorten("""rarely 1- or 5-7-foliolate;""")),
             [{'min': 1,
               'low': 5,
               'high': 7,
@@ -214,7 +214,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_19(self):
         self.assertEqual(
-            parse(shorten(
+            trait_list(shorten(
                 """Leaves imparipinnate, 5- or 7(or 9)-foliolate;""")),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 5, 'high': 7, 'max': 9, 'trait': 'leaf_count',
@@ -223,7 +223,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_20(self):
         self.assertEqual(
-            parse('Seeds (1 or)2 or 3 per legume,'),
+            trait_list('Seeds (1 or)2 or 3 per legume,'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
              {'min': 1, 'low': 2, 'high': 3, 'trait': 'seed_count', 'start': 6,
               'end': 18}]
@@ -231,7 +231,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_21(self):
         self.assertEqual(
-            parse('Racemes compact, 1- or 2- or 5-7-flowered'),
+            trait_list('Racemes compact, 1- or 2- or 5-7-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
              {'min': 1,
               'low': 2,
@@ -244,7 +244,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_22(self):
         self.assertEqual(
-            parse('3(or 5-9)-foliolate;'),
+            trait_list('3(or 5-9)-foliolate;'),
             [{'low': 3,
               'high': 5,
               'max': 9,
@@ -255,7 +255,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_23(self):
         self.assertEqual(
-            parse('leaflets (2or)3- or 4(or 5)-paired'),
+            trait_list('leaflets (2or)3- or 4(or 5)-paired'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'min': 2,
               'low': 3,
@@ -268,7 +268,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_24(self):
         self.assertEqual(
-            parse('Leaves (19-)23- or 25-foliolate;'),
+            trait_list('Leaves (19-)23- or 25-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'min': 19,
               'low': 23,

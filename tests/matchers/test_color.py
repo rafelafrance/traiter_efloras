@@ -4,7 +4,7 @@
 
 import unittest
 
-from efloras.pylib.pipeline import parse
+from efloras.pylib.pipeline import trait_list
 
 
 class TestColor(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_01(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'hypanthium green or greenish yellow, '
                 'usually not purple-spotted, rarely purple-spotted distally'),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
@@ -32,7 +32,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_02(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'hypanthium straw-colored to '
                 'sulphur-yellow or golden-yellow'),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
@@ -46,7 +46,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_03(self):
         self.assertEqual(
-            parse('sepals erect, green- or red-tipped'),
+            trait_list('sepals erect, green- or red-tipped'),
             [{'part': 'sepal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'green', 'trait': 'sepal_color', 'start': 14,
               'end': 20},
@@ -56,7 +56,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_04(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'petals white, cream, or pale green [orange to yellow], '),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'white', 'trait': 'petal_color', 'start': 7, 'end': 12},
@@ -73,23 +73,23 @@ class TestColor(unittest.TestCase):
     def test_color_05(self):
         """It handles pattern notations within colors."""
         self.assertEqual(
-            parse(
+            trait_list(
                 'petals distinct, white to cream, greenish yellow, '
                 'maturing yellowish or pale brown, commonly mottled or with '
                 'light green or white longitudinal stripes'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'color': 'white', 'trait': 'petal_color', 'start': 17,
-              'end': 22},
-             {'color': 'white', 'trait': 'petal_color', 'start': 26,
-              'end': 31},
-             {'color': 'green-yellow', 'trait': 'petal_color', 'start': 33,
-              'end': 48},
-             {'color': 'yellow', 'trait': 'petal_color', 'start': 59,
-              'end': 68},
-             {'color': 'brown', 'trait': 'petal_color', 'start': 77,
-              'end': 82},
-             {'color': 'green', 'trait': 'petal_color', 'start': 115,
-              'end': 120},
+             {'color': 'white', 'trait': 'petal_color',
+              'start': 17, 'end': 22},
+             {'color': 'white', 'trait': 'petal_color',
+              'start': 26, 'end': 31},
+             {'color': 'green-yellow', 'trait': 'petal_color',
+              'start': 33, 'end': 48},
+             {'color': 'yellow', 'trait': 'petal_color',
+              'start': 59, 'end': 68},
+             {'color': 'brown', 'trait': 'petal_color',
+              'start': 77, 'end': 82},
+             {'color': 'green', 'trait': 'petal_color',
+              'start': 115, 'end': 120},
              {'color': 'white-longitudinal-stripes',
               'trait': 'petal_color',
               'start': 124, 'end': 150}]
@@ -97,7 +97,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_06(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'Petals distinct, white to cream, greenish white, '
                 'or yellowish green, or yellowish, usually green-throated '
                 'and faintly green-lined,'),
@@ -120,7 +120,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_07(self):
         self.assertEqual(
-            parse('calyx yellow'),
+            trait_list('calyx yellow'),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'calyx_color', 'start': 6,
               'end': 12}]
@@ -128,7 +128,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_08(self):
         self.assertEqual(
-            parse('corolla yellow'),
+            trait_list('corolla yellow'),
             [{'part': 'corolla', 'trait': 'part', 'start': 0, 'end': 7},
              {'color': 'yellow', 'trait': 'corolla_color', 'start': 8,
               'end': 14}]
@@ -136,7 +136,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_09(self):
         self.assertEqual(
-            parse('flower yellow'),
+            trait_list('flower yellow'),
             [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'yellow', 'trait': 'flower_color', 'start': 7,
               'end': 13}]
@@ -144,7 +144,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_10(self):
         self.assertEqual(
-            parse('hypanthium yellow'),
+            trait_list('hypanthium yellow'),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'color': 'yellow', 'trait': 'hypanthium_color', 'start': 11,
               'end': 17}]
@@ -152,7 +152,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_11(self):
         self.assertEqual(
-            parse('petal pale sulfur-yellow'),
+            trait_list('petal pale sulfur-yellow'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'petal_color', 'start': 11,
               'end': 24}]
@@ -160,7 +160,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_12(self):
         self.assertEqual(
-            parse('sepal yellow'),
+            trait_list('sepal yellow'),
             [{'part': 'sepal', 'trait': 'part', 'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'sepal_color', 'start': 6,
               'end': 12}]
@@ -168,7 +168,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_13(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'Leaves acaulescent or nearly so, with white hairs.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'habit': 'acaulescent', 'trait': 'plant_habit', 'start': 7,
@@ -180,7 +180,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_14(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'leaflets surfaces rather densely spotted with minute '
                 'blackish dots,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
@@ -193,7 +193,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_15(self):
         self.assertEqual(
-            parse(
+            trait_list(
                 'Petals purplish in life, whitish yel-lowish when dry;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'petal_color', 'start': 7,
