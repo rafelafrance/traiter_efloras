@@ -110,7 +110,7 @@ def size_double_dim(span):
     return {**data, **new_data}
 
 
-def not_a_size(span):
+def not_a_size(_):
     """Flag this as a token to be deleted."""
     return {'_skip': True}
 

@@ -25,7 +25,7 @@ def count(span):
             data['group'] = REPLACE.get(token.lower_, token.lower_)
 
         else:
-            return {}
+            return {'_skip': True}
 
     return data
 

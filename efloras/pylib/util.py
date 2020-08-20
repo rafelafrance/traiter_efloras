@@ -1,6 +1,5 @@
 """Misc. utils."""
 
-from datetime import datetime
 from pathlib import Path
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
@@ -26,10 +25,3 @@ CONVERT = {
 def convert(number, units):
     """Normalize the units to meters."""
     return number * CONVERT.get(units, 1.0)
-
-
-def log(msg):
-    """Log a status message."""
-    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    msg = f'{now} {msg}'
-    print(msg)
