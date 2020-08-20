@@ -4,7 +4,7 @@
 
 import unittest
 
-from efloras.pylib.pipeline import trait_list
+from src.pylib.pipeline import trait_list
 
 
 class TestSize(unittest.TestCase):

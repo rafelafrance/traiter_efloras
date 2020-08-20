@@ -6,8 +6,8 @@ import re
 
 import pandas as pd
 
-from efloras.pylib import family_util as futil
-import efloras.pylib.db as db
+from src.pylib import family_util as futil
+import src.pylib.db as db
 
 INSERT = """
     insert into pages (flora_id, taxon_id, family, page_type, page_no, html)

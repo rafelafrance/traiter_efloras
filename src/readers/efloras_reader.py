@@ -1,12 +1,12 @@
-"""Use a custom ruler to trait_list efloras pages."""
+"""Use a custom ruler to trait_list src pages."""
 
 import re
 
 from bs4 import BeautifulSoup
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
-import efloras.pylib.family_util as futil
-from efloras.matchers.part import PATTERN_RE
+import src.pylib.family_util as futil
+from src.matchers.part import PATTERN_RE
 
 
 def efloras_reader(args, families):

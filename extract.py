@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
-"""Parse efloras treatments."""
+"""Parse src treatments."""
 
 import argparse
 import sys
 import textwrap
 from copy import deepcopy
 
-import efloras.pylib.family_util as futil
-from efloras.pylib.pipeline import trait_list
-from efloras.readers.efloras_reader import efloras_reader
-from efloras.writers.csv_writer import csv_writer
-from efloras.writers.data_writer import ner_writer
-from efloras.writers.html_writer import html_writer
+import src.pylib.family_util as futil
+from src.pylib.pipeline import trait_list
+from src.readers.efloras_reader import efloras_reader
+from src.writers.csv_writer import csv_writer
+from src.writers.data_writer import ner_writer
+from src.writers.html_writer import html_writer
 
 
 def main(args):
@@ -28,11 +28,10 @@ def main(args):
 
     rows = efloras_reader(args, families)
 
-    attach = not bool(args.ner_file)
+    # attach = not bool(args.ner_file)
 
     for row in rows:
-        row['traits'], row['sents'] = trait_list(
-            row['text'], with_sents=True, attach=attach)
+        row['traits'], row['sents'] = trait_list(row['text'])
 
     if args.csv_file:
         copied = deepcopy(rows)

@@ -35,7 +35,7 @@ def html_writer(args, rows):
         row['traits'] = format_traits(row, colors)
 
     env = Environment(
-        loader=FileSystemLoader('./efloras/writers/templates'),
+        loader=FileSystemLoader('./src/writers/templates'),
         autoescape=True)
 
     template = env.get_template('html_writer.html').render(

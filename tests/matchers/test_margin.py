@@ -6,7 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten
 
-from efloras.pylib.pipeline import trait_list
+from src.pylib.pipeline import trait_list
 
 
 class TestMargin(unittest.TestCase):

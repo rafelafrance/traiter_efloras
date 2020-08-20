@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Download files from efloras."""
+"""Download files from src."""
 
 import argparse
 import os
@@ -17,7 +17,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from lxml import html
 
-from efloras.pylib import family_util as futil
+from src.pylib import family_util as futil
 
 # Don't hit the site too hard
 SLEEP_MID = 15
