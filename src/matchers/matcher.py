@@ -1,6 +1,6 @@
 """Base matcher object."""
 
-from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
+from traiter.matcher import TraitMatcher  # pylint: disable=import-error
 
 from .all_matchers import MATCHERS
 from ..pylib.terms import TERMS

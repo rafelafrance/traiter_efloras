@@ -1,12 +1,11 @@
 """Setup terms."""
 
-# pylint: disable=superfluous-parens
+# pylint: disable=superfluous-parens, import-error
 
-import csv
 import re
 
-from hyphenate import hyphenate_word
-from traiter.pylib.util import FLAGS  # pylint: disable=import-error
+from traiter.pylib.terms import hyphenate_terms, read_terms
+from traiter.pylib.util import FLAGS
 
 from .util import VOCAB_DIR
 
@@ -14,44 +13,7 @@ TERM_PATH = VOCAB_DIR / 'terms.csv'
 
 _QUOTE = """["']"""
 
-
-def read_terms():
-    """Read and cache the terms."""
-    with open(TERM_PATH) as term_file:
-        reader = csv.DictReader(term_file)
-        return list(reader)
-
-
-def hyphenate_terms(terms):
-    """Systematically handle hyphenated terms."""
-    new_terms = []
-    for term in terms:
-        if term['hyphenate']:
-            parts = term['hyphenate'].split('-')
-        else:
-            parts = hyphenate_word(term['pattern'])
-        for i in range(1, len(parts)):
-            replace = term['replace']
-            hyphenated = ''.join(parts[:i]) + '-' + ''.join(parts[i:])
-            new_terms.append({
-                'label': term['label'],
-                'pattern': hyphenated,
-                'attr': term['attr'],
-                'replace': replace if replace else term['pattern'],
-                'category': term['category'],
-            })
-            hyphenated = ''.join(parts[:i]) + '\xad' + ''.join(parts[i:])
-            new_terms.append({
-                'label': term['label'],
-                'pattern': hyphenated,
-                'attr': term['attr'],
-                'replace': replace if replace else term['pattern'],
-                'category': term['category'],
-            })
-    return new_terms
-
-
-TERMS = read_terms()
+TERMS = read_terms(TERM_PATH)
 TERMS += hyphenate_terms(TERMS)
 
 LABELS = sorted({t['label'] for t in TERMS})
