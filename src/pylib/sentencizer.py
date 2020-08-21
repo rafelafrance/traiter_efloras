@@ -8,7 +8,7 @@ ABBREVS = '|'.join("""
 ABBREVS = re.compile(fr'(?: {ABBREVS} ) $', flags=re.VERBOSE)
 
 
-def custom_sentencizer(doc):
+def sentencizer(doc):
     """Break the text into sentences."""
     for i, token in enumerate(doc[:-1]):
         next_token = doc[i + 1]

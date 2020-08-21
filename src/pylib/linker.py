@@ -1,4 +1,4 @@
-"""Attach traits to a plant part.
+"""Attach traits to a plant parts.
 
 We consider 3 levels of parts to a treatment sentence. For example:
 
@@ -43,7 +43,7 @@ INFIX_END = {';', '.'}
 INFIX_SORT = {'part': 1, 'subpart': 0}
 
 
-def nel(sent):
+def linker(sent):
     """Attach traits to a plant part."""
     tokens = reorder_tokens(sent)
     fsm(tokens)

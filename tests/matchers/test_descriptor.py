@@ -4,7 +4,9 @@
 
 import unittest
 
-from src.pylib.ner import trait_list
+from src.pylib.pipeline import PIPELINE
+
+NLP = PIPELINE.trait_list
 
 
 class TestDescriptor(unittest.TestCase):
@@ -12,8 +14,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_01(self):
         self.assertEqual(
-            trait_list(
-                'bisexual (unisexual and plants sometimes gynodioecious, '
+            NLP('bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             [{'reproduction': 'bisexual',
               'trait': 'plant_reproduction',
@@ -37,7 +38,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_02(self):
         self.assertEqual(
-            trait_list('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
+            NLP('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
             [{'habit': 'shrub', 'trait': 'plant_habit', 'start': 0, 'end': 6},
              {'length_high': 1.5,
               'length_units': 'm',
@@ -48,7 +49,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_03(self):
         self.assertEqual(
-            trait_list('Stems often caespitose'),
+            NLP('Stems often caespitose'),
             [{'part': 'stem', 'trait': 'part', 'start': 0, 'end': 5},
              {'habit_shape': 'cespitose',
               'trait': 'plant_habit_shape',
@@ -58,8 +59,7 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_04(self):
         self.assertEqual(
-            trait_list(
-                'Herbs perennial or subshrubs, epiphytic or epilithic.'),
+            NLP('Herbs perennial or subshrubs, epiphytic or epilithic.'),
             [{'woodiness': 'herbaceous', 'trait': 'plant_woodiness',
               'start': 0, 'end': 5},
              {'plant_duration': 'perennial', 'trait': 'plant_duration',

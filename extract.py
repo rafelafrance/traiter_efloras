@@ -8,7 +8,7 @@ import textwrap
 from copy import deepcopy
 
 import src.pylib.family_util as futil
-from src.pylib.ner import trait_list
+from src.pylib.finder import trait_list
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import ner_writer

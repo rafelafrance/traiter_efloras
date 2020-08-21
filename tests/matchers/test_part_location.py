@@ -4,7 +4,9 @@
 
 import unittest
 
-from src.pylib.ner import trait_list
+from src.pylib.pipeline import PIPELINE
+
+NLP = PIPELINE.trait_list
 
 
 class TestPartLocation(unittest.TestCase):
@@ -12,8 +14,7 @@ class TestPartLocation(unittest.TestCase):
 
     def test_part_location_01(self):
         self.assertEqual(
-            trait_list(
-                'stipules 3-8 mm, semiamplexicaul, adnate to petiole for '
+            NLP('stipules 3-8 mm, semiamplexicaul, adnate to petiole for '
                 '1-2 mm'),
             [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
              {'length_low': 3,

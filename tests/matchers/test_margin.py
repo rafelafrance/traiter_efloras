@@ -6,7 +6,9 @@ import unittest
 
 from traiter.pylib.util import shorten
 
-from src.pylib.ner import trait_list
+from src.pylib.pipeline import PIPELINE
+
+NLP = PIPELINE.trait_list
 
 
 class TestMargin(unittest.TestCase):
@@ -14,7 +16,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_01(self):
         self.assertEqual(
-            trait_list('margin shallowly undulate-crenate'),
+            NLP('margin shallowly undulate-crenate'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 6},
              {'margin_shape': 'undulate-crenate',
               'trait': 'plant_margin_shape',
@@ -24,8 +26,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_02(self):
         self.assertEqual(
-            trait_list(
-                'margins ciliate, apex acute to long-acuminate,'),
+            NLP('margins ciliate, apex acute to long-acuminate,'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
              {'margin_shape': 'ciliate',
               'trait': 'plant_margin_shape',
@@ -40,7 +41,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_03(self):
         self.assertEqual(
-            trait_list('reniform, undulate-margined'),
+            NLP('reniform, undulate-margined'),
             [{'shape': 'reniform', 'trait': 'plant_shape', 'start': 0,
               'end': 8},
              {'margin_shape': 'undulate',
@@ -51,7 +52,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_04(self):
         self.assertEqual(
-            trait_list('margins thickened-corrugated'),
+            NLP('margins thickened-corrugated'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
              {'margin_shape': 'corrugated',
               'trait': 'plant_margin_shape',
@@ -61,7 +62,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_05(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 margins coarsely toothed or remotely sinuate-dentate
                 to serrate,""")),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},

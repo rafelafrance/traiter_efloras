@@ -6,7 +6,9 @@ import unittest
 
 from traiter.pylib.util import shorten
 
-from src.pylib.ner import trait_list
+from src.pylib.pipeline import PIPELINE
+
+NLP = PIPELINE.trait_list
 
 
 class TestAttachFSM(unittest.TestCase):
@@ -14,8 +16,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_01(self):
         self.assertEqual(
-            trait_list(
-                'Petals purple, keel with blue tip; standard 8-9 × ca. 6 mm, '
+            NLP('Petals purple, keel with blue tip; standard 8-9 × ca. 6 mm, '
                 'widely elliptic, emarginate;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'petal_color', 'start': 7,
@@ -38,7 +39,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_02(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 Calyx ca. 5 mm, loosely to rather densely appressed hairy;
                 teeth ca. 2.5 mm.
                 """)),
@@ -58,7 +59,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_03(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 Plants to 30 cm tall, strongly branched, with appressed to 
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
                 """)),
@@ -86,7 +87,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_04(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 Calyx shortly tubular, 8-9 mm, subglabrous or in upper part
                 with short spreading black hairs; teeth nearly equal, narrowly
                 triangular, 0.8-1 mm.""")),
@@ -117,7 +118,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_05(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 Calyx 10-12 mm, densely covered with extremely asymmetrically
                 bifurcate to basifixed, spreading hairs 1-2 mm; teeth ca.
                 4 mm. Petals white; standard oblong-pandurate, ca. 25 × 8 mm,
@@ -169,7 +170,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_06(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 Racemes short, 3-9-flowered; peduncle 0.5-2 cm, loosely to
                 rather densely hairy; bracts 0.5-1 mm, white hairy.""")),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
@@ -198,7 +199,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_07(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 hypanthium  pistillodes with 3-lobed ovary.""")),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'part': 'pistol', 'trait': 'part', 'start': 11, 'end': 22},
@@ -208,7 +209,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_08(self):
         self.assertEqual(
-            trait_list(shorten('roots thin, without thick, woody rootstock')),
+            NLP(shorten('roots thin, without thick, woody rootstock')),
             [{'part': 'root', 'trait': 'part', 'start': 0, 'end': 5},
              {'woodiness': 'not woody',
               'trait': 'rootstock_woodiness',
@@ -219,7 +220,7 @@ class TestAttachFSM(unittest.TestCase):
 
     def test_attach_fsm_09(self):
         self.assertEqual(
-            trait_list(shorten("""
+            NLP(shorten("""
                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                 1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},

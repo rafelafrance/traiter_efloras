@@ -4,7 +4,9 @@
 
 import unittest
 
-from src.pylib.ner import trait_list
+from src.pylib.pipeline import PIPELINE
+
+NLP = PIPELINE.trait_list
 
 
 class TestSubpart(unittest.TestCase):
@@ -12,7 +14,7 @@ class TestSubpart(unittest.TestCase):
 
     def test_subpart_01(self):
         self.assertEqual(
-            trait_list('terminal lobe ovate-trullate,'),
+            NLP('terminal lobe ovate-trullate,'),
             [{'location': 'terminal', 'subpart': 'lobe', 'trait': 'subpart',
               'start': 0, 'end': 13},
              {'shape': 'ovate-trullate', 'location': 'terminal',

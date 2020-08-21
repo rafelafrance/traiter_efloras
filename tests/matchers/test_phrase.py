@@ -4,7 +4,9 @@
 
 import unittest
 
-from src.pylib.ner import trait_list
+from src.pylib.pipeline import PIPELINE
+
+NLP = PIPELINE.trait_list
 
 
 class TestPhrase(unittest.TestCase):
@@ -12,7 +14,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_01(self):
         self.assertEqual(
-            trait_list('Pistillate flowers  usually sessile; hypogynous'),
+            NLP('Pistillate flowers  usually sessile; hypogynous'),
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 18},
              {'floral_location': 'superior',
@@ -24,7 +26,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_02(self):
         self.assertEqual(
-            trait_list('Petals glabrous, deciduous;'),
+            NLP('Petals glabrous, deciduous;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'duration': 'deciduous', 'trait': 'petal_duration', 'start': 17,
               'end': 26}]
@@ -32,7 +34,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_03(self):
         self.assertEqual(
-            trait_list('leaf blade herbaceous.'),
+            NLP('leaf blade herbaceous.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 10},
              {'woodiness': 'herbaceous', 'trait': 'leaf_woodiness',
               'start': 11, 'end': 21}]
