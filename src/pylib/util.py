@@ -11,7 +11,6 @@ VOCAB_DIR = BASE_DIR / 'src' / 'vocabulary'
 GROUP_STEP = 'group'
 TRAIT_STEP = 'traits'
 ATTACH_STEP = 'attach'
-STEPS2ATTACH = {TRAIT_STEP, ATTACH_STEP}
 
 CONVERT = {
     'cm': 10.0,

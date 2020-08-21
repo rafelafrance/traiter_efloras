@@ -4,7 +4,7 @@
 
 import unittest
 
-from src.pylib.pipeline import trait_list
+from src.pylib.ner import trait_list
 
 
 class TestDescriptor(unittest.TestCase):

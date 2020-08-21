@@ -1,8 +1,10 @@
 """Base matcher object."""
 
+from traiter.spacy_nlp import spacy_nlp  # pylint: disable=import-error
 from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
 from .all_matchers import MATCHERS
+from ..pylib.sentencizer import custom_sentencizer
 from ..pylib.terms import TERMS
 from ..pylib.util import ATTACH_STEP, GROUP_STEP, TRAIT_STEP
 
@@ -30,3 +32,10 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         self.add_patterns(traits, TRAIT_STEP)
         if attach:
             self.add_patterns(attaches, ATTACH_STEP)
+
+
+NLP = spacy_nlp(disable=['ner'])
+NLP.add_pipe(custom_sentencizer, before='parser')
+
+MATCHER = Matcher(NLP)
+NLP.add_pipe(MATCHER, after='parser')
