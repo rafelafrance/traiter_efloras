@@ -1,5 +1,4 @@
 Hyphenate~=1.1.0
-traiter~=0.8.0
 beautifulsoup4~=4.9.1
 pandas~=1.1.0
 Jinja2~=3.0.0a1
