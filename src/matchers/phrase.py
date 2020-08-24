@@ -19,7 +19,6 @@ def phrase(span):
 
 
 PHRASE = {
-    'name': 'phrase',
     TRAIT_STEP: [
         {
             'label': 'phrase',

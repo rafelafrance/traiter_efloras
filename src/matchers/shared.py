@@ -18,7 +18,6 @@ PER_COUNTS = ['pair', 'pairs']
 PER_COUNT = set(PER_COUNTS)
 
 QUEST = {
-    'name': 'range',
     GROUP_STEP: [
         {
             'label': 'quest',

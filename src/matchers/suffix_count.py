@@ -28,7 +28,6 @@ def count_phrase(span):
 
 
 SUFFIX_COUNT = {
-    'name': 'lobe',
     TRAIT_STEP: [
         {
             'label': 'suffix_subpart',

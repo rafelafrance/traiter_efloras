@@ -24,7 +24,6 @@ def subpart(span):
 
 
 SUBPART = {
-    'name': 'subpart',
     TRAIT_STEP: [
         {
             'label': 'subpart',

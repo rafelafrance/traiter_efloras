@@ -37,7 +37,6 @@ def part(span):
 
 
 PART = {
-    'name': 'part',
     TRAIT_STEP: [
         {
             'label': 'part',

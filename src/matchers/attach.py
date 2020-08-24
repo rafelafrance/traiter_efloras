@@ -73,7 +73,6 @@ def word_count(span):
 
 
 ATTACH = {
-    'name': 'attach',
     ATTACH_STEP: [
         {
             'label': 'attach',

@@ -120,7 +120,6 @@ _UNCERTAIN = """ quest quest_enclosed """.split()
 _NOT_A_SIZE = """ for """.split()
 
 SIZE = {
-    'name': 'size',
     GROUP_STEP: [
         {
             'label': 'sex_enclosed',

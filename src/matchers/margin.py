@@ -17,7 +17,6 @@ def margin(span):
 
 
 MARGIN_SHAPE = {
-    'name': 'margin_shape',
     TRAIT_STEP: [
         {
             'label': 'margin_shape',

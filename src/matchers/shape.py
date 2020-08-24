@@ -27,7 +27,6 @@ def n_shape(_):
 
 
 SHAPE = {
-    'name': 'shape',
     TRAIT_STEP: [
         {
             'label': 'shape',

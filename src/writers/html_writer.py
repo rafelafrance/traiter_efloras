@@ -7,16 +7,12 @@ from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-from ..matchers.matcher import MATCHERS
-
 # CSS colors
 CLASSES = [f'c{i}' for i in range(23)]
 COLORS = cycle(CLASSES)
 
 Cut = namedtuple('Cut', 'pos open len id end type title')
 Segment = namedtuple('Segment', 'start end')
-
-TRAIT_SUFFIXES = [m['name'] for m in MATCHERS]
 
 
 def html_writer(args, rows):

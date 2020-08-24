@@ -27,7 +27,6 @@ def descriptor(span):
 
 
 DESCRIPTOR = {
-    'name': 'descriptor',
     TRAIT_STEP: [
         {
             'label': 'descriptor',

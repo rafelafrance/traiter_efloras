@@ -36,7 +36,6 @@ def not_a_count(span):
 
 
 COUNT = {
-    'name': 'count',
     TRAIT_STEP: [
         {
             'label': 'count',

@@ -9,7 +9,6 @@ def part_location(span):
 
 
 PART_LOCATION = {
-    'name': 'part_location',
     TRAIT_STEP: [
         {
             'label': 'part_location',

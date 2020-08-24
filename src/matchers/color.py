@@ -15,7 +15,6 @@ def color(span):
 
 
 COLOR = {
-    'name': 'color',
     TRAIT_STEP: [
         {
             'label': 'color',
