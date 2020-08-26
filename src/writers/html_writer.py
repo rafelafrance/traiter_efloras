@@ -1,7 +1,7 @@
 """Write output to an HTML file."""
 
 import html
-from collections import deque, namedtuple
+from collections import deque, namedtuple, defaultdict
 from datetime import datetime
 from itertools import cycle
 
@@ -21,7 +21,7 @@ def html_writer(args, rows):
 
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
-    colors = {label for r in rows for label in r['traits']}
+    colors = {t['trait'] for r in rows for t in r['traits']}
     colors -= {'part', 'subpart'}
     colors = {label: next(COLORS) for label in sorted(colors)}
 
@@ -44,7 +44,10 @@ def html_writer(args, rows):
 def format_traits(row, colors):
     """Format the traits for HTML."""
     new_dict = {}
-    traits = dict(sorted(row['traits'].items(), key=lambda i: i[0]))
+    traits = defaultdict(list)
+    for trait in row['traits']:
+        traits[trait['trait']].append(trait)
+    traits = dict(sorted(traits.items(), key=lambda i: i[0]))
     for label, traits in traits.items():
         if label in ('part', 'subpart'):
             continue
@@ -52,10 +55,9 @@ def format_traits(row, colors):
         new_traits = {}
         for trait in traits:
             text = row['raw_text'][trait['start']:trait['end']]
-            del trait['start']
-            del trait['end']
             trait = ', '.join(f'<span title="{text}">{k}:&nbsp;{v}</span>'
-                              for k, v in trait.items())
+                              for k, v in trait.items()
+                              if k not in ('start', 'end', 'trait'))
             new_traits[trait] = 1
         new_dict[new_label] = '<br/>'.join(new_traits.keys())
 
@@ -68,26 +70,26 @@ def format_text(row, tags=None, colors=None):
     cuts = []
     cut_id = 0
 
-    for label, traits in row['traits'].items():
+    for trait in row['traits']:
+        label = trait['trait']
         title_label = ' '.join(label.split('_'))
-        for trait in traits:
-            color = colors.get(label)
-            if not color:
-                continue
-            title = ', '.join(f'{k} = {v}' for k, v in trait.items()
-                              if k not in ('start', 'end'))
-            title = f'{title_label}: {title}'
-            cut_id = append_endpoints(
-                cuts, cut_id, Segment(trait['start'], trait['end']),
-                color, title=title)
+        color = colors.get(label)
+        if not color:
+            continue
+        title = ', '.join(f'{k} = {v}' for k, v in trait.items()
+                          if k not in ('start', 'end', 'trait'))
+        title = f'{title_label}: {title}'
+        cut_id = append_endpoints(
+            cuts, cut_id, Segment(trait['start'], trait['end']),
+            color, title=title)
 
-    if parts := row['traits'].get('part'):
+    if parts := [t for t in row['traits'] if t['trait'] == 'part']:
         for part in parts:
             if part['end']:
                 cut_id = append_endpoints(
                     cuts, cut_id, Segment(part['start'], part['end']), 'bold')
 
-    if parts := row['traits'].get('subpart'):
+    if parts := [t for t in row['traits'] if t['trait'] == 'subpart']:
         for part in parts:
             cut_id = append_endpoints(
                 cuts, cut_id,

@@ -8,7 +8,7 @@ import textwrap
 from copy import deepcopy
 
 import src.pylib.family_util as futil
-from src.pylib.finder import trait_list
+from src.pylib.pipeline import PIPELINE
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import ner_writer
@@ -31,7 +31,7 @@ def main(args):
     # attach = not bool(args.ner_file)
 
     for row in rows:
-        row['traits'], row['sents'] = trait_list(row['text'])
+        row['traits'] = PIPELINE.trait_list(row['text'])
 
     if args.csv_file:
         copied = deepcopy(rows)
