@@ -1,13 +1,12 @@
 """Write output to an HTML file."""
 
 import html
-from collections import deque, namedtuple, defaultdict
+from collections import defaultdict, deque, namedtuple
 from datetime import datetime
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-# CSS colors
 CLASSES = [f'c{i}' for i in range(23)]
 COLORS = cycle(CLASSES)
 
@@ -100,7 +99,6 @@ def format_text(row, tags=None, colors=None):
 
 def insert_markup(text, cuts, tags):
     """Insert formatting markup for text highlighting etc."""
-    # Extract function here
     stack = deque()
     parts = []
 
