@@ -10,11 +10,14 @@ PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 
 LABEL = {
     'suffix_count': 'count',
+    'count_phrase': 'count',
 }
 
 
 def augment_data(token, part):
     """Attach traits from the part to the current token."""
+    if not part:
+        return
     for key, value in part._.data.items():
         if key in ('sex', 'location'):
             token._.data[key] = value
@@ -42,8 +45,7 @@ def part_to_trait(span, part):
     for token in span:
         label = token.ent_type_
         if label in PLANT_LEVEL_LABELS:
-            label = f'plant_{label}'
-            token.ent_type_ = label
+            relabel_token(token, None)
         elif label == 'subpart':
             subpart = token
             augment_data(token, part)
@@ -80,7 +82,7 @@ ATTACH = {
             'on_match': part_to_trait,
             'patterns': [
                 [
-                    {'ENT_TYPE': 'part'},
+                    {'ENT_TYPE': 'part', 'OP': '?'},
                     {'ENT_TYPE': '', 'OP': '?'},
                     {'ENT_TYPE': 'subpart', 'OP': '?'},
                     {'ENT_TYPE': {'NOT_IN': ['part']}, 'OP': '+'},

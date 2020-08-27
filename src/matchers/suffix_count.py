@@ -1,9 +1,10 @@
 """Common suffix count snippets."""
 
-from ..pylib.terms import CATEGORY, REPLACE
-from ..pylib.util import TRAIT_STEP
+from traiter.pylib.util import to_positive_int
 
 from ..matchers.shared import CLOSE, OPEN, PLUS
+from ..pylib.terms import CATEGORY, REPLACE
+from ..pylib.util import TRAIT_STEP
 
 
 def suffix_count(span):
@@ -24,7 +25,7 @@ def suffix_count(span):
 def count_phrase(span):
     """Enrich the match with data."""
     return {
-        'low': REPLACE.get(span.text, span.text),
+        'low': to_positive_int(REPLACE.get(span.text, span.text)),
         '_subpart': CATEGORY.get(span.text, span.text),
     }
 

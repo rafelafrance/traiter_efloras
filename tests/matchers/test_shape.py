@@ -126,14 +126,12 @@ class TestShape(unittest.TestCase):
                 'reniform-angulate or shallowly 5-angulate'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'part': 'petiole', 'trait': 'part', 'start': 8, 'end': 21},
-             {'shape': 'polygonal', 'trait': 'petiole_shape', 'start': 22,
-              'end': 32},
+             {'shape': 'polygonal',
+              'trait': 'petiole_shape', 'start': 22, 'end': 32},
              {'shape': 'reniform-polygonal',
-              'trait': 'petiole_shape',
-              'start': 45,
-              'end': 62},
-             {'shape': 'polygonal', 'trait': 'petiole_shape', 'start': 66,
-              'end': 86}]
+              'trait': 'petiole_shape', 'start': 45, 'end': 62},
+             {'shape': 'polygonal',
+              'trait': 'petiole_shape', 'start': 66, 'end': 86}]
         )
 
     def test_shape_12(self):
@@ -141,14 +139,12 @@ class TestShape(unittest.TestCase):
             NLP('blade lanceolate to narrowly or broadly lanceolate '
                 'or elliptic-lanceolate, '),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'shape': 'lanceolate', 'trait': 'leaf_shape', 'start': 6,
-              'end': 16},
-             {'shape': 'lanceolate', 'trait': 'leaf_shape', 'start': 32,
-              'end': 50},
+             {'shape': 'lanceolate',
+              'trait': 'leaf_shape', 'start': 6, 'end': 16},
+             {'shape': 'lanceolate',
+              'trait': 'leaf_shape', 'start': 32, 'end': 50},
              {'shape': 'elliptic-lanceolate',
-              'trait': 'leaf_shape',
-              'start': 54,
-              'end': 73}]
+              'trait': 'leaf_shape', 'start': 54, 'end': 73}]
         )
 
     def test_shape_13(self):
@@ -157,12 +153,12 @@ class TestShape(unittest.TestCase):
                 'or deltate'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'shape': 'ovate', 'trait': 'leaf_shape', 'start': 6, 'end': 19},
-             {'shape': 'orbicular-cordate', 'trait': 'leaf_shape', 'start': 23,
-              'end': 38},
-             {'shape': 'reniform', 'trait': 'leaf_shape', 'start': 40,
-              'end': 51},
-             {'shape': 'deltoid', 'trait': 'leaf_shape', 'start': 56,
-              'end': 63}]
+             {'shape': 'orbicular-cordate',
+              'trait': 'leaf_shape', 'start': 23, 'end': 38},
+             {'shape': 'reniform',
+              'trait': 'leaf_shape', 'start': 40, 'end': 51},
+             {'shape': 'deltoid',
+              'trait': 'leaf_shape', 'start': 56, 'end': 63}]
         )
 
     def test_shape_14(self):

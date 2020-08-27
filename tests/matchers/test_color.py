@@ -179,7 +179,7 @@ class TestColor(unittest.TestCase):
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'subpart': 'surface', 'trait': 'subpart', 'start': 9, 'end': 17},
              {'color': 'black-dots',
-              'trait': 'color', 'start': 53, 'end': 66}]
+              'trait': 'leaflet_surface_color', 'start': 53, 'end': 66}]
         )
 
     def test_color_15(self):
