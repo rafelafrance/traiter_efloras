@@ -1,32 +1,34 @@
 """Create a trait pipeline."""
 
 import spacy
-from traiter.pipeline import TraitPipeline  # pylint: disable=import-error
-from traiter.spacy_nlp import setup_tokenizer  # pylint: disable=import-error
+from traiter.spacy_nlp import setup_tokenizer
+from traiter.trait_pipeline import TraitPipeline
 
-from .util import ATTACH_STEP, TRAIT_STEP
+from .util import LINK_STEP, TRAIT_STEP
+from ..matchers.link_matcher import LinkMatcher
 from ..matchers.matcher import Matcher
-from ..pylib.linker import linker
 from ..pylib.sentencizer import sentencizer
 
 
 class Pipeline(TraitPipeline):
     """Build a custom traiter pipeline."""
 
-    steps2link = {TRAIT_STEP, ATTACH_STEP}
+    steps2link = {TRAIT_STEP, LINK_STEP}
 
     def __init__(self):
         self.nlp = spacy.load('en_core_web_sm')
-        super().__init__(self.nlp, linker=linker)
+        super().__init__(self.nlp)
 
         self.nlp.disable_pipes(['ner'])
 
         setup_tokenizer(self.nlp)
 
         self.matcher = Matcher(self.nlp)
+        self.linker = LinkMatcher(self.nlp)
 
         self.nlp.add_pipe(sentencizer, before='parser')
         self.nlp.add_pipe(self.matcher, last=True)
+        self.nlp.add_pipe(self.linker, last=True, name=LINK_STEP)
 
 
 PIPELINE = Pipeline()

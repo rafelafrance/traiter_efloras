@@ -18,13 +18,8 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('Seeds [1–]3–12[–30]'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
-             {'min': 1,
-              'low': 3,
-              'high': 12,
-              'max': 30,
-              'trait': 'seed_count',
-              'start': 6,
-              'end': 19}]
+             {'min': 1, 'low': 3, 'high': 12, 'max': 30,
+              'trait': 'seed_count', 'start': 6, 'end': 19}]
         )
 
     def test_count_02(self):
@@ -40,14 +35,9 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('blade 5–10 × 4–9 cm'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 5,
-              'length_high': 10,
-              'width_low': 4,
-              'width_high': 9,
-              'width_units': 'cm',
-              'trait': 'leaf_size',
-              'start': 6,
-              'end': 19}]
+             {'length_low': 5, 'length_high': 10,
+              'width_low': 4, 'width_high': 9, 'width_units': 'cm',
+              'trait': 'leaf_size', 'start': 6, 'end': 19}]
         )
 
     def test_count_04(self):
@@ -70,32 +60,26 @@ class TestCount(unittest.TestCase):
     def test_count_06(self):
         self.assertEqual(
             NLP('Staminate flowers (3–)5–10(–20)'),
-            [{'sex': 'male', 'part': 'flower', 'trait': 'part', 'start': 0,
-              'end': 17},
-             {'min': 3,
-              'low': 5,
-              'high': 10,
-              'max': 20,
-              'sex': 'male',
-              'trait': 'flower_count',
-              'start': 18,
-              'end': 31}]
+            [{'sex': 'male', 'part': 'flower',
+              'trait': 'part', 'start': 0, 'end': 17},
+             {'min': 3, 'low': 5, 'high': 10, 'max': 20, 'sex': 'male',
+              'trait': 'flower_count', 'start': 18, 'end': 31}]
         )
 
     def test_count_07(self):
         self.assertEqual(
             NLP('Ovaries (4 or)5,'),
             [{'part': 'ovary', 'trait': 'part', 'start': 0, 'end': 7},
-             {'min': 4, 'low': 5, 'trait': 'ovary_count', 'start': 8,
-              'end': 15}]
+             {'min': 4, 'low': 5,
+              'trait': 'ovary_count', 'start': 8, 'end': 15}]
         )
 
     def test_count_08(self):
         self.assertEqual(
             NLP('Seeds 5(or 6)'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
-             {'low': 5, 'max': 6, 'trait': 'seed_count', 'start': 6,
-              'end': 13}]
+             {'low': 5, 'max': 6,
+              'trait': 'seed_count', 'start': 6, 'end': 13}]
         )
 
     def test_count_09(self):
@@ -128,13 +112,8 @@ class TestCount(unittest.TestCase):
             NLP('Male flowers with 2-8(-20) stamens;'),
             [{'sex': 'male', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 12},
-             {'low': 2,
-              'high': 8,
-              'max': 20,
-              'sex': 'male',
-              'trait': 'stamen_count',
-              'start': 18,
-              'end': 26},
+             {'low': 2, 'high': 8, 'max': 20, 'sex': 'male',
+              'trait': 'stamen_count', 'start': 18, 'end': 26},
              {'part': 'stamen', 'sex': 'male', 'trait': 'part', 'start': 27,
               'end': 34}]
         )
@@ -143,12 +122,8 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('leaflets in 3 or 4 pairs,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
-             {'low': 3,
-              'high': 4,
-              'group': 'pairs',
-              'trait': 'leaflet_count',
-              'start': 12,
-              'end': 24}]
+             {'low': 3, 'high': 4, 'group': 'pairs',
+              'trait': 'leaflet_count', 'start': 12, 'end': 24}]
         )
 
     def test_count_14(self):
@@ -164,13 +139,8 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('leaflets in 3 or 4(or 5) pairs,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
-             {'low': 3,
-              'high': 4,
-              'max': 5,
-              'group': 'pairs',
-              'trait': 'leaflet_count',
-              'start': 12,
-              'end': 30}]
+             {'low': 3, 'high': 4, 'max': 5, 'group': 'pairs',
+              'trait': 'leaflet_count', 'start': 12, 'end': 30}]
         )
 
     def test_count_16(self):
@@ -184,34 +154,21 @@ class TestCount(unittest.TestCase):
             NLP(shorten("""
                 Pistillate flowers: hyaline bristle at apex of hypanthial 
                 aculei 0.5–1 times as long as opaque base.""")),
-            [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
-              'end': 18},
-             {'subpart': 'apex',
-              'sex': 'female',
-              'trait': 'subpart',
-              'start': 39,
-              'end': 43},
-             {'subpart': 'aculeus',
-              'sex': 'female',
-              'trait': 'subpart',
-              'start': 58,
-              'end': 64},
-             {'subpart': 'base',
-              'sex': 'female',
-              'trait': 'subpart',
-              'start': 95,
-              'end': 99}]
+            [{'sex': 'female', 'part': 'flower',
+              'trait': 'part', 'start': 0, 'end': 18},
+             {'subpart': 'apex', 'sex': 'female',
+              'trait': 'subpart', 'start': 39, 'end': 43},
+             {'subpart': 'aculeus', 'sex': 'female',
+              'trait': 'subpart', 'start': 58, 'end': 64},
+             {'subpart': 'base', 'sex': 'female',
+              'trait': 'subpart', 'start': 95, 'end': 99}]
         )
 
     def test_count_18(self):
         self.assertEqual(
             NLP(shorten("""rarely 1- or 5-7-foliolate;""")),
-            [{'min': 1,
-              'low': 5,
-              'high': 7,
-              'trait': 'plant_leaf_count',
-              'start': 7,
-              'end': 26}]
+            [{'min': 1, 'low': 5, 'high': 7,
+              'trait': 'plant_leaf_count', 'start': 7, 'end': 26}]
         )
 
     def test_count_19(self):

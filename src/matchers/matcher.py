@@ -1,6 +1,6 @@
 """Base matcher object."""
 
-from traiter.matcher import TraitMatcher  # pylint: disable=import-error
+from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
 from .attach import ATTACH
 from .color import COLOR
@@ -16,7 +16,7 @@ from .size import SIZE
 from .subpart import SUBPART
 from .suffix_count import SUFFIX_COUNT
 from ..pylib.terms import TERMS
-from ..pylib.util import ATTACH_STEP, GROUP_STEP, TRAIT_STEP
+from ..pylib.util import GROUP_STEP, TRAIT_STEP
 
 PARTS = [PART, SUBPART]
 TRAITS = [
@@ -37,21 +37,13 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
 
     name = 'entity_matcher'
 
-    def __init__(self, nlp, attach=True):
+    def __init__(self, nlp):
         super().__init__(nlp)
 
         self.add_terms(TERMS)
 
-        groups = []
-        traits = []
-        attaches = []
-
-        for matcher in MATCHERS:
-            groups += matcher.get(GROUP_STEP, [])
-            traits += matcher.get(TRAIT_STEP, [])
-            attaches += matcher.get(ATTACH_STEP, [])
+        groups = TraitMatcher.step_rules(MATCHERS, GROUP_STEP)
+        traits = TraitMatcher.step_rules(MATCHERS, TRAIT_STEP)
 
         self.add_patterns(groups, GROUP_STEP)
         self.add_patterns(traits, TRAIT_STEP)
-        if attach:
-            self.add_patterns(attaches, ATTACH_STEP)

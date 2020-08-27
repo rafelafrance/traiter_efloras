@@ -27,7 +27,7 @@ We consider 3 levels of parts to a treatment sentence. For example:
 
 import re
 
-from ..matchers.all_matchers import PART_LABELS, SUBPART_LABELS
+from ..matchers.matcher import PART_LABELS, SUBPART_LABELS
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 from .terms import LABELS
 

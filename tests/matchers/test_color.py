@@ -18,10 +18,10 @@ class TestColor(unittest.TestCase):
                 'hypanthium green or greenish yellow, '
                 'usually not purple-spotted, rarely purple-spotted distally'),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
-             {'color': 'green', 'trait': 'hypanthium_color',
-              'start': 11, 'end': 16},
-             {'color': 'green-yellow', 'trait': 'hypanthium_color',
-              'start': 20, 'end': 35},
+             {'color': 'green',
+              'trait': 'hypanthium_color', 'start': 11, 'end': 16},
+             {'color': 'green-yellow',
+              'trait': 'hypanthium_color', 'start': 20, 'end': 35},
              {'color': 'purple-spotted',
               'trait': 'hypanthium_color', 'start': 49, 'end': 63},
              {'color': 'purple-spotted',
@@ -179,8 +179,7 @@ class TestColor(unittest.TestCase):
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'subpart': 'surface', 'trait': 'subpart', 'start': 9, 'end': 17},
              {'color': 'black-dots',
-              'trait': 'leaflet_surface_color',
-              'start': 53, 'end': 66}]
+              'trait': 'color', 'start': 53, 'end': 66}]
         )
 
     def test_color_15(self):
