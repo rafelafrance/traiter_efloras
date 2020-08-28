@@ -3,8 +3,7 @@ import re
 
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 from ..matchers.shared import CLOSE, DOT, OPEN, PLUS
-from ..pylib.terms import CATEGORY, REPLACE
-from ..pylib.util import LINK_STEP, TRAIT_STEP
+from ..pylib.util import CATEGORY, LINK_STEP, REPLACE, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 
@@ -46,6 +45,8 @@ def part_to_trait(span, part):
         label = token.ent_type_
         if label in PLANT_LEVEL_LABELS:
             relabel_token(token, None)
+        elif label == 'part':
+            part = token
         elif label == 'subpart':
             subpart = token
             augment_data(token, part)

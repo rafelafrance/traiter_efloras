@@ -17,7 +17,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from lxml import html
 
-from src.pylib import family_util as futil
+from src.pylib import family as futil
 
 # Don't hit the site too hard
 SLEEP_MID = 15

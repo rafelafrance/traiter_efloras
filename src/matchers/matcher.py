@@ -15,8 +15,7 @@ from .shape import SHAPE
 from .size import SIZE
 from .subpart import SUBPART
 from .suffix_count import SUFFIX_COUNT
-from ..pylib.terms import TERMS
-from ..pylib.util import GROUP_STEP, TRAIT_STEP
+from ..pylib.util import GROUP_STEP, TERMS, TRAIT_STEP
 
 PARTS = [PART, SUBPART]
 TRAITS = [

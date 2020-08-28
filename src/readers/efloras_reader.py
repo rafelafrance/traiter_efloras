@@ -5,7 +5,7 @@ import re
 from bs4 import BeautifulSoup
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
-import src.pylib.family_util as futil
+import src.pylib.family as futil
 from src.matchers.part import PATTERN_RE
 
 

@@ -15,8 +15,8 @@ class TestSubpart(unittest.TestCase):
     def test_subpart_01(self):
         self.assertEqual(
             NLP('terminal lobe ovate-trullate,'),
-            [{'location': 'terminal', 'subpart': 'lobe', 'trait': 'subpart',
-              'start': 0, 'end': 13},
+            [{'location': 'terminal', 'subpart': 'lobe',
+              'trait': 'subpart', 'start': 0, 'end': 13},
              {'shape': 'ovate-trullate', 'location': 'terminal',
               'trait': 'plant_lobe_shape', 'start': 14, 'end': 28}]
         )

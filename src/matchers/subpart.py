@@ -1,7 +1,6 @@
 """Plant subpart parser."""
 
-from ..pylib.terms import REPLACE, TERMS
-from ..pylib.util import TRAIT_STEP
+from ..pylib.util import REPLACE, TERMS, TRAIT_STEP
 
 _SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex',)}
 

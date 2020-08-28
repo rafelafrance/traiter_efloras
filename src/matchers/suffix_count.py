@@ -3,8 +3,7 @@
 from traiter.pylib.util import to_positive_int
 
 from ..matchers.shared import CLOSE, OPEN, PLUS
-from ..pylib.terms import CATEGORY, REPLACE
-from ..pylib.util import TRAIT_STEP
+from ..pylib.util import CATEGORY, REPLACE, TRAIT_STEP
 
 
 def suffix_count(span):

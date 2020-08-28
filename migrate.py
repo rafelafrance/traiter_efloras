@@ -6,7 +6,7 @@ import re
 
 import pandas as pd
 
-from src.pylib import family_util as futil
+from src.pylib import family as futil
 import src.pylib.db as db
 
 INSERT = """

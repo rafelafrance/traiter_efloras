@@ -4,8 +4,7 @@ from collections import defaultdict
 
 import pandas as pd
 
-from ..pylib.terms import TERMS
-from ..pylib.util import convert
+from ..pylib.util import TERMS, convert
 
 DIMENSIONS = {t['replace'] for t in TERMS if t['label'] == 'dimension'}
 

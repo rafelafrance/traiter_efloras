@@ -5,8 +5,7 @@ import re
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
 from .shared import PER_COUNT, PER_COUNTS
-from ..pylib.terms import REPLACE, TERMS
-from ..pylib.util import TRAIT_STEP
+from ..pylib.util import REPLACE, TERMS, TRAIT_STEP
 
 _PATTERNS = [t for t in TERMS if t['label'] == 'part']
 _PATTERNS = sorted([t['pattern'] for t in _PATTERNS], key=len, reverse=True)

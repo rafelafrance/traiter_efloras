@@ -4,8 +4,7 @@ import re
 from functools import partial
 
 from .shared import CLOSE, CROSS, NUMBER, OPEN, QUEST
-from ..pylib.terms import REPLACE
-from ..pylib.util import GROUP_STEP, TRAIT_STEP
+from ..pylib.util import GROUP_STEP, REPLACE, TRAIT_STEP
 
 
 def size(span, high_only=False):
