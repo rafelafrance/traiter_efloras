@@ -23,14 +23,14 @@ class Pipeline(TraitPipeline):
 
         setup_tokenizer(self.nlp)
 
-        self.matcher = Matcher(self.nlp)
-        self.linker = LinkMatcher(self.nlp)
+        matcher = Matcher(self.nlp)
+        linker = LinkMatcher(self.nlp)
 
         sentencizer = Sentencizer(ABBREVS)
 
         self.nlp.add_pipe(sentencizer, before='parser')
-        self.nlp.add_pipe(self.matcher, last=True)
-        self.nlp.add_pipe(self.linker, last=True, name=LINK_STEP)
+        self.nlp.add_pipe(matcher, last=True)
+        self.nlp.add_pipe(linker, last=True, name=LINK_STEP)
 
 
 PIPELINE = Pipeline()

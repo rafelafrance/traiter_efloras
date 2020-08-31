@@ -29,7 +29,7 @@ def count(span):
     return data
 
 
-def not_a_count(span):
+def not_a_count(_):
     """Flag this as a token to be deleted."""
     return {'_skip': True}
 

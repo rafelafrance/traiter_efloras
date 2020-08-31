@@ -9,6 +9,8 @@ from ..pylib.util import LINK_STEP
 
 MATCHERS = [ATTACH]
 
+AUGMENT = ('sex', 'location')
+
 
 class LinkMatcher(TraitMatcher):
     """Base matcher object."""
@@ -17,8 +19,7 @@ class LinkMatcher(TraitMatcher):
 
     def __init__(self, nlp):
         super().__init__(nlp)
-        links = TraitMatcher.step_rules(MATCHERS, LINK_STEP)
-        self.add_patterns(links, LINK_STEP)
+        links = self.add_patterns(MATCHERS, LINK_STEP)
 
         # This is used for sorting matches
         self.priority = {m['label']: m.get('priority', 9999) for m in links}
@@ -43,16 +44,19 @@ class LinkMatcher(TraitMatcher):
                 match_list, key=lambda m: (m[1] - m[2], m[1]))
 
         # Build list by adding longest matches w/ no overlap by priority
-        matches = []
+        match_list = []
         for priority in sorted(priorities.keys()):
-            match_list = priorities[priority]
-            for match in match_list:
-                for prev in matches:
-                    if (prev[1] <= match[1] < prev[2]
-                            or prev[1] < match[2] <= prev[2]):
-                        break
-                else:
-                    matches.append(match)
+            match_list += priorities[priority]
+
+        matches = []
+        for curr in match_list:
+            for prev in matches:
+                if (prev[1] <= curr[1] < prev[2]
+                        or prev[1] < curr[2] <= prev[2]
+                        or curr[1] <= prev[1] and curr[2] >= prev[2]):
+                    break
+            else:
+                matches.append(curr)
 
         return matches
 

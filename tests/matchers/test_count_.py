@@ -110,12 +110,12 @@ class TestCount(unittest.TestCase):
     def test_count_12(self):
         self.assertEqual(
             NLP('Male flowers with 2-8(-20) stamens;'),
-            [{'sex': 'male', 'part': 'flower', 'trait': 'part', 'start': 0,
-              'end': 12},
+            [{'sex': 'male', 'part': 'flower',
+              'trait': 'part', 'start': 0, 'end': 12},
              {'low': 2, 'high': 8, 'max': 20, 'sex': 'male',
               'trait': 'stamen_count', 'start': 18, 'end': 26},
-             {'part': 'stamen', 'sex': 'male', 'trait': 'part', 'start': 27,
-              'end': 34}]
+             {'part': 'stamen', 'sex': 'male',
+              'trait': 'part', 'start': 27, 'end': 34}]
         )
 
     def test_count_13(self):

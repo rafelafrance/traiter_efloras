@@ -1,11 +1,13 @@
 """Patterns for attaching traits to plant parts."""
-import re
 
 from ..matchers.descriptor import DESCRIPTOR_LABELS
-from ..matchers.shared import CLOSE, DOT, OPEN, PLUS
-from ..pylib.util import CATEGORY, LINK_STEP, REPLACE, TRAIT_STEP
+from ..matchers.shared import DOT, COMMA
+from ..pylib.util import LINK_STEP, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
+AUGMENT = ('sex', 'location')
+SUBPART_END = {';', '.'}
+SUBPART_ONCE = {'size'}
 
 LABEL = {
     'suffix_count': 'count',
@@ -17,12 +19,11 @@ def augment_data(token, part):
     """Attach traits from the part to the current token."""
     if not part:
         return
-    for key, value in part._.data.items():
-        if key in ('sex', 'location'):
-            token._.data[key] = value
+    data = {k: v for k, v in part._.data.items() if k in AUGMENT and v}
+    token._.data = {**token._.data, **data}
 
 
-def relabel_token(token, part, subpart=None):
+def new_label(token, part, subpart=None):
     """Relabel the token's entity type."""
     label = LABEL.get(token.ent_type_, token.ent_type_)
     part = part._.data['part'] if part else 'plant'
@@ -32,33 +33,55 @@ def relabel_token(token, part, subpart=None):
         subpart = token._.data.get('_subpart')
 
     label = f'{part}_{subpart}_{label}' if subpart else f'{part}_{label}'
-    label = re.sub(r'_([^_]+)_\1', r'_\1', label)
-    label = re.sub(r'^([^_]+)_\1', r'\1', label)
+    label = {p: 1 for p in label.split('_')}
+    label = '_'.join(p for p, _ in label.items())
 
-    token.ent_type_ = label
+    return label
 
 
 def part_to_trait(span, part):
     """Connect the part to the matched traits."""
     subpart = None
+    subpart_traits = set()
     for token in span:
         label = token.ent_type_
         if label in PLANT_LEVEL_LABELS:
-            relabel_token(token, None)
+            token.ent_type_ = new_label(token, None)
         elif label == 'part':
+            augment_data(token, part)
             part = token
         elif label == 'subpart':
             subpart = token
             augment_data(token, part)
-        elif label and label != 'part':
-            relabel_token(token, part, subpart)
+        elif token.text in SUBPART_END:
+            subpart = None
+        elif label:
+            trait = new_label(token, part, subpart)
+            if subpart:
+                if trait in subpart_traits:
+                    subpart = None
+                    subpart_traits = set()
+                    trait = new_label(token, part, subpart)
+                elif label in SUBPART_ONCE:
+                    subpart_traits.add(trait)
+            token.ent_type_ = trait
             augment_data(token, part)
 
 
-def with_clause(span, part):
+def out_of_order(span, part):
     """Attach traits to a subpart."""
-    subpart = None
-    for token in list(span)[::-1]:
+    subpart = [t for t in span if t.ent_type_ == 'subpart']
+    subpart = subpart[0] if subpart else None
+    token = [t for t in span if t.ent_type_ == 'part']
+    if token:
+        augment_data(token[0], part)
+        part = token[0]
+    with_clause(span, part, subpart)
+
+
+def with_clause(span, part, subpart=None):
+    """Attach traits to a subpart."""
+    for token in span:
         label = token.ent_type_
         if label == 'part':
             augment_data(token, part)
@@ -67,26 +90,42 @@ def with_clause(span, part):
             augment_data(token, part)
             subpart = token
         elif token._.step == TRAIT_STEP:
-            relabel_token(token, part, subpart)
+            token.ent_type_ = new_label(token, part, subpart)
             augment_data(token, part)
 
 
-def suffixed_count(span, part):
-    """Enrich the match with data."""
-    relabel_token(span[0], part)
+def attach_final_suffix(span, part):
+    """Attach traits to a plant part."""
+    for token in list(span)[::-1]:
+        if token.ent_type_ == 'part':
+            part = token
+        elif token._.step == TRAIT_STEP:
+            token.ent_type_ = new_label(token, part)
+            augment_data(token, part)
 
 
 ATTACH = {
     LINK_STEP: [
         {
-            'label': 'part_to_trait',
-            'on_match': part_to_trait,
+            'label': 'with_clause',
+            'on_match': out_of_order,
+            'priority': 10,
             'patterns': [
                 [
-                    {'ENT_TYPE': 'part', 'OP': '?'},
-                    {'ENT_TYPE': '', 'OP': '?'},
-                    {'ENT_TYPE': 'subpart', 'OP': '?'},
-                    {'ENT_TYPE': {'NOT_IN': ['part']}, 'OP': '+'},
+                    {'LOWER': {'IN': ['with', 'having', 'only']}},
+                    {'LOWER': 'a', 'OP': '?'},
+                    {'POS': {'IN': ['NOUN', 'ADJ', 'ADV', 'VERB']}, 'OP': '*'},
+                    {'_': {'step': TRAIT_STEP}},
+                    {'ENT_TYPE': {'IN': ['part', 'subpart']}},
+                    {'_': {'step': TRAIT_STEP}, 'OP': '?'},
+                    {'TEXT': {'IN': COMMA}, 'OP': '?'},
+                    {'ENT_TYPE': 'part_location', 'OP': '?'},
+                    {'POS': {'IN': ['ADP']}, 'OP': '?'},
+                    {'_': {'step': TRAIT_STEP}, 'OP': '?'},
+                ],
+                [
+                    {'ENT_TYPE': 'woodiness'},
+                    {'ENT_TYPE': {'IN': ['part', 'subpart']}},
                 ],
             ],
         },
@@ -96,78 +135,25 @@ ATTACH = {
             'priority': 10,
             'patterns': [
                 [
-                    {'LOWER': {'IN': ['with', 'having']}},
+                    {'LOWER': {'IN': ['with', 'having', 'only']}},
                     {'LOWER': 'a', 'OP': '?'},
-                    {'POS': {'IN': ['NOUN', 'ADJ', 'ADV']}, 'OP': '*'},
-                    {'_': {'step': TRAIT_STEP}},
                     {'ENT_TYPE': {'IN': ['part', 'subpart']}},
+                    {'_': {'step': TRAIT_STEP}},
                 ],
             ],
         },
         {
-            'label': 'suffixed_count',
-            'on_match': suffixed_count,
+            'label': 'part_to_trait',
+            'on_match': part_to_trait,
             'patterns': [
                 [
-                    {'ENT_TYPE': 'suffix_count'},
-                ],
-                [
-                    {'ENT_TYPE': 'count'},
-                    {'LOWER': 'or'},
-                    {'ENT_TYPE': 'count'},
-                    {'TEXT': {'IN': PLUS}, 'OP': '?'},
-                    {'ENT_TYPE': 'suffix_count'},
+                    {'ENT_TYPE': 'part', 'OP': '?'},
+                    {'ENT_TYPE': '', 'OP': '?'},
+                    {'ENT_TYPE': 'subpart', 'OP': '?'},
+                    {'ENT_TYPE': {'NOT_IN': ['part']}, 'OP': '*'},
                 ],
             ],
         },
-    ],
-}
-
-
-def attach_final_suffix(span):
-    """Attach traits to a plant part."""
-    data = {}
-    part, relabel = '', ''
-    for token in list(span)[::-1]:
-        if token.ent_type_ == 'part':
-            part = token._.data['part']
-        elif token._.step == TRAIT_STEP:
-            data = token._.data
-            relabel = f'{part}_{token.ent_type_}'
-        data['_relabel'] = relabel
-    data['_attached'] = True
-    return data
-
-
-def attach_retokenize(span):
-    """Attach traits to a subpart."""
-    label, subpart = '', ''
-    data = {'_subpart_attached': True}
-    for token in list(span):
-        if token.ent_type_ == 'subpart':
-            subpart = token._.data['subpart']
-        elif token._.step == TRAIT_STEP:
-            data = token._.data
-            label = token.ent_type_
-    data['_relabel'] = f'{subpart}_{label}'
-    return data
-
-
-def word_count(span):
-    """Enrich the match with data."""
-    data = dict(
-        start=span.start_char,
-        end=span.end_char,
-        low=int(REPLACE[span.lower_]),
-    )
-    if category := CATEGORY.get(span.lower_):
-        data['_relabel'] = f'{category}_count'
-
-    return data
-
-
-OLD_ATTACH = {
-    LINK_STEP: [
         {
             'label': 'attach',
             'on_match': attach_final_suffix,
@@ -177,48 +163,6 @@ OLD_ATTACH = {
                     {'_': {'step': TRAIT_STEP}},
                     {'ENT_TYPE': 'part'},
                     {'TEXT': {'IN': DOT}}
-                ],
-            ],
-        },
-        {
-            'label': 'attach_retokenize',
-            'on_match': attach_retokenize,
-            'patterns': [
-                [
-                    {'LOWER': {'IN': ['with', 'having']}},
-                    {'LOWER': 'a', 'OP': '?'},
-                    {'POS': {'IN': ['NOUN', 'ADJ', 'ADV']}, 'OP': '*'},
-                    {'ENT_TYPE': 'subpart'},
-                    {'_': {'step': TRAIT_STEP}},
-                ],
-            ],
-        },
-        {
-            'label': 'suffixed_count',
-            'on_match': suffixed_count,
-            'patterns': [
-                [
-                    {'TEXT': {'IN': OPEN}, 'OP': '?'},
-                    {'ENT_TYPE': 'count'},
-                    {'TEXT': {'IN': PLUS}, 'OP': '?'},
-                    {'ENT_TYPE': 'suffix_count'},
-                    {'TEXT': {'IN': CLOSE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'count'},
-                    {'LOWER': 'or'},
-                    {'ENT_TYPE': 'count'},
-                    {'TEXT': {'IN': PLUS}, 'OP': '?'},
-                    {'ENT_TYPE': 'suffix_count'},
-                ],
-            ],
-        },
-        {
-            'label': 'word_count',
-            'on_match': word_count,
-            'patterns': [
-                [
-                    {'ENT_TYPE': 'count_phrase'},
                 ],
             ],
         },

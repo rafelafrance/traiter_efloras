@@ -48,37 +48,35 @@ I should be able to extract:
 1. Machine learning models. (In progress)
 
 ## Rule-based parsing strategy
-1. I first, split the text into sentences using a simple rule-based parser.
-1. Next I label terms using Spacy's phrase and rule-based matchers.
+1. I label terms using Spacy's phrase and rule-based matchers.
 1. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
 1. Finally, I associate traits with plant parts.
 
-For example, given the text: `Petiole 1-2 cm. Leaf blade 2-4 cm.`:
-- First I split this into two sentences: `Petiole 1-2 cm` and `Leaf blade 2-4 cm.`. Taking the first sentence I then do the following.
-- I recognize the tokens in the sentence:
+For example, given the text: `Petiole 1-2 cm.`:
+- I recognize vocabulary terms like:
     - `Petiole` = plant part
     - `1` = number
     - `-` = dash
     - `2` = number
     - `cm` = units
-- Then I group tokens. In this sentence I only group one set:
+- Then I group tokens. For instance:
     - `1-2` = a range
 - Next I recognize a size trait:
     - `1-2 cm` = a range with units.
-- Finally, I associate the size with the plant part: `Petiole`
+- Finally, I associate the size with the plant part `Petiole` by scanning sentences for even larger pattern matches and a few simple heuristics.
+    - One heuristic is that treatments typically (but not always) put the plant part being discussed at the beginning of a sentence.
 
 There are, of course, complications and subtleties not outlined above but you should get the gist of what is going on here.
 
 ## Install
-You will need to have Python installed. You can install the requirements into your python environment like so:
+You will need to have Python 3.8 (or later) installed. You can install the requirements into your python environment like so:
 ```
 git clone https://github.com/rafelafrance/traiter_efloras.git
 cd traiter_efloras
-optional: virtualenv -p python3 venv
+optional: virtualenv -p python3.8 venv
 optional: source venv/bin/activate
 python3 -m pip install --requirement requirements.txt
 python3 -m pip install git+https://github.com/rafelafrance/traiter.git@master#egg=traiter
-python -m spacy download en
 ```
 
 ## Run

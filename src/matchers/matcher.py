@@ -40,9 +40,5 @@ class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
         super().__init__(nlp)
 
         self.add_terms(TERMS)
-
-        groups = TraitMatcher.step_rules(MATCHERS, GROUP_STEP)
-        traits = TraitMatcher.step_rules(MATCHERS, TRAIT_STEP)
-
-        self.add_patterns(groups, GROUP_STEP)
-        self.add_patterns(traits, TRAIT_STEP)
+        self.add_patterns(MATCHERS, GROUP_STEP)
+        self.add_patterns(MATCHERS, TRAIT_STEP)

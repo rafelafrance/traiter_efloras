@@ -155,13 +155,9 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             NLP('leaf deeply to shallowly lobed, 4–5(–7) cm wide,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
-             {'width_low': 4,
-              'width_high': 5,
-              'width_max': 7,
+             {'width_low': 4, 'width_high': 5, 'width_max': 7,
               'width_units': 'cm',
-              'trait': 'leaf_size',
-              'start': 32,
-              'end': 47}]
+              'trait': 'leaf_size', 'start': 32, 'end': 47}]
         )
 
     def test_size_13(self):
@@ -170,80 +166,41 @@ class TestSize(unittest.TestCase):
                 'deeply lobed, petiolules 2–5 mm,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 3, 'trait': 'leaf_count', 'start': 7, 'end': 18},
-             {'location': 'lateral',
-              'group': 'pair',
-              'part': 'leaflet',
-              'trait': 'part',
-              'start': 20,
-              'end': 44},
+             {'location': 'lateral', 'group': 'pair', 'part': 'leaflet',
+              'trait': 'part', 'start': 20, 'end': 44},
              {'part': 'petiole',
-              'location': 'lateral',
-              'trait': 'part',
-              'start': 59,
-              'end': 69},
-             {'length_low': 2,
-              'length_high': 5,
-              'length_units': 'mm',
-              'location': 'lateral',
-              'trait': 'petiole_size',
-              'start': 70,
-              'end': 76}]
+              'trait': 'part', 'start': 59, 'end': 69},
+             {'length_low': 2, 'length_high': 5, 'length_units': 'mm',
+              'trait': 'petiole_size', 'start': 70, 'end': 76}]
         )
 
     def test_size_14(self):
         self.assertEqual(
             NLP('terminal leaflet 3–5 cm, blade petiolule 3–12 mm,'),
-            [{'location': 'terminal',
-              'part': 'leaflet',
-              'trait': 'part',
-              'start': 0,
-              'end': 16},
-             {'length_low': 3,
-              'length_high': 5,
-              'length_units': 'cm',
+            [{'location': 'terminal', 'part': 'leaflet',
+              'trait': 'part', 'start': 0, 'end': 16},
+             {'length_low': 3, 'length_high': 5, 'length_units': 'cm',
               'location': 'terminal',
-              'trait': 'leaflet_size',
-              'start': 17,
-              'end': 23},
-             {'part': 'leaf',
+              'trait': 'leaflet_size', 'start': 17, 'end': 23},
+             {'part': 'leaf', 'location': 'terminal',
+              'trait': 'part', 'start': 25, 'end': 30},
+             {'part': 'petiole', 'location': 'terminal',
+              'trait': 'part', 'start': 31, 'end': 40},
+             {'length_low': 3, 'length_high': 12, 'length_units': 'mm',
               'location': 'terminal',
-              'trait': 'part',
-              'start': 25,
-              'end': 30},
-             {'part': 'petiole',
-              'location': 'terminal',
-              'trait': 'part',
-              'start': 31,
-              'end': 40},
-             {'length_low': 3,
-              'length_high': 12,
-              'length_units': 'mm',
-              'location': 'terminal',
-              'trait': 'petiole_size',
-              'start': 41,
-              'end': 48}]
+              'trait': 'petiole_size', 'start': 41, 'end': 48}]
         )
 
     def test_size_15(self):
         self.assertEqual(
             NLP('leaf shallowly 3–5(–7)-lobed, 5–25 × (8–)10–25(–30) cm,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
-             {'low': 3,
-              'high': 5,
-              'max': 7,
-              'trait': 'leaf_lobe_count',
-              'start': 15,
-              'end': 28},
-             {'length_low': 5,
-              'length_high': 25,
-              'width_min': 8,
-              'width_low': 10,
-              'width_high': 25,
-              'width_max': 30,
+             {'low': 3, 'high': 5, 'max': 7,
+              'trait': 'leaf_lobe_count', 'start': 15, 'end': 28},
+             {'length_low': 5, 'length_high': 25, 'width_min': 8,
+              'width_low': 10, 'width_high': 25, 'width_max': 30,
               'width_units': 'cm',
-              'trait': 'leaf_size',
-              'start': 30,
-              'end': 54}]
+              'trait': 'leaf_size', 'start': 30, 'end': 54}]
         )
 
     def test_size_16(self):

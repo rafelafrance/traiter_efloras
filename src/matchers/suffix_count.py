@@ -18,6 +18,8 @@ def suffix_count(span):
         elif label == 'count_suffix':
             value = token.lower_
             data['_subpart'] = REPLACE.get(value, value)
+        elif token.text in PLUS:
+            data['indefinite'] = True
     return data
 
 

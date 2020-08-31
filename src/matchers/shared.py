@@ -3,6 +3,7 @@
 from ..pylib.util import GROUP_STEP
 
 CLOSE = ' ) ] '.split()
+COMMA = ' , '.split()
 CROSS = ' x × '.split()
 DASH = '– - –– --'.split()
 DOT = ' . '.split()

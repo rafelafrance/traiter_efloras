@@ -18,8 +18,9 @@ class TestAttach(unittest.TestCase):
         self.assertEqual(
             NLP(shorten("""leaves and yellow petals.""")),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'color': 'yellow', 'trait': 'petal_color',
-              'start': 7, 'end': 25}]
+             {'color': 'yellow',
+              'trait': 'petal_color', 'start': 11, 'end': 17},
+             {'part': 'petal', 'trait': 'part', 'start': 18, 'end': 24}]
         )
 
     def test_attach_02(self):
@@ -55,8 +56,7 @@ class TestAttach(unittest.TestCase):
             NLP('Inflorescences 10+-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'low': 10, 'indefinite': True,
-              'trait': 'inflorescence_flower_count',
-              'start': 15, 'end': 27}]
+              'trait': 'inflorescence_flower_count', 'start': 15, 'end': 27}]
         )
 
     def test_attach_06(self):
@@ -81,8 +81,9 @@ class TestAttach(unittest.TestCase):
             NLP('Legumes with a slender stipe 2-5 mm, 10-12 mm, ca. '
                 '4 mm high and ca. 3 mm wide, '),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
+             {'subpart': 'stipe', 'trait': 'subpart', 'start': 23, 'end': 28},
              {'length_low': 2, 'length_high': 5, 'length_units': 'mm',
-              'trait': 'legume_stipe_size', 'start': 8, 'end': 35},
+              'trait': 'legume_stipe_size', 'start': 29, 'end': 35},
              {'length_low': 10, 'length_high': 12, 'length_units': 'mm',
               'trait': 'legume_size', 'start': 37, 'end': 45},
              {'height_low': 4, 'height_units': 'mm', 'trait': 'legume_size',
@@ -141,25 +142,15 @@ class TestAttach(unittest.TestCase):
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
-             {'height_high': 30,
-              'height_units': 'cm',
-              'trait': 'plant_size',
-              'start': 7,
-              'end': 20},
-             {'color': 'white', 'trait': 'plant_hair_color', 'start': 74,
-              'end': 79},
+             {'height_high': 30, 'height_units': 'cm',
+              'trait': 'plant_size', 'start': 7, 'end': 20},
+             {'color': 'white',
+              'trait': 'plant_hair_color', 'start': 74, 'end': 79},
              {'subpart': 'hair', 'trait': 'subpart', 'start': 80, 'end': 85},
-             {'length_low': 0.2,
-              'length_high': 1.5,
-              'length_units': 'mm',
-              'trait': 'plant_hair_size',
-              'start': 86,
-              'end': 96},
-             {'length_high': 3,
-              'length_units': 'mm',
-              'trait': 'plant_hair_size',
-              'start': 110,
-              'end': 117}]
+             {'length_low': 0.2, 'length_high': 1.5, 'length_units': 'mm',
+              'trait': 'plant_hair_size', 'start': 86, 'end': 96},
+             {'length_high': 3, 'length_units': 'mm',
+              'trait': 'plant_hair_size', 'start': 110, 'end': 117}]
         )
 
     def test_attach_12(self):
@@ -169,28 +160,18 @@ class TestAttach(unittest.TestCase):
                 with short spreading black hairs; teeth nearly equal, narrowly
                 triangular, 0.8-1 mm.""")),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
-             {'shape': 'tubular', 'trait': 'calyx_shape', 'start': 14,
-              'end': 21},
-             {'length_low': 8,
-              'length_high': 9,
-              'length_units': 'mm',
-              'trait': 'calyx_size',
-              'start': 23,
-              'end': 29},
-             {'color': 'black', 'trait': 'calyx_hair_color', 'start': 81,
-              'end': 86},
+             {'shape': 'tubular',
+              'trait': 'calyx_shape', 'start': 14, 'end': 21},
+             {'length_low': 8, 'length_high': 9, 'length_units': 'mm',
+              'trait': 'calyx_size', 'start': 23, 'end': 29},
+             {'color': 'black',
+              'trait': 'calyx_hair_color', 'start': 81, 'end': 86},
              {'subpart': 'hair', 'trait': 'subpart', 'start': 87, 'end': 92},
              {'subpart': 'tooth', 'trait': 'subpart', 'start': 94, 'end': 99},
              {'shape': 'triangular',
-              'trait': 'calyx_tooth_shape',
-              'start': 114,
-              'end': 133},
-             {'length_low': 0.8,
-              'length_high': 1.0,
-              'length_units': 'mm',
-              'trait': 'calyx_tooth_size',
-              'start': 135,
-              'end': 143}]
+              'trait': 'calyx_tooth_shape', 'start': 114, 'end': 133},
+             {'length_low': 0.8, 'length_high': 1.0, 'length_units': 'mm',
+              'trait': 'calyx_tooth_size', 'start': 135, 'end': 143}]
         )
 
     def test_attach_13(self):
@@ -202,47 +183,28 @@ class TestAttach(unittest.TestCase):
                 in lower 1/3 slightly constricted, base widened,
                 hastate-auriculate, apex emarginate;""")),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 10,
-              'length_high': 12,
-              'length_units': 'mm',
-              'trait': 'calyx_size',
-              'start': 6,
-              'end': 14},
+             {'length_low': 10, 'length_high': 12, 'length_units': 'mm',
+              'trait': 'calyx_size', 'start': 6, 'end': 14},
              {'subpart': 'hair', 'trait': 'subpart', 'start': 96, 'end': 101},
-             {'length_low': 1,
-              'length_high': 2,
-              'length_units': 'mm',
-              'trait': 'calyx_hair_size',
-              'start': 102,
-              'end': 108},
-             {'subpart': 'tooth', 'trait': 'subpart', 'start': 110,
-              'end': 115},
-             {'length_low': 4,
-              'length_units': 'mm',
-              'trait': 'calyx_tooth_size',
-              'start': 116,
-              'end': 124},
+             {'length_low': 1, 'length_high': 2, 'length_units': 'mm',
+              'trait': 'calyx_hair_size', 'start': 102, 'end': 108},
+             {'subpart': 'tooth',
+              'trait': 'subpart', 'start': 110, 'end': 115},
+             {'length_low': 4, 'length_units': 'mm',
+              'trait': 'calyx_tooth_size', 'start': 116, 'end': 124},
              {'part': 'petal', 'trait': 'part', 'start': 126, 'end': 132},
-             {'color': 'white', 'trait': 'petal_color', 'start': 133,
-              'end': 138},
+             {'color': 'white',
+              'trait': 'petal_color', 'start': 133, 'end': 138},
              {'shape': 'oblong-pandurate',
-              'trait': 'petal_shape',
-              'start': 149,
-              'end': 165},
-             {'length_low': 25,
-              'width_low': 8,
-              'width_units': 'mm',
-              'trait': 'petal_size',
-              'start': 167,
-              'end': 180},
+              'trait': 'petal_shape', 'start': 149, 'end': 165},
+             {'length_low': 25, 'width_low': 8, 'width_units': 'mm',
+              'trait': 'petal_size', 'start': 167, 'end': 180},
              {'subpart': 'base', 'trait': 'subpart', 'start': 217, 'end': 221},
              {'shape': 'hastate-auriculate',
-              'trait': 'petal_base_shape',
-              'start': 231,
-              'end': 249},
+              'trait': 'petal_base_shape', 'start': 231, 'end': 249},
              {'subpart': 'apex', 'trait': 'subpart', 'start': 251, 'end': 255},
-             {'shape': 'emarginate', 'trait': 'petal_apex_shape', 'start': 256,
-              'end': 266}]
+             {'shape': 'emarginate',
+              'trait': 'petal_apex_shape', 'start': 256, 'end': 266}]
         )
 
     def test_attach_14(self):
@@ -251,33 +213,23 @@ class TestAttach(unittest.TestCase):
                 Racemes short, 3-9-flowered; peduncle 0.5-2 cm, loosely to
                 rather densely hairy; bracts 0.5-1 mm, white hairy.""")),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
-             {'low': 3,
-              'high': 9,
-              'trait': 'inflorescence_flower_count',
-              'start': 15,
-              'end': 27},
+             {'low': 3, 'high': 9,
+              'trait': 'inflorescence_flower_count', 'start': 15, 'end': 27},
              {'part': 'peduncle', 'trait': 'part', 'start': 29, 'end': 37},
-             {'length_low': 0.5,
-              'length_high': 2.0,
-              'length_units': 'cm',
-              'trait': 'peduncle_size',
-              'start': 38,
-              'end': 46},
+             {'length_low': 0.5, 'length_high': 2.0, 'length_units': 'cm',
+              'trait': 'peduncle_size', 'start': 38, 'end': 46},
              {'part': 'bract', 'trait': 'part', 'start': 81, 'end': 87},
-             {'length_low': 0.5,
-              'length_high': 1.0,
-              'length_units': 'mm',
-              'trait': 'bract_size',
-              'start': 88,
-              'end': 96},
+             {'length_low': 0.5, 'length_high': 1.0, 'length_units': 'mm',
+              'trait': 'bract_size', 'start': 88, 'end': 96},
              {'color': 'white', 'trait': 'bract_color', 'start': 98,
               'end': 103}]
         )
 
     def test_attach_15(self):
+        self.maxDiff = None
         self.assertEqual(
             NLP(shorten("""
-                hypanthium  pistillodes with 3-lobed ovary.""")),
+                hypanthium pistillodes with 3-lobed ovary.""")),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'part': 'pistol', 'trait': 'part', 'start': 11, 'end': 22},
              {'low': 3, 'trait': 'ovary_lobe_count', 'start': 28, 'end': 35},
@@ -289,9 +241,7 @@ class TestAttach(unittest.TestCase):
             NLP(shorten('roots thin, without thick, woody rootstock')),
             [{'part': 'root', 'trait': 'part', 'start': 0, 'end': 5},
              {'woodiness': 'not woody',
-              'trait': 'rootstock_woodiness',
-              'start': 27,
-              'end': 32},
+              'trait': 'rootstock_woodiness', 'start': 12, 'end': 32},
              {'part': 'rootstock', 'trait': 'part', 'start': 33, 'end': 42}]
         )
 
@@ -301,30 +251,15 @@ class TestAttach(unittest.TestCase):
                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                 1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
-             {'length_low': 6,
-              'length_high': 7,
-              'length_units': 'mm',
-              'trait': 'legume_stipe_size',
-              'start': 8,
-              'end': 27},
-             {'shape': 'ellipsoid', 'trait': 'legume_shape', 'start': 41,
-              'end': 59},
-             {'length_low': 1.5,
-              'length_high': 2.4,
-              'length_units': 'cm',
-              'trait': 'legume_size',
-              'start': 61,
-              'end': 71},
-             {'width_low': 6,
-              'width_high': 7,
-              'width_units': 'mm',
-              'trait': 'legume_size',
-              'start': 73,
-              'end': 84},
-             {'height_low': 4,
-              'height_high': 5,
-              'height_units': 'mm',
-              'trait': 'legume_size',
-              'start': 89,
-              'end': 100}]
+             {'subpart': 'stipe', 'trait': 'subpart', 'start': 15, 'end': 20},
+             {'length_low': 6, 'length_high': 7, 'length_units': 'mm',
+              'trait': 'legume_stipe_size', 'start': 21, 'end': 27},
+             {'shape': 'ellipsoid',
+              'trait': 'legume_shape', 'start': 41, 'end': 59},
+             {'length_low': 1.5, 'length_high': 2.4, 'length_units': 'cm',
+              'trait': 'legume_size', 'start': 61, 'end': 71},
+             {'width_low': 6, 'width_high': 7, 'width_units': 'mm',
+              'trait': 'legume_size', 'start': 73, 'end': 84},
+             {'height_low': 4, 'height_high': 5, 'height_units': 'mm',
+              'trait': 'legume_size', 'start': 89, 'end': 100}]
         )
