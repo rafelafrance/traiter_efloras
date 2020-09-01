@@ -263,3 +263,20 @@ class TestAttach(unittest.TestCase):
              {'height_low': 4, 'height_high': 5, 'height_units': 'mm',
               'trait': 'legume_size', 'start': 89, 'end': 100}]
         )
+
+    def test_size_18(self):
+        self.assertEqual(
+            NLP(shorten("""
+                Leaves 1.5-3 cm; leaflets 2-6 × 1-1.5 mm, with hairs ca. 1 mm.
+                """)),
+            [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
+             {'length_low': 1.5, 'length_high': 3.0, 'length_units': 'cm',
+              'trait': 'leaf_size', 'start': 7, 'end': 15},
+             {'part': 'leaflet', 'trait': 'part', 'start': 17, 'end': 25},
+             {'length_low': 2, 'length_high': 6,
+              'width_low': 1.0, 'width_high': 1.5, 'width_units': 'mm',
+              'trait': 'leaflet_size', 'start': 26, 'end': 40},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 47, 'end': 52},
+             {'length_low': 1, 'length_units': 'mm',
+              'trait': 'leaflet_hair_size', 'start': 53, 'end': 61}]
+        )

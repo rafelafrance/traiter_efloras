@@ -182,12 +182,9 @@ class TestSize(unittest.TestCase):
              {'length_low': 3, 'length_high': 5, 'length_units': 'cm',
               'location': 'terminal',
               'trait': 'leaflet_size', 'start': 17, 'end': 23},
-             {'part': 'leaf', 'location': 'terminal',
-              'trait': 'part', 'start': 25, 'end': 30},
-             {'part': 'petiole', 'location': 'terminal',
-              'trait': 'part', 'start': 31, 'end': 40},
+             {'part': 'leaf', 'trait': 'part', 'start': 25, 'end': 30},
+             {'part': 'petiole', 'trait': 'part', 'start': 31, 'end': 40},
              {'length_low': 3, 'length_high': 12, 'length_units': 'mm',
-              'location': 'terminal',
               'trait': 'petiole_size', 'start': 41, 'end': 48}]
         )
 

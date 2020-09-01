@@ -48,7 +48,8 @@ def part_to_trait(span, part):
         if label in PLANT_LEVEL_LABELS:
             token.ent_type_ = new_label(token, None)
         elif label == 'part':
-            augment_data(token, part)
+            if token.i > span.start:
+                augment_data(token, part)
             part = token
         elif label == 'subpart':
             subpart = token

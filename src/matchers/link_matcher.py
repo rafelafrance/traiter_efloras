@@ -58,7 +58,14 @@ class LinkMatcher(TraitMatcher):
             else:
                 matches.append(curr)
 
-        return matches
+        return sorted(matches, key=lambda m: m[1])
+
+    @staticmethod
+    def closest_part(start, parts):
+        """Find the part that is closest to the current match."""
+        part = [p for p in parts if p.i < start]
+        part = sorted(part, key=lambda p: -p.i)
+        return part[0] if part else None
 
     def scan(self, doc, matchers, step):
         """Find all terms in the text and return the resulting doc."""
@@ -72,10 +79,10 @@ class LinkMatcher(TraitMatcher):
                        if m[1] >= sent.start and m[2] <= sent.end]
             matches = self.filter_matches(matches)
 
-            part = [t for t in sent if t.ent_type_ == 'part']
-            part = part[0] if part else None
+            parts = [t for t in sent if t.ent_type_ == 'part']
 
             for match_id, start, end in matches:
+                part = self.closest_part(start, parts)
                 span = doc[start:end]
                 label = self.nlp.vocab.strings[match_id]
                 if action := self.actions.get(label):
