@@ -14,9 +14,8 @@ def csv_writer(args, rows):
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
     for row in rows:
-        row['raw_traits'] = dict(row['traits'])
+        row['raw_traits'] = row['traits']
         del row['traits']
-        del row['sents']
         build_columns(row)
 
     df = pd.DataFrame(rows)
@@ -28,38 +27,36 @@ def build_columns(row):
     extras = set(""" sex location group """.split())
     skips = extras | {'start', 'end'}
 
-    for label, traits in row['raw_traits'].items():
-        if label in ('part', 'subpart'):
+    columns = defaultdict(list)
+    for trait in row['raw_traits']:
+        label = trait['trait']
+        header = sorted(v for k, v in trait.items() if k in extras)
+        header = '.'.join([label] + header)
+        value = {k: v for k, v in trait.items() if k not in skips}
+        columns[header].append(value)
+
+        columns[f'{header}.raw'].append(
+            row['text'][trait['start']:trait['end']])
+
+    for header, value_list in columns.items():
+        if header.endswith('.raw'):
+            row[header] = value_list
             continue
-        columns = defaultdict(list)
-        for trait in traits:
-            header = sorted(v for k, v in trait.items() if k in extras)
-            header = '.'.join([label] + header)
-            value = {k: v for k, v in trait.items() if k not in skips}
-            columns[header].append(value)
 
-            columns[f'{header}.raw'].append(
-                row['text'][trait['start']:trait['end']])
+        keys = set()
+        all_strings = True
+        for data in value_list:
+            for key, value in data.items():
+                keys.add(key)
+                all_strings &= isinstance(value, str)
 
-        for header, value_list in columns.items():
-            if header.endswith('.raw'):
-                row[header] = value_list
-                continue
-
-            keys = set()
-            all_strings = True
-            for data in value_list:
-                for key, value in data.items():
-                    keys.add(key)
-                    all_strings &= isinstance(value, str)
-
-            if len(keys) == 1 and all_strings:
-                value = {v[k] for v in value_list for k in v.keys()}
-                row[header] = ', '.join(sorted(value))
-            elif header.endswith('_size'):
-                extract_sizes(row, header, value_list)
-            else:
-                extract_traits(row, header, value_list)
+        if len(keys) == 1 and all_strings:
+            value = {v[k] for v in value_list for k in v.keys()}
+            row[header] = ', '.join(sorted(value))
+        elif header.endswith('_size'):
+            extract_sizes(row, header, value_list)
+        else:
+            extract_traits(row, header, value_list)
 
     return row
 

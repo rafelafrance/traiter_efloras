@@ -85,8 +85,6 @@ color_leader,silvery,lower,silver,,,
 color_leader,violetish,lower,purple,,,
 color_leader,whitish,lower,white,,,
 color_leader,yellowish,lower,yellow,,,
-conj_phrase,and with,lower,,,,Needed because we treat “with” specially
-conj_phrase,or with,lower,,,,Needed because we treat “with” specially
 count_suffix,-callose,lower,callose,,,
 count_suffix,-columned,lower,colum,,,
 count_suffix,-flowered,lower,flower,,,

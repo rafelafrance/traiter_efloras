@@ -264,7 +264,7 @@ class TestAttach(unittest.TestCase):
               'trait': 'legume_size', 'start': 89, 'end': 100}]
         )
 
-    def test_size_18(self):
+    def test_attach_18(self):
         self.assertEqual(
             NLP(shorten("""
                 Leaves 1.5-3 cm; leaflets 2-6 × 1-1.5 mm, with hairs ca. 1 mm.
@@ -279,4 +279,150 @@ class TestAttach(unittest.TestCase):
              {'subpart': 'hair', 'trait': 'subpart', 'start': 47, 'end': 52},
              {'length_low': 1, 'length_units': 'mm',
               'trait': 'leaflet_hair_size', 'start': 53, 'end': 61}]
+        )
+
+    def test_attach_19(self):
+        self.assertEqual(
+            NLP(shorten("""
+                Calyx 7-8 mm, rather densely covered with ± medifixed,
+                subappressed, flexuous, black hairs 0.5-1 mm,
+                """)),
+            [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
+             {'length_low': 7, 'length_high': 8, 'length_units': 'mm',
+              'trait': 'calyx_size', 'start': 6, 'end': 12},
+             {'color': 'black',
+              'trait': 'calyx_hair_color', 'start': 79, 'end': 84},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 85, 'end': 90},
+             {'length_low': 0.5, 'length_high': 1.0, 'length_units': 'mm',
+              'trait': 'calyx_hair_size', 'start': 91, 'end': 99}]
+        )
+
+    def test_attach_20(self):
+        self.assertEqual(
+            NLP(shorten("""
+                Plants acaulescent, covered with mostly medifixed white hairs
+                """)),
+            [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
+             {'habit': 'acaulescent',
+              'trait': 'plant_habit', 'start': 7, 'end': 18},
+             {'color': 'white',
+              'trait': 'plant_hair_color', 'start': 50, 'end': 55},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 56, 'end': 61}]
+        )
+
+    def test_attach_21(self):
+        self.assertEqual(
+            NLP(shorten("""
+                leaflets in 7-9 pairs, widely obovate to suborbicular,
+                4-6 × 3.5-5.5 mm, abaxially rather densely and adaxially
+                sparsely to loosely covered with symmetrically or
+                asymmetrically, partly flexuous, ascending to spreading,
+                white hairs
+                """)),
+            [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
+             {'low': 7, 'high': 9, 'group': 'pairs',
+              'trait': 'leaflet_count', 'start': 12, 'end': 21},
+             {'shape': 'obovate',
+              'trait': 'leaflet_shape', 'start': 30, 'end': 37},
+             {'shape': 'orbicular',
+              'trait': 'leaflet_shape', 'start': 41, 'end': 53},
+             {'length_low': 4, 'length_high': 6,
+              'width_low': 3.5, 'width_high': 5.5, 'width_units': 'mm',
+              'trait': 'leaflet_size', 'start': 55, 'end': 71},
+             {'color': 'white',
+              'trait': 'leaflet_hair_color', 'start': 219, 'end': 224},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 225, 'end': 230}]
+        )
+
+    def test_attach_22(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
+                 1.5-2.4 cm, 6-7 mm wide and 4-5 mm high, with a beak ca. 2 mm;
+                 valves membranous, rather densely covered
+                 with very short white and black nearly ap­pressed hairs.
+                """)),
+            [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
+             {'subpart': 'stipe', 'trait': 'subpart', 'start': 15, 'end': 20},
+             {'length_low': 6, 'length_high': 7, 'length_units': 'mm',
+              'trait': 'legume_stipe_size', 'start': 21, 'end': 27},
+             {'shape': 'ellipsoid', 'trait': 'legume_shape', 'start': 41,
+              'end': 59},
+             {'length_low': 1.5, 'length_high': 2.4, 'length_units': 'cm',
+              'trait': 'legume_size', 'start': 61, 'end': 71},
+             {'width_low': 6, 'width_high': 7, 'width_units': 'mm',
+              'trait': 'legume_size', 'start': 73, 'end': 84},
+             {'height_low': 4, 'height_high': 5, 'height_units': 'mm',
+              'trait': 'legume_size', 'start': 89, 'end': 100},
+             {'subpart': 'beak', 'trait': 'subpart', 'start': 109, 'end': 113},
+             {'length_low': 2, 'length_units': 'mm',
+              'trait': 'legume_beak_size', 'start': 114, 'end': 122},
+             {'color': 'white',
+              'trait': 'legume_hair_color', 'start': 182, 'end': 187},
+             {'color': 'black',
+              'trait': 'legume_hair_color', 'start': 192, 'end': 197},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 216, 'end': 221}]
+        )
+
+    def test_attach_23(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 leaflets in 3-5 pairs, surfaces with minute blackish dots
+                 often only in basal 1/2, rounded at apex.
+                """)),
+            [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
+             {'low': 3, 'high': 5, 'group': 'pairs',
+              'trait': 'leaflet_count', 'start': 12, 'end': 21},
+             {'subpart': 'surface',
+              'trait': 'subpart', 'start': 23, 'end': 31},
+             {'color': 'black-dots',
+              'trait': 'leaflet_surface_color', 'start': 44, 'end': 57},
+             {'location': 'basal',
+              'trait': 'leaflet_surface_location', 'start': 72, 'end': 77},
+             {'shape': 'orbicular',
+              'trait': 'leaflet_apex_shape', 'start': 83, 'end': 90},
+             {'subpart': 'apex', 'trait': 'subpart', 'start': 94, 'end': 98}]
+        )
+
+    def test_attach_24(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 Calyx 7-8 mm, rather densely covered
+                 with ± medifixed, subappressed, flexuous, black hairs
+                 0.5-1 mm,
+                 with some longer, ascending, white and black hairs mixed in;
+                """)),
+            [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
+             {'length_low': 7, 'length_high': 8, 'length_units': 'mm',
+              'trait': 'calyx_size', 'start': 6, 'end': 12},
+             {'color': 'black',
+              'trait': 'calyx_hair_color', 'start': 79, 'end': 84},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 85, 'end': 90},
+             {'length_low': 0.5, 'length_high': 1.0, 'length_units': 'mm',
+              'trait': 'calyx_hair_size', 'start': 91, 'end': 99},
+             {'color': 'white',
+              'trait': 'calyx_hair_color', 'start': 130, 'end': 135},
+             {'color': 'black',
+              'trait': 'calyx_hair_color', 'start': 140, 'end': 145},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 146, 'end': 151}]
+        )
+
+    def test_attach_25(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 Legumes curved, 9-12 mm, 2.5-3 mm high, keeled ven­trally;
+                 valves with long, ascending, white hairs.
+                """)),
+            [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
+             {'shape': 'curved',
+              'trait': 'legume_shape', 'start': 8, 'end': 14},
+             {'length_low': 9, 'length_high': 12, 'length_units': 'mm',
+              'trait': 'legume_size', 'start': 16, 'end': 23},
+             {'height_low': 2.5, 'height_high': 3.0, 'height_units': 'mm',
+              'trait': 'legume_size', 'start': 25, 'end': 38},
+             {'shape': 'keeled',
+              'trait': 'legume_shape', 'start': 40, 'end': 46},
+             {'color': 'white',
+              'trait': 'legume_hair_color', 'start': 88, 'end': 93},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 94, 'end': 99}]
         )

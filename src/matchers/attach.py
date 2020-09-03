@@ -8,6 +8,8 @@ PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 AUGMENT = ('sex', 'location')
 SUBPART_END = {';', '.'}
 SUBPART_ONCE = {'size'}
+WITH_WORDS = """ with having only into """.split()
+SKIP = ['', 'shape_leader', 'dimension']
 
 LABEL = {
     'suffix_count': 'count',
@@ -113,16 +115,47 @@ ATTACH = {
             'priority': 10,
             'patterns': [
                 [
-                    {'LOWER': {'IN': ['with', 'having', 'only']}},
-                    {'LOWER': 'a', 'OP': '?'},
-                    {'POS': {'IN': ['NOUN', 'ADJ', 'ADV', 'VERB']}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': ['color', 'shape']}},
+                    {'POS': {'IN': ['ADP']}},
+                    {'ENT_TYPE': {'IN': ['subpart']}},
+                ],
+                [
+                    {'LOWER': {'IN': WITH_WORDS}},
+                    {'ENT_TYPE': {'IN': SKIP}, 'OP': '*'},
+                    {'_': {'step': TRAIT_STEP}},
+                    {'ENT_TYPE': {'IN': ['part', 'subpart']}},
+                    {'_': {'step': TRAIT_STEP}, 'OP': '?'},
+                    {'TEXT': {'IN': COMMA}, 'OP': '?'},
+                    {'ENT_TYPE': 'part_location', 'OP': '?'},
+                ],
+                [
+                    {'LOWER': {'IN': WITH_WORDS}},
+                    {'ENT_TYPE': {'IN': SKIP}, 'OP': '*'},
                     {'_': {'step': TRAIT_STEP}},
                     {'ENT_TYPE': {'IN': ['part', 'subpart']}},
                     {'_': {'step': TRAIT_STEP}, 'OP': '?'},
                     {'TEXT': {'IN': COMMA}, 'OP': '?'},
                     {'ENT_TYPE': 'part_location', 'OP': '?'},
                     {'POS': {'IN': ['ADP']}, 'OP': '?'},
-                    {'_': {'step': TRAIT_STEP}, 'OP': '?'},
+                    {'_': {'step': TRAIT_STEP}},
+                ],
+                [
+                    {'LOWER': {'IN': WITH_WORDS}},
+                    {'ENT_TYPE': {'IN': SKIP}, 'OP': '*'},
+                    {'ENT_TYPE': {'NOT_IN': SKIP}},
+                    {'POS': {'IN': ['CCONJ']}, 'OP': '?'},
+                    {'ENT_TYPE': {'NOT_IN': SKIP}},
+                    {'POS': {'IN': ['ADV', 'VERB']}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': ['subpart']}},
+                ],
+                [
+                    {'LOWER': {'IN': WITH_WORDS}},
+                    {'ENT_TYPE': {'IN': SKIP}, 'OP': '*'},
+                    {'ENT_TYPE': {'NOT_IN': SKIP}},
+                    {'POS': {'IN': ['CCONJ']}, 'OP': '?'},
+                    {'ENT_TYPE': {'NOT_IN': SKIP}},
+                    {'POS': {'IN': ['ADV', 'VERB', 'ADJ']}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': ['subpart']}},
                 ],
                 [
                     {'ENT_TYPE': 'woodiness'},
@@ -136,7 +169,7 @@ ATTACH = {
             'priority': 10,
             'patterns': [
                 [
-                    {'LOWER': {'IN': ['with', 'having', 'only']}},
+                    {'LOWER': {'IN': WITH_WORDS}},
                     {'LOWER': 'a', 'OP': '?'},
                     {'ENT_TYPE': {'IN': ['part', 'subpart']}},
                     {'_': {'step': TRAIT_STEP}},
