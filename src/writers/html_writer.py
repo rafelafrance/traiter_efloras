@@ -1,14 +1,16 @@
 """Write output to an HTML file."""
 
-import html
-from collections import defaultdict, deque, namedtuple
+from collections import defaultdict, namedtuple
 from datetime import datetime
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-CLASSES = [f'c{i}' for i in range(23)]
-COLORS = cycle(CLASSES)
+BACKGROUND_CLASSES = [f'c{i}' for i in range(14)]
+BACKGROUNDS = cycle(BACKGROUND_CLASSES)
+
+BORDER_CLASSES = [f'b{i}' for i in range(14)]
+BORDERS = cycle(BORDER_CLASSES)
 
 Cut = namedtuple('Cut', 'pos open len id end type title')
 Segment = namedtuple('Segment', 'start end')
@@ -16,18 +18,14 @@ Segment = namedtuple('Segment', 'start end')
 
 def html_writer(args, rows):
     """Output the data."""
-    tags = build_tags()
-
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
-    colors = {t['trait'] for r in rows for t in r['traits']}
-    colors -= {'part', 'subpart'}
-    colors = {label: next(COLORS) for label in sorted(colors)}
+    classes = build_classes(rows)
 
     for row in rows:
         row['raw_text'] = row['text']
-        row['text'] = format_text(row, tags, colors)
-        row['traits'] = format_traits(row, colors)
+        row['text'] = format_text(row, classes)
+        row['traits'] = format_traits(row, classes)
 
     env = Environment(
         loader=FileSystemLoader('./src/writers/templates'),
@@ -40,175 +38,88 @@ def html_writer(args, rows):
     args.html_file.close()
 
 
-def format_traits(row, colors):
+def build_classes(rows):
+    """Make tags for HTML text color highlighting.
+
+    Tag keys are the trait name and if it's an open or close tag.
+    For example:
+        (trait_name, is_open) -> <span class="css_class">
+        (trait_name, not_open) -> </span>
+    """
+    backgrounds = {}
+    borders = {}
+
+    tags = {
+        'part': 'bold',
+        'subpart': 'bold-italic',
+    }
+
+    for row in rows:
+        for trait in row['traits']:
+            name = trait['trait']
+            if name in {'part', 'subpart'}:
+                continue
+            name_parts = name.split('_')
+            bg, border = name_parts[0], name_parts[-1]
+            if bg not in backgrounds:
+                backgrounds[bg] = next(BACKGROUNDS)
+            if border not in borders:
+                borders[border] = next(BORDERS)
+            classes = f'{backgrounds[bg]} {borders[border]} c{backgrounds[bg]}'
+            tags[name] = classes
+    return tags
+
+
+def format_traits(row, classes):
     """Format the traits for HTML."""
     new_dict = {}
-    traits = defaultdict(list)
+
+    # Group by trait name
+    groups = defaultdict(list)
     for trait in row['traits']:
-        traits[trait['trait']].append(trait)
-    traits = dict(sorted(traits.items(), key=lambda i: i[0]))
-    for label, traits in traits.items():
-        if label in ('part', 'subpart'):
-            continue
-        new_label = f'<span class="{colors[label]}">{label}</span>'
-        new_traits = {}
+        if trait['trait'] not in {'part', 'subpart'}:
+            groups[trait['trait']].append(trait)
+    groups = dict(sorted(groups.items(), key=lambda i: i[0]))
+
+    # Format each trait group
+    for name, traits in groups.items():
+        span = f'<span class="{classes[name]}">{name}</span>'
+
+        # Format each trait within a trait group
+        new_traits = []
         for trait in traits:
             text = row['raw_text'][trait['start']:trait['end']]
             trait = ', '.join(f'<span title="{text}">{k}:&nbsp;{v}</span>'
                               for k, v in trait.items()
                               if k not in ('start', 'end', 'trait'))
-            new_traits[trait] = 1
-        new_dict[new_label] = '<br/>'.join(new_traits.keys())
+            new_traits.append(trait)
+        new_dict[span] = '<br/>'.join(new_traits)
 
     return new_dict
 
 
-def format_text(row, tags=None, colors=None):
+def format_text(row, classes):
     """Colorize and format the text for HTML."""
-    text = row['text']
-    cuts = []
-    cut_id = 0
+    text = row['raw_text']
+    frags = []
 
+    prev = 0
     for trait in row['traits']:
-        label = trait['trait']
-        title_label = ' '.join(label.split('_'))
-        color = colors.get(label)
-        if not color:
-            continue
+        name = trait['trait']
+        label = ' '.join(trait['trait'].split('_'))
+        start = trait['start']
+        end = trait['end']
         title = ', '.join(f'{k} = {v}' for k, v in trait.items()
-                          if k not in ('start', 'end', 'trait'))
-        title = f'{title_label}: {title}'
-        cut_id = append_endpoints(
-            cuts, cut_id, Segment(trait['start'], trait['end']),
-            color, title=title)
+                          if k not in {'start', 'end', 'trait'})
+        title = f'{label}: {title}'
+        if prev < start:
+            frags.append(text[prev:start])
+        frags.append(f'<span class="{classes[name]}" title="{title}">')
+        frags.append(text[start:end])
+        frags.append('</span>')
+        prev = end
 
-    if parts := [t for t in row['traits'] if t['trait'] == 'part']:
-        for part in parts:
-            if part['end']:
-                cut_id = append_endpoints(
-                    cuts, cut_id, Segment(part['start'], part['end']), 'bold')
+    if len(text) > prev:
+        frags.append(text[prev:])
 
-    if parts := [t for t in row['traits'] if t['trait'] == 'subpart']:
-        for part in parts:
-            cut_id = append_endpoints(
-                cuts, cut_id,
-                Segment(part['start'], part['end']), 'bold_italic')
-
-    return insert_markup(text, cuts, tags)
-
-
-def insert_markup(text, cuts, tags):
-    """Insert formatting markup for text highlighting etc."""
-    stack = deque()
-    parts = []
-
-    prev_end = 0
-    for cut in sorted(cuts):
-
-        # Add text before the tag
-        if cut.pos != prev_end:
-            parts.append(html.escape(text[prev_end:cut.pos]))
-            prev_end = cut.pos
-
-        # Add an open tag
-        if cut.open:
-            tag = tags[(cut.type, True)]
-            if cut.title:
-                tag = tag.replace('>', f' title="{cut.title}">')
-            parts.append(tag)  # Add tag to output
-            stack.appendleft(cut)  # Prepend open cut to stack
-
-        # Close tags are more complicated. We have to search for the
-        # matching open tag on the stack & remove it. We also need to
-        # reopen any intervening open tags. All while adding the
-        # appropriate close tags.
-        else:
-            # Find matching open tag while keeping any intervening tags
-            for idx in range(len(stack)):
-                # Append closing tag to output
-                parts.append(tags[(stack[0].type, False)])
-
-                # Is this the open tag we are looking for?
-                # Open tags have a negative ID and close tags are positive.
-                # This pushes the tags to the correct position for sorted
-                if abs(stack[0].id) == cut.id:
-                    break
-                stack.rotate(-1)
-            else:
-                raise IndexError('Matching open tag not found in stack.')
-            # Get rid of matching open tag
-            stack.popleft()
-
-            # Put intervening open tags back on stack & reopen in text
-            for _ in range(idx):
-                stack.rotate(1)
-                parts.append(tags[(stack[0].type, True)])
-
-    # Handle text after the last closing tag
-    if prev_end != len(text):
-        parts.append(html.escape(text[prev_end:]))
-
-    return ''.join(parts)
-
-
-def append_endpoints(cuts, cut_id, seg, tag_type, title=None):
-    """
-    Append endpoints to the cuts.
-
-    The only interesting point is that open cuts have a negative len and
-    matching close cuts have a positive len. This will push the cuts to the
-    correct position during a sort. Longer cuts need to surround inner cuts.
-
-    Like so:
-    [open_cut(len=-2), open_cut(len=-1), close_cut(len=1), close_cut(len=2)]
-
-    The same logic applies to the ID field. We push later tags outward:
-    [open_cut(id=-2), open_cut(id=-1), close_cut(id=1), close_cut(id=2)]
-    """
-    cut_id += 1  # Absolute value is the ID
-    trait_len = seg.end - seg.start
-
-    cuts.append(Cut(
-        pos=seg.start,
-        open=True,  # Close tags come before open tags
-        len=-trait_len,  # Longest tags open first
-        id=-cut_id,  # Force an order. Push open tags leftward
-        end=seg.end,
-        type=tag_type,
-        title=title,
-    ))
-
-    cuts.append(Cut(
-        pos=seg.end,
-        open=False,  # Close tags come before open tags
-        len=trait_len,  # Longest tags close last
-        id=cut_id,  # Force an order. Push close tags rightward
-        end=seg.end,
-        type=tag_type,
-        title=None,
-    ))
-
-    return cut_id
-
-
-def build_tags():
-    """
-    Make tags for HTML text color highlighting.
-
-    Tag keys are the the CSS class and if it's an open or close tag.
-    For example:
-        (css_class, is_open) -> <span class="css_class">
-        (css_class, not_open) -> </span>
-    """
-    tags = {
-        ('bold', True): '<strong>',
-        ('bold', False): '</strong>',
-        ('bold_italic', True): '<strong><i>',
-        ('bold_italic', False): '</i></strong>',
-    }
-
-    for color in CLASSES:
-        tags[(color, True)] = f'<span class="{color}">'
-        tags[(color, False)] = '</span>'
-
-    return tags
+    return ''.join(frags)
