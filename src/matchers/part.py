@@ -4,7 +4,7 @@ import re
 
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
-from .shared import PER_COUNT, PER_COUNTS
+from .shared import PER_COUNT, PER_COUNTS, COLON
 from ..pylib.util import REPLACE, TERMS, TRAIT_STEP
 
 _PATTERNS = [t for t in TERMS if t['label'] == 'part']
@@ -25,8 +25,9 @@ def part(span):
         value = token.lower_
         if label == 'part':
             data['part'] = REPLACE.get(value, value)
-        elif label == 'sex':
-            data['sex'] = _SEX[value]
+        elif label in ('sex_enclosed', 'sex'):
+            value = re.sub(r'\W+', '', token.lower_)
+            data['sex'] = REPLACE.get(value, value)
         elif label == 'location':
             data['location'] = value
         elif token.lower_ in PER_COUNT:
@@ -42,8 +43,19 @@ PART = {
             'on_match': part,
             'patterns': [
                 [
-                    {'ENT_TYPE': {'IN': ['sex', 'location']}, 'OP': '*'},
+                    {'ENT_TYPE': {
+                        'IN': ['sex', 'sex_enclosed', 'location']}, 'OP': '*'},
                     {'ENT_TYPE': 'part'},
+                ],
+                [
+                    {'ENT_TYPE': 'part'},
+                    {'ENT_TYPE': {'IN': ['sex_enclosed']}},
+                ],
+                [
+                    {'ENT_TYPE': 'part'},
+                    {'TEXT': {'IN': COLON}, 'OP': '?'},
+                    {'ENT_TYPE': {'IN': ['sex']}},
+                    {'TEXT': {'IN': COLON}, 'OP': '?'},
                 ],
                 [
                     {'ENT_TYPE': 'location'},

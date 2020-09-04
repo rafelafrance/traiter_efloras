@@ -33,3 +33,26 @@ class TestPart(unittest.TestCase):
             NLP('Receptacle discoid.'),
             []
         )
+
+    def test_part_04(self):
+        self.assertEqual(
+            NLP('Flowers: sepals (pistillate)'),
+            [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 7},
+             {'part': 'sepal', 'sex': 'female',
+              'trait': 'part', 'start': 9, 'end': 28}]
+        )
+
+    def test_part_05(self):
+        self.assertEqual(
+            NLP('Flowers: sepals (pistillate)'),
+            [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 7},
+             {'part': 'sepal', 'sex': 'female',
+              'trait': 'part', 'start': 9, 'end': 28}]
+        )
+
+    def test_part_06(self):
+        self.assertEqual(
+            NLP('Flowers: staminate:'),
+            [{'part': 'flower', 'sex': 'male',
+              'trait': 'part', 'start': 0, 'end': 19}]
+        )

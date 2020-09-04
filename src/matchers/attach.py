@@ -28,7 +28,7 @@ def augment_data(token, part):
 def new_label(token, part, subpart=None):
     """Relabel the token's entity type."""
     label = LABEL.get(token.ent_type_, token.ent_type_)
-    part = part._.data['part'] if part else 'plant'
+    part = part._.data.get('part', 'plant') if part else 'plant'
     if subpart:
         subpart = subpart._.data.get('subpart')
     else:
@@ -158,7 +158,7 @@ ATTACH = {
                     {'ENT_TYPE': {'IN': ['subpart']}},
                 ],
                 [
-                    {'ENT_TYPE': 'woodiness'},
+                    {'ENT_TYPE': {'IN': ['color', 'woodiness']}},
                     {'ENT_TYPE': {'IN': ['part', 'subpart']}},
                 ],
             ],

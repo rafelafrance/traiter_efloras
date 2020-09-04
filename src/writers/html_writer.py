@@ -2,6 +2,7 @@
 
 from collections import defaultdict, namedtuple
 from datetime import datetime
+from html import escape
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
@@ -113,9 +114,9 @@ def format_text(row, classes):
                           if k not in {'start', 'end', 'trait'})
         title = f'{label}: {title}'
         if prev < start:
-            frags.append(text[prev:start])
+            frags.append(escape(text[prev:start]))
         frags.append(f'<span class="{classes[name]}" title="{title}">')
-        frags.append(text[start:end])
+        frags.append(escape(text[start:end]))
         frags.append('</span>')
         prev = end
 
