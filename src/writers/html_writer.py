@@ -1,20 +1,19 @@
 """Write output to an HTML file."""
 
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from datetime import datetime
 from html import escape
 from itertools import cycle
 
 from jinja2 import Environment, FileSystemLoader
 
-BACKGROUND_CLASSES = [f'c{i}' for i in range(14)]
+COLOR_COUNT = 14
+
+BACKGROUND_CLASSES = [f'c{i}' for i in range(COLOR_COUNT)]
 BACKGROUNDS = cycle(BACKGROUND_CLASSES)
 
-BORDER_CLASSES = [f'b{i}' for i in range(14)]
+BORDER_CLASSES = [f'b{i}' for i in range(COLOR_COUNT)]
 BORDERS = cycle(BORDER_CLASSES)
-
-Cut = namedtuple('Cut', 'pos open len id end type title')
-Segment = namedtuple('Segment', 'start end')
 
 
 def html_writer(args, rows):

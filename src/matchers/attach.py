@@ -1,15 +1,14 @@
 """Patterns for attaching traits to plant parts."""
 
 from ..matchers.descriptor import DESCRIPTOR_LABELS
-from ..matchers.shared import DOT, COMMA
+from ..matchers.shared import COMMA, DOT
 from ..pylib.util import LINK_STEP, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 AUGMENT = ('sex', 'location')
-SUBPART_END = {';', '.'}
 SUBPART_ONCE = {'size'}
 WITH_WORDS = """ with having only into """.split()
-SKIP = ['', 'shape_leader', 'dimension']
+SKIP = ['', 'shape_leader', 'dimension', 'ender']
 
 LABEL = {
     'suffix_count': 'count',
@@ -29,10 +28,13 @@ def new_label(token, part, subpart=None):
     """Relabel the token's entity type."""
     label = LABEL.get(token.ent_type_, token.ent_type_)
     part = part._.data.get('part', 'plant') if part else 'plant'
-    if subpart:
+    if token._.data.get('_subpart'):
+        subpart = token._.data['_subpart']
+    elif subpart:
         subpart = subpart._.data.get('subpart')
-    else:
-        subpart = token._.data.get('_subpart')
+
+    token._.data['_part'] = part
+    token._.data['_subpart'] = subpart
 
     label = f'{part}_{subpart}_{label}' if subpart else f'{part}_{label}'
     label = {p: 1 for p in label.split('_')}
@@ -56,7 +58,7 @@ def part_to_trait(span, part):
         elif label == 'subpart':
             subpart = token
             augment_data(token, part)
-        elif token.text in SUBPART_END:
+        elif label == 'ender':
             subpart = None
         elif label:
             trait = new_label(token, part, subpart)
@@ -145,21 +147,24 @@ ATTACH = {
                     {'ENT_TYPE': {'NOT_IN': SKIP}},
                     {'POS': {'IN': ['CCONJ']}, 'OP': '?'},
                     {'ENT_TYPE': {'NOT_IN': SKIP}},
-                    {'POS': {'IN': ['ADV', 'VERB']}, 'OP': '*'},
-                    {'ENT_TYPE': {'IN': ['subpart']}},
-                ],
-                [
-                    {'LOWER': {'IN': WITH_WORDS}},
-                    {'ENT_TYPE': {'IN': SKIP}, 'OP': '*'},
-                    {'ENT_TYPE': {'NOT_IN': SKIP}},
-                    {'POS': {'IN': ['CCONJ']}, 'OP': '?'},
-                    {'ENT_TYPE': {'NOT_IN': SKIP}},
                     {'POS': {'IN': ['ADV', 'VERB', 'ADJ']}, 'OP': '*'},
                     {'ENT_TYPE': {'IN': ['subpart']}},
                 ],
                 [
                     {'ENT_TYPE': {'IN': ['color', 'woodiness']}},
                     {'ENT_TYPE': {'IN': ['part', 'subpart']}},
+                ],
+                [
+                    {'LOWER': {'IN': WITH_WORDS}},
+                    {'LOWER': 'a', 'OP': '?'},
+                    {'ENT_TYPE': {'NOT_IN': ['part', 'subpart', 'ender']}},
+                    {'POS': {'IN': ['CCONJ']}, 'OP': '?'},
+                    {'ENT_TYPE': {'NOT_IN': ['part', 'subpart', 'ender']},
+                     'OP': '?'},
+                    {'POS': {'IN': ['ADV', 'ADJ']}, 'OP': '*'},
+                    {'ENT_TYPE': {'IN': ['part', 'subpart']}},
+                    {'POS': {'IN': ['ADP']}, 'OP': '?'},
+                    {'_': {'step': TRAIT_STEP}},
                 ],
             ],
         },
@@ -171,6 +176,8 @@ ATTACH = {
                 [
                     {'LOWER': {'IN': WITH_WORDS}},
                     {'LOWER': 'a', 'OP': '?'},
+                    {'ENT_TYPE': {'NOT_IN': ['part', 'subpart', 'ender']},
+                     'OP': '*'},
                     {'ENT_TYPE': {'IN': ['part', 'subpart']}},
                     {'_': {'step': TRAIT_STEP}},
                 ],

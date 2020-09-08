@@ -12,6 +12,7 @@ from .part_location import PART_LOCATION
 from .phrase import PHRASE
 from .range import RANGE
 from .shape import SHAPE
+from .shared import SHARED
 from .size import SIZE
 from .subpart import SUBPART
 from .suffix_count import SUFFIX_COUNT
@@ -20,7 +21,7 @@ from ..pylib.util import GROUP_STEP, TERMS, TRAIT_STEP
 PARTS = [PART, SUBPART]
 TRAITS = [
     ATTACH, COLOR, COUNT, DESCRIPTOR, MARGIN_SHAPE, PART_LOCATION, PHRASE,
-    RANGE, SHAPE, SIZE, SUFFIX_COUNT]
+    RANGE, SHAPE, SHARED, SIZE, SUFFIX_COUNT]
 
 MATCHERS = PARTS + TRAITS
 

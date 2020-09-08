@@ -12,14 +12,16 @@ INT = r'^\d+$'
 NUMBER = r'^\d+(\.\d*)?$'
 OPEN = ' ( [ '.split()
 PLUS = ' + '.split()
+SEMICOLON = ' ; '.split()
 SLASH = ' / '.split()
 QUOTE = ' " \' '.split()
 LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split()
 
+
 PER_COUNTS = ['pair', 'pairs']
 PER_COUNT = set(PER_COUNTS)
 
-QUEST = {
+SHARED = {
     GROUP_STEP: [
         {
             'label': 'quest',
@@ -29,8 +31,12 @@ QUEST = {
                     {'TEXT': '?'},
                     {'TEXT': {'IN': CLOSE}},
                 ],
-                [{'LOWER': '?'}],
+                [{'TEXT': '?'}],
             ]
+        },
+        {
+            'label': 'ender',
+            'patterns': [[{'TEXT': {'IN': DOT + SEMICOLON}}]]
         },
     ],
 }

@@ -24,3 +24,10 @@ class TestPartLocation(unittest.TestCase):
               'start': 9,
               'end': 15}]
         )
+
+    def test_part_location_02(self):
+        self.assertEqual(
+            NLP('completely embracing stem but not connate'),
+            [{'shape': 'not connate',
+              'trait': 'plant_shape', 'start': 30, 'end': 41}]
+        )

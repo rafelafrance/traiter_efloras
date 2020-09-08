@@ -97,22 +97,18 @@ class TestAttach(unittest.TestCase):
             NLP('Petals purple, keel with blue tip; standard 8-9 × ca. 6 mm, '
                 'widely elliptic, emarginate;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'color': 'purple', 'trait': 'petal_color', 'start': 7,
-              'end': 13},
+             {'color': 'purple',
+              'trait': 'petal_color', 'start': 7, 'end': 13},
              {'subpart': 'keel', 'trait': 'subpart', 'start': 15, 'end': 19},
-             {'color': 'blue-tip', 'trait': 'petal_keel_color', 'start': 25,
-              'end': 33},
-             {'length_low': 8,
-              'length_high': 9,
-              'width_low': 6,
-              'width_units': 'mm',
-              'trait': 'petal_size',
-              'start': 44,
-              'end': 58},
-             {'shape': 'elliptic', 'trait': 'petal_shape', 'start': 67,
-              'end': 75},
-             {'shape': 'emarginate', 'trait': 'petal_shape', 'start': 77,
-              'end': 87}]
+             {'color': 'blue-tip',
+              'trait': 'petal_keel_color', 'start': 25, 'end': 33},
+             {'length_low': 8, 'length_high': 9,
+              'width_low': 6, 'width_units': 'mm',
+              'trait': 'petal_size', 'start': 44, 'end': 58},
+             {'shape': 'elliptic',
+              'trait': 'petal_shape', 'start': 67, 'end': 75},
+             {'shape': 'emarginate',
+              'trait': 'petal_shape', 'start': 77, 'end': 87}]
         )
 
     def test_attach_10(self):
@@ -425,4 +421,56 @@ class TestAttach(unittest.TestCase):
              {'color': 'white',
               'trait': 'legume_hair_color', 'start': 88, 'end': 93},
              {'subpart': 'hair', 'trait': 'subpart', 'start': 94, 'end': 99}]
+        )
+
+    def test_attach_26(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 Plants 4-20 cm tall, acaulescent, with white or reddish when
+                 mature hairs up to 3 mm.
+                """)),
+            [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
+             {'height_low': 4, 'height_high': 20, 'height_units': 'cm',
+              'trait': 'plant_size', 'start': 7, 'end': 19},
+             {'habit': 'acaulescent',
+              'trait': 'plant_habit', 'start': 21, 'end': 32},
+             {'color': 'white',
+              'trait': 'plant_hair_color', 'start': 39, 'end': 44},
+             {'color': 'red',
+              'trait': 'plant_hair_color', 'start': 48, 'end': 55},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 68, 'end': 73},
+             {'length_high': 3, 'length_units': 'mm',
+              'trait': 'plant_hair_size', 'start': 77, 'end': 84}]
+        )
+
+    def test_attach_27(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 Plants with white hairs, near stipules and in inflorescence
+                 also black hairy. 
+                """)),
+            [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
+             {'color': 'white',
+              'trait': 'plant_hair_color', 'start': 12, 'end': 17},
+             {'subpart': 'hair', 'trait': 'subpart', 'start': 18, 'end': 23},
+             {'color': 'black',
+              'trait': 'plant_color', 'start': 65, 'end': 70}]
+        )
+
+    def test_attach_28(self):
+        self.assertEqual(
+            NLP(shorten("""
+                 Petals yellow, standard and keel often suffused with violet;
+                 apex retuse
+                """)),
+            [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
+             {'color': 'yellow',
+              'trait': 'petal_color', 'start': 7, 'end': 13},
+             {'subpart': 'keel', 'trait': 'subpart', 'start': 28, 'end': 32},
+             {'color': 'purple',
+              'trait': 'petal_keel_color', 'start': 53, 'end': 59},
+             {'subpart': 'apex', 'trait': 'subpart', 'start': 61, 'end': 65},
+             {'shape': 'retuse',
+              'trait': 'petal_apex_shape', 'start': 66, 'end': 72}
+             ]
         )

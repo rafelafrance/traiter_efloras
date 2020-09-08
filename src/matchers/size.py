@@ -3,7 +3,7 @@
 import re
 from functools import partial
 
-from .shared import CLOSE, CROSS, NUMBER, OPEN, QUEST
+from .shared import CLOSE, CROSS, NUMBER, OPEN
 from ..pylib.util import GROUP_STEP, REPLACE, TRAIT_STEP
 
 
@@ -180,7 +180,7 @@ SIZE = {
                     {'LOWER': 'to'},
                     {'ENT_TYPE': 'about', 'OP': '?'},
                     {'LOWER': {'REGEX': NUMBER}},
-                    {'ENT_TYPE': QUEST, 'OP': '?'},
+                    {'ENT_TYPE': 'quest', 'OP': '?'},
                     {'ENT_TYPE': 'length_units'},
                     {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 ],

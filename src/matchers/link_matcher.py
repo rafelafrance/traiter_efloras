@@ -53,7 +53,7 @@ class LinkMatcher(TraitMatcher):
             for prev in matches:
                 if (prev[1] <= curr[1] < prev[2]
                         or prev[1] < curr[2] <= prev[2]
-                        or curr[1] <= prev[1] and curr[2] >= prev[2]):
+                        or (curr[1] <= prev[1] and curr[2] >= prev[2])):
                     break
             else:
                 matches.append(curr)
