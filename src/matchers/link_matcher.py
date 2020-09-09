@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 
-from traiter.trait_matcher import TraitMatcher
+from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
 
 from .attach import ATTACH
 from ..pylib.util import LINK_STEP
@@ -63,7 +63,8 @@ class LinkMatcher(TraitMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    def scan(self, doc, matchers, step):
+    # pylint: disable=too-many-locals
+    def scan(self, doc, matchers, step):  # pylint: disable=unused-argument
         """Find all terms in the text and return the resulting doc."""
         all_matches = []
 

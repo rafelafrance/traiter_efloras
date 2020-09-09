@@ -4,7 +4,7 @@
 
 import unittest
 
-from traiter.pylib.util import shorten
+from traiter.pylib.util import shorten  # pylint: disable=import-error
 
 from src.pylib.pipeline import PIPELINE
 
@@ -222,7 +222,6 @@ class TestAttach(unittest.TestCase):
         )
 
     def test_attach_15(self):
-        self.maxDiff = None
         self.assertEqual(
             NLP(shorten("""
                 hypanthium pistillodes with 3-lobed ovary.""")),

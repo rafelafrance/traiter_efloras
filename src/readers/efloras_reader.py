@@ -8,6 +8,8 @@ from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 import src.pylib.family as futil
 from src.matchers.part import PATTERN_RE
 
+_TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
+
 
 def efloras_reader(args, families):
     """Perform the parsing."""
@@ -69,7 +71,7 @@ def get_family_tree(family):
 
         soup = BeautifulSoup(page, features='lxml')
 
-        for link in soup.findAll('a', attrs={'title': futil.TAXON_RE}):
+        for link in soup.findAll('a', attrs={'title': _TAXON_RE}):
             href = link.attrs['href']
             taxon_id = futil.get_taxon_id(href)
             taxa[taxon_id] = link.text

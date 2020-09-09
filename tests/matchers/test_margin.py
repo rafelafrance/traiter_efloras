@@ -4,7 +4,7 @@
 
 import unittest
 
-from traiter.pylib.util import shorten
+from traiter.pylib.util import shorten  # pylint: disable=import-error
 
 from src.pylib.pipeline import PIPELINE
 

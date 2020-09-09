@@ -1,5 +1,7 @@
 """Misc. utils."""
 
+# pylint: disable=import-error
+
 from pathlib import Path
 
 from traiter.pylib.terms import hyphenate_terms, read_terms

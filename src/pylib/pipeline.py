@@ -1,5 +1,7 @@
 """Create a trait pipeline."""
 
+# pylint: disable=import-error
+
 import spacy
 from traiter.sentencizer import Sentencizer
 from traiter.spacy_nlp import setup_tokenizer
@@ -10,7 +12,7 @@ from ..matchers.link_matcher import LinkMatcher
 from ..matchers.matcher import Matcher
 
 
-class Pipeline(TraitPipeline):
+class Pipeline(TraitPipeline):  # pylint: disable=too-few-public-methods
     """Build a custom traiter pipeline."""
 
     steps2link = {TRAIT_STEP, LINK_STEP}
