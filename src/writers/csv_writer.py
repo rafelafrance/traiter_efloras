@@ -79,7 +79,9 @@ def extract_sizes(row, header, value_list):
         for field, value in extract.items():
             key = f'{header}.{i}.{field}'
             parts = field.split('_')
-            if parts[1] == 'units':
+            if parts[0] == 'trait':
+                continue
+            if len(parts) > 1 and parts[1] == 'units':
                 row[key] = value
             elif parts[0] == 'length':
                 row[key] = convert(value, length_units)
