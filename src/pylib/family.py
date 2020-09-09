@@ -6,8 +6,7 @@ import sys
 from datetime import datetime
 from itertools import product
 
-DATA_DIR = BASE_DIR / 'data'
-
+from .util import DATA_DIR
 
 EFLORAS_FAMILIES = DATA_DIR / 'families' / 'eFloras_family_list.csv'
 
