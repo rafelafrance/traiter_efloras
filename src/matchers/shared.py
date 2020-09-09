@@ -14,9 +14,6 @@ OPEN = ' ( [ '.split()
 PLUS = ' + '.split()
 SEMICOLON = ' ; '.split()
 SLASH = ' / '.split()
-QUOTE = ' " \' '.split()
-LETTERS = 'abcdefghijklmnopqrstuvwxyz'.split()
-
 
 PER_COUNTS = ['pair', 'pairs']
 PER_COUNT = set(PER_COUNTS)

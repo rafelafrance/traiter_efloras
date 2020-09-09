@@ -6,14 +6,10 @@ import sys
 from datetime import datetime
 from itertools import product
 
-from .util import DATA_DIR
+DATA_DIR = BASE_DIR / 'data'
 
-EFLORAS_DIR = DATA_DIR / 'eFloras'
-FAMILY_DIR = DATA_DIR / 'families'
 
-CITE = 'http://www.efloras.org'
-EFLORAS_FAMILIES = FAMILY_DIR / 'eFloras_family_list.csv'
-TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
+EFLORAS_FAMILIES = DATA_DIR / 'families' / 'eFloras_family_list.csv'
 
 
 def family_dir(flora_id, family_name):
@@ -76,7 +72,7 @@ def get_families():
 
             times = {'created': '', 'modified': '', 'count': 0}
 
-            path = (EFLORAS_DIR
+            path = (DATA_DIR / 'eFloras'
                     / f"{family['family']}_{family['flora_id']}")
 
             if path.exists():
@@ -221,5 +217,5 @@ def check_family_flora_ids(args, families):
 
 def treatment_link(flora_id, taxon_id):
     """Build a link to the treatment page."""
-    return (f'{CITE}/florataxon.aspx?'
+    return ('http://www.efloras.org/florataxon.aspx?'
             rf'flora_id={flora_id}&taxon_id={taxon_id}')

@@ -8,12 +8,8 @@ from itertools import cycle
 from jinja2 import Environment, FileSystemLoader
 
 COLOR_COUNT = 14
-
-BACKGROUND_CLASSES = [f'c{i}' for i in range(COLOR_COUNT)]
-BACKGROUNDS = cycle(BACKGROUND_CLASSES)
-
-BORDER_CLASSES = [f'b{i}' for i in range(COLOR_COUNT)]
-BORDERS = cycle(BORDER_CLASSES)
+BACKGROUNDS = cycle([f'c{i}' for i in range(COLOR_COUNT)])
+BORDERS = cycle([f'b{i}' for i in range(COLOR_COUNT)])
 
 
 def html_writer(args, rows):

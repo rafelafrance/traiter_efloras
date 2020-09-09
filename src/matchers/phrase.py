@@ -3,8 +3,8 @@
 from ..pylib.util import REPLACE, TERMS, TRAIT_STEP
 from .shared import COMMA
 
-LITERAL_LABELS = {t['label'] for t in TERMS if t['category'] == 'literal'}
-LITERAL_LABELS = sorted(LITERAL_LABELS)
+_LITERAL_LABELS = {t['label'] for t in TERMS if t['category'] == 'literal'}
+_LITERAL_LABELS = sorted(_LITERAL_LABELS)
 
 
 def phrase(span):
@@ -16,7 +16,7 @@ def phrase(span):
         value = token.lower_
         if value == 'without':
             negate = 'not '
-        elif label in LITERAL_LABELS:
+        elif label in _LITERAL_LABELS:
             value = REPLACE.get(value, value)
             data = {'_relabel': label, label: negate + value}
     return data
@@ -29,13 +29,13 @@ PHRASE = {
             'on_match': phrase,
             'patterns': [
                 [
-                    {'ENT_TYPE': {'IN': LITERAL_LABELS}},
+                    {'ENT_TYPE': {'IN': _LITERAL_LABELS}},
                 ],
                 [
                     {'LOWER': {'IN': ['without']}},
                     {'POS': {'IN': ['ADJ']}, 'OP': '?'},
                     {'TEXT': {'IN': COMMA}, 'OP': '?'},
-                    {'ENT_TYPE': {'IN': LITERAL_LABELS}},
+                    {'ENT_TYPE': {'IN': _LITERAL_LABELS}},
                 ],
             ],
         },

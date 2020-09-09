@@ -5,8 +5,6 @@ from ..matchers.shared import COMMA, DOT
 from ..pylib.util import LINK_STEP, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
-AUGMENT = ('sex', 'location')
-SUBPART_ONCE = {'size'}
 WITH_WORDS = """ with having only into """.split()
 SKIP = ['', 'shape_leader', 'dimension', 'ender']
 
@@ -20,7 +18,8 @@ def augment_data(token, part):
     """Attach traits from the part to the current token."""
     if not part:
         return
-    data = {k: v for k, v in part._.data.items() if k in AUGMENT and v}
+    data = {k: v for k, v in part._.data.items()
+            if k in ('sex', 'location') and v}
     token._.data = {**token._.data, **data}
 
 
@@ -67,7 +66,7 @@ def part_to_trait(span, part):
                     subpart = None
                     subpart_traits = set()
                     trait = new_label(token, part, subpart)
-                elif label in SUBPART_ONCE:
+                elif label == 'size':
                     subpart_traits.add(trait)
             token.ent_type_ = trait
             augment_data(token, part)

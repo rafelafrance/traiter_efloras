@@ -4,9 +4,7 @@ from collections import defaultdict
 
 import pandas as pd
 
-from ..pylib.util import TERMS, convert
-
-DIMENSIONS = {t['replace'] for t in TERMS if t['label'] == 'dimension'}
+from ..pylib.util import convert
 
 
 def csv_writer(args, rows):

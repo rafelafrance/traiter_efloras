@@ -7,10 +7,6 @@ from traiter.trait_matcher import TraitMatcher
 from .attach import ATTACH
 from ..pylib.util import LINK_STEP
 
-MATCHERS = [ATTACH]
-
-AUGMENT = ('sex', 'location')
-
 
 class LinkMatcher(TraitMatcher):
     """Base matcher object."""
@@ -19,7 +15,7 @@ class LinkMatcher(TraitMatcher):
 
     def __init__(self, nlp):
         super().__init__(nlp)
-        links = self.add_patterns(MATCHERS, LINK_STEP)
+        links = self.add_patterns([ATTACH], LINK_STEP)
 
         # This is used for sorting matches
         self.priority = {m['label']: m.get('priority', 9999) for m in links}

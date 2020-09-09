@@ -13,8 +13,6 @@ _PATTERNS = sorted([t['pattern'] for t in _PATTERNS], key=len, reverse=True)
 PATTERN_RE = '|'.join(_PATTERNS)
 PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)
 
-_SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex',)}
-
 
 def part(span):
     """Enrich a plant part match."""
