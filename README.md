@@ -1,47 +1,13 @@
 # The eFloras Traits Database Project [![Build Status](https://travis-ci.org/rafelafrance/traiter_efloras.svg?branch=master)](https://travis-ci.org/rafelafrance/traiter_efloras)
 
 ## All right, what's this all about then?
-**Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like:
- ```
- Shrubs or trees evergreen, monoecious, 1-3 m tall; trunk to 3 cm d.b.h.; bark
-grayish. Branchlets and buds densely tomentose or pubescent. Petiole 0-1 cm,
-pubescent to tomentose; leaf blade elliptic-obovate to cuneate-obovate,
-1.5-7 × 0.5-3 cm, subleathery, abaxially densely golden glandular, adaxially
-golden glandular when young, midvein pubescent, base cuneate, margin usually
-serrate or serrate-crenate in apical 2/3, apex acute or obtuse. Male spikes
-nearly simple, ascending, 1-2 cm; peduncle and rachis pubescent; bracts
-overlapping, ciliate, densely golden glandular. Male flowers without bracteoles.
-Stamens 2-6; anthers red(?), ellipsoid. Female spikes solitary in leaf axils or
-inconspicuously branched at base, to 1.5 cm, 1-3-flowered; rachis pubescent;
-bracts ciliate and densely golden glandular. Female flowers often with
-2 bracteoles. Ovary velutinous in young fruit; stigmas 2, bright red. Drupe
-usually 1 per infructescence, red or white, usually ellipsoid, papilliferous,
-0.7-1 cm in diam. Fl. Oct-Nov, fr. Feb-May of following year.
- ```
-I should be able to extract:
-- anther_color: red
-- bark_color: gray
-- bract_color:
-    - sex = male, golden
-    - sex = female, golden
-- bract_count: 2, sex = female
-- fruit_color: red, white
-- fruit_count: 1
-- fruit_size :diameter_low = 0.7, diameter_high = 1.0, diameter_units = cm
-- inflorescences_size: sex = male, length_low = 1.0, length_high = 2.0, length_units = cm
-- leaf_color: golden
-- leaf_shape:
-    - elliptic-obovate
-    - cuneate-obovate
-    - cuneate
-    - acute
-    - obtuse
-- leaf_size:
-    - length_low = 1.5, length_high = 7.0, width_low = 0.5, width_high = 3.0, width_units: cm
-    - sex = female, length_high = 1.5, length_units = cm
-- petiole_size: length_high = 1.0, length_units = cm
-- etc.
+**Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like: (Colors added to show targeted traits.)
 
+![Treatment](assets/treatment.png)
+
+I should be able to extract:
+
+![Treatment](assets/traits.png)
 
 ## Multiple methods for parsing
 1. Rule based parsing. Most machine learning models require a substantial training dataset. I use this method to bootstrap the training data. And, if other methods fail I can fall back to this.
@@ -62,7 +28,7 @@ For example, given the text: `Petiole 1-2 cm.`:
 - Then I group tokens. For instance:
     - `1-2` = a range
 - Next I recognize a size trait:
-    - `1-2 cm` = a range with units.
+    - `1-2 cm` = a range with units is a size.
 - Finally, I associate the size with the plant part `Petiole` by scanning sentences for even larger pattern matches and a few simple heuristics.
     - One heuristic is that treatments typically (but not always) put the plant part being discussed at the beginning of a sentence.
 

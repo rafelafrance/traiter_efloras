@@ -63,8 +63,8 @@ class LinkMatcher(TraitMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    # pylint: disable=too-many-locals
-    def scan(self, doc, matchers, step):  # pylint: disable=unused-argument
+    # pylint: disable=too-many-locals, disable=unused-argument
+    def scan(self, doc, matchers, step):
         """Find all terms in the text and return the resulting doc."""
         all_matches = []
 
