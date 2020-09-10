@@ -14,6 +14,7 @@ def csv_writer(args, rows):
     for row in rows:
         row['raw_traits'] = row['traits']
         del row['traits']
+        del row['doc']
         build_columns(row)
 
     df = pd.DataFrame(rows)

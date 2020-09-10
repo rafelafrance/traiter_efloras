@@ -8,7 +8,7 @@ from traiter.pylib.util import shorten  # pylint: disable=import-error
 
 from src.pylib.pipeline import PIPELINE
 
-NLP = PIPELINE.trait_list
+NLP = PIPELINE.test_traits
 
 
 class TestCount(unittest.TestCase):

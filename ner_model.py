@@ -62,7 +62,8 @@ def setup_model(args, all_data):
         optimizer = nlp.resume_training()
         print(f'Loaded model {args.old_model_name}')
     else:
-        nlp = spacy_nlp(disable=['ner'])
+        nlp = spacy_nlp()
+        nlp.disable_pipes(['ner'])
         ner = nlp.create_pipe('ner')
         nlp.add_pipe(ner, last=True)
         optimizer = nlp.begin_training()

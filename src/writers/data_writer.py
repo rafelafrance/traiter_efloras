@@ -2,32 +2,52 @@
 
 import json
 
-from traiter.pylib.util import DotDict  # pylint: disable=import-error
 
-
-def ner_writer(args, rows):
+def _training_data_writer(rows, output_file, ner=False):
     """Output the data."""
     for row in rows:
         # Initialize sentences
-        sents = [DotDict(start=s[0], end=s[1], traits=[])
-                 for s in row['sents']]
-        sents = sorted(sents, key=lambda s: (s.start, s.end))
+        sents = [{'start': s.start_char, 'end': s.end_char}
+                 for s in row['doc'].sents]
 
         # Initialize traits
-        traits = [DotDict(start=t['start'], end=t['end'], label=label)
-                  for label, ts in row['traits'].items() for t in ts]
-        traits = sorted(traits, key=lambda t: (t.start, t.end, t.label))
+        traits = []
+        for trait in row['traits']:
+            traits.append({
+                'start': trait['start'],
+                'end': trait['end'],
+                'label': trait['trait'],
+            })
+        traits = sorted(
+            traits, key=lambda t: (t['start'], t['end'], t['label']))
 
         # Attach traits to a sentence
         for sent in sents:
-            sent.traits = [t for t in traits
-                           if t.start >= sent.start and t.end <= sent.end]
+            sent['traits'] = [t for t in traits
+                              if t['start'] >= sent['start']
+                              and t['end'] <= sent['end']]
 
         # Write the data
         for sent in sents:
-            text = row['text'][sent.start:sent.end]
-            traits = [(t.start - sent.start, t.end - sent.start, t.label)
-                      for t in sent.traits]
+            text = row['text'][sent['start']:sent['end']]
+            traits = []
+            for trait in sent['traits']:
+                start = trait['start'] - sent['start']
+                end = trait['end'] - sent['start']
+                label = trait['label']
+                if ner:
+                    label = label.split('_')[-1]
+                traits.append((start, end, label))
             line = json.dumps([text, {'entities': traits}])
-            args.data_file.write(line)
-            args.data_file.write('\n')
+            output_file.write(line)
+            output_file.write('\n')
+
+
+def nel_writer(args, rows):
+    """Output named entity linking training data."""
+    _training_data_writer(rows, args.nel_file)
+
+
+def ner_writer(args, rows):
+    """Output named entity recognition training data."""
+    _training_data_writer(rows, args.ner_file, ner=True)

@@ -1,16 +1,16 @@
 # The eFloras Traits Database Project [![Build Status](https://travis-ci.org/rafelafrance/traiter_efloras.svg?branch=master)](https://travis-ci.org/rafelafrance/traiter_efloras)
 
 ## All right, what's this all about then?
-**Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like: (Colors added to show targeted traits.)
+**Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like: (Reformatted to emphasize targeted traits.)
 
 ![Treatment](assets/treatment.png)
 
-I should be able to extract:
+I should be able to extract: (Colors correspond to the text above.)
 
 ![Treatment](assets/traits.png)
-
+markdown image
 ## Multiple methods for parsing
-1. Rule based parsing. Most machine learning models require a substantial training dataset. I use this method to bootstrap the training data. And, if other methods fail I can fall back to this.
+1. Rule based parsing. Most machine learning models require a substantial training dataset. I use this method to bootstrap the training data. And, if other methods fail, I can fall back to this.
 1. Machine learning models. (In progress)
 
 ## Rule-based parsing strategy
@@ -20,15 +20,15 @@ I should be able to extract:
 
 For example, given the text: `Petiole 1-2 cm.`:
 - I recognize vocabulary terms like:
-    - `Petiole` = plant part
-    - `1` = number
-    - `-` = dash
-    - `2` = number
-    - `cm` = units
+    - `Petiole` is plant part
+    - `1` a number
+    - `-` a dash
+    - `2` a number
+    - `cm` is a unit notation
 - Then I group tokens. For instance:
-    - `1-2` = a range
+    - `1-2` is a range
 - Next I recognize a size trait:
-    - `1-2 cm` = a range with units is a size.
+    - `1-2 cm` is a size notation which is made up of a range with units.
 - Finally, I associate the size with the plant part `Petiole` by scanning sentences for even larger pattern matches and a few simple heuristics.
     - One heuristic is that treatments typically (but not always) put the plant part being discussed at the beginning of a sentence.
 
