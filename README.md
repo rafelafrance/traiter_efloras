@@ -8,7 +8,7 @@
 I should be able to extract: (Colors correspond to the text above.)
 
 ![Treatment](assets/traits.png)
-markdown image
+
 ## Multiple methods for parsing
 1. Rule based parsing. Most machine learning models require a substantial training dataset. I use this method to bootstrap the training data. And, if other methods fail, I can fall back to this.
 1. Machine learning models. (In progress)
