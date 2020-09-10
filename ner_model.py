@@ -13,7 +13,9 @@ from pathlib import Path
 
 import spacy
 from spacy.util import compounding, minibatch
-from traiter.spacy_nlp import spacy_nlp  # pylint: disable=import-error
+
+from src.pylib.pipeline import PIPELINE
+from src.pylib.util import LINK_STEP
 
 
 def main(args):
@@ -62,8 +64,8 @@ def setup_model(args, all_data):
         optimizer = nlp.resume_training()
         print(f'Loaded model {args.old_model_name}')
     else:
-        nlp = spacy_nlp()
-        nlp.disable_pipes(['ner'])
+        nlp = PIPELINE.nlp
+        nlp.disable_pipes([LINK_STEP])
         ner = nlp.create_pipe('ner')
         nlp.add_pipe(ner, last=True)
         optimizer = nlp.begin_training()
@@ -163,7 +165,7 @@ def parse_args():
 
     arg_parser.add_argument(
         '--data', '-D', type=argparse.FileType(), required=True,
-        help="""Data from this file.""")
+        help="""Input data file for training, validation, & testing sets.""")
 
     arg_parser.add_argument(
         '--splits', '-s', nargs=3, type=float, default=[0.6, 0.2, 0.2],

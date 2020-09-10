@@ -25,13 +25,13 @@ class Pipeline(TraitPipeline):  # pylint: disable=too-few-public-methods
 
         setup_tokenizer(self.nlp)
 
-        matcher = Matcher(self.nlp)
-        linker = LinkMatcher(self.nlp)
-
         sentencizer = Sentencizer(ABBREVS)
-
         self.nlp.add_pipe(sentencizer, before='parser')
-        self.nlp.add_pipe(matcher, last=True)
+
+        matcher = Matcher(self.nlp)
+        self.nlp.add_pipe(matcher, last=True, name=TRAIT_STEP)
+
+        linker = LinkMatcher(self.nlp)
         self.nlp.add_pipe(linker, last=True, name=LINK_STEP)
 
 
