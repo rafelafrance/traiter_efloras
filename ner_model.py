@@ -8,21 +8,20 @@ import random
 import sys
 import textwrap
 import warnings
-from datetime import datetime
 from pathlib import Path
 
 import spacy
 from spacy.util import compounding, minibatch
+from traiter.pylib.util import now
 
-from src.pylib.pipeline import PIPELINE
+from src.pylib.pipeline import Pipeline
 from src.pylib.util import LINK_STEP
 
 
 def main(args):
     """Do it."""
     print('=' * 80)
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(f'{timestamp} Started')
+    print(f'{now()} Started')
 
     all_data = [json.loads(ln) for ln in args.data.readlines()]
     random.shuffle(all_data)
@@ -51,8 +50,7 @@ def main(args):
                 for line in results:
                     json_file.write(f'{line}\n')
 
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(f'{timestamp} Finished')
+    print(f'{now()} Finished')
 
 
 def setup_model(args, all_data):
@@ -64,7 +62,7 @@ def setup_model(args, all_data):
         optimizer = nlp.resume_training()
         print(f'Loaded model {args.old_model_name}')
     else:
-        nlp = PIPELINE.nlp
+        nlp = Pipeline(gpu='require').nlp
         nlp.disable_pipes([LINK_STEP])
         ner = nlp.create_pipe('ner')
         nlp.add_pipe(ner, last=True)
@@ -82,7 +80,6 @@ def setup_model(args, all_data):
 
 def train(args, nlp, optimizer, disable_pipes, train_data, val_data):
     """Train the model."""
-
     with nlp.disable_pipes(*disable_pipes) and warnings.catch_warnings():
         warnings.filterwarnings('once', category=UserWarning, module='spacy')
         sizes = compounding(1, args.max_batch_size, 1.1)
@@ -145,8 +142,7 @@ def score_data(nlp, data, note, to_json=False):
             results.append(json.dumps([sent[0], result]))
 
     score = inter_count / union_count if union_count else 0.0
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(f'{timestamp} {note} score = {score:0.4}')
+    print(f'{now()} {note} score = {score:0.4}')
     return results
 
 

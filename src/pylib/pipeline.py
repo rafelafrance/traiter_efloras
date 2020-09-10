@@ -1,10 +1,8 @@
 """Create a trait pipeline."""
 
 # pylint: disable=import-error
-
-import spacy
 from traiter.sentencizer import Sentencizer
-from traiter.spacy_nlp import setup_tokenizer
+from traiter.spacy_nlp import setup_tokenizer, spacy_nlp
 from traiter.trait_pipeline import TraitPipeline
 
 from .util import ABBREVS, LINK_STEP, TRAIT_STEP
@@ -17,8 +15,8 @@ class Pipeline(TraitPipeline):  # pylint: disable=too-few-public-methods
 
     steps2link = {TRAIT_STEP, LINK_STEP}
 
-    def __init__(self):
-        self.nlp = spacy.load('en_core_web_sm')
+    def __init__(self, gpu='prefer'):
+        self.nlp = spacy_nlp(gpu=gpu)
         super().__init__(self.nlp)
 
         self.nlp.disable_pipes(['ner'])
