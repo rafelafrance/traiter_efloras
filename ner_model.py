@@ -39,7 +39,7 @@ def main(args):
 
     results = []
     if test_data:
-        results = score_data(nlp, test_data, 'Test:', to_json=True)
+        results = score_data(nlp, test_data, 'Test:')
 
     if args.output_dir:
         output_dir = Path(args.output_dir)
@@ -66,7 +66,7 @@ def setup_model(args, all_data):
         nlp.disable_pipes([LINK_STEP])
         ner = nlp.create_pipe('ner')
         nlp.add_pipe(ner, last=True)
-        optimizer = nlp.begin_training()
+        optimizer = nlp.begin_training(device=0)
 
     labels = {e[2] for d in all_data for e in d[1]['entities']}
     for label in labels:
@@ -97,7 +97,7 @@ def train(args, nlp, optimizer, disable_pipes, train_data, val_data):
             score_data(nlp, val_data, note)
 
 
-def score_data(nlp, data, note, to_json=False):
+def score_data(nlp, data, note):
     """Score the model."""
     union_count, inter_count = 0, 0
     results = []
@@ -109,30 +109,29 @@ def score_data(nlp, data, note, to_json=False):
         union_count += len(expected | actually)
         inter_count += len(inter)
 
-        if to_json:
-            result = [{'result': 'ok', 'expect': list(i)} for i in inter]
+        result = [{'result': 'ok', 'expect': list(i)} for i in inter]
 
-            expect = expected - actually
-            actual = actually - expected
+        expected -= inter
+        actually -= inter
 
-            for e in expect:
-                if not all(overlaps(e, a) for a in actual):
-                    result += [{'result': 'missing', 'expect': e}]
-                    continue
+        pairs = [(e, a) for e in expected for a in actually
+                 if overlaps(e, a)]
 
-                result += [{'result': 'label', 'expect': e, 'actual': a}
-                           for a in actual if e[2] != a[2] and e[:2] == a[:2]]
-                actual -= {a for r in result if (a := r.get('actual'))}
+        result += [{'result': 'missing', 'expect': x}
+                   for x in expected if x not in {p[0] for p in pairs}]
 
-                result += [{'result': 'span', 'expect': e, 'actual': a}
-                           for a in actual if e[2] == a[2] and overlaps(e, a)]
-                actual -= {a for r in result if (a := r.get('actual'))}
+        result += [{'result': 'excess', 'actual': x}
+                   for x in actually if x not in {p[1] for p in pairs}]
 
-                result += [{'result': 'error', 'expect': e, 'actual': a}
-                           for a in actual if e[2] != a[2] and overlaps(e, a)]
-                actual -= {a for r in result if (a := r.get('actual'))}
-
-            result += [{'result': 'excess', 'actual': a} for a in actual]
+        for expect, actual in pairs:
+            if expect[:2] == actual[:2] and expect[2] != actual[2]:
+                label = 'label'
+            elif expect[2] == actual[2]:
+                label = 'span'
+            else:
+                label = 'error'
+            result.append(
+                {'result': label, 'expect': expect, 'actual': actual})
 
             maxi = len(sent[0])
             result = sorted(result, key=lambda r: (
@@ -148,8 +147,8 @@ def score_data(nlp, data, note, to_json=False):
 
 def overlaps(expect, actual):
     """Check if the actual value overlaps the expected value."""
-    return (expect[0] <= actual[0] <= expect[1]
-            or expect[0] <= actual[1] <= expect[1])
+    return (expect[0] <= actual[0] < expect[1]
+            or expect[0] < actual[1] <= expect[1])
 
 
 def parse_args():

@@ -72,23 +72,32 @@ def error_detail(args):
                 result = result_dict['result']
                 expect = result_dict.get('expect')
                 actual = result_dict.get('actual')
-                if actual and expect:
+                if result == 'ok':
+                    print(f'{result:<7} expected and got '
+                          f'({expect[2]}) "{sent[expect[0]:expect[1]]}"')
+                elif actual and expect:
                     print(
-                        f'{result.upper():<6} '
-                        f'expected ({expect[2]}) {sent[expect[0]:expect[1]]} '
-                        f'got ({actual[2]}) {sent[actual[0]:actual[1]]}')
+                        f'{result.upper():<7} '
+                        f'expected ({expect[2]}) "{sent[expect[0]:expect[1]]}"'
+                        f' got ({actual[2]}) "{sent[actual[0]:actual[1]]}"')
                 elif expect:
-                    print(f'{result:<6} expected and got '
-                          f'({expect[2]}) {sent[expect[0]:expect[1]]}')
+                    print(
+                        f'{result.upper():<7} '
+                        f'expected ({expect[2]}) '
+                        f'"{sent[expect[0]:expect[1]]}"')
+                elif actual:
+                    print(
+                        f'{result.upper():<7} '
+                        f'got ({actual[2]}) "{sent[actual[0]:actual[1]]}"')
                 else:
-                    print(f'{result.upper():<6} '
-                          f'got ({actual[2]}) {sent[actual[0]:actual[1]]}')
+                    sys.exit(result_dict)
+
             print()
 
 
 def parse_args():
     """Process command-line arguments."""
-    description = """Create models from data from the eFloras website."""
+    description = """Examine model results."""
     arg_parser = argparse.ArgumentParser(
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
