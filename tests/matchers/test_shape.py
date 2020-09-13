@@ -127,7 +127,7 @@ class TestShape(unittest.TestCase):
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'part': 'petiole', 'trait': 'part', 'start': 8, 'end': 21},
              {'shape': 'polygonal',
-              'trait': 'petiole_shape', 'start': 22, 'end': 32},
+              'trait': 'petiole_shape', 'start': 22, 'end': 41},
              {'shape': 'reniform-polygonal',
               'trait': 'petiole_shape', 'start': 45, 'end': 62},
              {'shape': 'polygonal',
@@ -214,8 +214,8 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             NLP('Seeds globose-angular'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
-             {'shape': 'spheric', 'trait': 'seed_shape', 'start': 6,
-              'end': 13}]
+             {'shape': 'spheric-angular', 'trait': 'seed_shape', 'start': 6,
+              'end': 21}]
         )
 
     def test_shape_20(self):
@@ -233,4 +233,14 @@ class TestShape(unittest.TestCase):
              {'color': 'purple', 'trait': 'petal_color', 'start': 7,
               'end': 13},
              {'start': 15, 'end': 23, 'low': 2, 'trait': 'petal_lobe_count'}]
+        )
+
+    def test_shape_22(self):
+        self.assertEqual(
+            NLP('blade broadly ovate-angulate to reniform-angulate'),
+            [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
+             {'shape': 'ovate-angulate',
+              'trait': 'leaf_shape', 'start': 6, 'end': 28},
+             {'shape': 'reniform-polygonal',
+              'trait': 'leaf_shape', 'start': 32, 'end': 49}]
         )
