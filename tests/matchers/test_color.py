@@ -188,8 +188,17 @@ class TestColor(unittest.TestCase):
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'petal_color', 'start': 7,
               'end': 15},
-             {'color': 'white', 'trait': 'petal_color', 'start': 25,
-              'end': 32},
-             {'color': 'yellow', 'trait': 'petal_color', 'start': 33,
+             {'color': 'white-yellow',
+              'trait': 'petal_color', 'start': 25,
               'end': 43}]
+        )
+
+    def test_color_16(self):
+        self.assertEqual(
+            NLP('Petals red or golden yellowish'),
+            [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
+             {'color': 'red',
+              'trait': 'petal_color', 'start': 7, 'end': 10},
+             {'color': 'yellow',
+              'trait': 'petal_color', 'start': 14, 'end': 30}]
         )
