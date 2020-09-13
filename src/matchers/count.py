@@ -46,9 +46,13 @@ COUNT = {
             'on_match': count,
             'patterns': [
                 [
-                    {'TEXT': {'IN': OPEN}, 'OP': '?'},
                     {'ENT_TYPE': 'range'},
-                    {'TEXT': {'IN': CLOSE}, 'OP': '?'},
+                    {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
+                ],
+                [
+                    {'TEXT': {'IN': OPEN}},
+                    {'ENT_TYPE': 'range'},
+                    {'TEXT': {'IN': CLOSE}},
                     {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
                 ],
             ],
