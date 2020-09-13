@@ -233,6 +233,13 @@ RANGE = {
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': CLOSE}},
                 ],
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                ],
             ]
         },
         {
@@ -249,6 +256,17 @@ RANGE = {
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': DASH}},
                     {'TEXT': {'REGEX': NUMBER}},
+                ],
+                [
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': DASH}},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': OPEN}},
+                    {'LOWER': 'or'},
+                    {'TEXT': {'REGEX': NUMBER}},
+                    {'TEXT': {'IN': CLOSE}},
                 ],
                 [
                     {'TEXT': {'IN': OPEN}},

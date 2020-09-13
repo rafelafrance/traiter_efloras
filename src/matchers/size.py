@@ -111,7 +111,7 @@ def size_double_dim(span):
 
 def not_a_size(_):
     """Flag this as a token to be deleted."""
-    return {'_skip': True}
+    return {'_forget': True}
 
 
 _FOLLOW = """ dimension sex_enclosed sex """.split()

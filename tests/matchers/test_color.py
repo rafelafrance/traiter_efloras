@@ -202,3 +202,13 @@ class TestColor(unittest.TestCase):
              {'color': 'yellow',
               'trait': 'petal_color', 'start': 14, 'end': 30}]
         )
+
+    def test_color_17(self):
+        self.assertEqual(
+            NLP('twigs: young growth green or reddish-tinged'),
+            [{'part': 'twig', 'trait': 'part', 'start': 0, 'end': 5},
+             {'color': 'green',
+              'trait': 'twig_color', 'start': 20, 'end': 25},
+             {'color': 'red-tinged',
+              'trait': 'twig_color', 'start': 29, 'end': 43}]
+        )

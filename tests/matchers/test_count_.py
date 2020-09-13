@@ -229,10 +229,39 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('Leaves (19-)23- or 25-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'min': 19,
-              'low': 23,
-              'high': 25,
-              'trait': 'leaf_count',
-              'start': 7,
-              'end': 31}]
+             {'min': 19, 'low': 23, 'high': 25,
+              'trait': 'leaf_count', 'start': 7, 'end': 31}]
+        )
+
+    def test_count_25(self):
+        self.assertEqual(
+            NLP('Calyx (5-lobed)'),
+            [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
+             {'low': 5,
+              'trait': 'calyx_lobe_count', 'start': 6, 'end': 15}]
+        )
+
+    def test_count_26(self):
+        self.assertEqual(
+            NLP('blade lobes 0 or 1–4(or 5) per side'),
+            [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
+             {'subpart': 'lobe', 'trait': 'subpart', 'start': 6, 'end': 11},
+             {'min': 0, 'low': 1, 'high': 4, 'max': 5,
+              'trait': 'leaf_lobe_count', 'start': 12, 'end': 26}]
+        )
+
+    def test_count_27(self):
+        self.assertEqual(
+            NLP('stems (11–16) pairs'),
+            [{'part': 'stem', 'trait': 'part', 'start': 0, 'end': 5},
+             {'low': 11, 'high': 16, 'group': 'pairs',
+              'trait': 'stem_count', 'start': 6, 'end': 19}]
+        )
+
+    def test_count_28(self):
+        self.assertEqual(
+            NLP('stamens 5–10 or 20'),
+            [{'part': 'stamen', 'trait': 'part', 'start': 0, 'end': 7},
+             {'low': 5, 'high': 10, 'max': 20,
+              'trait': 'stamen_count', 'start': 8, 'end': 18}]
         )

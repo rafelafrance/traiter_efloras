@@ -16,7 +16,7 @@ def descriptor(span):
     value = span.lower_
 
     if value not in _IS_DESCRIPTOR:
-        return {'_skip': True}
+        return {'_forget': True}
 
     data = dict(_relabel=label)
     data[label] = REPLACE.get(value, value)
