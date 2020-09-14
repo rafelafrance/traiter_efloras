@@ -58,7 +58,7 @@ COUNT = {
             ],
         },
         {
-            'label': 'not_a_count',
+            'label': '_not_a_count',
             'on_match': not_a_count,
             'patterns': [
                 [

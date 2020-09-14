@@ -14,7 +14,8 @@ def _get_labels():
             if step == TRAIT_STEP:
                 for pattern_group in step_patterns:
                     label = pattern_group['label'].split('_')
-                    LABELS.add(tuple(label))
+                    if label[0]:
+                        LABELS.add(tuple(label))
 
 
 def _training_data_writer(rows, output_file, ner=False):
@@ -52,7 +53,7 @@ def _training_data_writer(rows, output_file, ner=False):
                 label = trait['label']
                 if ner:
                     label = label.split('_')
-                    if tuple(label[-2:]) in LABELS:
+                    if len(label) > 1 and tuple(label[-2:]) in LABELS:
                         label = '_'.join(label[-2:])
                     else:
                         label = label[-1]

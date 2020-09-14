@@ -202,7 +202,7 @@ SIZE = {
             ],
         },
         {
-            'label': 'not_a_size',
+            'label': '_not_a_size',
             'on_match': not_a_size,
             'patterns': [
                 [
