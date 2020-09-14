@@ -53,7 +53,6 @@ PART = {
                     {'ENT_TYPE': 'part'},
                     {'TEXT': {'IN': COLON}, 'OP': '?'},
                     {'ENT_TYPE': {'IN': ['sex']}},
-                    {'TEXT': {'IN': COLON}, 'OP': '?'},
                 ],
                 [
                     {'ENT_TYPE': 'location'},

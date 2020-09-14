@@ -244,3 +244,13 @@ class TestShape(unittest.TestCase):
              {'shape': 'reniform-polygonal',
               'trait': 'leaf_shape', 'start': 32, 'end': 49}]
         )
+
+    def test_shape_23(self):
+        self.assertEqual(
+            NLP('leaf subflabellate, sub-flabellate'),
+            [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
+             {'shape': 'subflabellate',
+              'trait': 'leaf_shape', 'start': 5, 'end': 18},
+             {'shape': 'subflabellate',
+              'trait': 'leaf_shape', 'start': 20, 'end': 34}]
+        )

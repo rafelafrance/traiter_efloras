@@ -54,5 +54,5 @@ class TestPart(unittest.TestCase):
         self.assertEqual(
             NLP('Flowers: staminate:'),
             [{'part': 'flower', 'sex': 'male',
-              'trait': 'part', 'start': 0, 'end': 19}]
+              'trait': 'part', 'start': 0, 'end': 18}]
         )
