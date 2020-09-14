@@ -15,7 +15,7 @@ class Pipeline(TraitPipeline):  # pylint: disable=too-few-public-methods
 
     steps2link = {TRAIT_STEP, LINK_STEP}
 
-    def __init__(self, gpu='prefer'):
+    def __init__(self, gpu='prefer', training=False):
         self.nlp = spacy_nlp(gpu=gpu)
         super().__init__(self.nlp)
 
@@ -26,7 +26,7 @@ class Pipeline(TraitPipeline):  # pylint: disable=too-few-public-methods
         sentencizer = Sentencizer(ABBREVS)
         self.nlp.add_pipe(sentencizer, before='parser')
 
-        matcher = Matcher(self.nlp)
+        matcher = Matcher(self.nlp, training=training)
         self.nlp.add_pipe(matcher, last=True, name=TRAIT_STEP)
 
         linker = LinkMatcher(self.nlp)

@@ -38,11 +38,16 @@ SUFFIX_COUNT = {
             'on_match': suffix_count,
             'patterns': [
                 [
-                    {'TEXT': {'IN': OPEN}, 'OP': '?'},
                     {'ENT_TYPE': 'range'},
                     {'TEXT': {'IN': PLUS}, 'OP': '?'},
                     {'ENT_TYPE': 'count_suffix'},
-                    {'TEXT': {'IN': CLOSE}, 'OP': '?'},
+                ],
+                [
+                    {'TEXT': {'IN': OPEN}},
+                    {'ENT_TYPE': 'range'},
+                    {'TEXT': {'IN': PLUS}, 'OP': '?'},
+                    {'ENT_TYPE': 'count_suffix'},
+                    {'TEXT': {'IN': CLOSE}},
                 ],
             ],
         },

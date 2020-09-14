@@ -265,3 +265,12 @@ class TestCount(unittest.TestCase):
              {'low': 5, 'high': 10, 'max': 20,
               'trait': 'stamen_count', 'start': 8, 'end': 18}]
         )
+
+    def test_count_29(self):
+        self.assertEqual(
+            NLP('blade lobes 0 or 1–4(–9) per side'),
+            [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
+             {'subpart': 'lobe', 'trait': 'subpart', 'start': 6, 'end': 11},
+             {'min': 0, 'low': 1, 'high': 4, 'max': 9,
+              'trait': 'leaf_lobe_count', 'start': 12, 'end': 24}]
+        )

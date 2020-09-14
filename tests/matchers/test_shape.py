@@ -254,3 +254,11 @@ class TestShape(unittest.TestCase):
              {'shape': 'subflabellate',
               'trait': 'leaf_shape', 'start': 20, 'end': 34}]
         )
+
+    # def test_shape_24(self):
+    #     self.assertEqual(
+    #         NLP(""""""),
+    #         [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
+    #          {'shape': 'pinnate',
+    #           'trait': 'leaf_shape', 'start': 5, 'end': 18}]
+    #     )

@@ -62,7 +62,7 @@ def setup_model(args, all_data):
         optimizer = nlp.resume_training()
         print(f'Loaded model {args.old_model_name}')
     else:
-        nlp = Pipeline(gpu='require').nlp
+        nlp = Pipeline(gpu='require', training=True).nlp
         nlp.disable_pipes([LINK_STEP])
         ner = nlp.create_pipe('ner')
         nlp.add_pipe(ner, last=True)
