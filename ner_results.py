@@ -15,14 +15,15 @@ MISSING = '~nothing~'
 def main(args):
     """Do it."""
     if args.confusion_matrix or args.confusion_csv:
-        matrix(args)
+        expected, actually = get_results(args)
+        create_confusion(args, expected, actually)
 
     if args.error_detail:
         error_detail(args)
 
 
-def matrix(args):
-    """Output a confusion matrix."""
+def get_results(args):
+    """Output a confusion get_results."""
     expected = []
     actually = []
     for line in args.results_file:
@@ -46,15 +47,19 @@ def matrix(args):
             else:
                 sys.exit(result_dict)
 
+    return expected, actually
+
+
+def create_confusion(args, expected, actually):
+    """Create a confusion get_results from the results."""
     expected = pd.Series(expected)
     actually = pd.Series(actually)
-
-    df = pd.crosstab(expected, actually, rownames=['Rule Prediction'],
-                     dropna=False, colnames=['CNN Prediction'], margins=True)
-
+    df = pd.crosstab(
+        expected, actually, dropna=False, margins=True,
+        rownames=['Rule Predictions (down)'],
+        colnames=['Model Predictions (across)'])
     if args.confusion_matrix:
         print(df.to_string())
-
     if args.confusion_csv:
         df.to_csv(args.confusion_csv)
 
@@ -108,7 +113,7 @@ def parse_args():
 
     arg_parser.add_argument(
         '--confusion-matrix', '-c', action='store_true',
-        help="""Print a confusion matrix of the results.""")
+        help="""Print a confusion get_results of the results.""")
 
     arg_parser.add_argument(
         '--confusion-csv', '-C',

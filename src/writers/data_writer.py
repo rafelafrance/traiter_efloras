@@ -1,10 +1,25 @@
 """Write training data to a JSONL file."""
 
 import json
+from ..matchers.matcher import MATCHERS
+from ..pylib.util import TRAIT_STEP
+
+LABELS = set()
+
+
+def _get_labels():
+    """Get the suffix lengths of the traits."""
+    for matcher in MATCHERS:
+        for step, step_patterns in matcher.items():
+            if step == TRAIT_STEP:
+                for pattern_group in step_patterns:
+                    label = pattern_group['label'].split('_')
+                    LABELS.add(tuple(label))
 
 
 def _training_data_writer(rows, output_file, ner=False):
     """Output the data."""
+    _get_labels()
     for row in rows:
         # Initialize sentences
         sents = [{'start': s.start_char, 'end': s.end_char}
@@ -36,7 +51,11 @@ def _training_data_writer(rows, output_file, ner=False):
                 end = trait['end'] - sent['start']
                 label = trait['label']
                 if ner:
-                    label = label.split('_')[-1]
+                    label = label.split('_')
+                    if tuple(label[-2:]) in LABELS:
+                        label = '_'.join(label[-2:])
+                    else:
+                        label = label[-1]
                 traits.append((start, end, label))
             line = json.dumps([text, {'entities': traits}])
             output_file.write(line)
