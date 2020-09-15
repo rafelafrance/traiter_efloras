@@ -473,3 +473,13 @@ class TestAttach(unittest.TestCase):
               'trait': 'petal_apex_shape', 'start': 66, 'end': 72}
              ]
         )
+
+    def test_attach_29(self):
+        self.assertEqual(
+            NLP(shorten("""limbs with basal abaxial edges""")),
+            [{'subpart': 'limb', 'trait': 'subpart', 'start': 0, 'end': 5},
+             {'location': 'basal',
+              'trait': 'plant_limb_location', 'start': 11, 'end': 16},
+             {'location': 'abaxial',
+              'trait': 'plant_limb_location', 'start': 17, 'end': 24}]
+        )

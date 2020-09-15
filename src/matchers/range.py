@@ -178,8 +178,10 @@ RANGE = {
             'patterns': [
                 [
                     {'TEXT': {'REGEX': NUMBER}},
+
                     {'LOWER': 'or'},
                     {'TEXT': {'REGEX': NUMBER}},
+
                     {'TEXT': {'IN': OPEN}},
                     {'TEXT': {'IN': _DASH_TO_CONJ}},
                     {'TEXT': {'REGEX': NUMBER}},
@@ -187,9 +189,11 @@ RANGE = {
                 ],
                 [
                     {'TEXT': {'REGEX': NUMBER}},
+
                     {'TEXT': {'IN': OPEN}},
                     {'LOWER': 'or'},
                     {'TEXT': {'REGEX': NUMBER}},
+
                     {'TEXT': {'IN': _DASH_TO_CONJ}},
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': CLOSE}},
@@ -202,7 +206,7 @@ RANGE = {
             'patterns': [
                 [
                     {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}},
+                    {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'LOWER': 'or'},
                     {'TEXT': {'REGEX': NUMBER}},
                     {'TEXT': {'IN': DASH}},
