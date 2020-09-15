@@ -1,6 +1,6 @@
 """Common count snippets."""
 
-from .shared import CLOSE, CROSS, OPEN, PER_COUNT, PER_COUNTS, SLASH
+from .shared import CLOSE, CROSS, OPEN, SLASH
 from ..pylib.util import REPLACE, TRAIT_STEP
 
 _NO_COUNTS = (CROSS + SLASH
@@ -22,7 +22,7 @@ def count(span):
         if label == 'range' and token._.data['_all_ints']:
             data = {**token._.data, **data}
 
-        elif token.lower_ in PER_COUNT:
+        elif label == 'per_count':
             data['group'] = REPLACE.get(token.lower_, token.lower_)
 
         elif token.lower_ in PARENS:
@@ -47,13 +47,13 @@ COUNT = {
             'patterns': [
                 [
                     {'ENT_TYPE': 'range'},
-                    {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
+                    {'ENT_TYPE': 'per_count', 'OP': '?'},
                 ],
                 [
                     {'TEXT': {'IN': OPEN}},
                     {'ENT_TYPE': 'range'},
                     {'TEXT': {'IN': CLOSE}},
-                    {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
+                    {'ENT_TYPE': 'per_count', 'OP': '?'},
                 ],
             ],
         },

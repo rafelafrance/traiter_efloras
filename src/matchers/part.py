@@ -4,7 +4,7 @@ import re
 
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
-from .shared import PER_COUNT, PER_COUNTS, COLON
+from .shared import COLON
 from ..pylib.util import REPLACE, TERMS, TRAIT_STEP
 
 _PATTERNS = [t for t in TERMS if t['label'] == 'part']
@@ -28,7 +28,7 @@ def part(span):
             data['sex'] = REPLACE.get(value, value)
         elif label == 'location':
             data['location'] = value
-        elif token.lower_ in PER_COUNT:
+        elif label == 'per_count':
             data['group'] = REPLACE.get(token.lower_, token.lower_)
 
     return data
@@ -46,7 +46,7 @@ PART = {
                     {'ENT_TYPE': 'part'},
                 ],
                 [
-                    {'ENT_TYPE': 'part'},
+                    {'ENT_TYPE': {'IN': ['part']}},
                     {'ENT_TYPE': {'IN': ['sex_enclosed']}},
                 ],
                 [
@@ -56,13 +56,13 @@ PART = {
                 ],
                 [
                     {'ENT_TYPE': 'location'},
-                    {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
+                    {'ENT_TYPE': 'per_count', 'OP': '?'},
                     {},
                     {'ENT_TYPE': 'part'},
                 ],
                 [
                     {'ENT_TYPE': 'location'},
-                    {'LOWER': {'IN': PER_COUNTS}, 'OP': '?'},
+                    {'ENT_TYPE': 'per_count', 'OP': '?'},
                     {'ENT_TYPE': 'part'},
                 ],
             ],

@@ -20,11 +20,12 @@ COLOR = {
             'on_match': color,
             'patterns': [
                 [
-                    {'ENT_TYPE': 'color', 'OP': '?'},
+                    {'ENT_TYPE': {'IN': ['color', 'color_modifier']},
+                     'OP': '?'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
                     {'ENT_TYPE': 'color', 'OP': '+'},
                     {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'ENT_TYPE': {'IN': ['color', 'color_follower']},
+                    {'ENT_TYPE': {'IN': ['color', 'color_modifier']},
                      'OP': '*'},
                 ],
             ],

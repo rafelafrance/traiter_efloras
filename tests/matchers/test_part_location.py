@@ -31,3 +31,12 @@ class TestPartLocation(unittest.TestCase):
             [{'shape': 'not connate',
               'trait': 'plant_shape', 'start': 30, 'end': 41}]
         )
+
+    def test_part_location_03(self):
+        self.assertEqual(
+            NLP('stipules shortly ciliate at margin'),
+            [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
+             {'margin_shape': 'ciliate',
+              'trait': 'stipule_margin_shape', 'start': 17, 'end': 24},
+            {'subpart': 'margin', 'trait': 'subpart', 'start': 28, 'end': 34}]
+        )

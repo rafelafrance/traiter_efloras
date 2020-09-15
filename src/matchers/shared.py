@@ -15,9 +15,6 @@ PLUS = ' + '.split()
 SEMICOLON = ' ; '.split()
 SLASH = ' / '.split()
 
-PER_COUNTS = ['pair', 'pairs']
-PER_COUNT = set(PER_COUNTS)
-
 SHARED = {
     GROUP_STEP: [
         {

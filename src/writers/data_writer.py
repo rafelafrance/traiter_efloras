@@ -1,8 +1,9 @@
 """Write training data to a JSONL file."""
 
 import json
+
 from ..matchers.matcher import MATCHERS
-from ..pylib.util import TRAIT_STEP
+from ..pylib.util import TERMS, TRAIT_STEP
 
 LABELS = set()
 
@@ -16,6 +17,10 @@ def _get_labels():
                     label = pattern_group['label'].split('_')
                     if label[0]:
                         LABELS.add(tuple(label))
+    for term in TERMS:
+        if term['category'] in {'descriptor', 'literal'}:
+            label = term['label'].split('_')
+            LABELS.add(tuple(label))
 
 
 def _training_data_writer(rows, output_file, ner=False):

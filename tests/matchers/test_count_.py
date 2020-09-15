@@ -246,8 +246,8 @@ class TestCount(unittest.TestCase):
             NLP('blade lobes 0 or 1–4(or 5) per side'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'subpart': 'lobe', 'trait': 'subpart', 'start': 6, 'end': 11},
-             {'min': 0, 'low': 1, 'high': 4, 'max': 5,
-              'trait': 'leaf_lobe_count', 'start': 12, 'end': 26}]
+             {'min': 0, 'low': 1, 'high': 4, 'max': 5, 'group': 'per side',
+              'trait': 'leaf_lobe_count', 'start': 12, 'end': 35}]
         )
 
     def test_count_27(self):
@@ -271,6 +271,14 @@ class TestCount(unittest.TestCase):
             NLP('blade lobes 0 or 1–4(–9) per side'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'subpart': 'lobe', 'trait': 'subpart', 'start': 6, 'end': 11},
-             {'min': 0, 'low': 1, 'high': 4, 'max': 9,
-              'trait': 'leaf_lobe_count', 'start': 12, 'end': 24}]
+             {'min': 0, 'low': 1, 'high': 4, 'max': 9, 'group': 'per side',
+              'trait': 'leaf_lobe_count', 'start': 12, 'end': 33}]
+        )
+
+    def test_count_30(self):
+        self.assertEqual(
+            NLP('Inflorescences 1–64(–90)[–100]-flowered'),
+            [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
+             {'min': 1, 'low': 64, 'high': 90, 'max': 100,
+              'trait': 'inflorescence_flower_count', 'start': 15, 'end': 39}]
         )
