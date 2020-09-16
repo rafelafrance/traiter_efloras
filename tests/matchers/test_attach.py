@@ -470,8 +470,7 @@ class TestAttach(unittest.TestCase):
               'trait': 'petal_keel_color', 'start': 53, 'end': 59},
              {'subpart': 'apex', 'trait': 'subpart', 'start': 61, 'end': 65},
              {'shape': 'retuse',
-              'trait': 'petal_apex_shape', 'start': 66, 'end': 72}
-             ]
+              'trait': 'petal_apex_shape', 'start': 66, 'end': 72}]
         )
 
     def test_attach_29(self):

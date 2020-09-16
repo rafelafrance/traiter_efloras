@@ -202,7 +202,7 @@ ATTACH = {
                     {'LOWER': 'and'},
                     {'_': {'step': TRAIT_STEP}},
                     {'ENT_TYPE': 'part'},
-                    {'TEXT': {'IN': DOT}}
+                    {'TEXT': {'IN': DOT}},
                 ],
             ],
         },

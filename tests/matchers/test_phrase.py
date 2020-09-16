@@ -17,11 +17,8 @@ class TestPhrase(unittest.TestCase):
             NLP('Pistillate flowers  usually sessile; hypogynous'),
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 18},
-             {'floral_location': 'superior',
-              'sex': 'female',
-              'trait': 'flower_floral_location',
-              'start': 37,
-              'end': 47}]
+             {'floral_location': 'superior', 'sex': 'female',
+              'trait': 'flower_floral_location', 'start': 37, 'end': 47}]
         )
 
     def test_phrase_02(self):

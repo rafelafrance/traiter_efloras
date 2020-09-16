@@ -58,6 +58,15 @@ def create_confusion(args, expected, actually):
         expected, actually, dropna=False, margins=True,
         rownames=['Rule Predictions (down)'],
         colnames=['Model Predictions (across)'])
+
+    # Why doesn't dropna=False handle this?
+    for idx, i in reversed([(idx, i) for i, idx in enumerate(df.index)]):
+        if idx not in df.columns:
+            df.insert(loc=i, column=idx, value=0)
+
+    # To get the predictions across to appear
+    df.columns = pd.MultiIndex.from_product([df.columns])
+
     if args.confusion_matrix:
         print(df.to_string())
     if args.confusion_csv:

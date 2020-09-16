@@ -5,4 +5,4 @@ Jinja2~=3.0.0a1
 regex~=2020.7.14
 lxml~=4.5.2
 spacy~=2.3.2
-cupy-cuda101~=7.8.0
+cupy-cuda102~=7.8.0
