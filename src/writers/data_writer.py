@@ -23,9 +23,10 @@ def _get_labels():
             LABELS.add(tuple(label))
 
 
-def _training_data_writer(rows, output_file, ner=False):
+def _training_data_writer(rows):
     """Output the data."""
     _get_labels()
+    lines = []
     for row in rows:
         # Initialize sentences
         sents = [{'start': s.start_char, 'end': s.end_char}
@@ -56,23 +57,16 @@ def _training_data_writer(rows, output_file, ner=False):
                 start = trait['start'] - sent['start']
                 end = trait['end'] - sent['start']
                 label = trait['label']
-                if ner:
-                    label = label.split('_')
-                    if len(label) > 1 and tuple(label[-2:]) in LABELS:
-                        label = '_'.join(label[-2:])
-                    else:
-                        label = label[-1]
+                label = label.split('_')
+                if len(label) > 1 and tuple(label[-2:]) in LABELS:
+                    label = '_'.join(label[-2:])
                 traits.append((start, end, label))
-            line = json.dumps([text, {'entities': traits}])
-            output_file.write(line)
-            output_file.write('\n')
-
-
-def nel_writer(args, rows):
-    """Output named entity linking training data."""
-    _training_data_writer(rows, args.nel_file)
+            lines.append(json.dumps([text, {'entities': traits}]))
+    return lines
 
 
 def ner_writer(args, rows):
     """Output named entity recognition training data."""
-    _training_data_writer(rows, args.ner_file, ner=True)
+    for row in _training_data_writer(rows):
+        args.ner_file.write(row[0], row[1])
+        args.ner_file.write('\n')

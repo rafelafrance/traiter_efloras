@@ -11,7 +11,7 @@ import src.pylib.family as futil
 from src.pylib.pipeline import PIPELINE
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
-from src.writers.data_writer import nel_writer, ner_writer
+from src.writers.data_writer import ner_writer
 from src.writers.html_writer import html_writer
 
 
@@ -39,10 +39,6 @@ def main(args):
     if args.html_file:
         copied = deepcopy(rows)
         html_writer(args, copied)
-
-    if args.nel_file:
-        copied = deepcopy(rows)
-        nel_writer(args, copied)
 
     if args.ner_file:
         copied = deepcopy(rows)
@@ -82,11 +78,7 @@ def parse_args():
         help="""Output the results to this CSV file.""")
 
     arg_parser.add_argument(
-        '--nel-file', '-N', type=argparse.FileType('a'),
-        help="""Append formatted NEL training data to this file.""")
-
-    arg_parser.add_argument(
-        '--ner-file', '-n', type=argparse.FileType('a'),
+        '--ner-file', '-N', type=argparse.FileType('a'),
         help="""Append formatted NER training data to this file.""")
 
     arg_parser.add_argument(
