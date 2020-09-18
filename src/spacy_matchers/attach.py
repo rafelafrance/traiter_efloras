@@ -1,8 +1,7 @@
 """Patterns for attaching traits to plant parts."""
 
-from ..matchers.descriptor import DESCRIPTOR_LABELS
-from ..matchers.shared import COMMA, DOT
-from ..pylib.util import LINK_STEP, TRAIT_STEP
+from ..spacy_matchers.descriptor import DESCRIPTOR_LABELS
+from .consts import COMMA, DOT, LINK_STEP, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 WITH_WORDS = """ with having only into """.split()

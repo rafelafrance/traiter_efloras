@@ -1,6 +1,22 @@
-"""Shared patterns."""
+"""Spacy related constants."""
 
-from ..pylib.util import GROUP_STEP
+# pylint: disable=import-error
+from traiter.spacy_nlp.terms import hyphenate_terms, read_terms
+
+from src.pylib.util import BASE_DIR
+
+GROUP_STEP = 'group'
+TRAIT_STEP = 'traits'
+LINK_STEP = 'link'
+
+TERM_PATH = BASE_DIR / 'src' / 'vocabulary' / 'terms.csv'
+TERMS = read_terms(TERM_PATH)
+TERMS += hyphenate_terms(TERMS)
+
+REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
+CATEGORY = {t['pattern']: c for t in TERMS if (c := t.get('category'))}
+
+ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec """
 
 CLOSE = ' ) ] '.split()
 COLON = ' : '.split()

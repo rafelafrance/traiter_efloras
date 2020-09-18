@@ -4,9 +4,9 @@
 from traiter.spacy_nlp.pipeline import SpacyPipeline
 from traiter.spacy_nlp.sentencizer import SpacySentencizer
 
-from .util import ABBREVS, LINK_STEP, TRAIT_STEP
-from ..matchers.link_matcher import LinkMatcher
-from ..matchers.matcher import Matcher
+from ..spacy_matchers.consts import ABBREVS, LINK_STEP, TRAIT_STEP
+from ..spacy_matchers.link_matcher import LinkMatcher
+from ..spacy_matchers.matcher import Matcher
 
 
 class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods

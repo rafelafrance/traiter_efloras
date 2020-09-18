@@ -2,8 +2,8 @@
 
 import json
 
-from ..matchers.matcher import MATCHERS
-from ..pylib.util import TERMS, TRAIT_STEP
+from ..spacy_matchers.matcher import MATCHERS
+from ..spacy_matchers.consts import TERMS, TRAIT_STEP
 
 LABELS = set()
 

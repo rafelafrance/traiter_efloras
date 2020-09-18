@@ -6,7 +6,7 @@ from collections import defaultdict
 from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .attach import ATTACH
-from ..pylib.util import LINK_STEP
+from .consts import LINK_STEP
 
 
 class LinkMatcher(SpacyMatcher):

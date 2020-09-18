@@ -1,6 +1,5 @@
 """Parse the trait."""
-from .shared import DASH
-from ..pylib.util import TRAIT_STEP
+from .consts import DASH, TRAIT_STEP
 
 _LEADERS = """ shape shape_leader margin_leader """.split()
 _FOLLOWERS = """ shape margin_shape margin_follower """.split()

@@ -1,7 +1,6 @@
 """Parse the trait."""
 
-from .shared import DASH
-from ..pylib.util import REPLACE, TRAIT_STEP
+from .consts import DASH, REPLACE, TRAIT_STEP
 
 _DASH_TO = DASH + ['to']
 

@@ -6,8 +6,7 @@ from functools import partial
 # pylint: disable=import-error
 from traiter.pylib.util import to_positive_float, to_positive_int
 
-from .shared import CLOSE, DASH, INT, NUMBER, OPEN
-from ..pylib.util import GROUP_STEP
+from .consts import CLOSE, DASH, GROUP_STEP, INT, NUMBER, OPEN
 
 _TO = ['to']
 _CONJ = ['or', 'and']

@@ -3,8 +3,7 @@
 import re
 from functools import partial
 
-from .shared import CLOSE, CROSS, NUMBER, OPEN
-from ..pylib.util import GROUP_STEP, REPLACE, TRAIT_STEP
+from .consts import CLOSE, CROSS, GROUP_STEP, NUMBER, OPEN, REPLACE, TRAIT_STEP
 
 
 def size(span, high_only=False):
