@@ -1,6 +1,6 @@
 """Base matcher object."""
 
-from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
+from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .attach import ATTACH
 from .color import COLOR
@@ -23,7 +23,7 @@ MATCHERS = [
     PHRASE, RANGE, SHAPE, SHARED, SIZE, SUBPART, SUFFIX_COUNT]
 
 
-class Matcher(TraitMatcher):  # pylint: disable=too-few-public-methods
+class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
     """Base matcher object."""
 
     name = 'entity_matcher'

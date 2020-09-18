@@ -1,14 +1,15 @@
 """Base matcher object."""
 
+# pylint: disable=import-error
 from collections import defaultdict
 
-from traiter.trait_matcher import TraitMatcher  # pylint: disable=import-error
+from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .attach import ATTACH
 from ..pylib.util import LINK_STEP
 
 
-class LinkMatcher(TraitMatcher):
+class LinkMatcher(SpacyMatcher):
     """Base matcher object."""
 
     name = 'entity_matcher'
