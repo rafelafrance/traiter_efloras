@@ -4,9 +4,9 @@
 from traiter.spacy_nlp.pipeline import SpacyPipeline
 from traiter.spacy_nlp.sentencizer import SpacySentencizer
 
-from ..spacy_matchers.consts import ABBREVS, LINK_STEP, TRAIT_STEP
-from ..spacy_matchers.link_matcher import LinkMatcher
-from ..spacy_matchers.matcher import Matcher
+from src.spacy_matchers.consts import ABBREVS, LINK_STEP, TRAIT_STEP
+from src.spacy_matchers.link_matcher import LinkMatcher
+from src.spacy_matchers.matcher import Matcher
 
 
 class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
@@ -19,14 +19,15 @@ class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
 
         self.nlp.disable_pipes(['ner'])
 
-        sentencizer = SpacySentencizer(ABBREVS)
-        self.nlp.add_pipe(sentencizer, before='parser')
-
         matcher = Matcher(self.nlp, training=training)
         self.nlp.add_pipe(matcher, last=True, name=TRAIT_STEP)
 
-        linker = LinkMatcher(self.nlp)
-        self.nlp.add_pipe(linker, last=True, name=LINK_STEP)
+        if not training:
+            sentencizer = SpacySentencizer(ABBREVS)
+            self.nlp.add_pipe(sentencizer, before='parser')
+
+            linker = LinkMatcher(self.nlp)
+            self.nlp.add_pipe(linker, last=True, name=LINK_STEP)
 
 
-PIPELINE = Pipeline()
+PIPELINE = Pipeline()  # This is here so tests can use a singleton

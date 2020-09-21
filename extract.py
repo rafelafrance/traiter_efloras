@@ -8,10 +8,10 @@ import textwrap
 from copy import deepcopy
 
 import src.pylib.family as futil
-from src.pylib.pipeline import PIPELINE
+from src.spacy_matchers.pipeline import PIPELINE
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
-from src.writers.data_writer import ner_writer
+from src.writers.data_writer import iob_writer, ner_writer
 from src.writers.html_writer import html_writer
 
 
@@ -43,6 +43,10 @@ def main(args):
     if args.ner_file:
         copied = deepcopy(rows)
         ner_writer(args, copied)
+
+    if args.iob_file:
+        copied = deepcopy(rows)
+        iob_writer(args, copied)
 
 
 def parse_args():
@@ -82,6 +86,11 @@ def parse_args():
         help="""Append formatted NER training data to this file.""")
 
     arg_parser.add_argument(
+        '--iob-file', '-B', type=argparse.FileType('a'),
+        help="""Append formatted training data in IOB format
+            to this file.""")
+
+    arg_parser.add_argument(
         '--list-families', '-l', action='store_true',
         help="""List families available to extract and exit.""")
 
@@ -97,7 +106,7 @@ def parse_args():
     else:
         args.flora_id = [1]
 
-    if not (args.csv_file or args.html_file or args.ner_file or args.nel_file):
+    if not (args.csv_file or args.html_file or args.ner_file or args.iob_file):
         setattr(args, 'csv_file', sys.stdout)
 
     return args

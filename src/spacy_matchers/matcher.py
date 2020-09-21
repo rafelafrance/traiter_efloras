@@ -31,6 +31,7 @@ class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
         super().__init__(nlp)
 
         self.add_terms(TERMS)
+
         if not training:
             self.add_patterns(MATCHERS, GROUP_STEP)
             self.add_patterns(MATCHERS, TRAIT_STEP)
