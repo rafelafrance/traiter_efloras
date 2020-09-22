@@ -8,16 +8,6 @@ from ..spacy_matchers.pipeline import Pipeline
 
 LABELS = set()
 
-# Convert BILUO tags to BIL tags
-BILUO2IOB = {'L': 'I', 'U': 'B'}
-
-
-def biluo2iob(tag):
-    """Convert BILUO tags to BIL tags."""
-    char = tag[0]
-    char = BILUO2IOB.get(char, char)
-    return char + tag[1:]
-
 
 def _get_labels():
     """Get the suffix lengths of the traits."""
@@ -70,23 +60,23 @@ def iob_writer(args, rows):
     nlp = Pipeline(training=True).nlp
     for row in rows:
         for sent in row['doc'].sents:
-            entities = get_entities(sent) + [(999999, 999999, 'sentinel')]
+            entities = get_entities(sent) + [(9_999_999, 9_999_999, '')]
             doc = nlp(sent.text)
             start, end, label = entities.pop(0)
             tags = []
-            count = 0
+            inside = False
             for token in doc:
                 if token.idx >= end:
-                    count = 0
+                    inside = False
                     start, end, label = entities.pop(0)
 
                 if start <= token.idx < end:
-                    iob = 'B' if count == 0 else 'I'
+                    iob = 'I' if inside else 'B'
                     tags.append(f'{iob}-{label}')
-                    count += 1
+                    inside = True
                 else:
                     tags.append('O')
-                    count = 0
+                    inside = False
 
             line = json.dumps([sent.text, tags])
             args.iob_file.write(line)
