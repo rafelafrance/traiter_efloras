@@ -168,7 +168,7 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP(shorten("""rarely 1- or 5-7-foliolate;""")),
             [{'min': 1, 'low': 5, 'high': 7,
-              'trait': 'plant_leaf_count', 'start': 7, 'end': 26}]
+              'trait': 'leaflet_count', 'start': 7, 'end': 26}]
         )
 
     def test_count_19(self):
@@ -176,7 +176,7 @@ class TestCount(unittest.TestCase):
             NLP(shorten(
                 """Leaves imparipinnate, 5- or 7(or 9)-foliolate;""")),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 5, 'high': 7, 'max': 9, 'trait': 'leaf_count',
+             {'low': 5, 'high': 7, 'max': 9, 'trait': 'leaflet_count',
               'start': 22, 'end': 45}]
         )
 
@@ -192,37 +192,23 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('Racemes compact, 1- or 2- or 5-7-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
-             {'min': 1,
-              'low': 2,
-              'high': 5,
-              'max': 7,
-              'trait': 'inflorescence_flower_count',
-              'start': 17,
-              'end': 41}]
+             {'min': 1, 'low': 2, 'high': 5, 'max': 7,
+              'trait': 'inflorescence_flower_count', 'start': 17, 'end': 41}]
         )
 
     def test_count_22(self):
         self.assertEqual(
             NLP('3(or 5-9)-foliolate;'),
-            [{'low': 3,
-              'high': 5,
-              'max': 9,
-              'trait': 'plant_leaf_count',
-              'start': 0,
-              'end': 19}]
+            [{'low': 3, 'high': 5, 'max': 9,
+              'trait': 'leaflet_count', 'start': 0, 'end': 19}]
         )
 
     def test_count_23(self):
         self.assertEqual(
             NLP('leaflets (2or)3- or 4(or 5)-paired'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
-             {'min': 2,
-              'low': 3,
-              'high': 4,
-              'max': 5,
-              'trait': 'leaflet_pair_count',
-              'start': 9,
-              'end': 34}]
+             {'min': 2, 'low': 3, 'high': 4, 'max': 5,
+              'trait': 'leaflet_pair_count', 'start': 9, 'end': 34}]
         )
 
     def test_count_24(self):
@@ -230,7 +216,7 @@ class TestCount(unittest.TestCase):
             NLP('Leaves (19-)23- or 25-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'min': 19, 'low': 23, 'high': 25,
-              'trait': 'leaf_count', 'start': 7, 'end': 31}]
+              'trait': 'leaflet_count', 'start': 7, 'end': 31}]
         )
 
     def test_count_25(self):

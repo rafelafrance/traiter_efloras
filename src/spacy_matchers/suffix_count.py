@@ -16,7 +16,9 @@ def suffix_count(span):
             return {'_forget': True}
         elif label == 'count_suffix':
             value = token.lower_
-            data['_subpart'] = REPLACE.get(value, value)
+            part = REPLACE.get(value, value)
+            key = CATEGORY.get(value, '_subpart')
+            data[key] = part
         elif token.text in PLUS:
             data['indefinite'] = True
     return data

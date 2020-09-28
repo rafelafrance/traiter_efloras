@@ -63,7 +63,7 @@ class TestAttach(unittest.TestCase):
         self.assertEqual(
             NLP('blade [3–5-foliolate]'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'low': 3, 'high': 5, 'trait': 'leaf_count', 'start': 6,
+             {'low': 3, 'high': 5, 'trait': 'leaflet_count', 'start': 6,
               'end': 21}]
         )
 
@@ -226,7 +226,7 @@ class TestAttach(unittest.TestCase):
             NLP(shorten("""
                 hypanthium pistillodes with 3-lobed ovary.""")),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
-             {'part': 'pistol', 'trait': 'part', 'start': 11, 'end': 22},
+             {'part': 'pistil', 'trait': 'part', 'start': 11, 'end': 22},
              {'low': 3, 'trait': 'ovary_lobe_count', 'start': 28, 'end': 35},
              {'part': 'ovary', 'trait': 'part', 'start': 36, 'end': 41}]
         )

@@ -165,7 +165,7 @@ class TestSize(unittest.TestCase):
             NLP('Leaves 3-foliolate, lateral pair of leaflets '
                 'deeply lobed, petiolules 2–5 mm,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 3, 'trait': 'leaf_count', 'start': 7, 'end': 18},
+             {'low': 3, 'trait': 'leaflet_count', 'start': 7, 'end': 18},
              {'location': 'lateral', 'group': 'pair', 'part': 'leaflet',
               'trait': 'part', 'start': 20, 'end': 44},
              {'part': 'petiole',
