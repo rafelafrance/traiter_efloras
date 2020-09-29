@@ -1,8 +1,8 @@
 Hyphenate~=1.1.0
-beautifulsoup4~=4.9.1
+beautifulsoup4~=4.9.2
 pandas~=1.1.2
 Jinja2~=3.0.0a1
-regex~=2020.7.14
+regex~=2020.9.27
 lxml~=4.5.2
 spacy~=2.3.2
 cupy-cuda102~=7.8.0

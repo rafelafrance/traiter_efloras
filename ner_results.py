@@ -27,7 +27,7 @@ def get_results(args):
     expected = []
     actually = []
     for line in args.results_file:
-        sent, results = json.loads(line)
+        _, results = json.loads(line)
         for result_dict in results:
             result = result_dict['result']
             expect = result_dict.get('expect')

@@ -108,6 +108,7 @@ def score_data(nlp, data, note):
         inter = expected & actually
         union_count += len(expected | actually)
         inter_count += len(inter)
+        maxi = len(sent[0])
 
         result = [{'result': 'ok', 'expect': list(i)} for i in inter]
 
@@ -133,9 +134,8 @@ def score_data(nlp, data, note):
             result.append(
                 {'result': label, 'expect': expect, 'actual': actual})
 
-            maxi = len(sent[0])
-            result = sorted(result, key=lambda r: (
-                min(r.get('actual', [maxi])[0], r.get('expect', [maxi])[0]),
+            result = sorted(result, key=lambda r, mx=maxi: (
+                min(r.get('actual', [mx])[0], r.get('expect', [mx])[0]),
                 -max(r.get('actual', [0, 0])[1], r.get('expect', [0, 0])[1])))
 
             results.append(json.dumps([sent[0], result]))

@@ -152,7 +152,7 @@ class TestCount(unittest.TestCase):
     def test_count_17(self):
         self.assertEqual(
             NLP(shorten("""
-                Pistillate flowers: hyaline bristle at apex of hypanthial 
+                Pistillate flowers: hyaline bristle at apex of hypanthial
                 aculei 0.5–1 times as long as opaque base.""")),
             [{'sex': 'female', 'part': 'flower',
               'trait': 'part', 'start': 0, 'end': 18},

@@ -5,6 +5,7 @@
 import argparse
 import os
 import random
+import re
 import socket
 import sys
 import textwrap
@@ -18,6 +19,7 @@ from bs4 import BeautifulSoup
 from lxml import html
 
 from src.pylib import family as futil
+from src.pylib.util import DATA_DIR
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -31,6 +33,13 @@ ERROR_RETRY = 10
 # Set a timeout for requests
 TIMEOUT = 30
 socket.setdefaulttimeout(TIMEOUT)
+
+EFLORAS_DIR = DATA_DIR / 'eFloras'
+FAMILY_DIR = DATA_DIR / 'families'
+
+CITE = 'http://www.efloras.org'
+EFLORAS_FAMILIES = FAMILY_DIR / 'eFloras_family_list.csv'
+TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
 
 def main(args, families, flora_ids):
@@ -70,20 +79,20 @@ def update_families():
     pattern = 'flora_id=*_page=*'
     families = []
 
-    for path in futil.FAMILY_DIR.glob(pattern):
+    for path in FAMILY_DIR.glob(pattern):
 
         with open(path) as in_file:
             page = in_file.read()
 
         soup = BeautifulSoup(page, features='lxml')
 
-        for link in soup.findAll('a', attrs={'title': futil.TAXON_RE}):
+        for link in soup.findAll('a', attrs={'title': TAXON_RE}):
             href = link.attrs['href']
             flora_id = futil.get_flora_id(href)
             families.append({
                 'flora_id': flora_id,
                 'taxon_id': futil.get_taxon_id(href),
-                'link': f'{futil.CITE}/{href}',
+                'link': f'{CITE}/{href}',
                 'family': link.text,
                 'flora_name': floras[flora_id],
             })
@@ -95,8 +104,8 @@ def update_families():
 
 def download_families(flora_id):
     """Get the families for the flora."""
-    base_url = f'{futil.CITE}/browse.aspx?flora_id={flora_id}'
-    path = futil.FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
+    base_url = f'{CITE}/browse.aspx?flora_id={flora_id}'
+    path = FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
     urllib.request.urlretrieve(base_url, path)
 
     with open(path) as in_file:
@@ -114,14 +123,14 @@ def download_families(flora_id):
 
     for page in pages:
         url = base_url + f'&page={page}'
-        path = futil.FAMILY_DIR / f'flora_id={flora_id}_page={page}.html'
+        path = FAMILY_DIR / f'flora_id={flora_id}_page={page}.html'
         urllib.request.urlretrieve(url, path)
 
 
 def download_floras():
     """Get the floras from the main page."""
-    url = futil.CITE
-    path = futil.FAMILY_DIR / 'home_page.html'
+    url = CITE
+    path = FAMILY_DIR / 'home_page.html'
     urllib.request.urlretrieve(url, path)
 
     with open(path) as in_file:
@@ -166,7 +175,7 @@ def get_treatments(flora_id, family_name, page):
 def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
     path = futil.treatment_file(flora_id, family_name, taxon_id)
-    url = (f'{futil.CITE}/florataxon.aspx'
+    url = (f'{CITE}/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
 
@@ -207,7 +216,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
 
     path = futil.tree_file(flora_id, family_name, taxon_id, page_no)
 
-    url = (f'{futil.CITE}/browse.aspx'
+    url = (f'{CITE}/browse.aspx'
            f'?flora_id={flora_id}'
            f'&start_taxon_id={taxon_id}')
     if page_no > 1:

@@ -38,5 +38,5 @@ class TestPartLocation(unittest.TestCase):
             [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
              {'margin_shape': 'ciliate',
               'trait': 'stipule_margin_shape', 'start': 17, 'end': 24},
-            {'subpart': 'margin', 'trait': 'subpart', 'start': 28, 'end': 34}]
+             {'subpart': 'margin', 'trait': 'subpart', 'start': 28, 'end': 34}]
         )

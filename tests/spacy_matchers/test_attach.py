@@ -134,7 +134,7 @@ class TestAttach(unittest.TestCase):
     def test_attach_11(self):
         self.assertEqual(
             NLP(shorten("""
-                Plants to 30 cm tall, strongly branched, with appressed to 
+                Plants to 30 cm tall, strongly branched, with appressed to
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
@@ -446,7 +446,7 @@ class TestAttach(unittest.TestCase):
         self.assertEqual(
             NLP(shorten("""
                  Plants with white hairs, near stipules and in inflorescence
-                 also black hairy. 
+                 also black hairy.
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'white',
