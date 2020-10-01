@@ -1,6 +1,6 @@
 """Common count snippets."""
 
-from .consts import CLOSE, CROSS, OPEN, REPLACE, SLASH, TRAIT_STEP
+from ..pylib.util import CLOSE, CROSS, OPEN, REPLACE, SLASH, TRAIT_STEP
 
 _NO_COUNTS = (CROSS + SLASH
               + """ average side times days weeks by """.split())

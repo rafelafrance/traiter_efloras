@@ -1,6 +1,6 @@
 """Common color snippets."""
 
-from .consts import DASH, REPLACE, TRAIT_STEP
+from ..pylib.util import DASH, REPLACE, TRAIT_STEP
 
 
 def color(span):

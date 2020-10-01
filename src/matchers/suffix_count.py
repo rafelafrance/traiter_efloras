@@ -2,7 +2,7 @@
 
 from traiter.pylib.util import to_positive_int  # pylint: disable=import-error
 
-from .consts import CATEGORY, CLOSE, OPEN, PLUS, REPLACE, TRAIT_STEP
+from ..pylib.util import CATEGORY, CLOSE, OPEN, PLUS, REPLACE, TRAIT_STEP
 
 
 def suffix_count(span):

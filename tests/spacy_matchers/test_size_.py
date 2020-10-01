@@ -4,7 +4,7 @@
 
 import unittest
 
-from src.spacy_matchers.pipeline import PIPELINE
+from src.matchers.pipeline import PIPELINE
 
 NLP = PIPELINE.test_traits
 
@@ -16,15 +16,10 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             NLP('Leaf (12-)23-34 × 45-56 cm'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
-             {'length_min': 12,
-              'length_low': 23,
-              'length_high': 34,
-              'width_low': 45,
-              'width_high': 56,
-              'width_units': 'cm',
+             {'length_min': 12, 'length_low': 23, 'length_high': 34,
+              'width_low': 45, 'width_high': 56, 'width_units': 'cm',
               'trait': 'size', 'part': 'leaf',
-              'start': 5,
-              'end': 26}]
+              'start': 5, 'end': 26}]
         )
 
     def test_size_02(self):

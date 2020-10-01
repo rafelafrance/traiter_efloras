@@ -2,9 +2,9 @@
 
 import json
 
-from ..spacy_matchers.consts import TERMS, TRAIT_STEP
-from ..spacy_matchers.matcher import MATCHERS
-from ..spacy_matchers.pipeline import Pipeline
+from ..pylib.util import TERMS, TRAIT_STEP
+from ..matchers.matcher import MATCHERS
+from ..matchers.pipeline import Pipeline
 
 LABELS = set()
 

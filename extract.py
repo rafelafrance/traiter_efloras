@@ -8,7 +8,7 @@ import textwrap
 from copy import deepcopy
 
 import src.pylib.family as futil
-from src.spacy_matchers.pipeline import Pipeline
+from src.matchers.pipeline import Pipeline
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import iob_writer, ner_writer

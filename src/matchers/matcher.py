@@ -4,7 +4,7 @@ from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .attach import ATTACH
 from .color import COLOR
-from .consts import GROUP_STEP, SHARED, TERMS, TRAIT_STEP
+from ..pylib.util import GROUP_STEP, SHARED, TERMS, TRAIT_STEP
 from .count import COUNT
 from .descriptor import DESCRIPTOR
 from .margin import MARGIN_SHAPE

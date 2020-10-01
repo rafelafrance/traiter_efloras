@@ -1,6 +1,6 @@
 """Common descriptors snippets, plant-wide traits (words or phrases)."""
 
-from .consts import REPLACE, TERMS, TRAIT_STEP
+from ..pylib.util import REPLACE, TERMS, TRAIT_STEP
 
 _DESCRIPTORS_DICT = {t['label']: t['label'] for t in TERMS
                      if t['category'] == 'descriptor'}
