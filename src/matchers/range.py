@@ -14,7 +14,7 @@ DASH_TO = DASH + TO
 DASH_TO_CONJ = DASH_TO + CONJ
 
 
-def rng(span, fields=''):
+def range_(span, fields=''):
     """Build the range parts."""
     data = {}
 
@@ -46,7 +46,7 @@ HIGH = DASH_LOW = DASH_MAX = [
     {'TEXT': {'REGEX': NUMBER}},
 ]
 
-MAX = HIGH_PAREN = [
+MAX = HIGH_PARENS = [
     {'TEXT': {'IN': OPEN}},
     {'LOWER': {'IN': DASH_TO_CONJ}},
     {'TEXT': {'REGEX': NUMBER}},
@@ -75,19 +75,19 @@ RANGE = {
     GROUP_STEP: [
         {
             'label': 'range',
-            'on_match': partial(rng, fields='min low high max'),
+            'on_match': partial(range_, fields='min low high max'),
             'patterns': [
                 MIN + LOW + HIGH + MAX,
                 MIN + LOW + OR_HIGH + MAX,
                 MIN_VAL + LOW + HIGH + MAX,
                 MIN_VAL + OR_LOW + HIGH + MAX,
                 MIN_VAL + OR_LOW + OR_HIGH + DASH_MAX,
-                MIN_VAL + DASH_LOW + HIGH_PAREN + MAX,
+                MIN_VAL + DASH_LOW + HIGH_PARENS + MAX,
             ],
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='low high max'),
+            'on_match': partial(range_, fields='low high max'),
             'patterns': [
                 LOW + HIGH + MAX,
                 LOW + OR_HIGH + MAX,
@@ -97,7 +97,7 @@ RANGE = {
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='min low high'),
+            'on_match': partial(range_, fields='min low high'),
             'patterns': [
                 MIN + LOW + HIGH,
                 MIN + LOW + OR_HIGH,
@@ -106,7 +106,7 @@ RANGE = {
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='min low max'),
+            'on_match': partial(range_, fields='min low max'),
             'patterns': [
                 MIN + LOW + MAX,
                 MIN_VAL + OR_LOW + DASH_MAX,
@@ -114,14 +114,14 @@ RANGE = {
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='min low'),
+            'on_match': partial(range_, fields='min low'),
             'patterns': [
                 MIN + LOW,
             ],
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='low high'),
+            'on_match': partial(range_, fields='low high'),
             'patterns': [
                 LOW + HIGH,
                 LOW + OR_HIGH,
@@ -129,14 +129,14 @@ RANGE = {
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='low max'),
+            'on_match': partial(range_, fields='low max'),
             'patterns': [
                 LOW + MAX,
             ],
         },
         {
             'label': 'range',
-            'on_match': partial(rng, fields='low'),
+            'on_match': partial(range_, fields='low'),
             'patterns': [
                 LOW,
             ],
