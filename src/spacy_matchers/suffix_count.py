@@ -35,7 +35,7 @@ def count_phrase(span):
 SUFFIX_COUNT = {
     TRAIT_STEP: [
         {
-            'label': 'suffix_count',
+            'label': 'count',
             'on_match': suffix_count,
             'patterns': [
                 [
@@ -53,7 +53,7 @@ SUFFIX_COUNT = {
             ],
         },
         {
-            'label': 'count_phrase',
+            'label': 'count',
             'on_match': count_phrase,
             'patterns': [
                 [

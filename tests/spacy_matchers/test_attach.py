@@ -19,7 +19,7 @@ class TestAttach(unittest.TestCase):
             NLP(shorten("""leaves and yellow petals.""")),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'yellow',
-              'trait': 'petal_color', 'start': 11, 'end': 17},
+              'trait': 'color', 'part': 'petal', 'start': 11, 'end': 17},
              {'part': 'petal', 'trait': 'part', 'start': 18, 'end': 24}]
         )
 
@@ -27,11 +27,13 @@ class TestAttach(unittest.TestCase):
         self.assertEqual(
             NLP('perianth lobes elliptic, ca. 1 mm'),
             [{'part': 'perianth', 'trait': 'part', 'start': 0, 'end': 8},
-             {'subpart': 'lobe', 'trait': 'subpart', 'start': 9, 'end': 14},
-             {'shape': 'elliptic', 'trait': 'perianth_lobe_shape', 'start': 15,
+             {'subpart': 'lobe', 'part': 'perianth', 'trait': 'subpart',
+              'start': 9, 'end': 14},
+             {'shape': 'elliptic', 'trait': 'shape', 'part': 'perianth',
+              'subpart': 'lobe', 'start': 15,
               'end': 23},
              {'length_low': 1, 'length_units': 'mm',
-              'trait': 'perianth_lobe_size',
+              'trait': 'size', 'part': 'perianth', 'subpart': 'lobe',
               'start': 25, 'end': 33}]
         )
 
@@ -39,7 +41,8 @@ class TestAttach(unittest.TestCase):
         self.assertEqual(
             NLP('fruits (1--)3-lobed,'),
             [{'part': 'fruit', 'trait': 'part', 'start': 0, 'end': 6},
-             {'min': 1, 'low': 3, 'trait': 'fruit_lobe_count', 'start': 7,
+             {'min': 1, 'low': 3, 'trait': 'count', 'part': 'fruit',
+              'subpart': 'lobe', 'start': 7,
               'end': 19}]
         )
 
@@ -47,8 +50,10 @@ class TestAttach(unittest.TestCase):
         self.assertEqual(
             NLP('petals spreading, pink, unlobed,'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'color': 'pink', 'trait': 'petal_color', 'start': 18, 'end': 22},
-             {'start': 24, 'end': 31, 'low': 0, 'trait': 'petal_lobe_count'}]
+             {'color': 'pink', 'trait': 'color', 'part': 'petal', 'start': 18,
+              'end': 22},
+             {'start': 24, 'end': 31, 'low': 0, 'trait': 'count',
+              'part': 'petal', 'subpart': 'lobe'}]
         )
 
     def test_attach_05(self):
@@ -56,15 +61,16 @@ class TestAttach(unittest.TestCase):
             NLP('Inflorescences 10+-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'low': 10, 'indefinite': True,
-              'trait': 'inflorescence_flower_count', 'start': 15, 'end': 27}]
+              'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
+              'start': 15, 'end': 27}]
         )
 
     def test_attach_06(self):
         self.assertEqual(
             NLP('blade [3–5-foliolate]'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'low': 3, 'high': 5, 'trait': 'leaflet_count', 'start': 6,
-              'end': 21}]
+             {'low': 3, 'high': 5, 'trait': 'count', 'part': 'leaflet',
+              'start': 6, 'end': 21}]
         )
 
     def test_attach_07(self):
@@ -72,7 +78,7 @@ class TestAttach(unittest.TestCase):
             NLP('Racemes sessile, 2- or 3-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
              {'low': 2, 'high': 3,
-              'trait': 'inflorescence_flower_count',
+              'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
               'start': 17, 'end': 33}]
         )
 
@@ -81,14 +87,18 @@ class TestAttach(unittest.TestCase):
             NLP('Legumes with a slender stipe 2-5 mm, 10-12 mm, ca. '
                 '4 mm high and ca. 3 mm wide, '),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
-             {'subpart': 'stipe', 'trait': 'subpart', 'start': 23, 'end': 28},
+             {'subpart': 'stipe', 'part': 'legume', 'trait': 'subpart',
+              'start': 23, 'end': 28},
              {'length_low': 2, 'length_high': 5, 'length_units': 'mm',
-              'trait': 'legume_stipe_size', 'start': 29, 'end': 35},
+              'trait': 'size', 'part': 'legume', 'subpart': 'stipe',
+              'start': 29, 'end': 35},
              {'length_low': 10, 'length_high': 12, 'length_units': 'mm',
-              'trait': 'legume_size', 'start': 37, 'end': 45},
-             {'height_low': 4, 'height_units': 'mm', 'trait': 'legume_size',
+              'trait': 'size', 'part': 'legume', 'start': 37, 'end': 45},
+             {'height_low': 4, 'height_units': 'mm', 'trait': 'size',
+              'part': 'legume',
               'start': 47, 'end': 60},
-             {'width_low': 3, 'width_units': 'mm', 'trait': 'legume_size',
+             {'width_low': 3, 'width_units': 'mm', 'trait': 'size',
+              'part': 'legume',
               'start': 65, 'end': 78}]
         )
 
@@ -98,17 +108,19 @@ class TestAttach(unittest.TestCase):
                 'widely elliptic, emarginate;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple',
-              'trait': 'petal_color', 'start': 7, 'end': 13},
-             {'subpart': 'keel', 'trait': 'subpart', 'start': 15, 'end': 19},
+              'trait': 'color', 'part': 'petal', 'start': 7, 'end': 13},
+             {'subpart': 'keel', 'part': 'petal', 'trait': 'subpart',
+              'start': 15, 'end': 19},
              {'color': 'blue-tip',
-              'trait': 'petal_keel_color', 'start': 25, 'end': 33},
+              'trait': 'color', 'part': 'petal', 'subpart': 'keel',
+              'start': 25, 'end': 33},
              {'length_low': 8, 'length_high': 9,
               'width_low': 6, 'width_units': 'mm',
-              'trait': 'petal_size', 'start': 44, 'end': 58},
+              'trait': 'size', 'part': 'petal', 'start': 44, 'end': 58},
              {'shape': 'elliptic',
-              'trait': 'petal_shape', 'start': 67, 'end': 75},
+              'trait': 'shape', 'part': 'petal', 'start': 67, 'end': 75},
              {'shape': 'emarginate',
-              'trait': 'petal_shape', 'start': 77, 'end': 87}]
+              'trait': 'shape', 'part': 'petal', 'start': 77, 'end': 87}]
         )
 
     def test_attach_10(self):
@@ -120,13 +132,14 @@ class TestAttach(unittest.TestCase):
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 5,
               'length_units': 'mm',
-              'trait': 'calyx_size',
+              'trait': 'size', 'part': 'calyx',
               'start': 6,
               'end': 14},
-             {'subpart': 'tooth', 'trait': 'subpart', 'start': 59, 'end': 64},
+             {'subpart': 'tooth', 'part': 'calyx', 'trait': 'subpart',
+              'start': 59, 'end': 64},
              {'length_low': 2.5,
               'length_units': 'mm',
-              'trait': 'calyx_tooth_size',
+              'trait': 'size', 'part': 'calyx', 'subpart': 'tooth',
               'start': 65,
               'end': 75}]
         )
@@ -139,14 +152,18 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'height_high': 30, 'height_units': 'cm',
-              'trait': 'plant_size', 'start': 7, 'end': 20},
+              'trait': 'size', 'part': 'plant', 'start': 7, 'end': 20},
              {'color': 'white',
-              'trait': 'plant_hair_color', 'start': 74, 'end': 79},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 80, 'end': 85},
+              'trait': 'color', 'part': 'plant', 'subpart': 'hair',
+              'start': 74, 'end': 79},
+             {'subpart': 'hair', 'part': 'plant', 'trait': 'subpart',
+              'start': 80, 'end': 85},
              {'length_low': 0.2, 'length_high': 1.5, 'length_units': 'mm',
-              'trait': 'plant_hair_size', 'start': 86, 'end': 96},
+              'trait': 'size', 'part': 'plant', 'subpart': 'hair', 'start': 86,
+              'end': 96},
              {'length_high': 3, 'length_units': 'mm',
-              'trait': 'plant_hair_size', 'start': 110, 'end': 117}]
+              'trait': 'size', 'part': 'plant', 'subpart': 'hair',
+              'start': 110, 'end': 117}]
         )
 
     def test_attach_12(self):
@@ -157,17 +174,22 @@ class TestAttach(unittest.TestCase):
                 triangular, 0.8-1 mm.""")),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'shape': 'tubular',
-              'trait': 'calyx_shape', 'start': 14, 'end': 21},
+              'trait': 'shape', 'part': 'calyx', 'start': 14, 'end': 21},
              {'length_low': 8, 'length_high': 9, 'length_units': 'mm',
-              'trait': 'calyx_size', 'start': 23, 'end': 29},
+              'trait': 'size', 'part': 'calyx', 'start': 23, 'end': 29},
              {'color': 'black',
-              'trait': 'calyx_hair_color', 'start': 81, 'end': 86},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 87, 'end': 92},
-             {'subpart': 'tooth', 'trait': 'subpart', 'start': 94, 'end': 99},
+              'trait': 'color', 'part': 'calyx', 'subpart': 'hair',
+              'start': 81, 'end': 86},
+             {'subpart': 'hair', 'part': 'calyx', 'trait': 'subpart',
+              'start': 87, 'end': 92},
+             {'subpart': 'tooth', 'part': 'calyx', 'trait': 'subpart',
+              'start': 94, 'end': 99},
              {'shape': 'triangular',
-              'trait': 'calyx_tooth_shape', 'start': 114, 'end': 133},
+              'trait': 'shape', 'part': 'calyx', 'subpart': 'tooth',
+              'start': 114, 'end': 133},
              {'length_low': 0.8, 'length_high': 1.0, 'length_units': 'mm',
-              'trait': 'calyx_tooth_size', 'start': 135, 'end': 143}]
+              'trait': 'size', 'part': 'calyx', 'subpart': 'tooth',
+              'start': 135, 'end': 143}]
         )
 
     def test_attach_13(self):
@@ -180,27 +202,34 @@ class TestAttach(unittest.TestCase):
                 hastate-auriculate, apex emarginate;""")),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 10, 'length_high': 12, 'length_units': 'mm',
-              'trait': 'calyx_size', 'start': 6, 'end': 14},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 96, 'end': 101},
+              'trait': 'size', 'part': 'calyx', 'start': 6, 'end': 14},
+             {'subpart': 'hair', 'part': 'calyx', 'trait': 'subpart',
+              'start': 96, 'end': 101},
              {'length_low': 1, 'length_high': 2, 'length_units': 'mm',
-              'trait': 'calyx_hair_size', 'start': 102, 'end': 108},
+              'trait': 'size', 'part': 'calyx', 'subpart': 'hair',
+              'start': 102, 'end': 108},
              {'subpart': 'tooth',
-              'trait': 'subpart', 'start': 110, 'end': 115},
+              'part': 'calyx', 'trait': 'subpart', 'start': 110, 'end': 115},
              {'length_low': 4, 'length_units': 'mm',
-              'trait': 'calyx_tooth_size', 'start': 116, 'end': 124},
+              'trait': 'size', 'part': 'calyx', 'subpart': 'tooth',
+              'start': 116, 'end': 124},
              {'part': 'petal', 'trait': 'part', 'start': 126, 'end': 132},
              {'color': 'white',
-              'trait': 'petal_color', 'start': 133, 'end': 138},
+              'trait': 'color', 'part': 'petal', 'start': 133, 'end': 138},
              {'shape': 'oblong-pandurate',
-              'trait': 'petal_shape', 'start': 149, 'end': 165},
+              'trait': 'shape', 'part': 'petal', 'start': 149, 'end': 165},
              {'length_low': 25, 'width_low': 8, 'width_units': 'mm',
-              'trait': 'petal_size', 'start': 167, 'end': 180},
-             {'subpart': 'base', 'trait': 'subpart', 'start': 217, 'end': 221},
+              'trait': 'size', 'part': 'petal', 'start': 167, 'end': 180},
+             {'subpart': 'base', 'part': 'petal', 'trait': 'subpart',
+              'start': 217, 'end': 221},
              {'shape': 'hastate-auriculate',
-              'trait': 'petal_base_shape', 'start': 231, 'end': 249},
-             {'subpart': 'apex', 'trait': 'subpart', 'start': 251, 'end': 255},
+              'trait': 'shape', 'part': 'petal', 'subpart': 'base',
+              'start': 231, 'end': 249},
+             {'subpart': 'apex', 'part': 'petal', 'trait': 'subpart',
+              'start': 251, 'end': 255},
              {'shape': 'emarginate',
-              'trait': 'petal_apex_shape', 'start': 256, 'end': 266}]
+              'trait': 'shape', 'part': 'petal', 'subpart': 'apex',
+              'start': 256, 'end': 266}]
         )
 
     def test_attach_14(self):
@@ -210,15 +239,16 @@ class TestAttach(unittest.TestCase):
                 rather densely hairy; bracts 0.5-1 mm, white hairy.""")),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
              {'low': 3, 'high': 9,
-              'trait': 'inflorescence_flower_count', 'start': 15, 'end': 27},
+              'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
+              'start': 15, 'end': 27},
              {'part': 'peduncle', 'trait': 'part', 'start': 29, 'end': 37},
              {'length_low': 0.5, 'length_high': 2.0, 'length_units': 'cm',
-              'trait': 'peduncle_size', 'start': 38, 'end': 46},
+              'trait': 'size', 'part': 'peduncle', 'start': 38, 'end': 46},
              {'part': 'bract', 'trait': 'part', 'start': 81, 'end': 87},
              {'length_low': 0.5, 'length_high': 1.0, 'length_units': 'mm',
-              'trait': 'bract_size', 'start': 88, 'end': 96},
-             {'color': 'white', 'trait': 'bract_color', 'start': 98,
-              'end': 103}]
+              'trait': 'size', 'part': 'bract', 'start': 88, 'end': 96},
+             {'color': 'white', 'trait': 'color', 'part': 'bract',
+              'start': 98, 'end': 103}]
         )
 
     def test_attach_15(self):
@@ -227,7 +257,8 @@ class TestAttach(unittest.TestCase):
                 hypanthium pistillodes with 3-lobed ovary.""")),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'part': 'pistil', 'trait': 'part', 'start': 11, 'end': 22},
-             {'low': 3, 'trait': 'ovary_lobe_count', 'start': 28, 'end': 35},
+             {'low': 3, 'trait': 'count', 'part': 'ovary', 'subpart': 'lobe',
+              'start': 28, 'end': 35},
              {'part': 'ovary', 'trait': 'part', 'start': 36, 'end': 41}]
         )
 
@@ -236,7 +267,8 @@ class TestAttach(unittest.TestCase):
             NLP(shorten('roots thin, without thick, woody rootstock')),
             [{'part': 'root', 'trait': 'part', 'start': 0, 'end': 5},
              {'woodiness': 'not woody',
-              'trait': 'rootstock_woodiness', 'start': 12, 'end': 32},
+              'trait': 'woodiness', 'part': 'rootstock', 'start': 12,
+              'end': 32},
              {'part': 'rootstock', 'trait': 'part', 'start': 33, 'end': 42}]
         )
 
@@ -246,17 +278,19 @@ class TestAttach(unittest.TestCase):
                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                 1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
-             {'subpart': 'stipe', 'trait': 'subpart', 'start': 15, 'end': 20},
+             {'subpart': 'stipe', 'part': 'legume', 'trait': 'subpart',
+              'start': 15, 'end': 20},
              {'length_low': 6, 'length_high': 7, 'length_units': 'mm',
-              'trait': 'legume_stipe_size', 'start': 21, 'end': 27},
+              'trait': 'size', 'part': 'legume', 'subpart': 'stipe',
+              'start': 21, 'end': 27},
              {'shape': 'ellipsoid',
-              'trait': 'legume_shape', 'start': 41, 'end': 59},
+              'trait': 'shape', 'part': 'legume', 'start': 41, 'end': 59},
              {'length_low': 1.5, 'length_high': 2.4, 'length_units': 'cm',
-              'trait': 'legume_size', 'start': 61, 'end': 71},
+              'trait': 'size', 'part': 'legume', 'start': 61, 'end': 71},
              {'width_low': 6, 'width_high': 7, 'width_units': 'mm',
-              'trait': 'legume_size', 'start': 73, 'end': 84},
+              'trait': 'size', 'part': 'legume', 'start': 73, 'end': 84},
              {'height_low': 4, 'height_high': 5, 'height_units': 'mm',
-              'trait': 'legume_size', 'start': 89, 'end': 100}]
+              'trait': 'size', 'part': 'legume', 'start': 89, 'end': 100}]
         )
 
     def test_attach_18(self):
@@ -266,14 +300,16 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'length_low': 1.5, 'length_high': 3.0, 'length_units': 'cm',
-              'trait': 'leaf_size', 'start': 7, 'end': 15},
+              'trait': 'size', 'part': 'leaf', 'start': 7, 'end': 15},
              {'part': 'leaflet', 'trait': 'part', 'start': 17, 'end': 25},
              {'length_low': 2, 'length_high': 6,
               'width_low': 1.0, 'width_high': 1.5, 'width_units': 'mm',
-              'trait': 'leaflet_size', 'start': 26, 'end': 40},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 47, 'end': 52},
+              'trait': 'size', 'part': 'leaflet', 'start': 26, 'end': 40},
+             {'subpart': 'hair', 'part': 'leaflet', 'trait': 'subpart',
+              'start': 47, 'end': 52},
              {'length_low': 1, 'length_units': 'mm',
-              'trait': 'leaflet_hair_size', 'start': 53, 'end': 61}]
+              'trait': 'size', 'part': 'leaflet', 'subpart': 'hair',
+              'start': 53, 'end': 61}]
         )
 
     def test_attach_19(self):
@@ -284,12 +320,15 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 7, 'length_high': 8, 'length_units': 'mm',
-              'trait': 'calyx_size', 'start': 6, 'end': 12},
+              'trait': 'size', 'part': 'calyx', 'start': 6, 'end': 12},
              {'color': 'black',
-              'trait': 'calyx_hair_color', 'start': 79, 'end': 84},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 85, 'end': 90},
+              'trait': 'color', 'part': 'calyx', 'subpart': 'hair',
+              'start': 79, 'end': 84},
+             {'subpart': 'hair', 'part': 'calyx', 'trait': 'subpart',
+              'start': 85, 'end': 90},
              {'length_low': 0.5, 'length_high': 1.0, 'length_units': 'mm',
-              'trait': 'calyx_hair_size', 'start': 91, 'end': 99}]
+              'trait': 'size', 'part': 'calyx', 'subpart': 'hair', 'start': 91,
+              'end': 99}]
         )
 
     def test_attach_20(self):
@@ -299,10 +338,12 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'habit': 'acaulescent',
-              'trait': 'plant_habit', 'start': 7, 'end': 18},
+              'trait': 'habit', 'part': 'plant', 'start': 7, 'end': 18},
              {'color': 'white',
-              'trait': 'plant_hair_color', 'start': 50, 'end': 55},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 56, 'end': 61}]
+              'trait': 'color', 'part': 'plant', 'subpart': 'hair',
+              'start': 50, 'end': 55},
+             {'subpart': 'hair', 'part': 'plant', 'trait': 'subpart',
+              'start': 56, 'end': 61}]
         )
 
     def test_attach_21(self):
@@ -316,17 +357,19 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'low': 7, 'high': 9, 'group': 'pairs',
-              'trait': 'leaflet_count', 'start': 12, 'end': 21},
+              'trait': 'count', 'part': 'leaflet', 'start': 12, 'end': 21},
              {'shape': 'obovate',
-              'trait': 'leaflet_shape', 'start': 30, 'end': 37},
+              'trait': 'shape', 'part': 'leaflet', 'start': 30, 'end': 37},
              {'shape': 'orbicular',
-              'trait': 'leaflet_shape', 'start': 41, 'end': 53},
+              'trait': 'shape', 'part': 'leaflet', 'start': 41, 'end': 53},
              {'length_low': 4, 'length_high': 6,
               'width_low': 3.5, 'width_high': 5.5, 'width_units': 'mm',
-              'trait': 'leaflet_size', 'start': 55, 'end': 71},
+              'trait': 'size', 'part': 'leaflet', 'start': 55, 'end': 71},
              {'color': 'white',
-              'trait': 'leaflet_hair_color', 'start': 219, 'end': 224},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 225, 'end': 230}]
+              'trait': 'color', 'part': 'leaflet', 'subpart': 'hair',
+              'start': 219, 'end': 224},
+             {'subpart': 'hair', 'part': 'leaflet', 'trait': 'subpart',
+              'start': 225, 'end': 230}]
         )
 
     def test_attach_22(self):
@@ -338,25 +381,33 @@ class TestAttach(unittest.TestCase):
                  with very short white and black nearly ap­pressed hairs.
                 """)),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
-             {'subpart': 'stipe', 'trait': 'subpart', 'start': 15, 'end': 20},
+             {'subpart': 'stipe', 'part': 'legume', 'trait': 'subpart',
+              'start': 15, 'end': 20},
              {'length_low': 6, 'length_high': 7, 'length_units': 'mm',
-              'trait': 'legume_stipe_size', 'start': 21, 'end': 27},
-             {'shape': 'ellipsoid', 'trait': 'legume_shape', 'start': 41,
+              'trait': 'size', 'part': 'legume', 'subpart': 'stipe',
+              'start': 21, 'end': 27},
+             {'shape': 'ellipsoid', 'trait': 'shape', 'part': 'legume',
+              'start': 41,
               'end': 59},
              {'length_low': 1.5, 'length_high': 2.4, 'length_units': 'cm',
-              'trait': 'legume_size', 'start': 61, 'end': 71},
+              'trait': 'size', 'part': 'legume', 'start': 61, 'end': 71},
              {'width_low': 6, 'width_high': 7, 'width_units': 'mm',
-              'trait': 'legume_size', 'start': 73, 'end': 84},
+              'trait': 'size', 'part': 'legume', 'start': 73, 'end': 84},
              {'height_low': 4, 'height_high': 5, 'height_units': 'mm',
-              'trait': 'legume_size', 'start': 89, 'end': 100},
-             {'subpart': 'beak', 'trait': 'subpart', 'start': 109, 'end': 113},
+              'trait': 'size', 'part': 'legume', 'start': 89, 'end': 100},
+             {'subpart': 'beak', 'part': 'legume', 'trait': 'subpart',
+              'start': 109, 'end': 113},
              {'length_low': 2, 'length_units': 'mm',
-              'trait': 'legume_beak_size', 'start': 114, 'end': 122},
+              'trait': 'size', 'part': 'legume', 'subpart': 'beak',
+              'start': 114, 'end': 122},
              {'color': 'white',
-              'trait': 'legume_hair_color', 'start': 182, 'end': 187},
+              'trait': 'color', 'part': 'legume', 'subpart': 'hair',
+              'start': 182, 'end': 187},
              {'color': 'black',
-              'trait': 'legume_hair_color', 'start': 192, 'end': 197},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 216, 'end': 221}]
+              'trait': 'color', 'part': 'legume', 'subpart': 'hair',
+              'start': 192, 'end': 197},
+             {'subpart': 'hair', 'part': 'legume', 'trait': 'subpart',
+              'start': 216, 'end': 221}]
         )
 
     def test_attach_23(self):
@@ -367,16 +418,20 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'low': 3, 'high': 5, 'group': 'pairs',
-              'trait': 'leaflet_count', 'start': 12, 'end': 21},
+              'trait': 'count', 'part': 'leaflet', 'start': 12, 'end': 21},
              {'subpart': 'surface',
-              'trait': 'subpart', 'start': 23, 'end': 31},
+              'part': 'leaflet', 'trait': 'subpart', 'start': 23, 'end': 31},
              {'color': 'black-dots',
-              'trait': 'leaflet_surface_color', 'start': 44, 'end': 57},
+              'trait': 'color', 'part': 'leaflet', 'subpart': 'surface',
+              'start': 44, 'end': 57},
              {'location': 'basal',
-              'trait': 'leaflet_surface_location', 'start': 72, 'end': 77},
+              'trait': 'location', 'part': 'leaflet', 'subpart': 'surface',
+              'start': 72, 'end': 77},
              {'shape': 'orbicular',
-              'trait': 'leaflet_apex_shape', 'start': 83, 'end': 90},
-             {'subpart': 'apex', 'trait': 'subpart', 'start': 94, 'end': 98}]
+              'trait': 'shape', 'part': 'leaflet', 'subpart': 'apex',
+              'start': 83, 'end': 90},
+             {'subpart': 'apex', 'part': 'leaflet', 'trait': 'subpart',
+              'start': 94, 'end': 98}]
         )
 
     def test_attach_24(self):
@@ -389,17 +444,23 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 7, 'length_high': 8, 'length_units': 'mm',
-              'trait': 'calyx_size', 'start': 6, 'end': 12},
+              'trait': 'size', 'part': 'calyx', 'start': 6, 'end': 12},
              {'color': 'black',
-              'trait': 'calyx_hair_color', 'start': 79, 'end': 84},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 85, 'end': 90},
+              'trait': 'color', 'part': 'calyx', 'subpart': 'hair',
+              'start': 79, 'end': 84},
+             {'subpart': 'hair', 'part': 'calyx', 'trait': 'subpart',
+              'start': 85, 'end': 90},
              {'length_low': 0.5, 'length_high': 1.0, 'length_units': 'mm',
-              'trait': 'calyx_hair_size', 'start': 91, 'end': 99},
+              'trait': 'size', 'part': 'calyx', 'subpart': 'hair', 'start': 91,
+              'end': 99},
              {'color': 'white',
-              'trait': 'calyx_hair_color', 'start': 130, 'end': 135},
+              'trait': 'color', 'part': 'calyx', 'subpart': 'hair',
+              'start': 130, 'end': 135},
              {'color': 'black',
-              'trait': 'calyx_hair_color', 'start': 140, 'end': 145},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 146, 'end': 151}]
+              'trait': 'color', 'part': 'calyx', 'subpart': 'hair',
+              'start': 140, 'end': 145},
+             {'subpart': 'hair', 'part': 'calyx', 'trait': 'subpart',
+              'start': 146, 'end': 151}]
         )
 
     def test_attach_25(self):
@@ -410,16 +471,18 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
              {'shape': 'curved',
-              'trait': 'legume_shape', 'start': 8, 'end': 14},
+              'trait': 'shape', 'part': 'legume', 'start': 8, 'end': 14},
              {'length_low': 9, 'length_high': 12, 'length_units': 'mm',
-              'trait': 'legume_size', 'start': 16, 'end': 23},
+              'trait': 'size', 'part': 'legume', 'start': 16, 'end': 23},
              {'height_low': 2.5, 'height_high': 3.0, 'height_units': 'mm',
-              'trait': 'legume_size', 'start': 25, 'end': 38},
+              'trait': 'size', 'part': 'legume', 'start': 25, 'end': 38},
              {'shape': 'keeled',
-              'trait': 'legume_shape', 'start': 40, 'end': 46},
+              'trait': 'shape', 'part': 'legume', 'start': 40, 'end': 46},
              {'color': 'white',
-              'trait': 'legume_hair_color', 'start': 88, 'end': 93},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 94, 'end': 99}]
+              'trait': 'color', 'part': 'legume', 'subpart': 'hair',
+              'start': 88, 'end': 93},
+             {'subpart': 'hair', 'part': 'legume', 'trait': 'subpart',
+              'start': 94, 'end': 99}]
         )
 
     def test_attach_26(self):
@@ -430,16 +493,20 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'height_low': 4, 'height_high': 20, 'height_units': 'cm',
-              'trait': 'plant_size', 'start': 7, 'end': 19},
+              'trait': 'size', 'part': 'plant', 'start': 7, 'end': 19},
              {'habit': 'acaulescent',
-              'trait': 'plant_habit', 'start': 21, 'end': 32},
+              'trait': 'habit', 'part': 'plant', 'start': 21, 'end': 32},
              {'color': 'white',
-              'trait': 'plant_hair_color', 'start': 39, 'end': 44},
+              'trait': 'color', 'part': 'plant', 'subpart': 'hair',
+              'start': 39, 'end': 44},
              {'color': 'red',
-              'trait': 'plant_hair_color', 'start': 48, 'end': 55},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 68, 'end': 73},
+              'trait': 'color', 'part': 'plant', 'subpart': 'hair',
+              'start': 48, 'end': 55},
+             {'subpart': 'hair', 'part': 'plant', 'trait': 'subpart',
+              'start': 68, 'end': 73},
              {'length_high': 3, 'length_units': 'mm',
-              'trait': 'plant_hair_size', 'start': 77, 'end': 84}]
+              'trait': 'size', 'part': 'plant', 'subpart': 'hair',
+              'start': 77, 'end': 84}]
         )
 
     def test_attach_27(self):
@@ -450,10 +517,12 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'white',
-              'trait': 'plant_hair_color', 'start': 12, 'end': 17},
-             {'subpart': 'hair', 'trait': 'subpart', 'start': 18, 'end': 23},
+              'trait': 'color', 'part': 'plant', 'subpart': 'hair',
+              'start': 12, 'end': 17},
+             {'subpart': 'hair', 'part': 'plant', 'trait': 'subpart',
+              'start': 18, 'end': 23},
              {'color': 'black',
-              'trait': 'plant_color', 'start': 65, 'end': 70}]
+              'trait': 'color', 'part': 'plant', 'start': 65, 'end': 70}]
         )
 
     def test_attach_28(self):
@@ -464,21 +533,28 @@ class TestAttach(unittest.TestCase):
                 """)),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'yellow',
-              'trait': 'petal_color', 'start': 7, 'end': 13},
-             {'subpart': 'keel', 'trait': 'subpart', 'start': 28, 'end': 32},
+              'trait': 'color', 'part': 'petal', 'start': 7, 'end': 13},
+             {'subpart': 'keel', 'part': 'petal', 'trait': 'subpart',
+              'start': 28, 'end': 32},
              {'color': 'purple',
-              'trait': 'petal_keel_color', 'start': 53, 'end': 59},
-             {'subpart': 'apex', 'trait': 'subpart', 'start': 61, 'end': 65},
+              'trait': 'color', 'part': 'petal', 'subpart': 'keel',
+              'start': 53, 'end': 59},
+             {'subpart': 'apex', 'part': 'petal', 'trait': 'subpart',
+              'start': 61, 'end': 65},
              {'shape': 'retuse',
-              'trait': 'petal_apex_shape', 'start': 66, 'end': 72}]
+              'trait': 'shape', 'part': 'petal', 'subpart': 'apex',
+              'start': 66, 'end': 72}]
         )
 
     def test_attach_29(self):
         self.assertEqual(
             NLP(shorten("""limbs with basal abaxial edges""")),
-            [{'subpart': 'limb', 'trait': 'subpart', 'start': 0, 'end': 5},
+            [{'subpart': 'limb', 'trait': 'subpart',
+              'start': 0, 'end': 5},
              {'location': 'basal',
-              'trait': 'plant_limb_location', 'start': 11, 'end': 16},
+              'trait': 'location', 'part': 'plant', 'subpart': 'limb',
+              'start': 11, 'end': 16},
              {'location': 'abaxial',
-              'trait': 'plant_limb_location', 'start': 17, 'end': 24}]
+              'trait': 'location', 'part': 'plant', 'subpart': 'limb',
+              'start': 17, 'end': 24}]
         )

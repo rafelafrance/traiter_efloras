@@ -17,22 +17,22 @@ class TestPhrase(unittest.TestCase):
             NLP('Pistillate flowers  usually sessile; hypogynous'),
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 18},
-             {'floral_location': 'superior', 'sex': 'female',
-              'trait': 'flower_floral_location', 'start': 37, 'end': 47}]
+             {'floral_location': 'superior', 'sex': 'female', 'part': 'flower',
+              'trait': 'floral_location', 'start': 37, 'end': 47}]
         )
 
     def test_phrase_02(self):
         self.assertEqual(
             NLP('Petals glabrous, deciduous;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'duration': 'deciduous', 'trait': 'petal_duration', 'start': 17,
-              'end': 26}]
+             {'duration': 'deciduous', 'trait': 'duration',
+              'part': 'petal', 'start': 17, 'end': 26}]
         )
 
     def test_phrase_03(self):
         self.assertEqual(
             NLP('leaf blade herbaceous.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 10},
-             {'woodiness': 'herbaceous', 'trait': 'leaf_woodiness',
-              'start': 11, 'end': 21}]
+             {'woodiness': 'herbaceous', 'trait': 'woodiness',
+              'part': 'leaf', 'start': 11, 'end': 21}]
         )

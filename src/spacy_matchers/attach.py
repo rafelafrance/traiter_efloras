@@ -1,5 +1,7 @@
 """Patterns for attaching traits to plant parts."""
 
+from traiter.pylib.util import DotDict
+
 from ..spacy_matchers.descriptor import DESCRIPTOR_LABELS
 from .consts import COMMA, DOT, LINK_STEP, TRAIT_STEP
 
@@ -7,51 +9,37 @@ PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
 WITH_WORDS = """ with having only into """.split()
 SKIP = ['', 'shape_leader', 'dimension', 'ender']
 
-LABEL = {
-    'suffix_count': 'count',
-    'count_phrase': 'count',
-}
+PLANT_TOKEN = DotDict({
+    'ent_type_': 'part',
+    '_': DotDict({'data': {'trait': 'part', 'part': 'plant'}})})
 
 
-def augment_data(token, part):
+def augment_data(token, part, subpart=None):
     """Attach traits from the part to the current token."""
-    if not part:
-        return
-    data = {k: v for k, v in part._.data.items()
-            if k in ('sex', 'location') and v}
-    token._.data = {**token._.data, **data}
+    data = {}
+    if part:
+        data = {k: v for k, v in part._.data.items()
+                if k in ('sex', 'location', 'part') and v}
+    if subpart:
+        data['subpart'] = subpart._.data['subpart']
 
+    if frag := token._.data.get('_subpart'):
+        data['subpart'] = frag
 
-def new_label(token, part, subpart=None):
-    """Relabel the token's entity type."""
-    label = LABEL.get(token.ent_type_, token.ent_type_)
+    if frag := token._.data.get('_part'):
+        data['part'] = frag
 
-    part = part._.data.get('part', 'plant') if part else 'plant'
-    part = token._.data.get('_part', part)
-
-    if token._.data.get('_subpart'):
-        subpart = token._.data['_subpart']
-    elif subpart:
-        subpart = subpart._.data.get('subpart')
-
-    token._.data['_part'] = part
-    token._.data['_subpart'] = subpart
-
-    label = f'{part}_{subpart}_{label}' if subpart else f'{part}_{label}'
-    label = {p: 1 for p in label.split('_')}
-    label = '_'.join(p for p, _ in label.items())
-
-    return label
+    token._.data = {**data, **token._.data}
 
 
 def part_to_trait(span, part):
     """Connect the part to the matched traits."""
     subpart = None
-    subpart_traits = set()
     for token in span:
         label = token.ent_type_
         if label in PLANT_LEVEL_LABELS:
-            token.ent_type_ = new_label(token, None)
+            part = PLANT_TOKEN
+            token._.data['part'] = 'plant'
         elif label == 'part':
             if token.i > span.start:
                 augment_data(token, part)
@@ -62,16 +50,8 @@ def part_to_trait(span, part):
         elif label == 'ender':
             subpart = None
         elif label:
-            trait = new_label(token, part, subpart)
-            if subpart:
-                if trait in subpart_traits:
-                    subpart = None
-                    subpart_traits = set()
-                    trait = new_label(token, part, subpart)
-                elif label == 'size':
-                    subpart_traits.add(trait)
-            token.ent_type_ = trait
-            augment_data(token, part)
+            part = part if part else PLANT_TOKEN
+            augment_data(token, part, subpart)
 
 
 def out_of_order(span, part):
@@ -96,8 +76,7 @@ def with_clause(span, part, subpart=None):
             augment_data(token, part)
             subpart = token
         elif token._.step == TRAIT_STEP:
-            token.ent_type_ = new_label(token, part, subpart)
-            augment_data(token, part)
+            augment_data(token, part, subpart)
 
 
 def attach_final_suffix(span, part):
@@ -106,7 +85,6 @@ def attach_final_suffix(span, part):
         if token.ent_type_ == 'part':
             part = token
         elif token._.step == TRAIT_STEP:
-            token.ent_type_ = new_label(token, part)
             augment_data(token, part)
 
 

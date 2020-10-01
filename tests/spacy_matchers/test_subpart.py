@@ -18,5 +18,6 @@ class TestSubpart(unittest.TestCase):
             [{'location': 'terminal', 'subpart': 'lobe',
               'trait': 'subpart', 'start': 0, 'end': 13},
              {'shape': 'ovate-trullate',
-              'trait': 'plant_lobe_shape', 'start': 14, 'end': 28}]
+              'trait': 'shape', 'part': 'plant', 'subpart': 'lobe',
+              'start': 14, 'end': 28}]
         )

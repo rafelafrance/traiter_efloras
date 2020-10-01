@@ -15,7 +15,7 @@ class TestPart(unittest.TestCase):
     def test_part_01(self):
         self.assertEqual(
             NLP('with thick, woody rootstock.'),
-            [{'woodiness': 'woody', 'trait': 'rootstock_woodiness',
+            [{'woodiness': 'woody', 'trait': 'woodiness', 'part': 'rootstock',
               'start': 12, 'end': 17},
              {'part': 'rootstock', 'trait': 'part', 'start': 18, 'end': 27}]
         )
@@ -24,8 +24,8 @@ class TestPart(unittest.TestCase):
         self.assertEqual(
             NLP('leaflets mostly 1 or 3'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
-             {'low': 1, 'high': 3, 'trait': 'leaflet_count', 'start': 16,
-              'end': 22}]
+             {'low': 1, 'high': 3, 'trait': 'count', 'part': 'leaflet',
+              'start': 16, 'end': 22}]
         )
 
     def test_part_03(self):

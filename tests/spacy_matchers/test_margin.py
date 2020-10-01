@@ -19,35 +19,35 @@ class TestMargin(unittest.TestCase):
             NLP('margin shallowly undulate-crenate'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 6},
              {'margin_shape': 'undulate-crenate',
-              'trait': 'plant_margin_shape',
-              'start': 7,
-              'end': 33}]
+              'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
+              'start': 7, 'end': 33}]
         )
 
     def test_margin_02(self):
+        self.maxDiff = None
         self.assertEqual(
             NLP('margins ciliate, apex acute to long-acuminate,'),
-            [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
+            [{'subpart': 'margin', 'trait': 'subpart',
+              'start': 0, 'end': 7},
              {'margin_shape': 'ciliate',
-              'trait': 'plant_margin_shape',
-              'start': 8,
-              'end': 15},
-             {'subpart': 'apex', 'trait': 'subpart', 'start': 17, 'end': 21},
-             {'shape': 'acute', 'trait': 'plant_apex_shape', 'start': 22,
-              'end': 27},
-             {'shape': 'acuminate', 'trait': 'plant_apex_shape', 'start': 31,
-              'end': 45}]
+              'trait': 'margin_shape', 'subpart': 'margin', 'part': 'plant',
+              'start': 8, 'end': 15},
+             {'subpart': 'apex', 'trait': 'subpart', 'part': 'plant',
+              'start': 17, 'end': 21},
+             {'shape': 'acute', 'trait': 'shape', 'part': 'plant',
+              'subpart': 'apex', 'start': 22, 'end': 27},
+             {'shape': 'acuminate', 'trait': 'shape', 'part': 'plant',
+              'subpart': 'apex', 'start': 31, 'end': 45}]
         )
 
     def test_margin_03(self):
         self.assertEqual(
             NLP('reniform, undulate-margined'),
-            [{'shape': 'reniform', 'trait': 'plant_shape', 'start': 0,
-              'end': 8},
+            [{'shape': 'reniform', 'trait': 'shape', 'part': 'plant',
+              'start': 0, 'end': 8},
              {'margin_shape': 'undulate',
-              'trait': 'plant_margin_shape',
-              'start': 10,
-              'end': 27}]
+              'trait': 'margin_shape', 'part': 'plant',
+              'start': 10, 'end': 27}]
         )
 
     def test_margin_04(self):
@@ -55,9 +55,8 @@ class TestMargin(unittest.TestCase):
             NLP('margins thickened-corrugated'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
              {'margin_shape': 'corrugated',
-              'trait': 'plant_margin_shape',
-              'start': 8,
-              'end': 28}]
+              'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
+              'start': 8, 'end': 28}]
         )
 
     def test_margin_05(self):
@@ -67,15 +66,12 @@ class TestMargin(unittest.TestCase):
                 to serrate,""")),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
              {'margin_shape': 'toothed',
-              'trait': 'plant_margin_shape',
-              'start': 8,
-              'end': 24},
+              'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
+              'start': 8, 'end': 24},
              {'margin_shape': 'sinuate-dentate',
-              'trait': 'plant_margin_shape',
-              'start': 28,
-              'end': 52},
+              'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
+              'start': 28, 'end': 52},
              {'margin_shape': 'serrate',
-              'trait': 'plant_margin_shape',
-              'start': 56,
-              'end': 63}]
+              'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
+              'start': 56, 'end': 63}]
         )

@@ -14,8 +14,8 @@ class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
 
     steps2link = {TRAIT_STEP, LINK_STEP}
 
-    def __init__(self, gpu='prefer', training=False):
-        super().__init__(gpu=gpu)
+    def __init__(self, gpu='prefer', training=False, tokenizer=True):
+        super().__init__(gpu=gpu, tokenizer=tokenizer)
 
         self.nlp.disable_pipes(['ner'])
 
@@ -30,4 +30,4 @@ class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
             self.nlp.add_pipe(linker, last=True, name=LINK_STEP)
 
 
-PIPELINE = Pipeline()  # This is here so tests can use a singleton
+PIPELINE = Pipeline()  # A singleton for testing

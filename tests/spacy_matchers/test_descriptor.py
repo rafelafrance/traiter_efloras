@@ -17,21 +17,21 @@ class TestDescriptor(unittest.TestCase):
             NLP('bisexual (unisexual and plants sometimes gynodioecious, '
                 'or plants dioecious'),
             [{'reproduction': 'bisexual',
-              'trait': 'plant_reproduction',
+              'trait': 'reproduction', 'part': 'plant',
               'start': 0,
               'end': 8},
              {'reproduction': 'unisexual',
-              'trait': 'plant_reproduction',
+              'trait': 'reproduction', 'part': 'plant',
               'start': 10,
               'end': 19},
              {'part': 'plant', 'trait': 'part', 'start': 24, 'end': 30},
              {'reproduction': 'gynodioecious',
-              'trait': 'plant_reproduction',
+              'trait': 'reproduction', 'part': 'plant',
               'start': 41,
               'end': 54},
              {'part': 'plant', 'trait': 'part', 'start': 59, 'end': 65},
              {'reproduction': 'dioecious',
-              'trait': 'plant_reproduction',
+              'trait': 'reproduction', 'part': 'plant',
               'start': 66,
               'end': 75}]
         )
@@ -39,12 +39,11 @@ class TestDescriptor(unittest.TestCase):
     def test_descriptor_02(self):
         self.assertEqual(
             NLP('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
-            [{'habit': 'shrub', 'trait': 'plant_habit', 'start': 0, 'end': 6},
-             {'length_high': 1.5,
-              'length_units': 'm',
-              'trait': 'plant_size',
-              'start': 9,
-              'end': 17}]
+            [{'habit': 'shrub', 'trait': 'habit', 'part': 'plant',
+              'start': 0, 'end': 6},
+             {'length_high': 1.5, 'length_units': 'm',
+              'trait': 'size', 'part': 'plant',
+              'start': 9, 'end': 17}]
         )
 
     def test_descriptor_03(self):
@@ -52,22 +51,22 @@ class TestDescriptor(unittest.TestCase):
             NLP('Stems often caespitose'),
             [{'part': 'stem', 'trait': 'part', 'start': 0, 'end': 5},
              {'habit_shape': 'cespitose',
-              'trait': 'plant_habit_shape',
-              'start': 12,
-              'end': 22}]
+              'trait': 'habit_shape', 'part': 'plant',
+              'start': 12, 'end': 22}]
         )
 
     def test_descriptor_04(self):
         self.assertEqual(
             NLP('Herbs perennial or subshrubs, epiphytic or epilithic.'),
-            [{'woodiness': 'herbaceous', 'trait': 'plant_woodiness',
+            [{'woodiness': 'herbaceous', 'trait': 'woodiness', 'part': 'plant',
               'start': 0, 'end': 5},
-             {'plant_duration': 'perennial', 'trait': 'plant_duration',
+             {'plant_duration': 'perennial',
+              'trait': 'plant_duration', 'part': 'plant',
               'start': 6, 'end': 15},
-             {'habit': 'shrub', 'trait': 'plant_habit', 'start': 19,
-              'end': 28},
-             {'habitat': 'epiphytic', 'trait': 'plant_habitat', 'start': 30,
-              'end': 39},
-             {'habitat': 'epilithic', 'trait': 'plant_habitat', 'start': 43,
-              'end': 52}]
+             {'habit': 'shrub', 'trait': 'habit',
+              'part': 'plant', 'start': 19, 'end': 28},
+             {'habitat': 'epiphytic', 'trait': 'habitat',
+              'part': 'plant', 'start': 30, 'end': 39},
+             {'habitat': 'epilithic', 'trait': 'habitat',
+              'part': 'plant', 'start': 43, 'end': 52}]
         )

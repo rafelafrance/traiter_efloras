@@ -8,7 +8,7 @@ import textwrap
 from copy import deepcopy
 
 import src.pylib.family as futil
-from src.spacy_matchers.pipeline import PIPELINE
+from src.spacy_matchers.pipeline import Pipeline
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import iob_writer, ner_writer
@@ -17,6 +17,8 @@ from src.writers.html_writer import html_writer
 
 def main(args):
     """Perform actions based on the arguments."""
+    pipeline = Pipeline()
+
     families = {k: v for k, v in futil.get_families().items() if v['count']}
 
     if args.list_families:
@@ -29,8 +31,8 @@ def main(args):
     rows = efloras_reader(args, families)
 
     for row in rows:
-        row['doc'] = PIPELINE.find_entities(row['text'])
-        row['traits'] = PIPELINE.trait_list(row['doc'])
+        row['doc'] = pipeline.find_entities(row['text'])
+        row['traits'] = pipeline.trait_list(row['doc'])
 
     if args.csv_file:
         copied = deepcopy(rows)
