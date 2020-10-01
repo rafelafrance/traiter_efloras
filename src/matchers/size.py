@@ -3,29 +3,8 @@
 import re
 from functools import partial
 
-from ..pylib.util import CLOSE, CROSS, GROUP_STEP, LENGTH_UNITS, NUMBER, \
-    OPEN, REPLACE, TRAIT_STEP, range_, LENGTH_UNITS_SET
-
-
-def cardinal(span):
-    """Enrich a phrase match."""
-    data = {}
-    dim, units, values = 'length', '', []
-    for token in span:
-        label = token.ent_type_
-        if label == 'CARDINAL':
-            values = range_(span.text)
-        elif token.lower_ in LENGTH_UNITS_SET:
-            units = token.lower_.replace('.', '')
-        elif label == 'dimension':
-            dim = token.lower_
-
-    for key, value in values.items():
-        data[f'{dim}_{key}'] = value
-
-    data[f'{dim}_units'] = units
-
-    return data
+from ..pylib.util import CLOSE, CROSS, GROUP_STEP, NUMBER, \
+    OPEN, REPLACE, TRAIT_STEP
 
 
 def size(span, high_only=False):
@@ -241,17 +220,6 @@ SIZE = {
                     {'ENT_TYPE': 'about', 'OP': '?'},
                     {'ENT_TYPE': 'range'},
                     {'ENT_TYPE': 'length_units'},
-                ],
-            ],
-        },
-        {
-            'label': 'size',
-            'on_match': cardinal,
-            'patterns': [
-                [
-                    {'ENT_TYPE': 'CARDINAL'},
-                    {'TEXT': {'IN': CLOSE}},
-                    {'LOWER': {'IN': LENGTH_UNITS}},
                 ],
             ],
         },

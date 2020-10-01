@@ -8,13 +8,13 @@ from traiter.pylib.util import to_positive_float, to_positive_int
 
 from ..pylib.util import CLOSE, DASH, GROUP_STEP, INT, NUMBER, OPEN
 
-_TO = ['to']
-_CONJ = ['or', 'and']
-_DASH_TO = DASH + _TO
-_DASH_TO_CONJ = _DASH_TO + _CONJ
+TO = ['to']
+CONJ = ['or', 'and']
+DASH_TO = DASH + TO
+DASH_TO_CONJ = DASH_TO + CONJ
 
 
-def range_(span, fields=''):
+def rng(span, fields=''):
     """Build the range parts."""
     data = {}
 
@@ -32,273 +32,114 @@ def range_(span, fields=''):
     return data
 
 
+MIN = [
+    {'TEXT': {'IN': OPEN}},
+    {'TEXT': {'REGEX': NUMBER}},
+    {'LOWER': {'IN': DASH_TO_CONJ}},
+    {'TEXT': {'IN': CLOSE}},
+]
+
+LOW = MIN_VAL = [{'TEXT': {'REGEX': NUMBER}}]
+
+HIGH = DASH_LOW = DASH_MAX = [
+    {'LOWER': {'IN': DASH_TO}},
+    {'TEXT': {'REGEX': NUMBER}},
+]
+
+MAX = HIGH_PAREN = [
+    {'TEXT': {'IN': OPEN}},
+    {'LOWER': {'IN': DASH_TO_CONJ}},
+    {'TEXT': {'REGEX': NUMBER}},
+    {'TEXT': {'IN': CLOSE}},
+]
+
+OR_LOW = OR_HIGH = OR_MAX = [
+    {'TEXT': {'IN': DASH}, 'OP': '?'},
+    {'LOWER': 'or'},
+    {'TEXT': {'REGEX': NUMBER}},
+]
+
+OPEN_HIGH = [
+    {'TEXT': {'IN': OPEN}},
+    {'LOWER': 'or'},
+    {'TEXT': {'REGEX': NUMBER}},
+]
+
+CLOSE_MAX = [
+    {'TEXT': {'IN': DASH_TO_CONJ}},
+    {'TEXT': {'REGEX': NUMBER}},
+    {'TEXT': {'IN': CLOSE}},
+]
+
 RANGE = {
     GROUP_STEP: [
         {
             'label': 'range',
-            'on_match': partial(range_, fields='min low high max'),
+            'on_match': partial(rng, fields='min low high max'),
             'patterns': [
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'IN': CLOSE}},
-
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'LOWER': {'IN': _DASH_TO}},
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-            ]
+                MIN + LOW + HIGH + MAX,
+                MIN + LOW + OR_HIGH + MAX,
+                MIN_VAL + LOW + HIGH + MAX,
+                MIN_VAL + OR_LOW + HIGH + MAX,
+                MIN_VAL + OR_LOW + OR_HIGH + DASH_MAX,
+                MIN_VAL + DASH_LOW + HIGH_PAREN + MAX,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='low high max'),
+            'on_match': partial(rng, fields='low high max'),
             'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'LOWER': {'IN': _DASH_TO}},
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-            ]
+                LOW + HIGH + MAX,
+                LOW + OR_HIGH + MAX,
+                LOW + HIGH + OR_MAX,
+                LOW + OPEN_HIGH + CLOSE_MAX,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='min low max'),
+            'on_match': partial(rng, fields='min low high'),
             'patterns': [
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'IN': CLOSE}},
-
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-            ]
+                MIN + LOW + HIGH,
+                MIN + LOW + OR_HIGH,
+                MIN_VAL + OR_LOW + HIGH,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='min low high'),
+            'on_match': partial(rng, fields='min low max'),
             'patterns': [
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'IN': CLOSE}},
-
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'LOWER': {'IN': _DASH_TO}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
+                MIN + LOW + MAX,
+                MIN_VAL + OR_LOW + DASH_MAX,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='low max'),
+            'on_match': partial(rng, fields='min low'),
             'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-            ]
+                MIN + LOW,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='low high'),
+            'on_match': partial(rng, fields='low high'),
             'patterns': [
-                [
-                    {'LOWER': {'IN': _TO}, 'OP': '?'},
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'LOWER': {'IN': _DASH_TO}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
+                LOW + HIGH,
+                LOW + OR_HIGH,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='min low'),
+            'on_match': partial(rng, fields='low max'),
             'patterns': [
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'IN': CLOSE}},
-
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
+                LOW + MAX,
+            ],
         },
         {
             'label': 'range',
-            'on_match': partial(range_, fields='low'),
+            'on_match': partial(rng, fields='low'),
             'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
-        },
-        {
-            'label': 'range',
-            'on_match': partial(range_, fields='low high'),
-            'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
-        },
-        {
-            'label': 'range',
-            'on_match': partial(range_, fields='low high max'),
-            'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-
-                    {'TEXT': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-            ]
-        },
-        {
-            'label': 'range',
-            'on_match': partial(range_, fields='min low high'),
-            'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'IN': CLOSE}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': _DASH_TO_CONJ}, 'OP': '+'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
-        },
-        {
-            'label': 'range',
-            'on_match': partial(range_, fields='low high max'),
-            'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}},
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-            ]
-        },
-        {
-            'label': 'range',
-            'on_match': partial(range_, fields='min low high max'),
-            'patterns': [
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}},
-                    {'LOWER': 'or'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}, 'OP': '+'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                ],
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}, 'OP': '+'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}, 'OP': '+'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'IN': CLOSE}},
-                    {'LOWER': 'or', 'OP': '?'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': DASH}, 'OP': '?'},
-                    {'LOWER': 'or', 'OP': '?'},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-                [
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                    {'TEXT': {'IN': OPEN}},
-                    {'LOWER': {'IN': _DASH_TO_CONJ}},
-                    {'TEXT': {'REGEX': NUMBER}},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-            ]
+                LOW,
+            ],
         },
     ],
 }
