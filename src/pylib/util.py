@@ -27,23 +27,6 @@ PLUS = ' + '.split()
 SEMICOLON = ' ; '.split()
 SLASH = ' / '.split()
 
-CONVERT = {
-    'cm': 10.0,
-    'dm': 100.0,
-    'm': 1000.0,
-    'mm': 1.0,
-    'µm': 1.0e-3,
-    'centimeters': 10.0,
-    'decimeters': 100.0,
-    'meters': 1000.0,
-    'millimeters': 1.0,
-}
-
-LENGTH_UNITS = [k for k in CONVERT.keys()]
-LENGTH_UNITS += [f'{k}.' for k in CONVERT.keys()]
-LENGTH_UNITS_RE = '|'.join([u.replace('.', '\\.') for u in LENGTH_UNITS])
-LENGTH_UNITS_SET = set(LENGTH_UNITS)
-
 TERM_PATH = BASE_DIR / 'src' / 'vocabulary' / 'terms.csv'
 TERMS = read_terms(TERM_PATH)
 TERMS += hyphenate_terms(TERMS)
@@ -70,6 +53,18 @@ SHARED = {
             'patterns': [[{'TEXT': {'IN': DOT + SEMICOLON}}]]
         },
     ],
+}
+
+CONVERT = {
+    'cm': 10.0,
+    'dm': 100.0,
+    'm': 1000.0,
+    'mm': 1.0,
+    'µm': 1.0e-3,
+    'centimeters': 10.0,
+    'decimeters': 100.0,
+    'meters': 1000.0,
+    'millimeters': 1.0,
 }
 
 
