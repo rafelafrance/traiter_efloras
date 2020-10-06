@@ -11,6 +11,8 @@ COLOR_COUNT = 14
 BACKGROUNDS = cycle([f'c{i}' for i in range(COLOR_COUNT)])
 BORDERS = cycle([f'b{i}' for i in range(COLOR_COUNT)])
 
+SKIPS = {'start', 'end', 'trait', 'part', 'subpart'}
+
 
 def html_writer(args, rows):
     """Output the data."""
@@ -52,9 +54,9 @@ def build_classes(rows):
 
     for row in rows:
         for trait in row['traits']:
-            name = trait['trait']
-            if name in {'part', 'subpart'}:
+            if trait['trait'] in {'part', 'subpart'}:
                 continue
+            name = trait_label(trait, '_')
             name_parts = name.split('_')
             bg, border = name_parts[0], name_parts[-1]
             if bg not in backgrounds:
@@ -74,20 +76,21 @@ def format_traits(row, classes):
     groups = defaultdict(list)
     for trait in row['traits']:
         if trait['trait'] not in {'part', 'subpart'}:
-            groups[trait['trait']].append(trait)
+            label = trait_label(trait, '_')
+            groups[label].append(trait)
     groups = dict(sorted(groups.items(), key=lambda i: i[0]))
 
     # Format each trait group
     for name, traits in groups.items():
-        span = f'<span class="{classes[name]}">{name}</span>'
+        label = name.replace('_', ' ')
+        span = f'<span class="{classes[name]}">{label}</span>'
 
         # Format each trait within a trait group
         new_traits = []
         for trait in traits:
             text = row['raw_text'][trait['start']:trait['end']]
             trait = ', '.join(f'<span title="{text}">{k}:&nbsp;{v}</span>'
-                              for k, v in trait.items()
-                              if k not in ('start', 'end', 'trait'))
+                              for k, v in trait.items() if k not in SKIPS)
             new_traits.append(trait)
         new_dict[span] = '<br/>'.join(new_traits)
 
@@ -101,13 +104,21 @@ def format_text(row, classes):
 
     prev = 0
     for trait in row['traits']:
-        name = trait['trait']
-        label = ' '.join(trait['trait'].split('_'))
+        if trait['trait'] == 'part':
+            label = trait['part']
+            name = 'part'
+        elif trait['trait'] == 'subpart':
+            label = f"{trait['part']} {trait['subpart']}"
+            name = 'subpart'
+        else:
+            label = trait_label(trait)
+            name = trait_label(trait, '_')
+
         start = trait['start']
         end = trait['end']
         title = ', '.join(f'{k} = {v}' for k, v in trait.items()
-                          if k not in {'start', 'end', 'trait'})
-        title = f'{label}: {title}'
+                          if k not in SKIPS)
+        title = f'{label}: {title}' if title else label
         if prev < start:
             frags.append(escape(text[prev:start]))
         frags.append(f'<span class="{classes[name]}" title="{title}">')
@@ -119,3 +130,14 @@ def format_text(row, classes):
         frags.append(text[prev:])
 
     return ''.join(frags)
+
+
+def trait_label(trait, sep=' '):
+    """Generate a label for the trait."""
+    label = [trait['part']]
+    if 'subpart' in trait:
+        label.append(trait['subpart'])
+    label.append(trait['trait'])
+    label = sep.join(label)
+    label = label.replace('-', '')
+    return label

@@ -28,20 +28,21 @@ def build_columns(row):
 
     columns = defaultdict(list)
     for trait in row['raw_traits']:
-        label = trait['trait']
+        if trait['trait'] in ('part', 'subpart'):
+            continue
+        if 'subpart' in trait:
+            label = f'{trait["part"]}_{trait["subpart"]}_{trait["trait"]}'
+        else:
+            label = f'{trait["part"]}_{trait["trait"]}'
+        trait = {k: v for k, v in trait.items()
+                 if k not in ('part', 'subpart', 'trait')}
         header = sorted(v for k, v in trait.items() if k in extras)
         header = '.'.join([label] + header)
         value = {k: v for k, v in trait.items() if k not in skips}
+        print(f'"{value}"')
         columns[header].append(value)
 
-        columns[f'{header}.raw'].append(
-            row['text'][trait['start']:trait['end']])
-
     for header, value_list in columns.items():
-        if header.endswith('.raw'):
-            row[header] = value_list
-            continue
-
         keys = set()
         all_strings = True
         for data in value_list:
@@ -79,6 +80,8 @@ def extract_sizes(row, header, value_list):
             key = f'{header}.{i}.{field}'
             parts = field.split('_')
             if parts[0] == 'trait':
+                continue
+            if parts[0] in ('part', 'subpart'):
                 continue
             if len(parts) > 1 and parts[1] == 'units':
                 row[key] = value

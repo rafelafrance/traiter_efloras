@@ -93,6 +93,7 @@ color_modifier,tipped,lower,,,,ADJ
 color_modifier,tips,lower,,,,NOUN
 color_modifier,vein,lower,,,,NOUN
 count_suffix,-callose,lower,callose,,,NOUN
+count_suffix,-carpellate,lower,,,,ADJ
 count_suffix,-columned,lower,colum,,,ADJ
 count_suffix,-flowered,lower,flowered,,,ADJ
 count_suffix,-foliolate,lower,leaflet,_part,,ADJ
@@ -370,7 +371,10 @@ part,x=,lower,x,,,X
 per_count,pair,lower,,,,NOUN
 per_count,pair of,lower,pair,,,NOUN
 per_count,pairs,lower,,,,NOUN
+per_count,per row,lower,,,,NOUN
 per_count,per side,lower,,,,NOUN
+per_count,row,lower,,,,NOUN
+per_count,rows,lower,,,,NOUN
 plant_duration,annual,lower,,descriptor,,ADJ
 plant_duration,biennial,lower,,descriptor,,ADJ
 plant_duration,monocarpic,lower,,descriptor,,ADJ

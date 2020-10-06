@@ -1,4 +1,9 @@
-"""Patterns for attaching traits to plant parts."""
+"""Patterns for attaching traits to plant parts.
+
+We're adding what plant part and subpart a trait is referring to. This uses
+a separate matcher object from the others because we're not merging tokens but
+modifying them by adding the part and subpart fields.
+"""
 
 from traiter.pylib.util import DotDict
 
