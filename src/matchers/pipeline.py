@@ -4,9 +4,9 @@
 from traiter.spacy_nlp.pipeline import SpacyPipeline
 from traiter.spacy_nlp.sentencizer import SpacySentencizer
 
-from src.pylib.util import ABBREVS, LINK_STEP, TRAIT_STEP
 from src.matchers.link_matcher import LinkMatcher
 from src.matchers.matcher import Matcher
+from src.pylib.util import ABBREVS, LINK_STEP, TRAIT_STEP
 
 
 class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
@@ -14,7 +14,12 @@ class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
 
     steps2link = {TRAIT_STEP, LINK_STEP}
 
-    def __init__(self, gpu='prefer', training=False, tokenizer=True):
+    def __init__(
+            self,
+            gpu: str = 'prefer',
+            training: bool = False,
+            tokenizer: bool = True
+    ) -> None:
         super().__init__(gpu=gpu, tokenizer=tokenizer)
 
         self.nlp.disable_pipes(['ner'])

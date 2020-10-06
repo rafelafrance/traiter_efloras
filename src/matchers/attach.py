@@ -14,24 +14,6 @@ PLANT_TOKEN = DotDict({
     '_': DotDict({'data': {'trait': 'part', 'part': 'plant'}})})
 
 
-def augment_data(token, part, subpart=None):
-    """Attach traits from the part to the current token."""
-    data = {}
-    if part:
-        data = {k: v for k, v in part._.data.items()
-                if k in ('sex', 'location', 'part') and v}
-    if subpart:
-        data['subpart'] = subpart._.data['subpart']
-
-    if frag := token._.data.get('_subpart'):
-        data['subpart'] = frag
-
-    if frag := token._.data.get('_part'):
-        data['part'] = frag
-
-    token._.data = {**data, **token._.data}
-
-
 def part_to_trait(span, part):
     """Connect the part to the matched traits."""
     subpart = None
@@ -86,6 +68,24 @@ def attach_final_suffix(span, part):
             part = token
         elif token._.step == TRAIT_STEP:
             augment_data(token, part)
+
+
+def augment_data(token, part, subpart=None):
+    """Attach traits from the part to the current token."""
+    data = {}
+    if part:
+        data = {k: v for k, v in part._.data.items()
+                if k in ('sex', 'location', 'part') and v}
+    if subpart:
+        data['subpart'] = subpart._.data['subpart']
+
+    if frag := token._.data.get('_subpart'):
+        data['subpart'] = frag
+
+    if frag := token._.data.get('_part'):
+        data['part'] = frag
+
+    token._.data = {**data, **token._.data}
 
 
 ATTACH = {

@@ -1,5 +1,6 @@
 """Base matcher object."""
 
+from spacy.language import Language
 from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .attach import ATTACH
@@ -25,9 +26,9 @@ MATCHERS = [
 class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
     """Base matcher object."""
 
-    name = 'entity_matcher'
+    name: str = 'entity_matcher'
 
-    def __init__(self, nlp, training=False):
+    def __init__(self, nlp: Language, training: bool = False):
         super().__init__(nlp)
 
         self.add_terms(TERMS)
