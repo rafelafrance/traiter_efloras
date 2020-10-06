@@ -32,13 +32,7 @@ def get_entities(sent):
     for entity in sent.ents:
         start = entity.start_char - sent.start_char
         end = entity.end_char - sent.start_char
-        label = entity.label_
-        label = label.split('_')
-        if len(label) > 1 and tuple(label[-2:]) in LABELS:
-            label = '_'.join(label[-2:])
-        else:
-            label = label[-1]
-        entity_offset = (start, end, label)
+        entity_offset = (start, end, entity.label_)
         entities.append(entity_offset)
     return entities
 
@@ -56,6 +50,18 @@ def ner_writer(args, rows):
 
 def iob_writer(args, rows):
     """Output named entity recognition training data in BIO format."""
+    out_file = args.iob_file
+    iob_biluo_writer(out_file, rows, lambda *_: None)
+
+
+def biluo_writer(args, rows):
+    """Output named entity recognition training data in BIO format."""
+    out_file = args.biluo_file
+    iob_biluo_writer(out_file, rows, update_prev_tag)
+
+
+def iob_biluo_writer(out_file, rows, updater):
+    """Logic common to both the IOB and BILUO writers."""
     _get_labels()
     nlp = Pipeline(training=True).nlp
     for row in rows:
@@ -71,13 +77,26 @@ def iob_writer(args, rows):
                     start, end, label = entities.pop(0)
 
                 if start <= token.idx < end:
-                    iob = 'I' if inside else 'B'
-                    tags.append(f'{iob}-{label}')
+                    prefix = 'I' if inside else 'B'
+                    if prefix == 'B':
+                        updater(tags)
+                    tags.append(f'{prefix}-{label}')
                     inside = True
                 else:
+                    updater(tags)
                     tags.append('O')
                     inside = False
 
+            updater(tags)
             line = json.dumps([sent.text, tags])
-            args.iob_file.write(line)
-            args.iob_file.write('\n')
+            out_file.write(line)
+            out_file.write('\n')
+
+
+def update_prev_tag(tags):
+    """Update the previous tags for BILUO tagging scheme."""
+    prev = tags[-1] if tags else ''
+    if prev.startswith('I'):
+        tags[-1] = 'L' + prev[1:]
+    if prev.startswith('B'):
+        tags[-1] = 'U' + prev[1:]

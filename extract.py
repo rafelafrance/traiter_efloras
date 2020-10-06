@@ -11,7 +11,7 @@ import src.pylib.family as futil
 from src.matchers.pipeline import Pipeline
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
-from src.writers.data_writer import iob_writer, ner_writer
+from src.writers.data_writer import biluo_writer, iob_writer, ner_writer
 from src.writers.html_writer import html_writer
 
 
@@ -49,6 +49,10 @@ def main(args):
     if args.iob_file:
         copied = deepcopy(rows)
         iob_writer(args, copied)
+
+    if args.biluo_file:
+        copied = deepcopy(rows)
+        biluo_writer(args, copied)
 
 
 def parse_args():
@@ -88,8 +92,13 @@ def parse_args():
         help="""Append formatted NER training data to this file.""")
 
     arg_parser.add_argument(
-        '--iob-file', '-B', type=argparse.FileType('a'),
+        '--iob-file', '-I', type=argparse.FileType('a'),
         help="""Append formatted training data in IOB format
+            to this file.""")
+
+    arg_parser.add_argument(
+        '--biluo-file', '-B', type=argparse.FileType('a'),
+        help="""Append formatted training data in BILUO format
             to this file.""")
 
     arg_parser.add_argument(
@@ -108,7 +117,8 @@ def parse_args():
     else:
         args.flora_id = [1]
 
-    if not (args.csv_file or args.html_file or args.ner_file or args.iob_file):
+    if not (args.csv_file or args.html_file or args.ner_file or args.iob_file
+            or args.biluo_file):
         setattr(args, 'csv_file', sys.stdout)
 
     return args
