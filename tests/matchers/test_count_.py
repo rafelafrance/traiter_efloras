@@ -319,6 +319,6 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP('sepals absent;'),
             [{'part': 'sepal', 'trait': 'part',  'start': 0, 'end': 6},
-             {'low': 0, 'trait': 'count', 'part': 'sepal',
+             {'min': 0, 'trait': 'count', 'part': 'sepal',
               'start': 7, 'end': 13}]
         )

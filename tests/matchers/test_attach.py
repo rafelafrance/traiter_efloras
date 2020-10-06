@@ -52,7 +52,7 @@ class TestAttach(unittest.TestCase):
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'pink', 'trait': 'color', 'part': 'petal', 'start': 18,
               'end': 22},
-             {'start': 24, 'end': 31, 'low': 0, 'trait': 'count',
+             {'start': 24, 'end': 31, 'min': 0, 'trait': 'count',
               'part': 'petal', 'subpart': 'lobe'}]
         )
 

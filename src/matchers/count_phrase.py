@@ -7,9 +7,17 @@ from ..pylib.util import CATEGORY, REPLACE, TRAIT_STEP
 
 def count_phrase(span):
     """Enrich the match with data."""
-    data = {'low': to_positive_int(REPLACE.get(span.text, span.text))}
+    data = {}
+
+    count = to_positive_int(REPLACE.get(span.text, span.text))
+    if count:
+        data['low'] = count
+    else:
+        data['min'] = count
+
     if subpart := CATEGORY.get(span.text):
         data['_subpart'] = subpart
+
     return data
 
 
