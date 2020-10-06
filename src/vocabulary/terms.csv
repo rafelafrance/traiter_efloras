@@ -103,9 +103,10 @@ count_suffix,-horned,lower,horn,,,ADJ
 count_suffix,-incised,lower,,,,ADJ
 count_suffix,-jointed,lower,joint,,,ADJ
 count_suffix,-lobed,lower,lobe,,,ADJ
-count_suffix,-locular,lower,locular,,,locular
-count_suffix,-paired,lower,pair,,,locular
-count_suffix,-rayed,lower,ray,,,locular
+count_suffix,-locular,lower,locular,,,ADJ
+count_suffix,-paired,lower,pair,,,ADJ
+count_suffix,-ranked,lower,,,,ADJ
+count_suffix,-rayed,lower,ray,,,ADJ
 count_suffix,-ribbed,lower,rib,,,ADJ
 count_suffix,-toothed,lower,tooth,,,ADJ
 count_suffix,-veined,lower,vein,,,ADJ
@@ -342,6 +343,8 @@ part,hypanthium,lower,hypanthium,,,NOUN
 part,inflorescence,lower,inflorescence,,,NOUN
 part,inflorescences,lower,inflorescence,,,NOUN
 part,inflorescenses,lower,inflorescence,,,NOUN
+part,Infructescence,lower,Infructescence,,,NOUN
+part,Infructescences,lower,Infructescence,,,NOUN
 part,leaf,lower,leaf,,,NOUN
 part,leaf blade,lower,leaf,,,NOUN
 part,leaf blades,lower,leaf,,,NOUN
@@ -427,6 +430,10 @@ part,twig,lower,twig,,,NOUN
 part,twigs,lower,twig,,,NOUN
 part,x =,lower,x,,,X
 part,x=,lower,x,,,X
+per_count,cluster,lower,,,,NOUN
+per_count,clusters,lower,cluster,,,NOUN
+per_count,1 or more clusters,lower,cluster,,,NOUN
+per_count,one or more clusters,lower,cluster,,,NOUN
 per_count,pair,lower,,,,NOUN
 per_count,pair of,lower,pair,,,NOUN
 per_count,pairs,lower,,,,NOUN
@@ -686,6 +693,8 @@ subpart,base,lower,base,,,NOUN
 subpart,bases,lower,base,,,NOUN
 subpart,beak,lower,beak,,,NOUN
 subpart,beaks,lower,beak,,,NOUN
+subpart,crown,lower,crown,,,NOUN
+subpart,crowns,lower,crown,,,NOUN
 subpart,flesh,lower,flesh,,,NOUN
 subpart,gland,lower,gland,,,NOUN
 subpart,glands,lower,gland,,,NOUN
@@ -694,6 +703,8 @@ subpart,hairs,lower,hair,,,NOUN
 subpart,hilum,lower,hilum,,,NOUN
 subpart,keel,lower,keel,,,NOUN
 subpart,keels,lower,keel,,,NOUN
+subpart,lenticel,lower,lenticel,,,NOUN
+subpart,lenticels,lower,lenticel,,,NOUN
 subpart,limb,lower,limb,,,NOUN
 subpart,limbs,lower,limb,,,NOUN
 subpart,lobe,lower,lobe,,,NOUN

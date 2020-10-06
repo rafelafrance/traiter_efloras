@@ -283,20 +283,13 @@ class TestSize(unittest.TestCase):
     def test_size_21(self):
         self.assertEqual(
             NLP('Inflorescences formed season before flowering and exposed '
-                'during winter; staminate catkins in 1 or more clusters '
-                'of 2--5, 3--8.5 cm,'),
+                'during winter; staminate catkins 3--8.5 cm,'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'sex': 'male', 'part': 'catkin', 'trait': 'part',
               'start': 73, 'end': 90},
              {'sex': 'male', 'part': 'catkin',
-              'low': 1,
-              'trait': 'count', 'start': 94, 'end': 95},
-             {'sex': 'male', 'part': 'catkin',
-              'low': 2, 'high': 5,
-              'trait': 'count', 'start': 116, 'end': 120},
-             {'sex': 'male', 'part': 'catkin',
               'length_low': 3.0, 'length_high': 8.5, 'length_units': 'cm',
-              'trait': 'size', 'start': 122, 'end': 131}]
+              'trait': 'size', 'start': 91, 'end': 100}]
         )
 
     def test_size_22(self):

@@ -322,3 +322,21 @@ class TestCount(unittest.TestCase):
              {'min': 0, 'trait': 'count', 'part': 'sepal',
               'start': 7, 'end': 13}]
         )
+
+    def test_count_32(self):
+        self.assertEqual(
+            NLP(shorten("""
+                staminate catkins in 1 or more clusters of 3--6;
+                pistillate catkins in 1 or more clusters of 2--7
+                """)),
+            [{'sex': 'male', 'part': 'catkin', 'trait': 'part',
+              'start': 0, 'end': 17},
+             {'sex': 'male', 'part': 'catkin',
+              'low': 3, 'high': 6, 'group': 'cluster',
+              'trait': 'count', 'start': 21, 'end': 47},
+             {'sex': 'female', 'part': 'catkin', 'trait': 'part',
+              'start': 49, 'end': 67},
+             {'sex': 'female', 'part': 'catkin',
+              'low': 2, 'high': 7, 'group': 'cluster',
+              'trait': 'count', 'start': 71, 'end': 97}]
+        )

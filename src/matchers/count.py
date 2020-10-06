@@ -27,6 +27,9 @@ def count(span):
         elif token.lower_ in PARENS:
             continue
 
+        elif token.lower_ in {'of'}:
+            continue
+
         else:
             return {'_forget': True}
 
@@ -47,6 +50,11 @@ COUNT = {
                 [
                     {'ENT_TYPE': 'range'},
                     {'ENT_TYPE': 'per_count', 'OP': '?'},
+                ],
+                [
+                    {'ENT_TYPE': 'per_count'},
+                    {'LOWER': {'IN': ['of']}, 'OP': '?'},
+                    {'ENT_TYPE': 'range'},
                 ],
                 [
                     {'TEXT': {'IN': OPEN}},

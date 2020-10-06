@@ -11,7 +11,7 @@ from ..matchers.descriptor import DESCRIPTOR_LABELS
 from ..pylib.util import COMMA, DOT, LINK_STEP, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)
-WITH_WORDS = """ with having only into """.split()
+WITH_WORDS = """ with having only into by """.split()
 SKIP = ['', 'shape_leader', 'dimension', 'ender']
 
 PLANT_TOKEN = DotDict({

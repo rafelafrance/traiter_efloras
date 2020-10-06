@@ -46,7 +46,7 @@ PART = {
                 ],
                 [
                     {'ENT_TYPE': {'IN': ['part']}},
-                    {'ENT_TYPE': {'IN': ['sex_enclosed']}},
+                    {'ENT_TYPE': {'IN': ['sex', 'sex_enclosed', 'location']}},
                 ],
                 [
                     {'ENT_TYPE': 'part'},
