@@ -50,8 +50,7 @@ class TestDescriptor(unittest.TestCase):
         self.assertEqual(
             NLP('Stems often caespitose'),
             [{'part': 'stem', 'trait': 'part', 'start': 0, 'end': 5},
-             {'habit_shape': 'cespitose',
-              'trait': 'habit_shape', 'part': 'plant',
+             {'habit': 'cespitose', 'trait': 'habit', 'part': 'plant',
               'start': 12, 'end': 22}]
         )
 

@@ -56,6 +56,8 @@ def build_classes(rows):
         for trait in row['traits']:
             if trait['trait'] in {'part', 'subpart'}:
                 continue
+            if 'part' not in trait:
+                continue
             name = trait_label(trait, '_')
             name_parts = name.split('_')
             bg, border = name_parts[0], name_parts[-1]
@@ -75,6 +77,8 @@ def format_traits(row, classes):
     # Group by trait name
     groups = defaultdict(list)
     for trait in row['traits']:
+        if 'part' not in trait:
+            continue
         if trait['trait'] not in {'part', 'subpart'}:
             label = trait_label(trait, '_')
             groups[label].append(trait)
@@ -104,6 +108,8 @@ def format_text(row, classes):
 
     prev = 0
     for trait in row['traits']:
+        if 'part' not in trait:
+            continue
         if trait['trait'] == 'part':
             label = trait['part']
             name = 'part'

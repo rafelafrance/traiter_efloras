@@ -30,6 +30,9 @@ def build_columns(row):
     for trait in row['raw_traits']:
         if trait['trait'] in ('part', 'subpart'):
             continue
+        if 'part' not in trait:
+            continue
+
         if 'subpart' in trait:
             label = f'{trait["part"]}_{trait["subpart"]}_{trait["trait"]}'
         else:
@@ -39,7 +42,6 @@ def build_columns(row):
         header = sorted(v for k, v in trait.items() if k in extras)
         header = '.'.join([label] + header)
         value = {k: v for k, v in trait.items() if k not in skips}
-        print(f'"{value}"')
         columns[header].append(value)
 
     for header, value_list in columns.items():
@@ -79,9 +81,7 @@ def extract_sizes(row, header, value_list):
         for field, value in extract.items():
             key = f'{header}.{i}.{field}'
             parts = field.split('_')
-            if parts[0] == 'trait':
-                continue
-            if parts[0] in ('part', 'subpart'):
+            if parts[0] in ('trait', 'part', 'subpart'):
                 continue
             if len(parts) > 1 and parts[1] == 'units':
                 row[key] = value
@@ -89,6 +89,6 @@ def extract_sizes(row, header, value_list):
                 row[key] = convert(value, length_units)
             elif parts[0] == 'width':
                 row[key] = convert(value, width_units)
-            else:
+            elif parts[0].endswith('units'):
                 units = f'{parts[0]}_units'
                 row[key] = convert(value, extract.get(units))

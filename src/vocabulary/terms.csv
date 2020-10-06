@@ -15,6 +15,7 @@ color,cream,lower,white,,,ADJ
 color,cream-yellow,lower,yellow,,,ADJ
 color,creamy,lower,white,,,ADJ
 color,crimson,lower,red,,,ADJ
+color,glaucous,lower,,,,ADJ
 color,glaucous-pink,lower,pink,,,ADJ
 color,gold,lower,,,,ADJ
 color,golden,lower,,,,ADJ
@@ -34,6 +35,7 @@ color,maroon,lower,red-brown,,,ADJ
 color,olive,lower,,,,ADJ
 color,olive-green,lower,green,,,ADJ
 color,orange,lower,,,,ADJ
+color,orangish,lower,orange,,,ADJ
 color,pink,lower,,,,ADJ
 color,pinkish,lower,pink,,,ADJ
 color,purple,lower,,,,ADJ
@@ -107,6 +109,7 @@ count_suffix,-rayed,lower,ray,,,locular
 count_suffix,-ribbed,lower,rib,,,ADJ
 count_suffix,-toothed,lower,tooth,,,ADJ
 count_suffix,-veined,lower,vein,,,ADJ
+count_word,absent,lower,0,,,ADJ
 count_word,achlamydeous,lower,0,perianth,,ADJ
 count_word,bilobate,lower,2,lobe,bi-lo-b-ate,ADJ
 count_word,bilobed,lower,2,lobe,bi-lob-ed,ADJ
@@ -134,6 +137,7 @@ dimension,thick,lower,thickness,,,ADJ
 dimension,thickness,lower,thickness,,,NOUN
 dimension,wide,lower,width,,,ADJ
 dimension,width,lower,width,,,NOUN
+duration,acme,lower,,,,ADJ
 duration,deciduous,lower,,literal,,ADJ
 duration,evergreen,lower,,literal,,ADJ
 duration,fugacious,lower,,literal,,ADJ
@@ -149,8 +153,46 @@ floral_location,inferior,lower,inferior,literal,,ADJ
 floral_location,perigynous,lower,perigynous,literal,,ADJ
 floral_location,superior,lower,superior,literal,,ADJ
 habit,acaulescent,lower,acaulescent,descriptor,,ADJ
+habit,acid plant,lower,acid plant,descriptor,,ADJ
+habit,arborescent,lower,arborescent,descriptor,,ADJ
+habit,assurgent,lower,assurgent,descriptor,,ADJ
+habit,branching,lower,branching,descriptor,,ADJ
+habit,caducous ,lower,caducous,descriptor,,ADJ
+habit,caducous ,lower,caducous ,descriptor,,ADJ
+habit,caespitose ,lower,caespitose,descriptor,,ADJ
 habit,caulescent,lower,caulescent,descriptor,,ADJ
+habit,creeping,lower,creeping,descriptor,,ADJ
+habit,decumbent ,lower,,descriptor,,ADJ
+habit,deflexed,lower,,descriptor,,ADJ
+habit,determinate growth,lower,,descriptor,,ADJ
+habit,dimorphic,lower,,descriptor,,ADJ
+habit,ecad,lower,,descriptor,,ADJ
+habit,ectogenesis,lower,,descriptor,,ADJ
+habit,ectoparasite,lower,,descriptor,,ADJ
+habit,epigeal,lower,,descriptor,,ADJ
+habit,epigean,lower,,descriptor,,ADJ
+habit,epigeic,lower,,descriptor,,ADJ
+habit,epigeous,lower,,descriptor,,ADJ
+habit,epilithic,lower,,descriptor,,ADJ
+habit,epiphloedal,lower,,descriptor,,ADJ
+habit,epiphyllous,lower,,descriptor,,ADJ
+habit,epiphyte,lower,,descriptor,,ADJ
+habit,equinoctial,lower,,descriptor,,ADJ
+habit,eupotamous,lower,,descriptor,,ADJ
+habit,euryhaline,lower,,descriptor,,ADJ
+habit,eurythermous,lower,,descriptor,,ADJ
+habit,exclusive species,lower,,descriptor,,ADJ
+habit,exotic,lower,,descriptor,,ADJ
+habit,exsiccatus,lower,,descriptor,,ADJ
+habit,indeterminate growth,lower,,descriptor,,ADJ
+habit,lax,lower,,descriptor,,ADJ
 habit,liana,lower,liana,descriptor,,NOUN
+habit,parasitic ,lower,,descriptor,,ADJ
+habit,precocious,lower,,descriptor,,ADJ
+habit,procumbent,lower,,descriptor,,ADJ
+habit,prostrate,lower,,descriptor,,ADJ
+habit,repent,lower,,descriptor,,ADJ
+habit,semi-erect,lower,,descriptor,,ADJ
 habit,shrub,lower,shrub,descriptor,,NOUN
 habit,shrubby,lower,shrub,descriptor,,ADJ
 habit,shrubs,lower,shrub,descriptor,,NOUN
@@ -159,10 +201,13 @@ habit,subcaulescent,lower,acaulescent,descriptor,,ADJ
 habit,subshrub,lower,shrub,descriptor,,NOUN
 habit,subshrubby,lower,shrub,descriptor,,ADJ
 habit,subshrubs,lower,shrub,descriptor,,NOUN
+habit,suffrutescent,lower,,descriptor,,ADJ
 habit,tree,lower,tree,descriptor,,NOUN
 habit,trees,lower,tree,descriptor,,NOUN
+habit,upright,lower,,descriptor,,ADJ
 habit,vine,lower,vine,descriptor,,NOUN
 habit,vines,lower,vine,descriptor,,NOUN
+habit,virgate,lower,,descriptor,,ADJ
 habit_shape,caespitose,lower,cespitose,descriptor,,ADJ
 habit_shape,cespitose,lower,cespitose,descriptor,,ADJ
 habit_shape,frutescent,lower,frutescent,descriptor,,ADJ
@@ -255,12 +300,16 @@ part,branch,lower,branch,,,NOUN
 part,branches,lower,branch,,,NOUN
 part,branchlet,lower,branch,,,NOUN
 part,branchlets,lower,branch,,,NOUN
+part,bud,lower,bud,,,NOUN
+part,buds,lower,bud,,,NOUN
 part,calyces,lower,calyx,,,NOUN
 part,calyx,lower,calyx,,,NOUN
 part,capsule,lower,capsule,,,NOUN
 part,capsules,lower,capsule,,,NOUN
 part,carpel,lower,carpel,,,NOUN
 part,carpels,lower,carpel,,,NOUN
+part,catkin,lower,catkin,,,NOUN
+part,catkins,lower,catkin,,,NOUN
 part,caudex,lower,caudex,,,NOUN
 part,caudices,lower,caudex,,,NOUN
 part,corolla,lower,corolla,,,NOUN
@@ -329,12 +378,16 @@ part,petioles,lower,petiole,,,NOUN
 part,petiolule,lower,petiole,,,NOUN
 part,petiolules,lower,petiole,,,NOUN
 part,pistil,lower,carpel,,,NOUN
+part,pistil,lower,pistil,,,NOUN
 part,pistillode,lower,pistil,,,NOUN
 part,pistillodes,lower,pistil,,,NOUN
 part,pistils,lower,carpel,,,NOUN
-part,pistil,lower,pistil,,,NOUN
+part,pith,lower,,,,NOUN
 part,plant,lower,plant,,,NOUN
 part,plants,lower,plant,,,NOUN
+part,pollen,lower,,,,NOUN
+part,pollen sac,lower,,,,NOUN
+part,pollen sacs,lower,pollen sac,,,NOUN
 part,raceme,lower,inflorescence,,ra-ceme,NOUN
 part,racemes,lower,inflorescence,,ra-cemes,NOUN
 part,root,lower,root,,,NOUN
@@ -343,12 +396,16 @@ part,rootstock,lower,rootstock,,,NOUN
 part,rootstocks,lower,rootstock,,,NOUN
 part,rosette,lower,rosette,,,NOUN
 part,rosettes,lower,rosette,,,NOUN
+part,runner,lower,,,,NOUN
+part,runners,lower,,,,NOUN
 part,seed,lower,seed,,,NOUN
 part,seeds,lower,seed,,,NOUN
 part,sepal,lower,sepal,,,NOUN
 part,sepals,lower,sepal,,,NOUN
 part,spike,lower,inflorescence,,,NOUN
 part,spikes,lower,inflorescence,,,NOUN
+part,stalk,lower,stalk,,,NOUN
+part,stalks,lower,stalk,,,NOUN
 part,stamen,lower,stamen,,,NOUN
 part,stamens,lower,stamen,,,NOUN
 part,staminode,lower,stamen,,,NOUN
@@ -360,6 +417,8 @@ part,stigmas,lower,stigma,,,NOUN
 part,stipule,lower,stipule,,,NOUN
 part,stipules,lower,stipule,,,NOUN
 part,stock,lower,rootstock,,,NOUN
+part,stolon,lower,,,,NOUN
+part,stolons,lower,,,,NOUN
 part,style,lower,style,,,NOUN
 part,styles,lower,style,,,NOUN
 part,trunk,lower,trunk,,,NOUN
@@ -444,6 +503,7 @@ shape,elongate-ovate,lower,,,,ADJ
 shape,emarginate,lower,,,,ADJ
 shape,ensate,lower,,,,ADJ
 shape,ensiform,lower,linear,,,ADJ
+shape,even-pinnate,lower,,,,ADJ
 shape,falcate,lower,,,,ADJ
 shape,fenestrate,lower,,,,ADJ
 shape,filiform,lower,,,,ADJ
@@ -485,6 +545,7 @@ shape,obtriangular,lower,,,,ADJ
 shape,obtuse,lower,,,,ADJ
 shape,octagonal,lower,polygonal,,,ADJ
 shape,octagonate,lower,polygonal,,,ADJ
+shape,odd-pinnate,lower,,,,ADJ
 shape,orbicular,lower,,,,ADJ
 shape,orbicular-ovate,lower,orbicular,,,ADJ
 shape,orbiculate,lower,orbicular,,,ADJ
@@ -575,6 +636,7 @@ shape,tragacanthoid,lower,,,,ADJ
 shape,trapezoid,lower,,,,ADJ
 shape,triangular,lower,,,,ADJ
 shape,triangulate,lower,,,,ADJ
+shape,trinifoliate,lower,,,,ADJ
 shape,trullate,lower,,,,ADJ
 shape,truncate,lower,,,,ADJ
 shape,tubular,lower,,,,ADJ
@@ -618,6 +680,8 @@ subpart,apiculus,lower,apiculus,,,NOUN
 subpart,appendix,lower,appendix,,,NOUN
 subpart,article,lower,article,,,NOUN
 subpart,articles,lower,article,,,NOUN
+subpart,axil,lower,axil,,,NOUN
+subpart,axils,lower,axil,,,NOUN
 subpart,base,lower,base,,,NOUN
 subpart,bases,lower,base,,,NOUN
 subpart,beak,lower,beak,,,NOUN
@@ -639,6 +703,9 @@ subpart,margins,lower,margin,,,NOUN
 subpart,pore,lower,pore,,,NOUN
 subpart,pores,lower,pore,,,NOUN
 subpart,rachis,lower,rachis,,,NOUN
+subpart,ray,lower,ray,,,NOUN
+subpart,rays,lower,ray,,,NOUN
+subpart,scales,lower,scales,,,NOUN
 subpart,sinus,lower,sinus,,,NOUN
 subpart,sinuses,lower,sinus,,,NOUN
 subpart,stipe,lower,stipe,,,NOUN
@@ -649,8 +716,8 @@ subpart,teeth,lower,tooth,,,NOUN
 subpart,tube,lower,tube,,,NOUN
 subpart,tubes,lower,tube,,,NOUN
 subpart,vein,lower,vein,,,NOUN
-subpart,venation,lower,vein,,,NOUN
 subpart,veins,lower,vein,,,NOUN
+subpart,venation,lower,vein,,,NOUN
 subpart,wing,lower,wing,,,NOUN
 subpart,wings,lower,wing,,,NOUN
 woodiness,herb,lower,herbaceous,literal,,NOUN

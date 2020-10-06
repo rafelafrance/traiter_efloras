@@ -1,7 +1,5 @@
 """Common suffix count snippets."""
 
-from traiter.pylib.util import to_positive_int  # pylint: disable=import-error
-
 from ..pylib.util import CATEGORY, CLOSE, OPEN, PLUS, REPLACE, TRAIT_STEP
 
 
@@ -24,14 +22,6 @@ def suffix_count(span):
     return data
 
 
-def count_phrase(span):
-    """Enrich the match with data."""
-    return {
-        'low': to_positive_int(REPLACE.get(span.text, span.text)),
-        '_subpart': CATEGORY.get(span.text, span.text),
-    }
-
-
 SUFFIX_COUNT = {
     TRAIT_STEP: [
         {
@@ -49,15 +39,6 @@ SUFFIX_COUNT = {
                     {'TEXT': {'IN': PLUS}, 'OP': '?'},
                     {'ENT_TYPE': 'count_suffix'},
                     {'TEXT': {'IN': CLOSE}},
-                ],
-            ],
-        },
-        {
-            'label': 'count',
-            'on_match': count_phrase,
-            'patterns': [
-                [
-                    {'ENT_TYPE': 'count_word'},
                 ],
             ],
         },

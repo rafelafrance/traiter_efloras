@@ -5,8 +5,8 @@ from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .attach import ATTACH
 from .color import COLOR
-from ..pylib.util import GROUP_STEP, SHARED, TERMS, TRAIT_STEP
 from .count import COUNT
+from .count_phrase import COUNT_PHRASE
 from .descriptor import DESCRIPTOR
 from .margin import MARGIN_SHAPE
 from .part import PART
@@ -17,10 +17,12 @@ from .shape import SHAPE
 from .size import SIZE
 from .subpart import SUBPART
 from .suffix_count import SUFFIX_COUNT
+from ..pylib.util import GROUP_STEP, SHARED, TERMS, TRAIT_STEP
 
 MATCHERS = [
-    ATTACH, COLOR, COUNT, DESCRIPTOR, MARGIN_SHAPE, PART_LOCATION, PART,
-    PHRASE, RANGE, SHAPE, SHARED, SIZE, SUBPART, SUFFIX_COUNT]
+    ATTACH, COLOR, COUNT, COUNT_PHRASE, DESCRIPTOR, MARGIN_SHAPE,
+    PART_LOCATION, PART, PHRASE, RANGE, SHAPE, SHARED, SIZE, SUBPART,
+    SUFFIX_COUNT]
 
 
 class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods

@@ -286,19 +286,17 @@ class TestSize(unittest.TestCase):
                 'during winter; staminate catkins in 1 or more clusters '
                 'of 2--5, 3--8.5 cm,'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
-             {'low': 1, 'trait': 'count', 'part': 'inflorescence', 'start': 94,
-              'end': 95},
-             {'low': 2,
-              'high': 5,
-              'trait': 'count', 'part': 'inflorescence',
-              'start': 116,
-              'end': 120},
-             {'length_low': 3.0,
-              'length_high': 8.5,
-              'length_units': 'cm',
-              'trait': 'size', 'part': 'inflorescence',
-              'start': 122,
-              'end': 131}]
+             {'sex': 'male', 'part': 'catkin', 'trait': 'part',
+              'start': 73, 'end': 90},
+             {'sex': 'male', 'part': 'catkin',
+              'low': 1,
+              'trait': 'count', 'start': 94, 'end': 95},
+             {'sex': 'male', 'part': 'catkin',
+              'low': 2, 'high': 5,
+              'trait': 'count', 'start': 116, 'end': 120},
+             {'sex': 'male', 'part': 'catkin',
+              'length_low': 3.0, 'length_high': 8.5, 'length_units': 'cm',
+              'trait': 'size', 'start': 122, 'end': 131}]
         )
 
     def test_size_22(self):
@@ -436,13 +434,10 @@ class TestSize(unittest.TestCase):
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'shape': 'obovate', 'trait': 'shape', 'part': 'leaflet',
               'start': 9, 'end': 16},
-             {'length_low': 1.0,
-              'length_high': 2.5,
-              'width_low': 1.6,
-              'width_units': 'cm',
+             {'length_low': 1.0, 'length_high': 2.5,
+              'width_low': 1.6, 'width_units': 'cm',
               'trait': 'size', 'part': 'leaflet',
-              'start': 18,
-              'end': 35}]
+              'start': 18, 'end': 35}]
         )
 
     def test_size_31(self):
@@ -450,11 +445,17 @@ class TestSize(unittest.TestCase):
             NLP('Shrubs, 0.5–1[–2.5] m.'),
             [{'habit': 'shrub', 'trait': 'habit', 'part': 'plant',
               'start': 0, 'end': 6},
-             {'length_low': 0.5,
-              'length_high': 1.0,
-              'length_max': 2.5,
+             {'length_low': 0.5, 'length_high': 1.0, 'length_max': 2.5,
               'length_units': 'm',
               'trait': 'size', 'part': 'plant',
-              'start': 8,
-              'end': 22}]
+              'start': 8, 'end': 22}]
+        )
+
+    def test_size_32(self):
+        self.assertEqual(
+            NLP('trunk to 3(?) cm d.b.h.;'),
+            [{'part': 'trunk', 'trait': 'part', 'start': 0, 'end': 5},
+             {'part': 'trunk',
+              'dbh_high': 3, 'dbh_units': 'cm', 'uncertain': 'true',
+              'trait': 'size', 'start': 6, 'end': 23}]
         )

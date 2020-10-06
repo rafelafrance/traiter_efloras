@@ -314,3 +314,11 @@ class TestCount(unittest.TestCase):
               'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
               'start': 15, 'end': 39}]
         )
+
+    def test_count_31(self):
+        self.assertEqual(
+            NLP('sepals absent;'),
+            [{'part': 'sepal', 'trait': 'part',  'start': 0, 'end': 6},
+             {'low': 0, 'trait': 'count', 'part': 'sepal',
+              'start': 7, 'end': 13}]
+        )
