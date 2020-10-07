@@ -1,4 +1,4 @@
-# The eFloras Traits Database Project [![Build Status](https://travis-ci.org/rafelafrance/traiter_efloras.svg?branch=master)](https://travis-ci.org/rafelafrance/traiter_efloras)
+# The Floras Traits Database Project [![Build Status](https://travis-ci.org/rafelafrance/traiter_floras.svg?branch=master)](https://travis-ci.org/rafelafrance/traiter_floras)
 
 ## All right, what's this all about then?
 **Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like: (Reformatted to emphasize targeted traits.)
