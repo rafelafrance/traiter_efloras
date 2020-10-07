@@ -8,7 +8,7 @@ from itertools import product
 
 from .util import DATA_DIR
 
-EFLORAS_FAMILIES = DATA_DIR / 'families' / 'eFloras_family_list.csv'
+EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
 
 
 def family_dir(flora_id, family_name):

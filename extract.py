@@ -7,7 +7,7 @@ import sys
 import textwrap
 from copy import deepcopy
 
-import src.pylib.family as futil
+import src.pylib.efloras_family as futil
 from src.matchers.pipeline import Pipeline
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer

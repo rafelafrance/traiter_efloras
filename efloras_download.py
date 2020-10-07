@@ -18,7 +18,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from lxml import html
 
-from src.pylib import family as futil
+from src.pylib import efloras_family as futil
 from src.pylib.util import DATA_DIR
 
 # Don't hit the site too hard
