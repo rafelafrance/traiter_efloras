@@ -35,26 +35,6 @@ REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
 CATEGORY = {t['pattern']: c for t in TERMS if (c := t.get('category'))}
 ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec """
 
-SHARED = {
-    GROUP_STEP: [
-        {
-            'label': 'quest',
-            'patterns': [
-                [
-                    {'TEXT': {'IN': OPEN}},
-                    {'TEXT': '?'},
-                    {'TEXT': {'IN': CLOSE}},
-                ],
-                [{'TEXT': '?'}],
-            ]
-        },
-        {
-            'label': 'ender',
-            'patterns': [[{'TEXT': {'IN': DOT + SEMICOLON}}]]
-        },
-    ],
-}
-
 CONVERT = {
     'cm': 10.0,
     'dm': 100.0,
