@@ -14,6 +14,11 @@ import urllib.request
 from urllib.error import HTTPError
 
 import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.ui import WebDriverWait
+from traiter.pylib.util import log
 
 from src.pylib.util import DATA_DIR
 
@@ -22,12 +27,10 @@ SLEEP_MID = 15
 SLEEP_RADIUS = 5
 SLEEP_RANGE = (SLEEP_MID - SLEEP_RADIUS, SLEEP_MID + SLEEP_RADIUS)
 
-# Make a few attempts to download a page
-ERROR_SLEEP = 120
-ERROR_RETRY = 10
+WAIT = 20  # How many seconds to wait for the page action to happen
 
 # Set a timeout for requests
-TIMEOUT = 30
+TIMEOUT = 60
 socket.setdefaulttimeout(TIMEOUT)
 
 BRAZIL_DIR = DATA_DIR / 'brazil'
@@ -36,13 +39,13 @@ SITE = 'http://servicos.jbrj.gov.br/flora/'
 
 
 def main(args):
-    """Download the pages."""
+    """Download the data."""
     if args.all_families:
         families()
         sys.exit()
 
     if not args.family_action:
-        print('You must choose a --family-action.')
+        log('Error: You must choose a --family-action.')
         sys.exit()
 
     if args.family_action == 'list':
@@ -66,6 +69,9 @@ def species(args):
 
 def pages(args):
     """Download all treatment pages for a family."""
+    driver = webdriver.Firefox(log_path=args.log_file)
+    driver.implicitly_wait(2)
+
     path = species_path(args)
 
     if not path.exists():
@@ -91,29 +97,44 @@ def pages(args):
 
         path = dir_ / name
 
-        print(f'Downloading: {name}')
+        log(f'Downloading: {name}')
         if path.exists():
             continue
 
+        # Don't hit the site too hard
+        time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+
         url = row['references'] + '&lingua=en'
-        download_page(url, path)
-        return
+        download_page(driver, url, path)
+
+    driver.close()
 
 
-def download_page(url, path):
+def download_page(driver, url, path):
     """Download a page if it does not exist."""
     if path.exists():
         return
 
-    for attempt in range(ERROR_RETRY):
-        if attempt > 0:
-            print(f'Attempt {attempt + 1}')
-        try:
-            urllib.request.urlretrieve(url, path)
-            time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
-            break
-        except (TimeoutError, socket.timeout, HTTPError):
-            pass
+    driver.get(url)
+
+    spinner = 'modalTelaCarregando'
+    try:
+        WebDriverWait(driver, WAIT).until(
+            ec.invisibility_of_element((By.ID, spinner)))
+    except (TimeoutError, socket.timeout, HTTPError):
+        log(f'Error: waiting for {spinner} to stop')
+        return
+
+    spinner = 'linkCites'
+    try:
+        WebDriverWait(driver, WAIT).until(
+            ec.invisibility_of_element((By.ID, spinner)))
+    except (TimeoutError, socket.timeout, HTTPError):
+        log(f'Error: waiting for {spinner} to stop')
+        return
+
+    with open(path, 'w') as out_file:
+        out_file.write(driver.page_source)
 
 
 def species_path(args):
@@ -148,6 +169,10 @@ def parse_args():
         help="""Filter the list of species in a family to include this string
             in the scientific name. E.g. 'Abarema' will get all species in the
             genus 'Abarema'.""")
+
+    arg_parser.add_argument(
+        '--log-file', '-l', default='geckodriver.log',
+        help="""Path to the selenium driver log file.""")
 
     args = arg_parser.parse_args()
     return args
