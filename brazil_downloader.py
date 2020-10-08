@@ -60,7 +60,7 @@ def all_families():
 
 def species(args):
     """Download all species for a family."""
-    url = SITE + f'species/{args.family_species}'
+    url = SITE + f'species/{args.family}'
     urllib.request.urlretrieve(url, species_path(args))
 
 
@@ -86,6 +86,8 @@ def pages(args):
     dir_ = BRAZIL_DIR / args.family.capitalize()
     os.makedirs(dir_, exist_ok=True)
 
+    first_time = True
+
     for _, row in df.iterrows():
         name = f"{row['genus']}_{row['specificepithet']}"
         if row['infraspecificepithet']:
@@ -99,7 +101,9 @@ def pages(args):
             continue
 
         # Don't hit the site too hard
-        time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+        if not first_time:
+            time.sleep(random.randint(SLEEP_RANGE[0], SLEEP_RANGE[1]))
+        first_time = False
 
         url = row['references'] + '&lingua=en'
         download_page(driver, url, path)

@@ -64,6 +64,10 @@ def brazil_extract(args):
         b_util.print_families(families)
         sys.exit()
 
+    family_set = {f.capitalize() for f in args.family}
+
+    families = {k: v for k, v in families.items() if k in family_set}
+
     return families, brazil_reader
 
 
