@@ -7,28 +7,29 @@ import sys
 import textwrap
 from copy import deepcopy
 
-import src.pylib.efloras_family as futil
+import src.pylib.brazil_util as b_util
+import src.pylib.efloras_util as e_util
 from src.matchers.pipeline import Pipeline
+from src.readers.brazil_reader import brazil_reader
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import biluo_writer, iob_writer, ner_writer
 from src.writers.html_writer import html_writer
+
+READERS = ['brazil', 'efloras']
 
 
 def main(args):
     """Perform actions based on the arguments."""
     pipeline = Pipeline()
 
-    families = {k: v for k, v in futil.get_families().items() if v['count']}
+    families, reader = {}, None
+    if args.reader == 'efloras':
+        families, reader = efloras_extract(args)
+    elif args.reader == 'brazil':
+        families, reader = brazil_extract(args)
 
-    if args.list_families:
-        futil.print_families(families)
-        sys.exit()
-
-    if not futil.check_family_flora_ids(args, families):
-        sys.exit(1)
-
-    rows = efloras_reader(args, families)
+    rows = reader(args, families)
 
     for row in rows:
         row['doc'] = pipeline.find_entities(row['text'])
@@ -55,12 +56,41 @@ def main(args):
         biluo_writer(args, copied)
 
 
+def brazil_extract(args):
+    """Handle Brazil Flora extractions"""
+    families = {k: v for k, v in b_util.get_families().items() if v['count']}
+
+    if args.list_families:
+        b_util.print_families(families)
+        sys.exit()
+
+    return families, brazil_reader
+
+
+def efloras_extract(args):
+    """Handle eFloras extractions"""
+    families = {k: v for k, v in e_util.get_families().items() if v['count']}
+
+    if not e_util.check_family_flora_ids(args, families):
+        sys.exit(1)
+
+    if args.list_families:
+        e_util.print_families(families)
+        sys.exit()
+
+    return families, efloras_reader
+
+
 def parse_args():
     """Process command-line arguments."""
     description = """Parse data from the eFloras website."""
     arg_parser = argparse.ArgumentParser(
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
+
+    arg_parser.add_argument(
+        '--reader', '-r', choices=READERS, default=READERS[0],
+        help="""Which flora reader to use.""")
 
     arg_parser.add_argument(
         '--family', '-f', action='append',
@@ -73,9 +103,9 @@ def parse_args():
             genera this is really just a filter on the taxa names so you
             can put in anything that matches a taxon name.""")
 
-    flora_ids = futil.get_flora_ids()
+    flora_ids = e_util.get_flora_ids()
     arg_parser.add_argument(
-        '--flora-id', '--id', '-F', action='append',
+        '--flora-id', '-e', action='append',
         choices=[str(k) for k in flora_ids],
         help="""Which flora ID to extract. Default 1.""")
 

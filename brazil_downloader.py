@@ -20,7 +20,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from traiter.pylib.util import log
 
-from src.pylib.util import DATA_DIR
+from src.pylib.brazil_util import BRAZIL_DIR, BRAZIL_FAMILIES
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -33,15 +33,13 @@ WAIT = 20  # How many seconds to wait for the page action to happen
 TIMEOUT = 60
 socket.setdefaulttimeout(TIMEOUT)
 
-BRAZIL_DIR = DATA_DIR / 'brazil'
-
 SITE = 'http://servicos.jbrj.gov.br/flora/'
 
 
 def main(args):
     """Download the data."""
     if args.all_families:
-        families()
+        all_families()
         sys.exit()
 
     if not args.family_action:
@@ -54,11 +52,10 @@ def main(args):
         pages(args)
 
 
-def families():
+def all_families():
     """Save a list of families."""
     url = SITE + 'families'
-    path = BRAZIL_DIR / 'families.json'
-    urllib.request.urlretrieve(url, path)
+    urllib.request.urlretrieve(url, BRAZIL_FAMILIES)
 
 
 def species(args):

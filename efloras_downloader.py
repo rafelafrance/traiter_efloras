@@ -13,12 +13,12 @@ import time
 import urllib.request
 from urllib.error import HTTPError
 
-import regex
 import pandas as pd
+import regex
 from bs4 import BeautifulSoup
 from lxml import html
 
-from src.pylib import efloras_family as futil
+from src.pylib import efloras_util as e_util
 from src.pylib.util import DATA_DIR
 
 # Don't hit the site too hard
@@ -34,22 +34,21 @@ ERROR_RETRY = 10
 TIMEOUT = 30
 socket.setdefaulttimeout(TIMEOUT)
 
-EFLORAS_DIR = DATA_DIR / 'eFloras'
-FAMILY_DIR = DATA_DIR / 'families'
+FAMILY_DIR = DATA_DIR / 'efloras_families'
 
 SITE = 'http://www.efloras.org'
 EFLORAS_FAMILIES = FAMILY_DIR / 'eFloras_family_list.csv'
 TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
 
-def main(args, families, flora_ids):
+def main(args, families, efloras_ids):
     """Perform actions based on the arguments."""
-    if args.list_flora_ids:
-        futil.print_flora_ids(flora_ids)
+    if args.list_efloras_ids:
+        e_util.print_flora_ids(efloras_ids)
         sys.exit()
 
     if args.search:
-        futil.search_families(args, families)
+        e_util.search_families(args, families)
         sys.exit()
 
     if args.update_families:
@@ -61,10 +60,10 @@ def main(args, families, flora_ids):
         family_name = FAMILIES[key]['family']
         taxon_id = FAMILIES[key]['taxon_id']
 
-        dir_ = futil.tree_dir(args.flora_id, family_name)
+        dir_ = e_util.tree_dir(args.flora_id, family_name)
         os.makedirs(dir_, exist_ok=True)
 
-        dir_ = futil.treatment_dir(args.flora_id, family_name)
+        dir_ = e_util.treatment_dir(args.flora_id, family_name)
         os.makedirs(dir_, exist_ok=True)
 
         download(family_name, args.flora_id, taxon_id)
@@ -88,10 +87,10 @@ def update_families():
 
         for link in soup.findAll('a', attrs={'title': TAXON_RE}):
             href = link.attrs['href']
-            flora_id = futil.get_flora_id(href)
+            flora_id = e_util.get_flora_id(href)
             families.append({
                 'flora_id': flora_id,
-                'taxon_id': futil.get_taxon_id(href),
+                'taxon_id': e_util.get_taxon_id(href),
                 'link': f'{SITE}/{href}',
                 'family': link.text,
                 'flora_name': floras[flora_id],
@@ -99,7 +98,7 @@ def update_families():
 
     df = pd.DataFrame(families)
     df = df.sort_values(by=['flora_id', 'family'])
-    df.to_csv(futil.EFLORAS_FAMILIES, index=None)
+    df.to_csv(e_util.EFLORAS_FAMILIES, index=None)
 
 
 def download_families(flora_id):
@@ -152,7 +151,7 @@ def download(family_name, flora_id, taxon_id):
     """Download the family tree and then treatments."""
     family_tree(family_name, flora_id, taxon_id, set())
 
-    tree_dir = futil.tree_dir(flora_id, family_name)
+    tree_dir = e_util.tree_dir(flora_id, family_name)
     for path in tree_dir.glob('*.html'):
         with open(path) as in_file:
             page = html.fromstring(in_file.read())
@@ -174,7 +173,7 @@ def get_treatments(flora_id, family_name, page):
 
 def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
-    path = futil.treatment_file(flora_id, family_name, taxon_id)
+    path = e_util.treatment_file(flora_id, family_name, taxon_id)
     url = (f'{SITE}/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
@@ -214,7 +213,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
         r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
         regex.VERBOSE | regex.IGNORECASE)
 
-    path = futil.tree_file(flora_id, family_name, taxon_id, page_no)
+    path = e_util.tree_file(flora_id, family_name, taxon_id, page_no)
 
     url = (f'{SITE}/browse.aspx'
            f'?flora_id={flora_id}'
@@ -297,7 +296,7 @@ def parse_args(flora_ids):
 
 
 if __name__ == "__main__":
-    FAMILIES = futil.get_families()
-    FLORA_IDS = futil.get_flora_ids()
+    FAMILIES = e_util.get_families()
+    FLORA_IDS = e_util.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
     main(ARGS, FAMILIES, FLORA_IDS)

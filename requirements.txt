@@ -6,6 +6,4 @@ regex~=2020.9.27
 lxml~=4.5.2
 spacy~=2.3.2
 cupy-cuda102~=7.8.0
-
-traiter~=0.8.0
 selenium~=3.141.0

@@ -1,4 +1,4 @@
-"""Common functions related to extracting families."""
+"""Common utility functions for eFloras."""
 
 import csv
 import re
@@ -8,6 +8,7 @@ from itertools import product
 
 from .util import DATA_DIR
 
+EFLORAS_DIR = DATA_DIR / 'eFloras'
 EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
 
 
@@ -62,7 +63,7 @@ def get_taxon_id(href):
 
 
 def get_families():
-    """Get a list of all families in the eFloras North American catalog."""
+    """Get a list of all families in the eFloras catalog."""
     families = {}
 
     with open(EFLORAS_FAMILIES) as in_file:
