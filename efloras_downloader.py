@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Download files from src."""
+"""Download files from efloras web site."""
 
 import argparse
 import os
@@ -37,7 +37,7 @@ socket.setdefaulttimeout(TIMEOUT)
 EFLORAS_DIR = DATA_DIR / 'eFloras'
 FAMILY_DIR = DATA_DIR / 'families'
 
-CITE = 'http://www.efloras.org'
+SITE = 'http://www.efloras.org'
 EFLORAS_FAMILIES = FAMILY_DIR / 'eFloras_family_list.csv'
 TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
@@ -92,7 +92,7 @@ def update_families():
             families.append({
                 'flora_id': flora_id,
                 'taxon_id': futil.get_taxon_id(href),
-                'link': f'{CITE}/{href}',
+                'link': f'{SITE}/{href}',
                 'family': link.text,
                 'flora_name': floras[flora_id],
             })
@@ -104,7 +104,7 @@ def update_families():
 
 def download_families(flora_id):
     """Get the families for the flora."""
-    base_url = f'{CITE}/browse.aspx?flora_id={flora_id}'
+    base_url = f'{SITE}/browse.aspx?flora_id={flora_id}'
     path = FAMILY_DIR / f'flora_id={flora_id}_page=1.html'
     urllib.request.urlretrieve(base_url, path)
 
@@ -129,7 +129,7 @@ def download_families(flora_id):
 
 def download_floras():
     """Get the floras from the main page."""
-    url = CITE
+    url = SITE
     path = FAMILY_DIR / 'home_page.html'
     urllib.request.urlretrieve(url, path)
 
@@ -175,7 +175,7 @@ def get_treatments(flora_id, family_name, page):
 def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
     path = futil.treatment_file(flora_id, family_name, taxon_id)
-    url = (f'{CITE}/florataxon.aspx'
+    url = (f'{SITE}/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
 
@@ -216,7 +216,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
 
     path = futil.tree_file(flora_id, family_name, taxon_id, page_no)
 
-    url = (f'{CITE}/browse.aspx'
+    url = (f'{SITE}/browse.aspx'
            f'?flora_id={flora_id}'
            f'&start_taxon_id={taxon_id}')
     if page_no > 1:
