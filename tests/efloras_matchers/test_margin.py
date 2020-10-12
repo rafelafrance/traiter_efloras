@@ -6,7 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.matchers.pipeline import PIPELINE
+from src.efloras_matchers.pipeline import PIPELINE
 
 NLP = PIPELINE.test_traits
 

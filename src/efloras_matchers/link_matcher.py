@@ -12,7 +12,7 @@ from ..pylib.util import LINK_STEP
 class LinkMatcher(SpacyMatcher):
     """Base matcher object."""
 
-    name = 'entity_matcher'
+    name = 'link_matcher'
 
     def __init__(self, nlp):
         super().__init__(nlp)
@@ -64,8 +64,7 @@ class LinkMatcher(SpacyMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    # pylint: disable=too-many-locals, disable=unused-argument
-    def scan(self, doc, matchers, step):
+    def scan(self, doc, matchers, step):  # pylint: disable=too-many-locals
         """Find all terms in the text and return the resulting doc."""
         all_matches = []
 

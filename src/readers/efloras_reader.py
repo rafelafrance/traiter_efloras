@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
 import src.pylib.efloras_util as e_util
-from src.matchers.part import PATTERN_RE
+from src.efloras_matchers.part import PATTERN_RE
 
 _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 

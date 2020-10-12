@@ -49,7 +49,7 @@ MATCHERS = [
 class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
     """Base matcher object."""
 
-    name: str = 'entity_matcher'
+    name: str = 'efloras_matcher'
 
     def __init__(self, nlp: Language, training: bool = False):
         super().__init__(nlp)

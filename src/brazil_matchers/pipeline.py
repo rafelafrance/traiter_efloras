@@ -4,15 +4,14 @@
 from traiter.spacy_nlp.pipeline import SpacyPipeline
 from traiter.spacy_nlp.sentencizer import SpacySentencizer
 
-from src.matchers.link_matcher import LinkMatcher
-from src.matchers.matcher import Matcher
-from src.pylib.util import ABBREVS, LINK_STEP, TRAIT_STEP
+from .matcher import Matcher
+from ..pylib.util import ABBREVS, LINK_STEP, TRAIT_STEP, GROUP_STEP
 
 
 class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
     """Build a custom traiter pipeline."""
 
-    steps2link = {TRAIT_STEP, LINK_STEP}
+    token2entity = {TRAIT_STEP, LINK_STEP, GROUP_STEP}
 
     def __init__(
             self,
@@ -30,9 +29,6 @@ class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
         if not training:
             sentencizer = SpacySentencizer(ABBREVS)
             self.nlp.add_pipe(sentencizer, before='parser')
-
-            linker = LinkMatcher(self.nlp)
-            self.nlp.add_pipe(linker, last=True, name=LINK_STEP)
 
 
 PIPELINE = Pipeline()  # A singleton for testing
