@@ -703,6 +703,9 @@ subpart,gland,lower,gland,,,NOUN
 subpart,glands,lower,gland,,,NOUN
 subpart,hair,lower,hair,,,NOUN
 subpart,hairs,lower,hair,,,NOUN
+subpart,indumenta,lower,indumentum,,,NOUN
+subpart,indumentum,lower,indumentum,,,NOUN
+subpart,indumentums,lower,indumentum,,,NOUN
 subpart,hilum,lower,hilum,,,NOUN
 subpart,keel,lower,keel,,,NOUN
 subpart,keels,lower,keel,,,NOUN

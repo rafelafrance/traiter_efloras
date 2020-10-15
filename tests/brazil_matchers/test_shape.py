@@ -34,4 +34,3 @@ class TestShape(unittest.TestCase):
             [{'shape': 'patelliform', 'part': 'nectary',
               'trait': 'shape', 'start': 0, 'end': 19}]
         )
-
