@@ -4,10 +4,11 @@ from spacy.language import Language
 from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .count import COUNT
-from ..pylib.util import GROUP_STEP, TERMS
+from .shape import SHAPE
+from .size import SIZE
+from ..pylib.util import GROUP_STEP, TERMS, TRAIT_STEP
 
-MATCHERS = [
-    COUNT]
+MATCHERS = [COUNT, SHAPE, SIZE]
 
 
 class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
@@ -22,4 +23,4 @@ class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
 
         if not training:
             self.add_patterns(MATCHERS, GROUP_STEP)
-            # self.add_patterns(MATCHERS, TRAIT_STEP)
+            self.add_patterns(MATCHERS, TRAIT_STEP)

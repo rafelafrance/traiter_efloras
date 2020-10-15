@@ -1,4 +1,4 @@
-"""Parse the trait."""
+"""Parse shape traits."""
 
 from ..pylib.util import DASH, REPLACE, TRAIT_STEP
 

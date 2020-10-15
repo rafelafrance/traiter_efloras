@@ -2,9 +2,11 @@
 
 from traiter.pylib.util import to_positive_int
 
-from ..pylib.util import GROUP_STEP, SLASH
+from ..pylib.util import TRAIT_STEP, SLASH
 
-MORE = ' more '.split()
+COUNT_KEY = """ count number """.split()
+MORE = """ more """.split()
+PARTS = """ part subpart """.split()
 
 
 def count(span):
@@ -29,131 +31,57 @@ def count(span):
 
     if field := [t.lower_ for t in span if t.ent_type_ == 'part']:
         data['part'] = field[0]
+    if field := [t.lower_ for t in span if t.ent_type_ == 'subpart']:
+        data['subpart'] = field[0]
 
     return data
 
 
 COUNT = {
-    GROUP_STEP: [
+    TRAIT_STEP: [
         {
             'label': 'count',
             'on_match': count,
             'patterns': [
+                # Example: number of the pairs of the leaflet 1/2/3/4/5
                 [
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                # With per_count as a prefix
-                [
-                    {'ENT_TYPE': 'per_count'},
+                    {'LOWER': {'IN': COUNT_KEY}},
                     {'POS': 'ADP', 'OP': '?'},
                     {'POS': 'DET', 'OP': '?'},
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'per_count'},
+                    {'ENT_TYPE': 'per_count', 'OP': '?'},
                     {'POS': 'ADP', 'OP': '?'},
                     {'POS': 'DET', 'OP': '?'},
-                    {'ENT_TYPE': 'part'},
+                    {'ENT_TYPE': {'IN': PARTS}},
                     {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
                 ],
+                # Example: count of the pairs of the leaflet 1/2/3/4/5 or more
                 [
-                    {'ENT_TYPE': 'per_count'},
+                    {'LOWER': {'IN': COUNT_KEY}},
                     {'POS': 'ADP', 'OP': '?'},
                     {'POS': 'DET', 'OP': '?'},
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'per_count'},
+                    {'ENT_TYPE': 'per_count', 'OP': '?'},
                     {'POS': 'ADP', 'OP': '?'},
                     {'POS': 'DET', 'OP': '?'},
-                    {'ENT_TYPE': 'part'},
+                    {'ENT_TYPE': {'IN': PARTS}},
                     {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
+                    {'TEXT': {'IN': SLASH}, 'OP': '?'},
+                    {'IS_DIGIT': True, 'OP': '?'},
                     {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
-                ],
-                [
-                    {'ENT_TYPE': 'per_count'},
-                    {'POS': 'ADP', 'OP': '?'},
-                    {'POS': 'DET', 'OP': '?'},
-                    {'ENT_TYPE': 'part'},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'TEXT': {'IN': SLASH}},
-                    {'IS_DIGIT': True},
-                    {'POS': 'CCONJ', 'OP': '?'},
-                    {'TEXT': {'IN': MORE}, 'OP': '?'},
+                    {'LOWER': {'IN': MORE}},
                 ],
             ],
         },

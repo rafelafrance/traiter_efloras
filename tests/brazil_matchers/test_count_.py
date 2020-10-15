@@ -18,7 +18,7 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             NLP(shorten('Leaf: number of the pairs of the leaflet 1/2/3;')),
             [{'low': 1, 'high': 3, 'per_count': 'pairs', 'part': 'leaflet',
-              'trait': 'count', 'start': 20, 'end': 46}]
+              'trait': 'count', 'start': 6, 'end': 46}]
 
         )
 
@@ -28,5 +28,5 @@ class TestCount(unittest.TestCase):
                 Leaf: number of the pairs of the leaflet 1/2/3 or more;
                 """)),
             [{'low': 1, 'high': 3, 'more': True, 'per_count': 'pairs',
-              'part': 'leaflet', 'trait': 'count', 'start': 20, 'end': 54}]
+              'part': 'leaflet', 'trait': 'count', 'start': 6, 'end': 54}]
         )

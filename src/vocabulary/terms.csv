@@ -355,6 +355,8 @@ part,leaflets,lower,leaflet,,leaf-lets,NOUN
 part,leaves,lower,leaf,,,NOUN
 part,legume,lower,legume,,,NOUN
 part,legumes,lower,legume,,,NOUN
+part,nectary,lower,nectary,,,NOUN
+part,nectaries,lower,nectary,,,NOUN
 part,non-flowering branch,lower,branch,,,NOUN
 part,non-flowering branches,lower,branch,,,NOUN
 part,non-flowering stem,lower,stem,,,NOUN
@@ -565,6 +567,7 @@ shape,palmatisect,lower,,,,ADJ
 shape,pandurate,lower,,,,ADJ
 shape,papilionaceous,lower,,,,ADJ
 shape,peltate,lower,,,,ADJ
+shape,patelliform,lower,,,,ADJ
 shape,pentagonal,lower,polygonal,,,ADJ
 shape,pentangular,lower,polygonal,,,ADJ
 shape,pentangulate,lower,polygonal,,,ADJ
