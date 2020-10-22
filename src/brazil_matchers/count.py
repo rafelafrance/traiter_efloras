@@ -2,11 +2,10 @@
 
 from traiter.pylib.util import to_positive_int
 
-from ..pylib.util import TRAIT_STEP, SLASH
+from ..pylib.util import PARTS, TRAIT_STEP, SLASH
 
 COUNT_KEY = """ count number """.split()
 MORE = """ more """.split()
-PARTS = """ part subpart """.split()
 
 
 def count(span):

@@ -27,12 +27,23 @@ PLUS = ' + '.split()
 SEMICOLON = ' ; '.split()
 SLASH = ' / '.split()
 
+PARTS = ['part', 'subpart']
+
 TERM_PATH = BASE_DIR / 'src' / 'vocabulary' / 'terms.csv'
 TERMS = read_terms(TERM_PATH)
 TERMS += hyphenate_terms(TERMS)
 
 REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
 CATEGORY = {t['pattern']: c for t in TERMS if (c := t.get('category'))}
+
+PRESENCE = {
+    'present': True,
+    'presence': True,
+    'absent': False,
+    'absence': False,
+}
+PRESENT = list(PRESENCE)
+
 ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec """
 
 CONVERT = {

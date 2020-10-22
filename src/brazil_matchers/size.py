@@ -4,11 +4,10 @@ import re
 
 from traiter.pylib.util import to_positive_float
 
-from ..pylib.util import GROUP_STEP, NUMBER, TRAIT_STEP, REPLACE, SLASH
+from ..pylib.util import GROUP_STEP, NUMBER, PARTS, REPLACE, SLASH, TRAIT_STEP
 
 SIZE_KEY = """ size """.split()
 PLUS = """ bigger larger greater """.split()
-PARTS = """ part subpart """.split()
 LABELS = {
     1: ['low'],
     2: ['low', 'high'],

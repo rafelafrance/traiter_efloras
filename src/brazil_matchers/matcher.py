@@ -6,9 +6,10 @@ from traiter.spacy_nlp.matcher import SpacyMatcher
 from .count import COUNT
 from .shape import SHAPE
 from .size import SIZE
+from .surface import SURFACE
 from ..pylib.util import GROUP_STEP, TERMS, TRAIT_STEP
 
-MATCHERS = [COUNT, SHAPE, SIZE]
+MATCHERS = [COUNT, SHAPE, SIZE, SURFACE]
 
 
 class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods

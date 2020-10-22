@@ -2,14 +2,13 @@
 
 from traiter.pylib.util import squash
 
-from ..pylib.util import REPLACE, SLASH, TRAIT_STEP
+from ..pylib.util import PARTS, REPLACE, SLASH, TRAIT_STEP
 
 SHAPE_KEY = """ form shape """.split()
-PARTS = ['part', 'subpart']
 
 
 def shape(span):
-    """Enrich a phrase match."""
+    """Enrich a shape match."""
     data = {'shape': squash([REPLACE.get(t.lower_, t.lower_) for t in span
                              if t.ent_type_ == 'shape'])}
 
