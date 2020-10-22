@@ -57,4 +57,3 @@ class TestSurface(unittest.TestCase):
               'subpart': 'indumentum', 'location': 'abaxial',
               'trait': 'surface', 'start': 0, 'end': 59}]
         )
-
