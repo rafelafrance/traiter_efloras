@@ -93,7 +93,6 @@ color_modifier,tinges,lower,,,,NOUN
 color_modifier,tip,lower,,,,NOUN
 color_modifier,tipped,lower,,,,ADJ
 color_modifier,tips,lower,,,,NOUN
-color_modifier,vein,lower,,,,NOUN
 count_suffix,-callose,lower,callose,,,NOUN
 count_suffix,-carpellate,lower,,,,ADJ
 count_suffix,-columned,lower,colum,,,ADJ
@@ -159,7 +158,6 @@ habit,arborescent,lower,arborescent,descriptor,,ADJ
 habit,assurgent,lower,assurgent,descriptor,,ADJ
 habit,branching,lower,branching,descriptor,,ADJ
 habit,caducous ,lower,caducous,descriptor,,ADJ
-habit,caducous ,lower,caducous ,descriptor,,ADJ
 habit,caespitose ,lower,caespitose,descriptor,,ADJ
 habit,caulescent,lower,caulescent,descriptor,,ADJ
 habit,creeping,lower,creeping,descriptor,,ADJ
@@ -177,7 +175,6 @@ habit,epigeous,lower,,descriptor,,ADJ
 habit,epilithic,lower,,descriptor,,ADJ
 habit,epiphloedal,lower,,descriptor,,ADJ
 habit,epiphyllous,lower,,descriptor,,ADJ
-habit,epiphyte,lower,,descriptor,,ADJ
 habit,equinoctial,lower,,descriptor,,ADJ
 habit,eupotamous,lower,,descriptor,,ADJ
 habit,euryhaline,lower,,descriptor,,ADJ
@@ -212,9 +209,6 @@ habit,virgate,lower,,descriptor,,ADJ
 habit_shape,caespitose,lower,cespitose,descriptor,,ADJ
 habit_shape,cespitose,lower,cespitose,descriptor,,ADJ
 habit_shape,frutescent,lower,frutescent,descriptor,,ADJ
-habit_shape,suffrutescent,lower,epiphytic,descriptor,,ADJ
-habitat,epilithic,lower,epilithic,descriptor,,ADJ
-habitat,epiphloedal,lower,epiphloedic,descriptor,,ADJ
 habitat,epiphloedic,lower,epiphloedic,descriptor,,ADJ
 habitat,epiphyte,lower,epiphytic,descriptor,,NOUN
 habitat,epiphytic,lower,epiphytic,descriptor,,ADJ
@@ -243,7 +237,6 @@ location,radical,lower,,literal,,ADJ
 location,terminal,lower,,literal,,ADJ
 margin_follower,crisped,lower,,,,ADJ
 margin_follower,margined,lower,,,,ADJ
-margin_leader,coarsely,lower,,,,ADJ
 margin_leader,coarsely,lower,,,,ADJ
 margin_leader,remotely,lower,,,,ADJ
 margin_leader,thickened,lower,,,,ADJ
@@ -382,7 +375,6 @@ part,petiole blades,lower,petiole,,,NOUN
 part,petioles,lower,petiole,,,NOUN
 part,petiolule,lower,petiole,,,NOUN
 part,petiolules,lower,petiole,,,NOUN
-part,pistil,lower,carpel,,,NOUN
 part,pistil,lower,pistil,,,NOUN
 part,pistillode,lower,pistil,,,NOUN
 part,pistillodes,lower,pistil,,,NOUN
@@ -618,7 +610,6 @@ shape,septagonate,lower,polygonal,,,ADJ
 shape,septate,lower,,,,ADJ
 shape,sextagonal,lower,polygonal,,,ADJ
 shape,sextagonate,lower,polygonal,,,ADJ
-shape,sinuate,lower,,,,ADJ
 shape,spatulate,lower,,,,ADJ
 shape,spear-shaped,lower,spearshaped,,,ADJ
 shape,spearshaped,lower,,,,ADJ
@@ -665,7 +656,6 @@ shape_leader,bilaterally,lower,,,,ADJ
 shape_leader,broadly,lower,,,,ADJ
 shape_leader,deeply,lower,,,,ADJ
 shape_leader,depressed,lower,,,,ADJ
-shape_leader,elongate,lower,,,,ADJ
 shape_leader,inflated,lower,,,,ADJ
 shape_leader,irregularly,lower,,,,ADJ
 shape_leader,long-,lower,,,,ADJ
@@ -753,7 +743,6 @@ surface,floccose,lower,,,,ADJ
 surface,glabrate,lower,,,,ADJ
 surface,glabrous,lower,,,,ADJ
 surface,glandular,lower,,,,ADJ
-surface,glandular,lower,,,,ADJ
 surface,glandular-punctate,lower,,,,ADJ
 surface,hairy,lower,,,,ADJ
 surface,hirsute,lower,,,,ADJ
@@ -764,7 +753,6 @@ surface,puberulous,lower,puberulent,,,ADJ
 surface,pubescent,lower,,,,ADJ
 surface,scabrous,lower,,,,ADJ
 surface,scurfy,lower,,,,ADJ
-surface,stellate,lower,,,,ADJ
 surface,tomentose,lower,,,,ADJ
 surface,verrucose,lower,,,,ADJ
 surface,villose,lower,,,,ADJ
