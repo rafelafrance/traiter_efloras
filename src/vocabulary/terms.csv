@@ -172,9 +172,6 @@ habit,epigeal,lower,,descriptor,,ADJ
 habit,epigean,lower,,descriptor,,ADJ
 habit,epigeic,lower,,descriptor,,ADJ
 habit,epigeous,lower,,descriptor,,ADJ
-habit,epilithic,lower,,descriptor,,ADJ
-habit,epiphloedal,lower,,descriptor,,ADJ
-habit,epiphyllous,lower,,descriptor,,ADJ
 habit,equinoctial,lower,,descriptor,,ADJ
 habit,eupotamous,lower,,descriptor,,ADJ
 habit,euryhaline,lower,,descriptor,,ADJ
@@ -209,7 +206,10 @@ habit,virgate,lower,,descriptor,,ADJ
 habit_shape,caespitose,lower,cespitose,descriptor,,ADJ
 habit_shape,cespitose,lower,cespitose,descriptor,,ADJ
 habit_shape,frutescent,lower,frutescent,descriptor,,ADJ
+habitat,epilithic,lower,,descriptor,,ADJ
+habitat,epiphloedal,lower,,descriptor,,ADJ
 habitat,epiphloedic,lower,epiphloedic,descriptor,,ADJ
+habitat,epiphyllous,lower,,descriptor,,ADJ
 habitat,epiphyte,lower,epiphytic,descriptor,,NOUN
 habitat,epiphytic,lower,epiphytic,descriptor,,ADJ
 habitat,lithophyte,lower,lithophytic,descriptor,,NOUN
