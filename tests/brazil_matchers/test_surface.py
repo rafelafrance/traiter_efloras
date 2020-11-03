@@ -30,7 +30,8 @@ class TestSurface(unittest.TestCase):
                 Flower: indumentum of the calyx present;
                 indumentum of the corolla absent.
                 """)),
-            [{'part': 'calyx', 'subpart': 'indumentum', 'present': True,
+            [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 7},
+             {'part': 'calyx', 'subpart': 'indumentum', 'present': True,
               'trait': 'surface', 'start': 8, 'end': 39},
              {'part': 'corolla', 'subpart': 'indumentum', 'present': False,
               'trait': 'surface', 'start': 41, 'end': 73}
