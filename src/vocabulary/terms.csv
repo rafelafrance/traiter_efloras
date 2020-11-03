@@ -235,6 +235,7 @@ location,dorsal,lower,,literal,,ADJ
 location,lateral,lower,,literal,,ADJ
 location,radical,lower,,literal,,ADJ
 location,terminal,lower,,literal,,ADJ
+margin_follower,constricted,lower,,,,ADJ
 margin_follower,crisped,lower,,,,ADJ
 margin_follower,margined,lower,,,,ADJ
 margin_leader,coarsely,lower,,,,ADJ
@@ -251,12 +252,14 @@ margin_shape,entire,lower,,,,ADJ
 margin_shape,involute,lower,,,,ADJ
 margin_shape,lobate,lower,,,,ADJ
 margin_shape,lobulate,lower,,,,ADJ
+margin_shape,moniliform,lower,,,,ADJ
 margin_shape,not bordered,lower,,,,ADJ
 margin_shape,pungent,lower,,,,ADJ
 margin_shape,scalloped,lower,,,,ADJ
 margin_shape,serrate,lower,,,,ADJ
 margin_shape,serrulate,lower,,,,ADJ
 margin_shape,sinuate,lower,,,,ADJ
+margin_shape,sinuose,lower,,,,ADJ
 margin_shape,spiny,lower,,,,ADJ
 margin_shape,toothed,lower,,,,ADJ
 margin_shape,undulate,lower,,,,ADJ
@@ -753,6 +756,7 @@ surface,puberulous,lower,puberulent,,,ADJ
 surface,pubescent,lower,,,,ADJ
 surface,scabrous,lower,,,,ADJ
 surface,scurfy,lower,,,,ADJ
+surface,smooth,lower,,,,ADJ
 surface,tomentose,lower,,,,ADJ
 surface,verrucose,lower,,,,ADJ
 surface,villose,lower,,,,ADJ

@@ -4,13 +4,14 @@ from spacy.language import Language
 from traiter.spacy_nlp.matcher import SpacyMatcher
 
 from .count import COUNT
+from .margin import MARGIN
 from .part import PART
 from .shape import SHAPE
 from .size import SIZE
 from .surface import SURFACE
 from ..pylib.util import GROUP_STEP, TERMS, TRAIT_STEP
 
-MATCHERS = [COUNT, PART, SHAPE, SIZE, SURFACE]
+MATCHERS = [COUNT, MARGIN, PART, SHAPE, SIZE, SURFACE]
 
 
 class Matcher(SpacyMatcher):  # pylint: disable=too-few-public-methods
