@@ -6,7 +6,7 @@ from traiter.spacy_nlp.sentencizer import SpacySentencizer
 
 from .attach import attach
 from .matcher import Matcher
-from ..pylib.util import ABBREVS, LINK_STEP, TRAIT_STEP, GROUP_STEP
+from ..pylib.util import ABBREVS, GROUP_STEP, LINK_STEP, TRAIT_STEP
 
 
 class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods

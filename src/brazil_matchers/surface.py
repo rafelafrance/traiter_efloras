@@ -68,6 +68,13 @@ SURFACE = {
                     {'TEXT': {'IN': SLASH}},
                     {'LOWER': {'IN': PRESENT}},
                 ],
+                [
+                    {'ENT_TYPE': {'IN': PARTS}},
+                    {'POS': 'ADP', 'OP': '?'},
+                    {'POS': 'DET', 'OP': '?'},
+                    {'ENT_TYPE': {'IN': PARTS}},
+                    {'ENT_TYPE': 'surface'},
+                ],
             ],
         },
     ],
