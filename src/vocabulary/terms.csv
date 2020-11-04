@@ -120,9 +120,9 @@ dimension,d.b.h.,lower,dbh,,,NOUN
 dimension,dbh,lower,dbh,,,NOUN
 dimension,dia,lower,diameter,,,NOUN
 dimension,diam,lower,diameter,,,NOUN
-dimension,diameter,lower,diameter,,,NOUN
 dimension,diameter at breast height,lower,dbh,,,NOUN
 dimension,diameter breast height,lower,dbh,,,NOUN
+dimension,diameter,lower,diameter,,,NOUN
 dimension,height,lower,height,,,NOUN
 dimension,high,lower,height,,,ADJ
 dimension,in dia,lower,diameter,,,ADJ
@@ -275,8 +275,12 @@ mass_units,oz,lower,oz,,,NOUN
 mass_units,ozs,lower,oz,,,NOUN
 mass_units,pound,lower,lbs,,,NOUN
 mass_units,pounds,lower,lbs,,,NOUN
+morphic,heteropmorphic,lower,,,,ADJ
+morphic,homomorphic,lower,,,,ADJ
 part,2 n,lower,2n,,,X
 part,2n,lower,2n,,,X
+part,Infructescence,lower,Infructescence,,,NOUN
+part,Infructescences,lower,Infructescence,,,NOUN
 part,achene,lower,achene,,,NOUN
 part,achenes,lower,achene,,,NOUN
 part,androecia,lower,stamen,,,NOUN
@@ -339,14 +343,12 @@ part,hypanthium,lower,hypanthium,,,NOUN
 part,inflorescence,lower,inflorescence,,,NOUN
 part,inflorescences,lower,inflorescence,,,NOUN
 part,inflorescenses,lower,inflorescence,,,NOUN
-part,Infructescence,lower,Infructescence,,,NOUN
-part,Infructescences,lower,Infructescence,,,NOUN
-part,leaf,lower,leaf,,,NOUN
 part,leaf blade,lower,leaf,,,NOUN
 part,leaf blades,lower,leaf,,,NOUN
-part,leaflet,lower,leaflet,,leaf-let,NOUN
+part,leaf,lower,leaf,,,NOUN
 part,leaflet blade,lower,leaflet,,leaf-let blade,NOUN
 part,leaflet blades,lower,leaflet,,leaf-let blades,NOUN
+part,leaflet,lower,leaflet,,leaf-let,NOUN
 part,leaflets,lower,leaflet,,leaf-lets,NOUN
 part,leaves,lower,leaf,,,NOUN
 part,legume,lower,legume,,,NOUN
@@ -363,8 +365,8 @@ part,ovule,lower,ovary,,,NOUN
 part,ovules,lower,ovary,,,NOUN
 part,pedicel,lower,pedicel,,,NOUN
 part,pedicels,lower,pedicel,,,NOUN
-part,peduncle,lower,peduncle,,,NOUN
 part,peduncle plus floral axis,lower,,,,NOUN
+part,peduncle,lower,peduncle,,,NOUN
 part,peduncles,lower,peduncle,,,NOUN
 part,pepo,lower,pepo,,,NOUN
 part,pepos,lower,pepo,,,NOUN
@@ -372,9 +374,9 @@ part,perianth,lower,perianth,,,NOUN
 part,perigonium,lower,perianth,,,NOUN
 part,petal,lower,petal,,,NOUN
 part,petals,lower,petal,,,NOUN
-part,petiole,lower,petiole,,,NOUN
 part,petiole blade,lower,petiole,,,NOUN
 part,petiole blades,lower,petiole,,,NOUN
+part,petiole,lower,petiole,,,NOUN
 part,petioles,lower,petiole,,,NOUN
 part,petiolule,lower,petiole,,,NOUN
 part,petiolules,lower,petiole,,,NOUN
@@ -385,9 +387,9 @@ part,pistils,lower,carpel,,,NOUN
 part,pith,lower,,,,NOUN
 part,plant,lower,plant,,,NOUN
 part,plants,lower,plant,,,NOUN
-part,pollen,lower,,,,NOUN
 part,pollen sac,lower,,,,NOUN
 part,pollen sacs,lower,pollen sac,,,NOUN
+part,pollen,lower,,,,NOUN
 part,raceme,lower,inflorescence,,ra-ceme,NOUN
 part,racemes,lower,inflorescence,,ra-cemes,NOUN
 part,root,lower,root,,,NOUN
@@ -431,8 +433,8 @@ per_count,1 or more clusters,lower,cluster,,,NOUN
 per_count,cluster,lower,,,,NOUN
 per_count,clusters,lower,cluster,,,NOUN
 per_count,one or more clusters,lower,cluster,,,NOUN
-per_count,pair,lower,,,,NOUN
 per_count,pair of,lower,pair,,,NOUN
+per_count,pair,lower,,,,NOUN
 per_count,pairs,lower,,,,NOUN
 per_count,per row,lower,,,,NOUN
 per_count,per side,lower,,,,NOUN
@@ -652,6 +654,7 @@ shape,unifoliate,lower,,,,ADJ
 shape,urceolate,lower,,,,ADJ
 shape,urn-shaped,lower,,,,ADJ
 shape,vaginate,lower,,,,ADJ
+shape,verruciform,lower,,,,ADJ
 shape,zygomorphic,lower,bilaterally symmetric,,,ADJ
 shape,zygomorphous,lower,bilaterally symmetric,,,ADJ
 shape_leader,annulate,lower,,,,ADJ
