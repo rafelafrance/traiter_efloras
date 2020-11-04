@@ -16,7 +16,8 @@ SKIPS = {'start', 'end', 'trait', 'part', 'subpart'}
 
 def html_writer(args, rows):
     """Output the data."""
-    rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
+    rows = sorted(rows, key=lambda r: (
+        r.get('flora_id'), r['family'], r['taxon']))
 
     classes = build_classes(rows)
 
@@ -146,4 +147,5 @@ def trait_label(trait, sep=' '):
     label.append(trait['trait'])
     label = sep.join(label)
     label = label.replace('-', '')
+    label = label.replace('indumentum' + sep + 'surface', 'indumentum')
     return label

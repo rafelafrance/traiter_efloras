@@ -7,3 +7,5 @@ lxml~=4.6.1
 spacy~=2.3.2
 cupy-cuda102~=7.8.0
 selenium~=3.141.0
+streamlit~=0.70.0
+st-annotated-text~=1.0.1

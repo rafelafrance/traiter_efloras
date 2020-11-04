@@ -8,6 +8,8 @@ from src.pylib.util import DATA_DIR
 BRAZIL_DIR = DATA_DIR / 'brazil'
 BRAZIL_FAMILIES = BRAZIL_DIR / 'families.json'
 
+SITE = 'http://servicos.jbrj.gov.br/flora/'
+
 
 def get_families():
     """Get a list of all families in the Brazil catalog."""
@@ -53,3 +55,8 @@ def print_families(families):
             family['created'],
             family['modified'],
             family['count'] if family['count'] else ''))
+
+
+def species_path(family):
+    """Build the path to the list of species for the family."""
+    return BRAZIL_DIR / f'{family.capitalize()}_species.json'

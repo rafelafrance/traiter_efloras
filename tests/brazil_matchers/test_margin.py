@@ -23,7 +23,6 @@ class TestMargin(unittest.TestCase):
              {'subpart': 'margin',
               'margin': ['smooth', 'sinuose', 'irregularly constricted'],
               'trait': 'margin', 'start': 7, 'end': 59}]
-
         )
 
     def test_margin_02(self):

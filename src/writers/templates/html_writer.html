@@ -38,8 +38,11 @@
         </button>
       </td>
       <td>
-        {{ row.family.capitalize() }}<hr/>
-        <span class="smaller">({{ row.flora_name }})</span>
+        {{ row.family.capitalize() }}
+        {% if row.flora_name %}
+          <hr/>
+          <span class="smaller">({{ row.flora_name }})</span>
+        {% endif %}
       </td>
       <td>
         <a href="{{ row.link }}"

@@ -9,7 +9,8 @@ from copy import deepcopy
 
 import src.pylib.brazil_util as b_util
 import src.pylib.efloras_util as e_util
-from src.efloras_matchers.pipeline import Pipeline
+from src.brazil_matchers.pipeline import Pipeline as BrazilPipe
+from src.efloras_matchers.pipeline import Pipeline as EflorasPipe
 from src.readers.brazil_reader import brazil_reader
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
@@ -21,7 +22,10 @@ READERS = ['brazil', 'efloras']
 
 def main(args):
     """Perform actions based on the arguments."""
-    pipeline = Pipeline()
+    if args.reader == 'efloras':
+        pipeline = EflorasPipe()
+    else:
+        pipeline = BrazilPipe()
 
     families, reader = {}, None
     if args.reader == 'efloras':

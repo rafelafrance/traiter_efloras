@@ -25,7 +25,7 @@ NUMBER = r'^\d+(\.\d*)?$'
 OPEN = ' ( [ '.split()
 PLUS = ' + '.split()
 SEMICOLON = ' ; '.split()
-SLASH = ' / '.split()
+SLASH = ' / / '.split()
 
 PARTS = ['part', 'subpart']
 

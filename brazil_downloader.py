@@ -20,7 +20,8 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from traiter.pylib.util import log
 
-from src.pylib.brazil_util import BRAZIL_DIR, BRAZIL_FAMILIES
+from src.pylib.brazil_util import BRAZIL_DIR, BRAZIL_FAMILIES, SITE, \
+    species_path
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -32,8 +33,6 @@ WAIT = 20  # How many seconds to wait for the page action to happen
 # Set a timeout for requests
 TIMEOUT = 60
 socket.setdefaulttimeout(TIMEOUT)
-
-SITE = 'http://servicos.jbrj.gov.br/flora/'
 
 
 def main(args):
@@ -61,7 +60,7 @@ def all_families():
 def species(args):
     """Download all species for a family."""
     url = SITE + f'species/{args.family}'
-    urllib.request.urlretrieve(url, species_path(args))
+    urllib.request.urlretrieve(url, species_path(args.family))
 
 
 def pages(args):
@@ -69,7 +68,7 @@ def pages(args):
     driver = webdriver.Firefox(log_path=args.log_file)
     driver.implicitly_wait(2)
 
-    path = species_path(args)
+    path = species_path(args.family)
 
     if not path.exists():
         sys.exit(f'The file {path} does not exist.')
@@ -97,8 +96,6 @@ def pages(args):
         path = dir_ / name
 
         log(f'Downloading: {name}')
-        if path.exists():
-            continue
 
         # Don't hit the site too hard
         if not first_time:
@@ -136,11 +133,6 @@ def download_page(driver, url, path):
 
     with open(path, 'w') as out_file:
         out_file.write(driver.page_source)
-
-
-def species_path(args):
-    """Build the path to the list of species for the family."""
-    return BRAZIL_DIR / f'{args.family.capitalize()}_species.json'
 
 
 def parse_args():
