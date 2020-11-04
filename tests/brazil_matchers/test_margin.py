@@ -20,7 +20,7 @@ class TestMargin(unittest.TestCase):
                 Fruit: margin smooth or sinuose the irregularly constricted.
                 """)),
             [{'part': 'fruit', 'trait': 'part', 'start': 0, 'end': 6},
-             {'subpart': 'margin',
+             {'subpart': 'margin', 'part': 'fruit',
               'margin': ['smooth', 'sinuose', 'irregularly constricted'],
               'trait': 'margin', 'start': 7, 'end': 59}]
         )
@@ -29,6 +29,6 @@ class TestMargin(unittest.TestCase):
         self.assertEqual(
             NLP(shorten("""Fruit: margin moniliform.""")),
             [{'part': 'fruit', 'trait': 'part', 'start': 0, 'end': 6},
-             {'subpart': 'margin', 'margin': 'moniliform',
+             {'subpart': 'margin', 'margin': 'moniliform', 'part': 'fruit',
               'trait': 'margin', 'start': 7, 'end': 24}]
         )
