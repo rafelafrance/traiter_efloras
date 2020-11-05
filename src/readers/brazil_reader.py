@@ -19,6 +19,7 @@ def brazil_reader(_, families):
             row = {
                 'family': family,
                 'taxon': path.stem.replace('_', ' '),
+                'taxon_id': taxon_id,
                 'text': controlled,
                 'free': free,
                 'link': links.get(taxon_id, ''),

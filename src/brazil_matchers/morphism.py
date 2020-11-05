@@ -3,6 +3,9 @@
 from ..pylib.util import PARTS, REPLACE, TRAIT_STEP
 
 
+MORPHISM_KEY = """ type """.split()
+
+
 def morphism(span):
     """Enrich the trait."""
     data = {}
@@ -22,6 +25,9 @@ MORPHISM = {
             'on_match': morphism,
             'patterns': [
                 [
+                    {'LOWER': {'IN': MORPHISM_KEY}},
+                    {'POS': 'ADP', 'OP': '?'},
+                    {'POS': 'DET', 'OP': '?'},
                     {'ENT_TYPE': {'IN': PARTS}},
                     {'ENT_TYPE': 'morphic'},
                 ],

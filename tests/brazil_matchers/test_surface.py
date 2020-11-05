@@ -66,3 +66,14 @@ class TestSurface(unittest.TestCase):
               'subpart': 'indumentum',
               'trait': 'surface', 'start': 0, 'end': 34}]
         )
+
+    def test_surface_06(self):
+        self.assertEqual(
+            NLP(shorten("""
+                indumentum of the leaflet glabrous/puberulent on the
+                surface abaxial; 
+                """)),
+            [{'surface': ['glabrous', 'puberulent'], 'part': 'leaflet',
+              'subpart': 'indumentum', 'location': 'abaxial',
+              'trait': 'surface', 'start': 0, 'end': 68}]
+        )

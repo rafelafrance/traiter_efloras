@@ -18,5 +18,5 @@ class TestMorphism(unittest.TestCase):
         self.assertEqual(
             NLP(shorten("""type of the inflorescence heteropmorphic.""")),
             [{'part': 'inflorescence', 'morphism': 'heteropmorphic',
-              'trait': 'morphism', 'start': 12, 'end': 40}]
+              'trait': 'morphism', 'start': 0, 'end': 40}]
         )

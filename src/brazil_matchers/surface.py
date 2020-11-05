@@ -11,26 +11,28 @@ def surface(span):
     """Enrich a surface match."""
     data = {}
 
-    present = set()
-    subparts = set()
+    fields = {
+        'present': set(),
+        'subpart': set(),
+        'surface': [],
+    }
 
     for token in span:
         label = token.ent_type_
-        if label in ('part', 'surface', 'location'):
+        if label in ('part', 'location'):
             data[label] = REPLACE.get(token.lower_, token.lower_)
+        elif label == 'surface':
+            fields['surface'].append(REPLACE.get(token.lower_, token.lower_))
         elif label == 'subpart':
-            subparts.add(REPLACE.get(token.lower_, token.lower_))
+            fields['subpart'].add(REPLACE.get(token.lower_, token.lower_))
         elif token.lower_ in PRESENT:
-            present.add(PRESENCE.get(token.lower_, False))
+            fields['present'].add(PRESENCE.get(token.lower_, False))
 
-    if len(subparts) > 1:
-        subparts -= {'surface'}
+    if len(fields['subpart']) > 1:
+        fields['subpart'] -= {'surface'}
 
-    if subparts:
-        data['subpart'] = squash(subparts)
-
-    if present:
-        data['present'] = squash(present)
+    fields = {k: squash(v) for k, v in fields.items() if fields[k]}
+    data = {**data, **fields}
 
     return data
 
@@ -74,6 +76,19 @@ SURFACE = {
                     {'POS': 'DET', 'OP': '?'},
                     {'ENT_TYPE': {'IN': PARTS}},
                     {'ENT_TYPE': 'surface'},
+                ],
+                [
+                    {'ENT_TYPE': {'IN': PARTS}},
+                    {'POS': 'ADP', 'OP': '?'},
+                    {'POS': 'DET', 'OP': '?'},
+                    {'ENT_TYPE': {'IN': PARTS}},
+                    {'ENT_TYPE': 'surface'},
+                    {'TEXT': {'IN': SLASH}},
+                    {'ENT_TYPE': 'surface'},
+                    {'POS': 'ADP', 'OP': '?'},
+                    {'POS': 'DET', 'OP': '?'},
+                    {'LOWER': {'IN': SURFACE_KEY}},
+                    {'ENT_TYPE': 'location', 'OP': '?'},
                 ],
             ],
         },
