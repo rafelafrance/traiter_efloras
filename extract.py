@@ -17,21 +17,59 @@ from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import biluo_writer, iob_writer, ner_writer
 from src.writers.html_writer import html_writer
 
-READERS = ['brazil', 'efloras']
+
+def get_brazil_families(args, util):
+    """Handle Brazil Flora extractions"""
+    families = {k: v for k, v in util.get_families().items() if v['count']}
+
+    if args.list_families:
+        b_util.print_families(families)
+        sys.exit()
+
+    family_set = {f.capitalize() for f in args.family}
+
+    families = {k: v for k, v in families.items() if k in family_set}
+
+    return families
+
+
+def get_efloras_families(args, util):
+    """Handle eFloras extractions"""
+    families = {k: v for k, v in util.get_families().items() if v['count']}
+
+    if not e_util.check_family_flora_ids(args, families):
+        sys.exit(1)
+
+    if args.list_families:
+        e_util.print_families(families)
+        sys.exit()
+
+    return families
+
+
+KITS = {
+    'brazil': {
+        'pipeline': BrazilPipe,
+        'reader': brazil_reader,
+        'util': b_util,
+        'get_families': get_brazil_families,
+    },
+    'efloras': {
+        'pipeline': EflorasPipe,
+        'reader': efloras_reader,
+        'util': e_util,
+        'get_families': get_efloras_families,
+    },
+}
 
 
 def main(args):
     """Perform actions based on the arguments."""
-    if args.reader == 'efloras':
-        pipeline = EflorasPipe()
-    else:
-        pipeline = BrazilPipe()
-
-    families, reader = {}, None
-    if args.reader == 'efloras':
-        families, reader = efloras_extract(args)
-    elif args.reader == 'brazil':
-        families, reader = brazil_extract(args)
+    kit = KITS[args.reader]
+    util = kit['util']
+    pipeline = kit['pipeline']()
+    reader = kit['reader']
+    families = kit['families'](args, util)
 
     rows = reader(args, families)
 
@@ -60,35 +98,6 @@ def main(args):
         biluo_writer(args, copied)
 
 
-def brazil_extract(args):
-    """Handle Brazil Flora extractions"""
-    families = {k: v for k, v in b_util.get_families().items() if v['count']}
-
-    if args.list_families:
-        b_util.print_families(families)
-        sys.exit()
-
-    family_set = {f.capitalize() for f in args.family}
-
-    families = {k: v for k, v in families.items() if k in family_set}
-
-    return families, brazil_reader
-
-
-def efloras_extract(args):
-    """Handle eFloras extractions"""
-    families = {k: v for k, v in e_util.get_families().items() if v['count']}
-
-    if not e_util.check_family_flora_ids(args, families):
-        sys.exit(1)
-
-    if args.list_families:
-        e_util.print_families(families)
-        sys.exit()
-
-    return families, efloras_reader
-
-
 def parse_args():
     """Process command-line arguments."""
     description = """Parse data from the eFloras website."""
@@ -96,9 +105,10 @@ def parse_args():
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
 
+    readers = list(KITS.keys())
     arg_parser.add_argument(
-        '--reader', '-r', choices=READERS, default=READERS[0],
-        help="""Which flora reader to use.""")
+        '--reader', '-r', choices=readers, default=readers[0],
+        help="""Which flora to read.""")
 
     arg_parser.add_argument(
         '--family', '-f', action='append',
