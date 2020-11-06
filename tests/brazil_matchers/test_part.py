@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.brazil_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_brazil
 
 
 class TestPart(unittest.TestCase):
@@ -16,6 +14,6 @@ class TestPart(unittest.TestCase):
 
     def test_part_01(self):
         self.assertEqual(
-            NLP(shorten('Leaf: number of the pairs')),
+            test_brazil(shorten('Leaf: number of the pairs')),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5}]
         )

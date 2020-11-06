@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.brazil_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_brazil
 
 
 class TestMorphism(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestMorphism(unittest.TestCase):
 
     def test_inflorescence_01(self):
         self.assertEqual(
-            NLP(shorten("""Inflorescence: raceme congested;""")),
+            test_brazil(shorten("""Inflorescence: raceme congested;""")),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'part': 'inflorescence', 'inflorescence': 'congested',
               'trait': 'inflorescence', 'start': 15, 'end': 31}]
@@ -24,7 +22,7 @@ class TestMorphism(unittest.TestCase):
 
     def test_inflorescence_02(self):
         self.assertEqual(
-            NLP(shorten("""Inflorescence: raceme lax;""")),
+            test_brazil(shorten("""Inflorescence: raceme lax;""")),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'part': 'inflorescence', 'inflorescence': 'lax',
               'trait': 'inflorescence', 'start': 15, 'end': 25}]

@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten
 
-from src.efloras_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_efloras
 
 
 class TestColor(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_01(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 hypanthium green or greenish yellow,
                 usually not purple-spotted, rarely purple-spotted distally
                 """)),
@@ -38,7 +36,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_02(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 hypanthium straw-colored to sulphur-yellow or golden-yellow
                 """)),
             [{'part': 'hypanthium', 'trait': 'part',
@@ -53,7 +51,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_03(self):
         self.assertEqual(
-            NLP('sepals erect, green- or red-tipped'),
+            test_efloras('sepals erect, green- or red-tipped'),
             [{'part': 'sepal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'green', 'trait': 'color', 'part': 'sepal',
@@ -64,7 +62,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_04(self):
         self.assertEqual(
-            NLP(
+            test_efloras(
                 'petals white, cream, or pale green [orange to yellow]'),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
@@ -83,7 +81,7 @@ class TestColor(unittest.TestCase):
     def test_color_05(self):
         """It handles pattern notations within colors."""
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 petals distinct, white to cream, greenish yellow,
                 maturing yellowish or pale brown, commonly mottled or with
                 light green or white longitudinal stripes
@@ -109,7 +107,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_06(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Petals distinct, white to cream, greenish white,
                 or yellowish green, or yellowish, usually green-throated
                 and faintly green-lined,
@@ -134,7 +132,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_07(self):
         self.assertEqual(
-            NLP('calyx yellow'),
+            test_efloras('calyx yellow'),
             [{'part': 'calyx', 'trait': 'part',
               'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'color', 'part': 'calyx',
@@ -143,7 +141,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_08(self):
         self.assertEqual(
-            NLP('corolla yellow'),
+            test_efloras('corolla yellow'),
             [{'part': 'corolla', 'trait': 'part',
               'start': 0, 'end': 7},
              {'color': 'yellow', 'trait': 'color', 'part': 'corolla',
@@ -152,7 +150,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_09(self):
         self.assertEqual(
-            NLP('flower yellow'),
+            test_efloras('flower yellow'),
             [{'part': 'flower', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'yellow', 'trait': 'color', 'part': 'flower',
@@ -161,7 +159,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_10(self):
         self.assertEqual(
-            NLP('hypanthium yellow'),
+            test_efloras('hypanthium yellow'),
             [{'part': 'hypanthium', 'trait': 'part',
               'start': 0, 'end': 10},
              {'color': 'yellow', 'trait': 'color', 'part': 'hypanthium',
@@ -170,7 +168,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_11(self):
         self.assertEqual(
-            NLP('petal pale sulfur-yellow'),
+            test_efloras('petal pale sulfur-yellow'),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'color', 'part': 'petal',
@@ -179,7 +177,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_12(self):
         self.assertEqual(
-            NLP('sepal yellow'),
+            test_efloras('sepal yellow'),
             [{'part': 'sepal', 'trait': 'part',
               'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'color', 'part': 'sepal',
@@ -188,7 +186,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_13(self):
         self.assertEqual(
-            NLP('Leaves acaulescent or nearly so, with white hairs.'),
+            test_efloras('Leaves acaulescent or nearly so, with white hairs.'),
             [{'part': 'leaf', 'trait': 'part',
               'start': 0, 'end': 6},
              {'habit': 'acaulescent', 'trait': 'habit', 'part': 'plant',
@@ -202,7 +200,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_14(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 leaflets surfaces rather densely spotted with minute
                 blackish dots,""")),
             [{'part': 'leaflet', 'trait': 'part',
@@ -216,7 +214,8 @@ class TestColor(unittest.TestCase):
 
     def test_color_15(self):
         self.assertEqual(
-            NLP('Petals purplish in life, whitish yel-lowish when dry;'),
+            test_efloras(
+                    'Petals purplish in life, whitish yel-lowish when dry;'),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'color', 'part': 'petal',
@@ -228,7 +227,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_16(self):
         self.assertEqual(
-            NLP('Petals red or golden yellowish'),
+            test_efloras('Petals red or golden yellowish'),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'red',
@@ -241,7 +240,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_17(self):
         self.assertEqual(
-            NLP('twigs: young growth green or reddish-tinged'),
+            test_efloras('twigs: young growth green or reddish-tinged'),
             [{'part': 'twig', 'trait': 'part',
               'start': 0, 'end': 5},
              {'color': 'green',

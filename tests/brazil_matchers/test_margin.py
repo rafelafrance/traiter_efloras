@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.brazil_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_brazil
 
 
 class TestMargin(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_01(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_brazil(shorten("""
                 Fruit: margin smooth or sinuose the irregularly constricted.
                 """)),
             [{'part': 'fruit', 'trait': 'part', 'start': 0, 'end': 6},
@@ -27,7 +25,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_02(self):
         self.assertEqual(
-            NLP(shorten("""Fruit: margin moniliform.""")),
+            test_brazil(shorten("""Fruit: margin moniliform.""")),
             [{'part': 'fruit', 'trait': 'part', 'start': 0, 'end': 6},
              {'subpart': 'margin', 'margin': 'moniliform', 'part': 'fruit',
               'trait': 'margin', 'start': 7, 'end': 24}]

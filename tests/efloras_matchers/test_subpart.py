@@ -4,9 +4,7 @@
 
 import unittest
 
-from src.efloras_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_efloras
 
 
 class TestSubpart(unittest.TestCase):
@@ -14,7 +12,7 @@ class TestSubpart(unittest.TestCase):
 
     def test_subpart_01(self):
         self.assertEqual(
-            NLP('terminal lobe ovate-trullate,'),
+            test_efloras('terminal lobe ovate-trullate,'),
             [{'location': 'terminal', 'subpart': 'lobe',
               'trait': 'subpart', 'start': 0, 'end': 13},
              {'shape': 'ovate-trullate',

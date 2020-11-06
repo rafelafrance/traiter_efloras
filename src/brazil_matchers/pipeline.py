@@ -3,6 +3,7 @@
 # pylint: disable=import-error
 from traiter.spacy_nlp.pipeline import SpacyPipeline
 from traiter.spacy_nlp.sentencizer import SpacySentencizer
+from traiter.spacy_nlp.to_entities import ToEntities
 
 from .attach import attach
 from .matcher import Matcher
@@ -31,7 +32,7 @@ class Pipeline(SpacyPipeline):  # pylint: disable=too-few-public-methods
             sentencizer = SpacySentencizer(ABBREVS)
             self.nlp.add_pipe(sentencizer, before='parser')
 
+            to_entities = ToEntities(token2entity=self.token2entity)
+            self.nlp.add_pipe(to_entities, last=True)
+
             self.nlp.add_pipe(attach, last=True, name=LINK_STEP)
-
-
-PIPELINE = Pipeline()  # A singleton for testing

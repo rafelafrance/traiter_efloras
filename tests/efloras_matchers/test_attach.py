@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.efloras_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_efloras
 
 
 class TestAttach(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_01(self):
         self.assertEqual(
-            NLP(shorten("""leaves and yellow petals.""")),
+            test_efloras(shorten("""leaves and yellow petals.""")),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'yellow',
               'trait': 'color', 'part': 'petal', 'start': 11, 'end': 17},
@@ -25,7 +23,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_02(self):
         self.assertEqual(
-            NLP('perianth lobes elliptic, ca. 1 mm'),
+            test_efloras('perianth lobes elliptic, ca. 1 mm'),
             [{'part': 'perianth', 'trait': 'part', 'start': 0, 'end': 8},
              {'subpart': 'lobe', 'part': 'perianth', 'trait': 'subpart',
               'start': 9, 'end': 14},
@@ -39,7 +37,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_03(self):
         self.assertEqual(
-            NLP('fruits (1--)3-lobed,'),
+            test_efloras('fruits (1--)3-lobed,'),
             [{'part': 'fruit', 'trait': 'part', 'start': 0, 'end': 6},
              {'min': 1, 'low': 3, 'trait': 'count', 'part': 'fruit',
               'subpart': 'lobe', 'start': 7,
@@ -48,7 +46,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_04(self):
         self.assertEqual(
-            NLP('petals spreading, pink, unlobed,'),
+            test_efloras('petals spreading, pink, unlobed,'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'pink', 'trait': 'color', 'part': 'petal', 'start': 18,
               'end': 22},
@@ -58,7 +56,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_05(self):
         self.assertEqual(
-            NLP('Inflorescences 10+-flowered'),
+            test_efloras('Inflorescences 10+-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'low': 10, 'indefinite': True,
               'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
@@ -67,7 +65,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_06(self):
         self.assertEqual(
-            NLP('blade [3–5-foliolate]'),
+            test_efloras('blade [3–5-foliolate]'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'low': 3, 'high': 5, 'trait': 'count', 'part': 'leaflet',
               'start': 6, 'end': 21}]
@@ -75,7 +73,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_07(self):
         self.assertEqual(
-            NLP('Racemes sessile, 2- or 3-flowered'),
+            test_efloras('Racemes sessile, 2- or 3-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
              {'low': 2, 'high': 3,
               'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
@@ -84,7 +82,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_08(self):
         self.assertEqual(
-            NLP('Legumes with a slender stipe 2-5 mm, 10-12 mm, ca. '
+            test_efloras('Legumes with a slender stipe 2-5 mm, 10-12 mm, ca. '
                 '4 mm high and ca. 3 mm wide, '),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
              {'subpart': 'stipe', 'part': 'legume', 'trait': 'subpart',
@@ -104,7 +102,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_09(self):
         self.assertEqual(
-            NLP('Petals purple, keel with blue tip; standard 8-9 × ca. 6 mm, '
+            test_efloras('Petals purple, keel with blue tip; standard 8-9 × ca. 6 mm, '
                 'widely elliptic, emarginate;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple',
@@ -125,7 +123,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_10(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Calyx ca. 5 mm, loosely to rather densely appressed hairy;
                 teeth ca. 2.5 mm.
                 """)),
@@ -146,7 +144,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_11(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Plants to 30 cm tall, strongly branched, with appressed to
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
                 """)),
@@ -168,7 +166,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_12(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Calyx shortly tubular, 8-9 mm, subglabrous or in upper part
                 with short spreading black hairs; teeth nearly equal, narrowly
                 triangular, 0.8-1 mm.""")),
@@ -194,7 +192,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_13(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Calyx 10-12 mm, densely covered with extremely asymmetrically
                 bifurcate to basifixed, spreading hairs 1-2 mm; teeth ca.
                 4 mm. Petals white; standard oblong-pandurate, ca. 25 × 8 mm,
@@ -234,7 +232,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_14(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Racemes short, 3-9-flowered; peduncle 0.5-2 cm, loosely to
                 rather densely hairy; bracts 0.5-1 mm, white hairy.""")),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
@@ -253,7 +251,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_15(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 hypanthium pistillodes with 3-lobed ovary.""")),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'part': 'pistil', 'trait': 'part', 'start': 11, 'end': 22},
@@ -264,7 +262,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_16(self):
         self.assertEqual(
-            NLP(shorten('roots thin, without thick, woody rootstock')),
+            test_efloras(shorten('roots thin, without thick, woody rootstock')),
             [{'part': 'root', 'trait': 'part', 'start': 0, 'end': 5},
              {'woodiness': 'not woody',
               'trait': 'woodiness', 'part': 'rootstock', 'start': 12,
@@ -274,7 +272,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_17(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                 1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
@@ -295,7 +293,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_18(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Leaves 1.5-3 cm; leaflets 2-6 × 1-1.5 mm, with hairs ca. 1 mm.
                 """)),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
@@ -314,7 +312,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_19(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Calyx 7-8 mm, rather densely covered with ± medifixed,
                 subappressed, flexuous, black hairs 0.5-1 mm,
                 """)),
@@ -333,7 +331,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_20(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 Plants acaulescent, covered with mostly medifixed white hairs
                 """)),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
@@ -348,7 +346,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_21(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                 leaflets in 7-9 pairs, widely obovate to suborbicular,
                 4-6 × 3.5-5.5 mm, abaxially rather densely and adaxially
                 sparsely to loosely covered with symmetrically or
@@ -374,7 +372,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_22(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                  1.5-2.4 cm, 6-7 mm wide and 4-5 mm high, with a beak ca. 2 mm;
                  valves membranous, rather densely covered
@@ -412,7 +410,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_23(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  leaflets in 3-5 pairs, surfaces with minute blackish dots
                  often only in basal 1/2, rounded at apex.
                 """)),
@@ -436,7 +434,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_24(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  Calyx 7-8 mm, rather densely covered
                  with ± medifixed, subappressed, flexuous, black hairs
                  0.5-1 mm,
@@ -465,7 +463,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_25(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  Legumes curved, 9-12 mm, 2.5-3 mm high, keeled ven­trally;
                  valves with long, ascending, white hairs.
                 """)),
@@ -487,7 +485,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_26(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  Plants 4-20 cm tall, acaulescent, with white or reddish when
                  mature hairs up to 3 mm.
                 """)),
@@ -511,7 +509,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_27(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  Plants with white hairs, near stipules and in inflorescence
                  also black hairy.
                 """)),
@@ -527,7 +525,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_28(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_efloras(shorten("""
                  Petals yellow, standard and keel often suffused with violet;
                  apex retuse
                 """)),
@@ -548,7 +546,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_29(self):
         self.assertEqual(
-            NLP(shorten("""limbs with basal abaxial edges""")),
+            test_efloras(shorten("""limbs with basal abaxial edges""")),
             [{'subpart': 'limb', 'trait': 'subpart',
               'start': 0, 'end': 5},
              {'location': 'basal',

@@ -100,7 +100,7 @@ def main(args):
 
 def parse_args():
     """Process command-line arguments."""
-    description = """Parse data from the eFloras website."""
+    description = """Parse data from flora website."""
     arg_parser = argparse.ArgumentParser(
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')

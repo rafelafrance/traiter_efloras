@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.brazil_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_brazil
 
 
 class TestSurface(unittest.TestCase):
@@ -16,7 +14,7 @@ class TestSurface(unittest.TestCase):
 
     def test_surface_01(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_brazil(shorten("""
                 indumentum of the leaflet villose on the surface abaxial;
                 """)),
             [{'surface': 'villose', 'location': 'abaxial',
@@ -26,7 +24,7 @@ class TestSurface(unittest.TestCase):
 
     def test_surface_02(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_brazil(shorten("""
                 Flower: indumentum of the calyx present;
                 indumentum of the corolla absent.
                 """)),
@@ -40,7 +38,7 @@ class TestSurface(unittest.TestCase):
 
     def test_surface_03(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_brazil(shorten("""
                 indumentum of the calyx absent/present;
                 """)),
             [{'part': 'calyx', 'subpart': 'indumentum',
@@ -51,7 +49,7 @@ class TestSurface(unittest.TestCase):
 
     def test_surface_04(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_brazil(shorten("""
                 indumentum of the leaflet puberulent on the surface abaxial;
                 """)),
             [{'surface': 'puberulent', 'part': 'leaflet',
@@ -61,7 +59,7 @@ class TestSurface(unittest.TestCase):
 
     def test_surface_05(self):
         self.assertEqual(
-            NLP(shorten("""indumentum of the leaflet glabrous;""")),
+            test_brazil(shorten("""indumentum of the leaflet glabrous;""")),
             [{'surface': 'glabrous', 'part': 'leaflet',
               'subpart': 'indumentum',
               'trait': 'surface', 'start': 0, 'end': 34}]
@@ -69,7 +67,7 @@ class TestSurface(unittest.TestCase):
 
     def test_surface_06(self):
         self.assertEqual(
-            NLP(shorten("""
+            test_brazil(shorten("""
                 indumentum of the leaflet glabrous/puberulent on the
                 surface abaxial; 
                 """)),

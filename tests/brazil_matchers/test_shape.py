@@ -6,9 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from src.brazil_matchers.pipeline import PIPELINE
-
-NLP = PIPELINE.test_traits
+from tests.setup import test_brazil
 
 
 class TestShape(unittest.TestCase):
@@ -16,21 +14,22 @@ class TestShape(unittest.TestCase):
 
     def test_shape_01(self):
         self.assertEqual(
-            NLP(shorten('form of the leaflet lanceolate;')),
+            test_brazil(shorten('form of the leaflet lanceolate;')),
             [{'shape': 'lanceolate', 'part': 'leaflet',
               'trait': 'shape', 'start': 0, 'end': 30}]
         )
 
     def test_shape_02(self):
         self.assertEqual(
-            NLP(shorten('form of the leaflet elliptic/obovate/rhombic;')),
+            test_brazil(shorten("""
+                form of the leaflet elliptic/obovate/rhombic;""")),
             [{'shape': ['elliptic', 'obovate', 'rhomboic'], 'part': 'leaflet',
               'trait': 'shape', 'start': 0, 'end': 44}]
         )
 
     def test_shape_03(self):
         self.assertEqual(
-            NLP(shorten('nectary patelliform.')),
+            test_brazil(shorten('nectary patelliform.')),
             [{'shape': 'patelliform', 'part': 'nectary',
               'trait': 'shape', 'start': 0, 'end': 19}]
         )
