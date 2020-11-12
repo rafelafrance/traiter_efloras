@@ -17,7 +17,7 @@ def phrase(span):
             negate = 'not '
         elif label in LITERAL_LABELS:
             value = REPLACE.get(value, value)
-            data = {'_relabel': label, label: negate + value}
+            data = {'_label': label, label: negate + value}
     return data
 
 

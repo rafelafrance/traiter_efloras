@@ -85,4 +85,4 @@ class LinkMatcher(SpacyMatcher):
                 if action := self.actions.get(label):
                     action(span, part)
 
-        return doc
+        return doc, False
