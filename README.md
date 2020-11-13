@@ -1,4 +1,4 @@
-# The Floras Traits Database Project ![Python application](https://github.com/rafelafrance/traiter_floras/workflows/Python%20application/badge.svg)
+# The Floras Traits Database Project ![Python application](https://github.com/rafelafrance/traiter_floras/workflows/CI/badge.svg)
 
 ## All right, what's this all about then?
 **Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like: (Reformatted to emphasize targeted traits.)
