@@ -1,7 +1,7 @@
 """Base matcher object."""
 
 from spacy.language import Language
-from traiter.spacy_nlp.matcher import SpacyMatcher
+from traiter.pylib.matcher import SpacyMatcher
 
 from .count import COUNT
 from .inflorescence import INFLORESCENCE

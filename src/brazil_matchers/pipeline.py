@@ -1,9 +1,9 @@
 """Create a trait pipeline."""
 
 # pylint: disable=import-error
-from traiter.spacy_nlp.pipeline import SpacyPipeline
-from traiter.spacy_nlp.sentencizer import SpacySentencizer
-from traiter.spacy_nlp.to_entities import ToEntities
+from traiter.pylib.pipeline import SpacyPipeline
+from traiter.pylib.sentencizer import SpacySentencizer
+from traiter.pylib.to_entities import ToEntities
 
 from .attach import attach
 from .matcher import Matcher

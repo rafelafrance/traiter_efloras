@@ -3,7 +3,7 @@
 # pylint: disable=import-error
 from collections import defaultdict
 
-from traiter.spacy_nlp.matcher import SpacyMatcher
+from traiter.pylib.matcher import SpacyMatcher
 
 from .attach import ATTACH
 from ..pylib.util import LINK_STEP
@@ -64,7 +64,7 @@ class LinkMatcher(SpacyMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    def scan(self, doc, matchers, step):  # pylint: disable=too-many-locals
+    def scan(self, doc, matchers, _):  # pylint: disable=too-many-locals
         """Find all terms in the text and return the resulting doc."""
         all_matches = []
 

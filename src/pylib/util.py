@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from traiter.spacy_nlp.terms import hyphenate_terms, read_terms
+from traiter.pylib.terms import hyphenate_terms, read_terms
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
 BASE_DIR = Path.cwd() if BASE_DIR.find('floras') > -1 else Path.cwd().parent
