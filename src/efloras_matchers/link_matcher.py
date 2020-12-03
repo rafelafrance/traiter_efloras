@@ -64,7 +64,7 @@ class LinkMatcher(SpacyMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    def scan(self, doc, matchers, _):  # pylint: disable=too-many-locals
+    def retokenize_matches(self, doc, matchers, step):
         """Find all terms in the text and return the resulting doc."""
         all_matches = []
 

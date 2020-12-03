@@ -44,7 +44,7 @@ PRESENCE = {
 }
 PRESENT = list(PRESENCE)
 
-ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec """
+ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec ca """
 
 CONVERT = {
     'cm': 10.0,
