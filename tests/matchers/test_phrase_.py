@@ -4,7 +4,7 @@
 
 import unittest
 
-from tests.setup import test_efloras
+from tests.setup import test
 
 
 class TestPhrase(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_01(self):
         self.assertEqual(
-            test_efloras('Pistillate flowers  usually sessile; hypogynous'),
+            test('Pistillate flowers  usually sessile; hypogynous'),
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 18},
              {'floral_location': 'superior', 'sex': 'female', 'part': 'flower',
@@ -21,7 +21,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_02(self):
         self.assertEqual(
-            test_efloras('Petals glabrous, deciduous;'),
+            test('Petals glabrous, deciduous;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'duration': 'deciduous', 'trait': 'duration',
               'part': 'petal', 'start': 17, 'end': 26}]
@@ -29,7 +29,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_03(self):
         self.assertEqual(
-            test_efloras('leaf blade herbaceous.'),
+            test('leaf blade herbaceous.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 10},
              {'woodiness': 'herbaceous', 'trait': 'woodiness',
               'part': 'leaf', 'start': 11, 'end': 21}]

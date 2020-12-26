@@ -6,7 +6,7 @@ import unittest
 
 from traiter.pylib.util import shorten  # pylint: disable=import-error
 
-from tests.setup import test_efloras
+from tests.setup import test
 
 
 class TestMargin(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_01(self):
         self.assertEqual(
-            test_efloras('margin shallowly undulate-crenate'),
+            test('margin shallowly undulate-crenate'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 6},
              {'margin_shape': 'undulate-crenate',
               'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
@@ -24,7 +24,7 @@ class TestMargin(unittest.TestCase):
     def test_margin_02(self):
         self.maxDiff = None
         self.assertEqual(
-            test_efloras('margins ciliate, apex acute to long-acuminate,'),
+            test('margins ciliate, apex acute to long-acuminate,'),
             [{'subpart': 'margin', 'trait': 'subpart',
               'start': 0, 'end': 7},
              {'margin_shape': 'ciliate',
@@ -40,7 +40,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_03(self):
         self.assertEqual(
-            test_efloras('reniform, undulate-margined'),
+            test('reniform, undulate-margined'),
             [{'shape': 'reniform', 'trait': 'shape', 'part': 'plant',
               'start': 0, 'end': 8},
              {'margin_shape': 'undulate',
@@ -50,7 +50,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_04(self):
         self.assertEqual(
-            test_efloras('margins thickened-corrugated'),
+            test('margins thickened-corrugated'),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},
              {'margin_shape': 'corrugated',
               'trait': 'margin_shape', 'part': 'plant', 'subpart': 'margin',
@@ -59,7 +59,7 @@ class TestMargin(unittest.TestCase):
 
     def test_margin_05(self):
         self.assertEqual(
-            test_efloras(shorten("""
+            test(shorten("""
                 margins coarsely toothed or remotely sinuate-dentate
                 to serrate,""")),
             [{'subpart': 'margin', 'trait': 'subpart', 'start': 0, 'end': 7},

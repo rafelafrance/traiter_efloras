@@ -4,7 +4,7 @@
 
 import unittest
 
-from tests.setup import test_efloras
+from tests.setup import test
 
 
 class TestSubpart(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestSubpart(unittest.TestCase):
 
     def test_subpart_01(self):
         self.assertEqual(
-            test_efloras('terminal lobe ovate-trullate,'),
+            test('terminal lobe ovate-trullate,'),
             [{'location': 'terminal', 'subpart': 'lobe',
               'trait': 'subpart', 'start': 0, 'end': 13},
              {'shape': 'ovate-trullate',

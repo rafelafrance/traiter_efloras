@@ -9,10 +9,10 @@ from copy import deepcopy
 
 import src.pylib.efloras_util as e_util
 from src.matchers.pipeline import Pipeline
-from src.readers.efloras_reader import efloras_reader
-from src.writers.csv_writer import csv_writer
-from src.writers.data_writer import biluo_writer, iob_writer, ner_writer
-from src.writers.html_writer import html_writer
+from src.readers.reader import efloras_reader
+from src.writers.csv_ import csv_writer
+from src.writers.data import biluo_writer, iob_writer, ner_writer
+from src.writers.html_ import html_writer
 
 
 def get_efloras_families(args):

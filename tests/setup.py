@@ -2,11 +2,11 @@
 
 from typing import Dict, List
 
-from src.matchers.pipeline import Pipeline as EflorasPipe
+from src.matchers.pipeline import Pipeline
 
-TEST = EflorasPipe()  # Singleton for testing
+TEST = Pipeline()  # Singleton for testing
 
 
-def test_efloras(text: str) -> List[Dict]:
+def test(text: str) -> List[Dict]:
     """Find entities in the doc."""
     return TEST.test_traits(text)
