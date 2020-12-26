@@ -1,4 +1,4 @@
-# The Floras Traits Database Project ![Python application](https://github.com/rafelafrance/traiter_floras/workflows/CI/badge.svg)
+# The eFloras Traits Project ![Python application](https://github.com/rafelafrance/traiter_efloras/workflows/CI/badge.svg)
 
 ## All right, what's this all about then?
 **Challenge**: Extract trait information from plant treatments. That is, if I'm given treatment text like: (Reformatted to emphasize targeted traits.)
@@ -37,8 +37,8 @@ There are, of course, complications and subtleties not outlined above but you sh
 ## Install
 You will need to have Python 3.8 (or later) installed. You can install the requirements into your python environment like so:
 ```
-git clone https://github.com/rafelafrance/traiter_floras.git
-cd traiter_floras
+git clone https://github.com/rafelafrance/traiter_efloras.git
+cd traiter_efloras
 optional: virtualenv -p python3.8 venv
 optional: source venv/bin/activate
 python3 -m pip install --requirement requirements.txt
@@ -55,6 +55,6 @@ Having a test suite is absolutely critical. The strategy I use is every new trai
 
 You can run the tests like so:
 ```
-cd /my/path/to/floras_traiter
+cd /my/path/to/efloras_traiter
 python -m unittest discover
 ```
