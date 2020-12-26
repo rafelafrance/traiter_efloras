@@ -30,7 +30,7 @@ def html_writer(args, rows):
         loader=FileSystemLoader('./src/writers/templates'),
         autoescape=True)
 
-    template = env.get_template('html_writer.html').render(
+    template = env.get_template('html_.html').render(
         now=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M'),
         rows=rows)
     args.html_file.write(template)

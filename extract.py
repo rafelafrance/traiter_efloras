@@ -9,7 +9,7 @@ from copy import deepcopy
 
 import src.pylib.efloras_util as e_util
 from src.matchers.pipeline import Pipeline
-from src.readers.reader import efloras_reader
+from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_ import csv_writer
 from src.writers.data import biluo_writer, iob_writer, ner_writer
 from src.writers.html_ import html_writer
