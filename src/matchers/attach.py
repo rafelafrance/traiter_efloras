@@ -7,7 +7,7 @@ modifying them by adding the part and subpart fields.
 
 from traiter.pylib.util import DotDict
 
-from ..efloras_matchers.descriptor import DESCRIPTOR_LABELS
+from ..matchers.descriptor import DESCRIPTOR_LABELS
 from ..pylib.util import COMMA, DOT, LINK_STEP, TRAIT_STEP
 
 PLANT_LEVEL_LABELS = set(DESCRIPTOR_LABELS)

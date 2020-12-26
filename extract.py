@@ -7,35 +7,17 @@ import sys
 import textwrap
 from copy import deepcopy
 
-import src.pylib.brazil_util as b_util
 import src.pylib.efloras_util as e_util
-from src.brazil_matchers.pipeline import Pipeline as BrazilPipe
-from src.efloras_matchers.pipeline import Pipeline as EflorasPipe
-from src.readers.brazil_reader import brazil_reader
+from src.matchers.pipeline import Pipeline
 from src.readers.efloras_reader import efloras_reader
 from src.writers.csv_writer import csv_writer
 from src.writers.data_writer import biluo_writer, iob_writer, ner_writer
 from src.writers.html_writer import html_writer
 
 
-def get_brazil_families(args, util):
-    """Handle Brazil Flora extractions"""
-    families = {k: v for k, v in util.get_families().items() if v['count']}
-
-    if args.list_families:
-        b_util.print_families(families)
-        sys.exit()
-
-    family_set = {f.capitalize() for f in args.family}
-
-    families = {k: v for k, v in families.items() if k in family_set}
-
-    return families
-
-
-def get_efloras_families(args, util):
+def get_efloras_families(args):
     """Handle eFloras extractions"""
-    families = {k: v for k, v in util.get_families().items() if v['count']}
+    families = {k: v for k, v in e_util.get_families().items() if v['count']}
 
     if not e_util.check_family_flora_ids(args, families):
         sys.exit(1)
@@ -47,34 +29,15 @@ def get_efloras_families(args, util):
     return families
 
 
-KITS = {
-    'brazil': {
-        'pipeline': BrazilPipe,
-        'reader': brazil_reader,
-        'util': b_util,
-        'get_families': get_brazil_families,
-    },
-    'efloras': {
-        'pipeline': EflorasPipe,
-        'reader': efloras_reader,
-        'util': e_util,
-        'get_families': get_efloras_families,
-    },
-}
-
-
 def main(args):
     """Perform actions based on the arguments."""
-    kit = KITS[args.reader]
-    util = kit['util']
-    pipeline = kit['pipeline']()
-    reader = kit['reader']
-    families = kit['families'](args, util)
+    pipeline = Pipeline()
+    families = get_efloras_families(args)
 
-    rows = reader(args, families)
+    rows = efloras_reader(args, families)
 
     for row in rows:
-        row['doc'] = pipeline.find_entities(row['text'])
+        row['doc'] = pipeline.nlp(row['text'])
         row['traits'] = pipeline.trait_list(row['doc'])
 
     if args.csv_file:
@@ -104,11 +67,6 @@ def parse_args():
     arg_parser = argparse.ArgumentParser(
         description=textwrap.dedent(description),
         fromfile_prefix_chars='@')
-
-    readers = list(KITS.keys())
-    arg_parser.add_argument(
-        '--reader', '-r', choices=readers, default=readers[0],
-        help="""Which flora to read.""")
 
     arg_parser.add_argument(
         '--family', '-f', action='append',
