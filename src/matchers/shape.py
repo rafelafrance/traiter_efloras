@@ -1,6 +1,6 @@
 """Parse shape traits."""
 
-from ..pylib.util import DASH, REPLACE, TRAIT_STEP
+from ..pylib.consts import DASH, REPLACE, TRAIT_STEP
 
 _DASH_TO = DASH + ['to']
 

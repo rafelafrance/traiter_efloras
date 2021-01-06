@@ -83,8 +83,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_08(self):
         self.assertEqual(
-            test(
-                'petiolules 2–5 mm; coarsely serrate; petioles 16–28 mm.'),
+            test('petiolules 2–5 mm; coarsely serrate; petioles 16–28 mm.'),
             [{'part': 'petiole', 'trait': 'part', 'start': 0, 'end': 10},
              {'length_low': 2,
               'length_high': 5,
@@ -155,9 +154,9 @@ class TestSize(unittest.TestCase):
 
     def test_size_13(self):
         self.assertEqual(
-            test(
-                'Leaves 3-foliolate, lateral pair of leaflets '
-                'deeply lobed, petiolules 2–5 mm,'),
+            test("""
+                Leaves 3-foliolate, lateral pair of leaflets
+                deeply lobed, petiolules 2–5 mm,"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 3, 'trait': 'count', 'part': 'leaflet',
               'start': 7, 'end': 18},
@@ -185,8 +184,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_15(self):
         self.assertEqual(
-            test(
-                'leaf shallowly 3–5(–7)-lobed, 5–25 × (8–)10–25(–30) cm,'),
+            test('leaf shallowly 3–5(–7)-lobed, 5–25 × (8–)10–25(–30) cm,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
              {'low': 3, 'high': 5, 'max': 7,
               'trait': 'count', 'part': 'leaf', 'subpart': 'lobe',
@@ -226,9 +224,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_18(self):
         self.assertEqual(
-            test(
-                'petals (1–)3–10(–12) mm (pistillate) '
-                'or 5–8(–10) mm (staminate)'),
+            test('petals (1–)3–10(–12) mm (pistillate) or 5–8(–10) mm (staminate)'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'length_min': 1,
               'length_low': 3,
@@ -284,9 +280,9 @@ class TestSize(unittest.TestCase):
 
     def test_size_21(self):
         self.assertEqual(
-            test(
-                'Inflorescences formed season before flowering and exposed '
-                'during winter; staminate catkins 3--8.5 cm,'),
+            test("""
+                Inflorescences formed season before flowering and exposed
+                during winter; staminate catkins 3--8.5 cm,"""),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 14},
              {'sex': 'male', 'part': 'catkin', 'trait': 'part',
               'start': 73, 'end': 90},
@@ -389,9 +385,7 @@ class TestSize(unittest.TestCase):
 
     def test_size_28(self):
         self.assertEqual(
-            test(
-                'Petals pale violet, with darker keel; standard '
-                'elliptic, 6-7 × 3-4;'),
+            test('Petals pale violet, with darker keel; standard elliptic, 6-7 × 3-4;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'color', 'part': 'petal',
               'start': 12, 'end': 18},

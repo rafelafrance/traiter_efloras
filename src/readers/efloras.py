@@ -6,6 +6,10 @@ from bs4 import BeautifulSoup
 from traiter.pylib.util import FLAGS  # pylint: disable=import-error
 
 import src.pylib.efloras_util as e_util
+
+import downloader
+import extract
+import src.pylib.util
 from src.matchers.part import PATTERN_RE
 
 _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
@@ -13,8 +17,8 @@ _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
 def efloras_reader(args, families):
     """Perform the parsing."""
-    families_flora = e_util.get_family_flora_ids(args, families)
-    flora_ids = e_util.get_flora_ids()
+    families_flora = extract.get_family_flora_ids(args, families)
+    flora_ids = src.pylib.util.get_flora_ids()
 
     # Build a filter for the taxon names
     genera = [g.lower() for g in args.genus] if args.genus else []
@@ -27,11 +31,11 @@ def efloras_reader(args, families):
         flora_id = int(flora_id)
         family = families[(family_name, flora_id)]
         taxa = get_family_tree(family)
-        root = e_util.treatment_dir(flora_id, family['family'])
+        root = downloader.treatment_dir(flora_id, family['family'])
         for path in root.glob('*.html'):
             text = get_treatment(path)
             text = get_traits(text)
-            taxon_id = e_util.get_taxon_id(path)
+            taxon_id = downloader.get_taxon_id(path)
             if not taxa.get(taxon_id):
                 continue
 
@@ -45,7 +49,7 @@ def efloras_reader(args, families):
                 'flora_name': flora_ids[flora_id],
                 'taxon': taxa[taxon_id],
                 'taxon_id': taxon_id,
-                'link': e_util.treatment_link(flora_id, taxon_id),
+                'link': treatment_link(flora_id, taxon_id),
                 'text': '',
                 'traits': {},
             }
@@ -63,7 +67,7 @@ def efloras_reader(args, families):
 def get_family_tree(family):
     """Get all taxa for the all of the families."""
     taxa = {}
-    tree_dir = e_util.tree_dir(family['flora_id'], family['family'])
+    tree_dir = downloader.tree_dir(family['flora_id'], family['family'])
     for path in tree_dir.glob('*.html'):
 
         with open(path) as in_file:
@@ -73,7 +77,7 @@ def get_family_tree(family):
 
         for link in soup.findAll('a', attrs={'title': _TAXON_RE}):
             href = link.attrs['href']
-            taxon_id = e_util.get_taxon_id(href)
+            taxon_id = downloader.get_taxon_id(href)
             taxa[taxon_id] = link.text
 
     return taxa
@@ -102,3 +106,9 @@ def get_traits(treatment):
         if high >= 5:
             return best
     return best if high >= 5 else ''
+
+
+def treatment_link(flora_id, taxon_id):
+    """Build a link to the treatment page."""
+    return ('http://www.efloras.org/florataxon.aspx?'
+            rf'flora_id={flora_id}&taxon_id={taxon_id}')

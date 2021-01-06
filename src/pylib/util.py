@@ -1,64 +1,47 @@
 """Misc. utils."""
+import csv
+from datetime import datetime
 
-from pathlib import Path
-
-from traiter.pylib.terms import Terms
-
-BASE_DIR = Path.cwd().resolve().parts[-1]
-BASE_DIR = Path.cwd() if BASE_DIR.find('floras') > -1 else Path.cwd().parent
-
-DATA_DIR = BASE_DIR / 'data'
-
-GROUP_STEP = 'group'
-TRAIT_STEP = 'traits'
-LINK_STEP = 'link'
-
-CLOSE = ' ) ] '.split()
-COLON = ' : '.split()
-COMMA = ' , '.split()
-CROSS = ' x × '.split()
-DASH = '– - –– --'.split()
-DOT = ' . '.split()
-INT = r'^\d+$'
-INT_RE = r'\d+'
-NUMBER = r'^\d+(\.\d*)?$'
-OPEN = ' ( [ '.split()
-PLUS = ' + '.split()
-SEMICOLON = ' ; '.split()
-SLASH = ' / / '.split()
-
-PARTS = ['part', 'subpart']
-
-TERM_PATH = BASE_DIR / 'src' / 'vocabulary' / 'terms.csv'
-TERMS = Terms(csv_file=TERM_PATH)
-TERMS.hyphenate_terms()
-
-REPLACE = {t['pattern']: r for t in TERMS if (r := t.get('replace'))}
-CATEGORY = {t['pattern']: c for t in TERMS if (c := t.get('category'))}
-
-PRESENCE = {
-    'present': True,
-    'presence': True,
-    'absent': False,
-    'absence': False,
-}
-PRESENT = list(PRESENCE)
-
-ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec ca """
-
-CONVERT = {
-    'cm': 10.0,
-    'dm': 100.0,
-    'm': 1000.0,
-    'mm': 1.0,
-    'µm': 1.0e-3,
-    'centimeters': 10.0,
-    'decimeters': 100.0,
-    'meters': 1000.0,
-    'millimeters': 1.0,
-}
+from src.pylib.consts import CONVERT, DATA_DIR, EFLORAS_FAMILIES
 
 
 def convert(number, units):
     """Normalize the units to meters."""
     return number * CONVERT.get(units, 1.0)
+
+
+def get_families():
+    """Get a list of all families in the eFloras catalog."""
+    families = {}
+
+    with open(EFLORAS_FAMILIES) as in_file:
+
+        for family in csv.DictReader(in_file):
+
+            times = {'created': '', 'modified': '', 'count': 0}
+
+            path = (DATA_DIR / 'eFloras'
+                    / f"{family['family']}_{family['flora_id']}")
+
+            if path.exists():
+                times['count'] = len(list(path.glob('**/treatments/*.html')))
+                if times['count']:
+                    stat = path.stat()
+                    times['created'] = datetime.fromtimestamp(
+                        stat.st_ctime).strftime('%Y-%m-%d %H:%M')
+                    times['modified'] = datetime.fromtimestamp(
+                        stat.st_mtime).strftime('%Y-%m-%d %H:%M')
+
+            key = (family['family'].lower(), int(family['flora_id']))
+            families[key] = {**family, **times}
+
+    return families
+
+
+def get_flora_ids():
+    """Get a list of flora IDs."""
+    flora_ids = {}
+    with open(EFLORAS_FAMILIES) as in_file:
+        for family in csv.DictReader(in_file):
+            flora_ids[int(family['flora_id'])] = family['flora_name']
+    return flora_ids

@@ -36,9 +36,7 @@ class TestShape(unittest.TestCase):
 
     def test_shape_04(self):
         self.assertEqual(
-            test(
-                'Leaves ; blade ovate or orbiculate to '
-                'suborbiculate or reniform,'),
+            test('Leaves ; blade ovate or orbiculate to suborbiculate or reniform,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'part': 'leaf', 'trait': 'part', 'start': 9, 'end': 14},
              {'shape': 'ovate', 'trait': 'shape', 'part': 'leaf',
@@ -53,9 +51,9 @@ class TestShape(unittest.TestCase):
 
     def test_shape_05(self):
         self.assertEqual(
-            test(
-                'Leaves: blade ovate or elongate-ovate to '
-                'lanceolate-ovate or ovate-triangular, '),
+            test("""
+                Leaves: blade ovate or elongate-ovate to
+                lanceolate-ovate or ovate-triangular,"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'part': 'leaf', 'trait': 'part', 'start': 8, 'end': 13},
              {'shape': 'ovate', 'trait': 'shape', 'part': 'leaf',
@@ -79,9 +77,9 @@ class TestShape(unittest.TestCase):
 
     def test_shape_07(self):
         self.assertEqual(
-            test(
-                '; blade abaxially, suborbiculate to '
-                'broadly ovate, depressed-ovate, or reniform, '),
+            test("""
+                ; blade abaxially, suborbiculate to
+                broadly ovate, depressed-ovate, or reniform,"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 2, 'end': 7},
              {'shape': 'orbicular', 'trait': 'shape', 'part': 'leaf',
               'start': 19, 'end': 32},
@@ -95,9 +93,9 @@ class TestShape(unittest.TestCase):
 
     def test_shape_08(self):
         self.assertEqual(
-            test(
-                'blade broadly ovate-cordate to triangular-cordate or '
-                'reniform, shallowly to deeply palmately '),
+            test("""
+                blade broadly ovate-cordate to triangular-cordate or
+                reniform, shallowly to deeply palmately"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'shape': 'ovate-cordate', 'trait': 'shape', 'part': 'leaf',
               'start': 6, 'end': 27},
@@ -121,8 +119,7 @@ class TestShape(unittest.TestCase):
 
     def test_shape_10(self):
         self.assertEqual(
-            test(
-                'Leaf blades mostly orbiculate, deeply to shallowly lobed,'),
+            test('Leaf blades mostly orbiculate, deeply to shallowly lobed,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 11},
              {'shape': 'orbicular', 'trait': 'shape', 'part': 'leaf',
               'start': 12, 'end': 29}]
@@ -130,9 +127,9 @@ class TestShape(unittest.TestCase):
 
     def test_shape_11(self):
         self.assertEqual(
-            test(
-                'Leaves: petiole blade pentagonal-angulate to '
-                'reniform-angulate or shallowly 5-angulate'),
+            test("""
+                Leaves: petiole blade pentagonal-angulate to
+                reniform-angulate or shallowly 5-angulate"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'part': 'petiole', 'trait': 'part', 'start': 8, 'end': 21},
              {'shape': 'polygonal',
@@ -145,9 +142,9 @@ class TestShape(unittest.TestCase):
 
     def test_shape_12(self):
         self.assertEqual(
-            test(
-                'blade lanceolate to narrowly or broadly lanceolate '
-                'or elliptic-lanceolate, '),
+            test("""
+                blade lanceolate to narrowly or broadly lanceolate
+                or elliptic-lanceolate,"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'shape': 'lanceolate',
               'trait': 'shape', 'part': 'leaf', 'start': 6, 'end': 16},
@@ -159,9 +156,7 @@ class TestShape(unittest.TestCase):
 
     def test_shape_13(self):
         self.assertEqual(
-            test(
-                'blade broadly ovate to rounded-cordate, subreniform, '
-                'or deltate'),
+            test('blade broadly ovate to rounded-cordate, subreniform, or deltate'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
              {'shape': 'ovate', 'trait': 'shape', 'part': 'leaf',
               'start': 6, 'end': 19},
@@ -266,11 +261,3 @@ class TestShape(unittest.TestCase):
              {'shape': 'subflabellate',
               'trait': 'shape', 'part': 'leaf', 'start': 20, 'end': 34}]
         )
-
-    # def test_shape_24(self):
-    #     self.assertEqual(
-    #         test(""""""),
-    #         [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
-    #          {'shape': 'pinnate',
-    #           'trait': 'shape', 'part': 'leaf', 'start': 5, 'end': 18}]
-    #     )

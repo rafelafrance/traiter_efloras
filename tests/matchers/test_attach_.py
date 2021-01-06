@@ -4,8 +4,6 @@
 
 import unittest
 
-from traiter.pylib.util import shorten  # pylint: disable=import-error
-
 from tests.setup import test
 
 
@@ -14,7 +12,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_01(self):
         self.assertEqual(
-            test(shorten("""leaves and yellow petals.""")),
+            test('leaves and yellow petals.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'yellow',
               'trait': 'color', 'part': 'petal', 'start': 11, 'end': 17},
@@ -123,10 +121,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_10(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Calyx ca. 5 mm, loosely to rather densely appressed hairy;
                 teeth ca. 2.5 mm.
-                """)),
+                """),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 5,
               'length_units': 'mm',
@@ -144,10 +142,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_11(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Plants to 30 cm tall, strongly branched, with appressed to
                 spreading only white hairs 0.2-1.5 mm, at calyx up to 3 mm.
-                """)),
+                """),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'height_high': 30, 'height_units': 'cm',
               'trait': 'size', 'part': 'plant', 'start': 7, 'end': 20},
@@ -166,10 +164,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_12(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Calyx shortly tubular, 8-9 mm, subglabrous or in upper part
                 with short spreading black hairs; teeth nearly equal, narrowly
-                triangular, 0.8-1 mm.""")),
+                triangular, 0.8-1 mm."""),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'shape': 'tubular',
               'trait': 'shape', 'part': 'calyx', 'start': 14, 'end': 21},
@@ -192,12 +190,12 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_13(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Calyx 10-12 mm, densely covered with extremely asymmetrically
                 bifurcate to basifixed, spreading hairs 1-2 mm; teeth ca.
                 4 mm. Petals white; standard oblong-pandurate, ca. 25 × 8 mm,
                 in lower 1/3 slightly constricted, base widened,
-                hastate-auriculate, apex emarginate;""")),
+                hastate-auriculate, apex emarginate;"""),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 10, 'length_high': 12, 'length_units': 'mm',
               'trait': 'size', 'part': 'calyx', 'start': 6, 'end': 14},
@@ -232,9 +230,9 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_14(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Racemes short, 3-9-flowered; peduncle 0.5-2 cm, loosely to
-                rather densely hairy; bracts 0.5-1 mm, white hairy.""")),
+                rather densely hairy; bracts 0.5-1 mm, white hairy."""),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
              {'low': 3, 'high': 9,
               'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
@@ -251,8 +249,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_15(self):
         self.assertEqual(
-            test(shorten("""
-                hypanthium pistillodes with 3-lobed ovary.""")),
+            test('hypanthium pistillodes with 3-lobed ovary.'),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'part': 'pistil', 'trait': 'part', 'start': 11, 'end': 22},
              {'low': 3, 'trait': 'count', 'part': 'ovary', 'subpart': 'lobe',
@@ -262,7 +259,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_16(self):
         self.assertEqual(
-            test(shorten('roots thin, without thick, woody rootstock')),
+            test('roots thin, without thick, woody rootstock'),
             [{'part': 'root', 'trait': 'part', 'start': 0, 'end': 5},
              {'woodiness': 'not woody',
               'trait': 'woodiness', 'part': 'rootstock', 'start': 12,
@@ -272,9 +269,9 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_17(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
-                1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,""")),
+                1.5-2.4 cm, 6-7 mm wide and 4-5 mm high,"""),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
              {'subpart': 'stipe', 'part': 'legume', 'trait': 'subpart',
               'start': 15, 'end': 20},
@@ -293,9 +290,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_18(self):
         self.assertEqual(
-            test(shorten("""
-                Leaves 1.5-3 cm; leaflets 2-6 × 1-1.5 mm, with hairs ca. 1 mm.
-                """)),
+            test('Leaves 1.5-3 cm; leaflets 2-6 × 1-1.5 mm, with hairs ca. 1 mm.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'length_low': 1.5, 'length_high': 3.0, 'length_units': 'cm',
               'trait': 'size', 'part': 'leaf', 'start': 7, 'end': 15},
@@ -312,10 +307,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_19(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Calyx 7-8 mm, rather densely covered with ± medifixed,
                 subappressed, flexuous, black hairs 0.5-1 mm,
-                """)),
+                """),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 7, 'length_high': 8, 'length_units': 'mm',
               'trait': 'size', 'part': 'calyx', 'start': 6, 'end': 12},
@@ -331,9 +326,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_20(self):
         self.assertEqual(
-            test(shorten("""
-                Plants acaulescent, covered with mostly medifixed white hairs
-                """)),
+            test('Plants acaulescent, covered with mostly medifixed white hairs'),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'habit': 'acaulescent',
               'trait': 'habit', 'part': 'plant', 'start': 7, 'end': 18},
@@ -346,13 +339,13 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_21(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 leaflets in 7-9 pairs, widely obovate to suborbicular,
                 4-6 × 3.5-5.5 mm, abaxially rather densely and adaxially
                 sparsely to loosely covered with symmetrically or
                 asymmetrically, partly flexuous, ascending to spreading,
                 white hairs
-                """)),
+                """),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'low': 7, 'high': 9, 'group': 'pairs',
               'trait': 'count', 'part': 'leaflet', 'start': 12, 'end': 21},
@@ -372,12 +365,12 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_22(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  Legumes with a stipe 6-7 mm, pen­dulous, narrowly ellipsoid,
                  1.5-2.4 cm, 6-7 mm wide and 4-5 mm high, with a beak ca. 2 mm;
                  valves membranous, rather densely covered
                  with very short white and black nearly ap­pressed hairs.
-                """)),
+                """),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
              {'subpart': 'stipe', 'part': 'legume', 'trait': 'subpart',
               'start': 15, 'end': 20},
@@ -410,10 +403,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_23(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  leaflets in 3-5 pairs, surfaces with minute blackish dots
                  often only in basal 1/2, rounded at apex.
-                """)),
+                """),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'low': 3, 'high': 5, 'group': 'pairs',
               'trait': 'count', 'part': 'leaflet', 'start': 12, 'end': 21},
@@ -434,12 +427,12 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_24(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  Calyx 7-8 mm, rather densely covered
                  with ± medifixed, subappressed, flexuous, black hairs
                  0.5-1 mm,
                  with some longer, ascending, white and black hairs mixed in;
-                """)),
+                """),
             [{'part': 'calyx', 'trait': 'part', 'start': 0, 'end': 5},
              {'length_low': 7, 'length_high': 8, 'length_units': 'mm',
               'trait': 'size', 'part': 'calyx', 'start': 6, 'end': 12},
@@ -463,10 +456,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_25(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  Legumes curved, 9-12 mm, 2.5-3 mm high, keeled ven­trally;
                  valves with long, ascending, white hairs.
-                """)),
+                """),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
              {'shape': 'curved',
               'trait': 'shape', 'part': 'legume', 'start': 8, 'end': 14},
@@ -485,10 +478,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_26(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  Plants 4-20 cm tall, acaulescent, with white or reddish when
                  mature hairs up to 3 mm.
-                """)),
+                """),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'height_low': 4, 'height_high': 20, 'height_units': 'cm',
               'trait': 'size', 'part': 'plant', 'start': 7, 'end': 19},
@@ -509,10 +502,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_27(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  Plants with white hairs, near stipules and in inflorescence
                  also black hairy.
-                """)),
+                """),
             [{'part': 'plant', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'white',
               'trait': 'color', 'part': 'plant', 'subpart': 'hair',
@@ -525,10 +518,10 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_28(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                  Petals yellow, standard and keel often suffused with violet;
                  apex retuse
-                """)),
+                """),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'yellow',
               'trait': 'color', 'part': 'petal', 'start': 7, 'end': 13},
@@ -546,7 +539,7 @@ class TestAttach(unittest.TestCase):
 
     def test_attach_29(self):
         self.assertEqual(
-            test(shorten("""limbs with basal abaxial edges""")),
+            test('limbs with basal abaxial edges'),
             [{'subpart': 'limb', 'trait': 'subpart',
               'start': 0, 'end': 5},
              {'location': 'basal',

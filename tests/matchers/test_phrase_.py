@@ -16,7 +16,7 @@ class TestPhrase(unittest.TestCase):
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 18},
              {'floral_location': 'superior', 'sex': 'female', 'part': 'flower',
-              'trait': 'floral_location', 'start': 37, 'end': 47}]
+              'trait': 'floral_location', 'start': 36, 'end': 46}]
         )
 
     def test_phrase_02(self):

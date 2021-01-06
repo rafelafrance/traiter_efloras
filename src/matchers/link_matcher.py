@@ -6,7 +6,7 @@ from collections import defaultdict
 from traiter.pylib.matcher import SpacyMatcher
 
 from .attach import ATTACH
-from ..pylib.util import LINK_STEP
+from ..pylib.consts import LINK_STEP
 
 
 class LinkMatcher(SpacyMatcher):
@@ -64,8 +64,9 @@ class LinkMatcher(SpacyMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    def retokenize_matches(self, doc, matchers, step):
+    def retokenize(self, doc, step):
         """Find all terms in the text and return the resulting doc."""
+        matchers = self.matchers[step]
         all_matches = []
 
         for matcher in matchers:
@@ -85,4 +86,4 @@ class LinkMatcher(SpacyMatcher):
                 if action := self.actions.get(label):
                     action(span, part)
 
-        return doc, False
+        return doc

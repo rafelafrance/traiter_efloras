@@ -18,8 +18,9 @@ import regex
 from bs4 import BeautifulSoup
 from lxml import html
 
-from src.pylib import efloras_util as e_util
-from src.pylib.util import DATA_DIR
+import src.pylib.consts
+import src.pylib.util
+from src.pylib.consts import DATA_DIR
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -44,11 +45,11 @@ TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 def main(args, families, efloras_ids):
     """Perform actions based on the arguments."""
     if args.list_efloras_ids:
-        e_util.print_flora_ids(efloras_ids)
+        print_flora_ids(efloras_ids)
         sys.exit()
 
     if args.search:
-        e_util.search_families(args, families)
+        search_families(args, families)
         sys.exit()
 
     if args.update_families:
@@ -60,10 +61,10 @@ def main(args, families, efloras_ids):
         family_name = FAMILIES[key]['family']
         taxon_id = FAMILIES[key]['taxon_id']
 
-        dir_ = e_util.tree_dir(args.flora_id, family_name)
+        dir_ = tree_dir(args.flora_id, family_name)
         os.makedirs(dir_, exist_ok=True)
 
-        dir_ = e_util.treatment_dir(args.flora_id, family_name)
+        dir_ = treatment_dir(args.flora_id, family_name)
         os.makedirs(dir_, exist_ok=True)
 
         download(family_name, args.flora_id, taxon_id)
@@ -87,10 +88,10 @@ def update_families():
 
         for link in soup.findAll('a', attrs={'title': TAXON_RE}):
             href = link.attrs['href']
-            flora_id = e_util.get_flora_id(href)
+            flora_id = get_flora_id(href)
             families.append({
                 'flora_id': flora_id,
-                'taxon_id': e_util.get_taxon_id(href),
+                'taxon_id': get_taxon_id(href),
                 'link': f'{SITE}/{href}',
                 'family': link.text,
                 'flora_name': floras[flora_id],
@@ -98,7 +99,7 @@ def update_families():
 
     df = pd.DataFrame(families)
     df = df.sort_values(by=['flora_id', 'family'])
-    df.to_csv(e_util.EFLORAS_FAMILIES, index=None)
+    df.to_csv(src.pylib.consts.EFLORAS_FAMILIES, index=None)
 
 
 def download_families(flora_id):
@@ -151,8 +152,8 @@ def download(family_name, flora_id, taxon_id):
     """Download the family tree and then treatments."""
     family_tree(family_name, flora_id, taxon_id, set())
 
-    tree_dir = e_util.tree_dir(flora_id, family_name)
-    for path in tree_dir.glob('*.html'):
+    tree_dir_ = tree_dir(flora_id, family_name)
+    for path in tree_dir_.glob('*.html'):
         with open(path) as in_file:
             page = html.fromstring(in_file.read())
         get_treatments(flora_id, family_name, page)
@@ -173,7 +174,7 @@ def get_treatments(flora_id, family_name, page):
 
 def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
-    path = e_util.treatment_file(flora_id, family_name, taxon_id)
+    path = treatment_file(flora_id, family_name, taxon_id)
     url = (f'{SITE}/florataxon.aspx'
            f'?flora_id={flora_id}'
            f'&taxon_id={taxon_id}')
@@ -213,7 +214,7 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
         r'browse\.aspx\?flora_id=\d+&start_taxon_id=(?P<taxon_id>\d+)',
         regex.VERBOSE | regex.IGNORECASE)
 
-    path = e_util.tree_file(flora_id, family_name, taxon_id, page_no)
+    path = tree_file(flora_id, family_name, taxon_id, page_no)
 
     url = (f'{SITE}/browse.aspx'
            f'?flora_id={flora_id}'
@@ -252,6 +253,95 @@ def download_page(url, path):
             break
         except (TimeoutError, socket.timeout, HTTPError):
             pass
+
+
+def print_flora_ids(flora_ids):
+    """Display a list of all flora IDs."""
+    template = '{:>8}  {:<30}'
+
+    print(template.format('Flora ID', 'Name'))
+
+    for fid, name in flora_ids.items():
+        print(template.format(fid, name))
+
+
+def search_families(args, families):
+    """Display a list of all families that match the given pattern."""
+    template = '{:<20} {:>8} {:>8} {:<30}  {:<20} {:<20} {:>8}'
+
+    pattern = args.search.replace('*', '.*').replace('?', '.?')
+    pattern = re.compile(pattern, flags=re.IGNORECASE)
+
+    print(template.format(
+        'Family',
+        'Taxon Id',
+        'Flora Id',
+        'Flora Name',
+        'Directory Created',
+        'Directory Modified',
+        'File Count'))
+
+    for family in families.values():
+        if (pattern.search(family['family'])
+                or pattern.search(family['flora_name'])):
+            print(template.format(
+                family['family'],
+                family['taxon_id'],
+                family['flora_id'],
+                family['flora_name'],
+                family['created'],
+                family['modified'],
+                family['count'] if family['count'] else ''))
+
+
+def get_taxon_id(href):
+    """Given a link or file name return a taxon ID."""
+    href = str(href)
+    taxon_id_re = re.compile(r'taxon_id[=_](\d+)')
+    return int(taxon_id_re.search(href)[1])
+
+
+def get_flora_id(href):
+    """Given a link or file name return a flora ID."""
+    href = str(href)
+    flora_id_re = re.compile(r'flora_id[=_](\d+)')
+    return int(flora_id_re.search(href)[1])
+
+
+def treatment_file(flora_id, family_name, taxon_id, page_no=1):
+    """Build the treatment directory name."""
+    root = treatment_dir(flora_id, family_name)
+    return root / taxon_file(taxon_id, page_no)
+
+
+def tree_file(flora_id, family_name, taxon_id, page_no=1):
+    """Build the family tree directory name."""
+    root = tree_dir(flora_id, family_name)
+    return root / taxon_file(taxon_id, page_no)
+
+
+def family_dir(flora_id, family_name):
+    """Build the family directory name."""
+    taxon_dir = f'{family_name}_{flora_id}'
+    return DATA_DIR / 'eFloras' / taxon_dir
+
+
+def taxon_file(taxon_id, page_no=1):
+    """Build the taxon file name."""
+    file_name = f'taxon_id_{taxon_id}.html'
+    if page_no > 1:
+        file_name = f'taxon_id_{taxon_id}_{page_no}.html'
+    return file_name
+
+
+def tree_dir(flora_id, family_name):
+    """Build the family tree directory name."""
+    return family_dir(flora_id, family_name) / 'tree'
+
+
+def treatment_dir(flora_id, family_name):
+    """Build the treatment directory name."""
+    return family_dir(flora_id, family_name) / 'treatments'
 
 
 def parse_args(flora_ids):
@@ -296,7 +386,7 @@ def parse_args(flora_ids):
 
 
 if __name__ == "__main__":
-    FAMILIES = e_util.get_families()
-    FLORA_IDS = e_util.get_flora_ids()
+    FAMILIES = src.pylib.util.get_families()
+    FLORA_IDS = src.pylib.util.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
     main(ARGS, FAMILIES, FLORA_IDS)

@@ -4,8 +4,6 @@
 
 import unittest
 
-from traiter.pylib.util import shorten
-
 from tests.setup import test
 
 
@@ -14,10 +12,10 @@ class TestColor(unittest.TestCase):
 
     def test_color_01(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 hypanthium green or greenish yellow,
                 usually not purple-spotted, rarely purple-spotted distally
-                """)),
+                """),
             [{'part': 'hypanthium', 'trait': 'part',
               'start': 0, 'end': 10},
              {'color': 'green',
@@ -36,9 +34,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_02(self):
         self.assertEqual(
-            test(shorten("""
-                hypanthium straw-colored to sulphur-yellow or golden-yellow
-                """)),
+            test('hypanthium straw-colored to sulphur-yellow or golden-yellow'),
             [{'part': 'hypanthium', 'trait': 'part',
               'start': 0, 'end': 10},
              {'color': 'yellow', 'trait': 'color', 'part': 'hypanthium',
@@ -81,11 +77,11 @@ class TestColor(unittest.TestCase):
     def test_color_05(self):
         """It handles pattern notations within colors."""
         self.assertEqual(
-            test(shorten("""
+            test("""
                 petals distinct, white to cream, greenish yellow,
                 maturing yellowish or pale brown, commonly mottled or with
                 light green or white longitudinal stripes
-                """)),
+                """),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'white', 'trait': 'color', 'part': 'petal',
@@ -107,11 +103,11 @@ class TestColor(unittest.TestCase):
 
     def test_color_06(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Petals distinct, white to cream, greenish white,
                 or yellowish green, or yellowish, usually green-throated
                 and faintly green-lined,
-                """)),
+                """),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'white', 'trait': 'color', 'part': 'petal',
@@ -200,9 +196,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_14(self):
         self.assertEqual(
-            test(shorten("""
-                leaflets surfaces rather densely spotted with minute
-                blackish dots,""")),
+            test('leaflets surfaces rather densely spotted with minute blackish dots'),
             [{'part': 'leaflet', 'trait': 'part',
               'start': 0, 'end': 8},
              {'subpart': 'surface', 'part': 'leaflet', 'trait': 'subpart',
@@ -214,8 +208,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_15(self):
         self.assertEqual(
-            test(
-                    'Petals purplish in life, whitish yel-lowish when dry;'),
+            test('Petals purplish in life, whitish yel-lowish when dry;'),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'color', 'part': 'petal',

@@ -6,10 +6,11 @@ import argparse
 import sys
 import textwrap
 from copy import deepcopy
+from itertools import product
 
-import src.pylib.efloras_util as e_util
+import src.pylib.util
 from src.matchers.pipeline import Pipeline
-from src.readers.efloras_reader import efloras_reader
+from src.readers.efloras import efloras_reader
 from src.writers.csv_ import csv_writer
 from src.writers.data import biluo_writer, iob_writer, ner_writer
 from src.writers.html_ import html_writer
@@ -17,13 +18,13 @@ from src.writers.html_ import html_writer
 
 def get_efloras_families(args):
     """Handle eFloras extractions"""
-    families = {k: v for k, v in e_util.get_families().items() if v['count']}
+    families = {k: v for k, v in src.pylib.util.get_families().items() if v['count']}
 
-    if not e_util.check_family_flora_ids(args, families):
+    if not check_family_flora_ids(args, families):
         sys.exit(1)
 
     if args.list_families:
-        e_util.print_families(families)
+        print_families(families)
         sys.exit()
 
     return families
@@ -61,6 +62,60 @@ def main(args):
         biluo_writer(args, copied)
 
 
+def check_family_flora_ids(args, families):
+    """Validate family and flora ID combinations."""
+    combos = get_family_flora_ids(args, families)
+
+    flora = {i: False for i in args.flora_id}
+    fams = {f: False for f in args.family}
+    for combo in combos:
+        fams[combo[0]] = True
+        flora[combo[1]] = True
+
+    ok = True
+    for fam, hit in fams.items():
+        if not hit:
+            ok = False
+            print(f'Family "{fam}" is not being used.')
+
+    for id_, hit in flora.items():
+        if not hit:
+            ok = False
+            print(f'Flora ID "{id_}" is not being used.')
+
+    return ok
+
+
+def get_family_flora_ids(args, families):
+    """Get family and flora ID combinations."""
+    return [c for c in product(args.family, args.flora_id)
+            if c in families]
+
+
+def print_families(families):
+    """Display a list of all families."""
+    template = '{:<20} {:>8} {:>8} {:<30}  {:<20} {:<20} {:>8}'
+
+    print(template.format(
+        'Family',
+        'Taxon Id',
+        'Flora Id',
+        'Flora Name',
+        'Directory Created',
+        'Directory Modified',
+        'Treatments'))
+
+    for family in families.values():
+        print(template.format(
+            family['family'],
+            family['taxon_id'],
+            family['flora_id'],
+            family['flora_name'],
+            family['created'],
+            family['modified'],
+            family['count'] if family['count'] else ''))
+
+
 def parse_args():
     """Process command-line arguments."""
     description = """Parse data from flora website."""
@@ -79,7 +134,7 @@ def parse_args():
             genera this is really just a filter on the taxa names so you
             can put in anything that matches a taxon name.""")
 
-    flora_ids = e_util.get_flora_ids()
+    flora_ids = src.pylib.util.get_flora_ids()
     arg_parser.add_argument(
         '--flora-id', '-e', action='append',
         choices=[str(k) for k in flora_ids],

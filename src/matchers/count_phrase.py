@@ -2,7 +2,7 @@
 
 from traiter.pylib.util import to_positive_int  # pylint: disable=import-error
 
-from ..pylib.util import CATEGORY, REPLACE, TRAIT_STEP
+from ..pylib.consts import CATEGORY, REPLACE, TRAIT_STEP
 
 
 def count_phrase(span):

@@ -12,9 +12,7 @@ class TestPartLocation(unittest.TestCase):
 
     def test_part_location_01(self):
         self.assertEqual(
-            test(
-                'stipules 3-8 mm, semiamplexicaul, adnate to petiole for '
-                '1-2 mm'),
+            test('stipules 3-8 mm, semiamplexicaul, adnate to petiole for 1-2 mm'),
             [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
              {'length_low': 3, 'length_high': 8, 'length_units': 'mm',
               'trait': 'size', 'part': 'stipule',

@@ -4,8 +4,6 @@
 
 import unittest
 
-from traiter.pylib.util import shorten  # pylint: disable=import-error
-
 from tests.setup import test
 
 
@@ -168,9 +166,9 @@ class TestCount(unittest.TestCase):
 
     def test_count_17(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 Pistillate flowers: hyaline bristle at apex of hypanthial
-                aculei 0.5–1 times as long as opaque base.""")),
+                aculei 0.5–1 times as long as opaque base."""),
             [{'sex': 'female', 'part': 'flower',
               'trait': 'part',
               'start': 0, 'end': 18},
@@ -187,7 +185,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_18(self):
         self.assertEqual(
-            test(shorten("""rarely 1- or 5-7-foliolate;""")),
+            test('rarely 1- or 5-7-foliolate;'),
             [{'min': 1, 'low': 5, 'high': 7,
               'trait': 'count', 'part': 'leaflet',
               'start': 7, 'end': 26}]
@@ -195,8 +193,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_19(self):
         self.assertEqual(
-            test(shorten(
-                """Leaves imparipinnate, 5- or 7(or 9)-foliolate;""")),
+            test('Leaves imparipinnate, 5- or 7(or 9)-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 5, 'high': 7, 'max': 9,
               'trait': 'count', 'part': 'leaflet',
@@ -323,10 +320,10 @@ class TestCount(unittest.TestCase):
 
     def test_count_32(self):
         self.assertEqual(
-            test(shorten("""
+            test("""
                 staminate catkins in 1 or more clusters of 3--6;
                 pistillate catkins in 1 or more clusters of 2--7
-                """)),
+                """),
             [{'sex': 'male', 'part': 'catkin', 'trait': 'part',
               'start': 0, 'end': 17},
              {'sex': 'male', 'part': 'catkin',

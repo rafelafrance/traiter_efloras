@@ -1,6 +1,6 @@
 """Match unadorned phrases attached to a plant part."""
 
-from ..pylib.util import COMMA, REPLACE, TERMS, TRAIT_STEP
+from ..pylib.consts import COMMA, REPLACE, TERMS, TRAIT_STEP
 
 LITERAL_LABELS = {t['label'] for t in TERMS if t['category'] == 'literal'}
 LITERAL_LABELS = sorted(LITERAL_LABELS)

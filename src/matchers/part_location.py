@@ -1,6 +1,6 @@
 """Plant part is being  used as a location parser."""
 
-from ..pylib.util import GROUP_STEP
+from ..pylib.consts import GROUP_STEP
 
 
 def not_a_part_location(_):

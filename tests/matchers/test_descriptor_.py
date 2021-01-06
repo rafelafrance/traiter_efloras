@@ -12,9 +12,9 @@ class TestDescriptor(unittest.TestCase):
 
     def test_descriptor_01(self):
         self.assertEqual(
-            test(
-                'bisexual (unisexual and plants sometimes gynodioecious, '
-                'or plants dioecious'),
+            test("""
+                bisexual (unisexual and plants sometimes gynodioecious,
+                or plants dioecious"""),
             [{'reproduction': 'bisexual',
               'trait': 'reproduction', 'part': 'plant',
               'start': 0,

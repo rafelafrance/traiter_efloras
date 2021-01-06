@@ -17,7 +17,7 @@ from .shape import SHAPE
 from .size import SIZE
 from .subpart import SUBPART
 from .suffix_count import SUFFIX_COUNT
-from ..pylib.util import CLOSE, DOT, GROUP_STEP, OPEN, SEMICOLON, TERMS, \
+from ..pylib.consts import CLOSE, DOT, GROUP_STEP, OPEN, SEMICOLON, TERMS, \
     TRAIT_STEP
 
 SHARED = {

@@ -3,7 +3,7 @@
 import re
 from functools import partial
 
-from ..pylib.util import CLOSE, CROSS, GROUP_STEP, NUMBER, \
+from ..pylib.consts import CLOSE, CROSS, GROUP_STEP, NUMBER, \
     OPEN, REPLACE, TRAIT_STEP
 
 

@@ -1,6 +1,6 @@
 """Common suffix count snippets."""
 
-from ..pylib.util import CATEGORY, CLOSE, OPEN, PLUS, REPLACE, TRAIT_STEP
+from ..pylib.consts import CATEGORY, CLOSE, OPEN, PLUS, REPLACE, TRAIT_STEP
 
 
 def suffix_count(span):
