@@ -5,9 +5,9 @@ from collections import defaultdict
 
 from traiter.matchers.rule import Rule
 
-from .attach import ATTACH
+from .link import LINK
 
-MATCHERS = [ATTACH]
+MATCHERS = [LINK]
 
 
 class LinkMatcher(Rule):

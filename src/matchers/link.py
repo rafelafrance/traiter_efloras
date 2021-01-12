@@ -93,7 +93,7 @@ def augment_data(token, part, subpart=None):
     token._.data = {**data, **token._.data}
 
 
-ATTACH = {
+LINK = {
     LINK_STEP: [
         {
             'label': 'with_clause',
