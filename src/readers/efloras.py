@@ -3,13 +3,11 @@
 import re
 
 from bs4 import BeautifulSoup
-from traiter.pylib.util import FLAGS  # pylint: disable=import-error
-
-import src.pylib.efloras_util as e_util
+from traiter.util import FLAGS  # pylint: disable=import-error
 
 import downloader
 import extract
-import src.pylib.util
+import src.pylib.util as util
 from src.matchers.part import PATTERN_RE
 
 _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
@@ -18,7 +16,7 @@ _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 def efloras_reader(args, families):
     """Perform the parsing."""
     families_flora = extract.get_family_flora_ids(args, families)
-    flora_ids = src.pylib.util.get_flora_ids()
+    flora_ids = util.get_flora_ids()
 
     # Build a filter for the taxon names
     genera = [g.lower() for g in args.genus] if args.genus else []

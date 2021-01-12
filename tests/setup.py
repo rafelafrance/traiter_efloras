@@ -2,7 +2,7 @@
 
 from typing import Dict, List
 
-from traiter.pylib.util import shorten  # pylint: disable=import-error
+from traiter.util import shorten  # pylint: disable=import-error
 
 from src.matchers.pipeline import Pipeline
 

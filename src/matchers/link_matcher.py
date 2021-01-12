@@ -3,26 +3,21 @@
 # pylint: disable=import-error
 from collections import defaultdict
 
-from traiter.pylib.matcher import SpacyMatcher
+from traiter.matchers.rule import Rule
 
 from .attach import ATTACH
-from ..pylib.consts import LINK_STEP
+
+MATCHERS = [ATTACH]
 
 
-class LinkMatcher(SpacyMatcher):
+class LinkMatcher(Rule):
     """Base matcher object."""
 
-    name = 'link_matcher'
-
-    def __init__(self, nlp):
-        super().__init__(nlp)
-        links = self.add_patterns([ATTACH], LINK_STEP)
+    def __init__(self, nlp, rules, step):
+        super().__init__(nlp, rules=rules, step=step)
 
         # This is used for sorting matches
-        self.priority = {m['label']: m.get('priority', 9999) for m in links}
-        for action in self.actions:
-            label = action.split('.')[0]
-            self.priority[action] = self.priority[label]
+        self.priority = {r['label']: r.get('priority', 9999) for r in rules}
 
     def filter_matches(self, matches):
         """Remove overlapping matches following priority rules."""
@@ -32,6 +27,7 @@ class LinkMatcher(SpacyMatcher):
         priorities = defaultdict(list)
         for match in matches:
             label = strings[match[0]]
+            label = label.split('.')[0]
             priority = self.priority[label]
             priorities[priority].append(match)
 
@@ -64,17 +60,12 @@ class LinkMatcher(SpacyMatcher):
         part = sorted(part, key=lambda p: -p.i)
         return part[0] if part else None
 
-    def retokenize(self, doc, step):
+    def __call__(self, doc):
         """Find all terms in the text and return the resulting doc."""
-        matchers = self.matchers[step]
-        all_matches = []
-
-        for matcher in matchers:
-            all_matches += matcher(doc)
+        matches = self.matcher(doc)
 
         for sent in doc.sents:
-            matches = [m for m in all_matches
-                       if m[1] >= sent.start and m[2] <= sent.end]
+            matches = [m for m in matches if m[1] >= sent.start and m[2] <= sent.end]
             matches = self.filter_matches(matches)
 
             parts = [t for t in sent if t.ent_type_ == 'part']

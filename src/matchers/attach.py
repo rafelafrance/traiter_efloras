@@ -5,7 +5,7 @@ a separate matcher object from the others because we're not merging tokens but
 modifying them by adding the part and subpart fields.
 """
 
-from traiter.pylib.util import DotDict
+from traiter.util import DotDict
 
 from ..matchers.descriptor import DESCRIPTOR_LABELS
 from ..pylib.consts import COMMA, DOT, LINK_STEP, TRAIT_STEP

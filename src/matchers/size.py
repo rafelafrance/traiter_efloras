@@ -109,11 +109,6 @@ def size_double_dim(span):
     return {**data, **new_data}
 
 
-def not_a_size(_):
-    """Flag this as a token to be deleted."""
-    return {'_forget': True}
-
-
 _FOLLOW = """ dimension sex_enclosed sex """.split()
 _UNCERTAIN = """ quest quest_enclosed """.split()
 _NOT_A_SIZE = """ for """.split()
@@ -203,7 +198,7 @@ SIZE = {
         },
         {
             'label': '_not_a_size',
-            'on_match': not_a_size,
+            'on_match': lambda _: None,
             'patterns': [
                 [
                     {'LOWER': {'IN': _NOT_A_SIZE}},

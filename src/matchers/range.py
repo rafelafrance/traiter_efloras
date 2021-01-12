@@ -4,7 +4,7 @@ import re
 from functools import partial
 
 # pylint: disable=import-error
-from traiter.pylib.util import to_positive_float, to_positive_int
+from traiter.util import to_positive_float, to_positive_int
 
 from ..pylib.consts import CLOSE, DASH, GROUP_STEP, INT, NUMBER, OPEN, SLASH
 
@@ -30,11 +30,6 @@ def range_(span, fields=''):
             data[field] = to_positive_float(value)
 
     return data
-
-
-def forget(_):
-    """Not a range."""
-    return {'_forget': True}
 
 
 MIN = [
@@ -148,7 +143,7 @@ RANGE = {
         },
         {
             'label': 'fraction',
-            'on_match': forget,
+            'on_match': lambda _: None,
             'patterns': [[
                 {'TEXT': {'REGEX': INT}},
                 {'TEXT': {'IN': SLASH}},

@@ -31,14 +31,9 @@ def count(span):
             continue
 
         else:
-            return {'_forget': True}
+            return
 
     return data
-
-
-def not_a_count(_):
-    """Flag this as a token to be deleted."""
-    return {'_forget': True}
 
 
 COUNT = {
@@ -66,7 +61,7 @@ COUNT = {
         },
         {
             'label': '_not_a_count',
-            'on_match': not_a_count,
+            'on_match': lambda _: None,
             'patterns': [
                 [
                     {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},

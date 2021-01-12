@@ -1,6 +1,6 @@
 """Common suffix count snippets."""
 
-from traiter.pylib.util import to_positive_int  # pylint: disable=import-error
+from traiter.util import to_positive_int  # pylint: disable=import-error
 
 from ..pylib.consts import CATEGORY, REPLACE, TRAIT_STEP
 

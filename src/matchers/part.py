@@ -2,12 +2,12 @@
 
 import re
 
-from traiter.pylib.util import FLAGS  # pylint: disable=import-error
+from traiter.util import FLAGS  # pylint: disable=import-error
 
 from ..pylib.consts import COLON, REPLACE, TERMS, TRAIT_STEP
 
 _PATTERNS = [t for t in TERMS if t['label'] == 'part']
-_PATTERNS = sorted([t['pattern'] for t in _PATTERNS], key=len, reverse=True)
+_PATTERNS = sorted([str(t['pattern']) for t in _PATTERNS], key=len, reverse=True)
 
 PATTERN_RE = '|'.join(_PATTERNS)
 PATTERN_RE = re.compile(f'({PATTERN_RE})', FLAGS)

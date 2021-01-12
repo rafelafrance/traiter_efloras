@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from traiter.pylib.terms import Terms
+from traiter.terms.csv_ import Csv
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
 BASE_DIR = Path.cwd() if BASE_DIR.find('floras') > -1 else Path.cwd().parent
@@ -33,8 +33,8 @@ SLASH = ' / / '.split()
 PARTS = ['part', 'subpart']
 
 TERM_PATH = BASE_DIR / 'src' / 'vocabulary' / 'terms.csv'
-TERMS = Terms.read_csv(TERM_PATH)
-TERMS += Terms.hyphenate_terms(TERMS)
+TERMS = Csv.read_csv(TERM_PATH)
+TERMS += Csv.hyphenate_terms(TERMS)
 
 REPLACE = TERMS.pattern_dicts('replace')
 CATEGORY = TERMS.pattern_dicts('category')

@@ -11,7 +11,7 @@ def suffix_count(span):
         if label == 'range' and token._.data['_all_ints']:
             data = {**token._.data, **data}
         elif label == 'range':
-            return {'_forget': True}
+            return
         elif label == 'count_suffix':
             value = token.lower_
             part = REPLACE.get(value, value)

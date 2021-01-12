@@ -1,11 +1,7 @@
-Hyphenate~=1.1.0
 beautifulsoup4~=4.9.3
-pandas~=1.1.4
-Jinja2~=3.0.0a1
+pandas~=1.2.0
+Jinja2==2.11.2
 regex~=2020.11.13
 lxml~=4.6.2
-spacy~=2.3.4
-cupy-cuda102~=7.8.0
+spacy~=2.3.5
 selenium~=3.141.0
-streamlit~=0.72.0
-st-annotated-text~=1.0.1
