@@ -3,6 +3,8 @@
 import re
 from functools import partial
 
+from traiter.actions import forget
+
 from ..pylib.consts import CLOSE, CROSS, GROUP_STEP, NUMBER, \
     OPEN, REPLACE, TRAIT_STEP
 
@@ -198,7 +200,7 @@ SIZE = {
         },
         {
             'label': '_not_a_size',
-            'on_match': lambda _: None,
+            'on_match': forget,
             'patterns': [
                 [
                     {'LOWER': {'IN': _NOT_A_SIZE}},

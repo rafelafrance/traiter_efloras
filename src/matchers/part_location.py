@@ -1,5 +1,7 @@
 """Plant part is being  used as a location parser."""
 
+from traiter.actions import forget
+
 from ..pylib.consts import GROUP_STEP
 
 
@@ -7,7 +9,7 @@ PART_LOCATION = {
     GROUP_STEP: [
         {
             'label': 'not_a_part_location',
-            'on_match': lambda _: None,
+            'on_match': forget,
             'patterns': [
                 [
                     {'ENT_TYPE': {'IN': ['sex', 'sex_enclosed', 'location']}},

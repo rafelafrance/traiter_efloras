@@ -1,5 +1,7 @@
 """Common count snippets."""
 
+from traiter.actions import forget
+
 from ..pylib.consts import CLOSE, CROSS, OPEN, REPLACE, SLASH, TRAIT_STEP
 
 _NO_COUNTS = (CROSS + SLASH
@@ -61,7 +63,7 @@ COUNT = {
         },
         {
             'label': '_not_a_count',
-            'on_match': lambda _: None,
+            'on_match': forget,
             'patterns': [
                 [
                     {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},

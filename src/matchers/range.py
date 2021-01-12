@@ -3,7 +3,7 @@
 import re
 from functools import partial
 
-# pylint: disable=import-error
+from traiter.actions import forget
 from traiter.util import to_positive_float, to_positive_int
 
 from ..pylib.consts import CLOSE, DASH, GROUP_STEP, INT, NUMBER, OPEN, SLASH
@@ -143,7 +143,7 @@ RANGE = {
         },
         {
             'label': 'fraction',
-            'on_match': lambda _: None,
+            'on_match': forget,
             'patterns': [[
                 {'TEXT': {'REGEX': INT}},
                 {'TEXT': {'IN': SLASH}},
