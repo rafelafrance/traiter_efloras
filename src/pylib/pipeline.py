@@ -2,7 +2,6 @@
 
 import spacy
 from traiter.pattern_utils import add_ruler_patterns
-from traiter.tokenizer_utils import add_tokenizer
 from traiter.pipes import cache, debug, dependency, sentence
 from traiter.pipes.entity_data import EntityData
 
@@ -24,11 +23,11 @@ from src.patterns.suffix_count import SUFFIX_COUNT
 from src.pylib.consts import TERMS
 
 MATCHERS = [
-    COLOR, COUNT, COUNT_PHRASE, DESCRIPTOR, MARGIN_SHAPE, PART, PART_LOCATION,
-    PHRASE, RANGE, SHAPE, SHARED, SIZE, SUBPART, SUFFIX_COUNT]
+    COUNT, COUNT_PHRASE, DESCRIPTOR, MARGIN_SHAPE, PART_LOCATION,
+    PHRASE, SHAPE, SIZE, SUFFIX_COUNT]
 
 MATCHERS1 = [RANGE, SHARED]
-MATCHERS2 = [COLOR, PART]
+MATCHERS2 = [COLOR, PART, SUBPART]
 ALL_MATCHERS = MATCHERS1 + MATCHERS2
 
 LINKERS = [PART_LINKER]
@@ -76,21 +75,3 @@ def add_linker_pipe(nlp):
     """Add a pipe for linking body parts with other traits."""
     config = {'patterns': LINKERS}
     nlp.add_pipe('dependency', name='part_linker', config=config)
-
-
-# class Pipeline(SpacyPipeline):
-#     """Build a custom traiter pipeline."""
-#
-#     def __init__(self) -> None:
-#         super().__init__()
-#
-#         self.nlp.disable_pipes(['ner'])
-#
-#         token2entity = {TRAIT_STEP}
-#
-#         Term.add_pipes(self.nlp, TERMS, before='parser')
-#         Rule.add_pipe(self.nlp, MATCHERS, GROUP_STEP, before='parser')
-#         Rule.add_pipe(self.nlp, MATCHERS, TRAIT_STEP, before='parser')
-#         Sentencizer.add_pipe(self.nlp, ABBREVS, before='parser')
-#         LinkMatcher.add_pipe(self.nlp, MATCHERS, LINK_STEP, before='parser')
-#         ToEntities.add_pipe(self.nlp, token2entity=token2entity, before='parser')

@@ -60,7 +60,7 @@ class TestColor(unittest.TestCase):
              {'color': 'white', 'trait': 'color', 'part': 'petal',
               'start': 14, 'end': 19},
              {'color': 'green', 'trait': 'color', 'part': 'petal',
-              'start': 29, 'end': 34},
+              'start': 24, 'end': 34},
              {'color': 'orange', 'trait': 'color', 'part': 'petal',
               'start': 36, 'end': 42},
              {'color': 'yellow', 'trait': 'color', 'part': 'petal',
@@ -73,10 +73,9 @@ class TestColor(unittest.TestCase):
             test("""
                 petals distinct, white to cream, greenish yellow,
                 maturing yellowish or pale brown, commonly mottled or with
-                light green or white longitudinal stripes
+                light green or white longitudinal stripes.
                 """),
-            [{'part': 'petal', 'trait': 'part',
-              'start': 0, 'end': 6},
+            [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'white', 'trait': 'color', 'part': 'petal',
               'start': 17, 'end': 22},
              {'color': 'white', 'trait': 'color', 'part': 'petal',
@@ -86,7 +85,7 @@ class TestColor(unittest.TestCase):
              {'color': 'yellow', 'trait': 'color', 'part': 'petal',
               'start': 59, 'end': 68},
              {'color': 'brown', 'trait': 'color', 'part': 'petal',
-              'start': 77, 'end': 82},
+              'start': 72, 'end': 82},
              {'color': 'green', 'trait': 'color', 'part': 'petal',
               'start': 115, 'end': 120},
              {'color': 'white-longitudinal-stripes',
@@ -99,7 +98,7 @@ class TestColor(unittest.TestCase):
             test("""
                 Petals distinct, white to cream, greenish white,
                 or yellowish green, or yellowish, usually green-throated
-                and faintly green-lined,
+                and faintly green-lined.
                 """),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 6},
@@ -116,7 +115,7 @@ class TestColor(unittest.TestCase):
              {'color': 'green-throated', 'trait': 'color', 'part': 'petal',
               'start': 91, 'end': 105},
              {'color': 'green-lined', 'trait': 'color', 'part': 'petal',
-              'start': 118, 'end': 129}]
+              'start': 110, 'end': 129}]
         )
 
     def test_color_07(self):
@@ -157,11 +156,11 @@ class TestColor(unittest.TestCase):
 
     def test_color_11(self):
         self.assertEqual(
-            test('petal pale sulfur-yellow'),
+            test('petal pale sulfur-yellow.'),
             [{'part': 'petal', 'trait': 'part',
               'start': 0, 'end': 5},
              {'color': 'yellow', 'trait': 'color', 'part': 'petal',
-              'start': 11, 'end': 24}]
+              'start': 6, 'end': 24}]
         )
 
     def test_color_12(self):

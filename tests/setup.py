@@ -2,7 +2,7 @@
 
 from typing import Dict, List
 
-from spacy import displacy
+# from spacy import displacy
 from traiter.util import shorten
 
 from src.pylib.pipeline import trait_pipeline
@@ -20,6 +20,6 @@ def test(text: str) -> List[Dict]:
     from pprint import pp
     pp(traits)
 
-    displacy.serve(doc)
+    # displacy.serve(doc)
 
     return traits
