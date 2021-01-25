@@ -14,27 +14,22 @@ class TestColor(unittest.TestCase):
         self.assertEqual(
             test("""
                 hypanthium green or greenish yellow,
-                usually not purple-spotted, rarely purple-spotted distally
+                usually not purple-spotted, rarely purple-spotted distally.
                 """),
-            [{'part': 'hypanthium', 'trait': 'part',
-              'start': 0, 'end': 10},
-             {'color': 'green',
-              'trait': 'color', 'part': 'hypanthium',
+            [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
+             {'color': 'green', 'trait': 'color', 'part': 'hypanthium',
               'start': 11, 'end': 16},
-             {'color': 'green-yellow',
-              'trait': 'color', 'part': 'hypanthium',
+             {'color': 'green-yellow', 'trait': 'color', 'part': 'hypanthium',
               'start': 20, 'end': 35},
-             {'color': 'purple-spotted',
-              'trait': 'color', 'part': 'hypanthium',
-              'start': 49, 'end': 63},
-             {'color': 'purple-spotted',
-              'trait': 'color', 'part': 'hypanthium',
-              'start': 72, 'end': 86}]
+             {'color': 'purple-spotted', 'trait': 'color', 'part': 'hypanthium',
+              'missing': True, 'start': 45, 'end': 63},
+             {'color': 'purple-spotted', 'trait': 'color', 'part': 'hypanthium',
+              'missing': True, 'start': 65, 'end': 86}]
         )
 
     def test_color_02(self):
         self.assertEqual(
-            test('hypanthium straw-colored to sulphur-yellow or golden-yellow'),
+            test('hypanthium straw-colored to sulphur-yellow or golden-yellow.'),
             [{'part': 'hypanthium', 'trait': 'part',
               'start': 0, 'end': 10},
              {'color': 'yellow', 'trait': 'color', 'part': 'hypanthium',
@@ -47,7 +42,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_03(self):
         self.assertEqual(
-            test('sepals erect, green- or red-tipped'),
+            test('sepals erect, green- or red-tipped.'),
             [{'part': 'sepal', 'trait': 'part',
               'start': 0, 'end': 6},
              {'color': 'green', 'trait': 'color', 'part': 'sepal',
@@ -58,10 +53,8 @@ class TestColor(unittest.TestCase):
 
     def test_color_04(self):
         self.assertEqual(
-            test(
-                'petals white, cream, or pale green [orange to yellow]'),
-            [{'part': 'petal', 'trait': 'part',
-              'start': 0, 'end': 6},
+            test('petals white, cream, or pale green [orange to yellow].'),
+            [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'white', 'trait': 'color', 'part': 'petal',
               'start': 7, 'end': 12},
              {'color': 'white', 'trait': 'color', 'part': 'petal',

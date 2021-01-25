@@ -1,10 +1,24 @@
 """Plant subpart parser."""
 
-from ..pylib.consts import REPLACE, TERMS, TRAIT_STEP
+import spacy
+
+from ..pylib.consts import REPLACE, TERMS
 
 _SEX = {t['pattern']: t['replace'] for t in TERMS if t['label'] in ('sex',)}
 
+SUBPART = [
+    {
+        'label': 'subpart',
+        'on_match': 'subpart.v1',
+        'patterns': [[
+            {'ENT_TYPE': {'IN': ['sex', 'location']}, 'OP': '*'},
+            {'ENT_TYPE': 'subpart'},
+        ]],
+    },
+]
 
+
+@spacy.registry.misc(SUBPART[0]['on_match'])
 def subpart(span):
     """Enrich a plant subpart match."""
     data = {}
@@ -20,17 +34,3 @@ def subpart(span):
             data['location'] = value
 
     return data
-
-
-SUBPART = {
-    TRAIT_STEP: [
-        {
-            'label': 'subpart',
-            'on_match': subpart,
-            'patterns': [[
-                {'ENT_TYPE': {'IN': ['sex', 'location']}, 'OP': '*'},
-                {'ENT_TYPE': 'subpart'},
-            ]],
-        },
-    ],
-}

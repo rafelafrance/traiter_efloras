@@ -3,8 +3,8 @@
 import json
 
 from ..pylib.consts import TERMS, TRAIT_STEP
-from ..matchers.matcher import MATCHERS
-from ..matchers.pipeline import Pipeline
+from ..patterns.matcher import MATCHERS
+from src.pylib.pipeline import Pipeline
 
 LABELS = set()
 

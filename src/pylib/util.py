@@ -2,7 +2,19 @@
 import csv
 from datetime import datetime
 
-from src.pylib.consts import CONVERT, DATA_DIR, EFLORAS_FAMILIES
+from src.pylib.consts import DATA_DIR, EFLORAS_FAMILIES
+
+CONVERT = {
+    'cm': 10.0,
+    'dm': 100.0,
+    'm': 1000.0,
+    'mm': 1.0,
+    'µm': 1.0e-3,
+    'centimeters': 10.0,
+    'decimeters': 100.0,
+    'meters': 1000.0,
+    'millimeters': 1.0,
+}
 
 
 def convert(number, units):

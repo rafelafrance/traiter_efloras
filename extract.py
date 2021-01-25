@@ -9,7 +9,7 @@ from copy import deepcopy
 from itertools import product
 
 import src.pylib.util
-from src.matchers.pipeline import Pipeline
+from src.pylib.pipeline import Pipeline
 from src.readers.efloras import efloras_reader
 from src.writers.csv_ import csv_writer
 from src.writers.data import biluo_writer, iob_writer, ner_writer

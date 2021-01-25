@@ -8,7 +8,7 @@ from traiter.util import FLAGS  # pylint: disable=import-error
 import downloader
 import extract
 import src.pylib.util as util
-from src.matchers.part import PATTERN_RE
+from src.patterns.part import PATTERN_RE
 
 _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
