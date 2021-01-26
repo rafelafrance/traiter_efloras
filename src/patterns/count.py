@@ -9,13 +9,10 @@ from traiter.util import to_positive_int
 
 from ..pylib.consts import REPLACE
 
-_NOT_COUNTS = (CROSS + SLASH + """ average side times days weeks by """.split())
-_NOT_COUNT = set(_NOT_COUNTS)
+NOT_COUNT_WORDS = (CROSS + SLASH + """ average side times days weeks by """.split())
 
-_COUNT_KILLER = """
+NOT_COUNT_ENTS = """
     metric_length imperial_length metric_mass imperial_mass """.split()
-
-PARENS = OPEN + CLOSE
 
 IS_RANGE = {'REGEX': '^range'}
 
@@ -39,6 +36,9 @@ COUNT = [
                 {'TEXT': {'IN': CLOSE}},
                 {'ENT_TYPE': 'per_count', 'OP': '?'},
             ],
+            [
+                {'ENT_TYPE': 'count_word'},
+            ],
         ],
     },
     {
@@ -47,19 +47,19 @@ COUNT = [
         'patterns': [
             [
                 {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
+                {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}, 'OP': '?'},
             ],
             [
                 {'ENT_TYPE': IS_RANGE, 'OP': '?'},
-                {'LOWER': {'IN': _NOT_COUNTS}},
+                {'LOWER': {'IN': NOT_COUNT_WORDS}},
                 {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
+                {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}, 'OP': '?'},
             ],
             [
                 {'ENT_TYPE': IS_RANGE},
-                {'LOWER': {'IN': _NOT_COUNTS}},
+                {'LOWER': {'IN': NOT_COUNT_WORDS}},
                 {'ENT_TYPE': IS_RANGE, 'OP': '?'},
-                {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
+                {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}, 'OP': '?'},
             ],
         ],
     },
@@ -71,19 +71,25 @@ def count(ent):
     """Enrich the match with data."""
     data = {}
 
-    for token in ent:
-        label = token._.label_cache.split('.')[0]
+    if word := [t for t in ent if t._.label_cache == 'count_word']:
+        word = word[0]
+        ent._.data['low'] = to_positive_int(REPLACE.get(word, word))
+        return
 
-        if label == 'range':
-            fields = token._.label_cache.split('.')[1:]
-            values = re.findall(FLOAT_RE, ent.text)
-            all_ints = all([re.search(INT_RE, v) for v in values])
-            if not all_ints:
-                raise RejectMatch
-            for field, value in zip(fields, values):
-                data[field] = to_positive_int(value)
+    values = re.findall(FLOAT_RE, ent.text)
+    all_ints = all([re.search(INT_RE, v) for v in values])
 
-        elif label == 'per_count':
-            data['group'] = REPLACE.get(token.lower_, token.lower_)
+    if not all_ints:
+        raise RejectMatch
+
+    range_ = [t for t in ent if t._.label_cache.split('.')[0] == 'range'][0]
+    fields = range_._.label_cache.split('.')[1:]
+
+    for field, value in zip(fields, values):
+        data[field] = to_positive_int(value)
+
+    if per_count := [t for t in ent if t._.label_cache == 'per_count']:
+        per_count = per_count[0].lower_
+        data['group'] = REPLACE.get(per_count, per_count)
 
     ent._.data = data

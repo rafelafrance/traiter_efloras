@@ -7,7 +7,6 @@ from traiter.pipes.entity_data import EntityData
 
 from src.patterns.color import COLOR
 from src.patterns.count import COUNT
-from src.patterns.count_phrase import COUNT_PHRASE
 from src.patterns.descriptor import DESCRIPTOR
 from src.patterns.margin import MARGIN_SHAPE
 from src.patterns.part import PART
@@ -24,7 +23,7 @@ from src.patterns.subpart_linker import SUBPART_LINKER
 from src.patterns.suffix_count import SUFFIX_COUNT
 from src.pylib.consts import TERMS
 
-MATCHERS = [COUNT_PHRASE, MARGIN_SHAPE, PART_LOCATION, SHAPE, SIZE, SUFFIX_COUNT]
+MATCHERS = [MARGIN_SHAPE, PART_LOCATION, SHAPE, SIZE, SUFFIX_COUNT]
 
 TERM_MATCHERS = [RANGE, SHARED]
 ENTITY_MATCHERS = [COLOR, COUNT, DESCRIPTOR, PART, PHRASE, REJECT, SUBPART]

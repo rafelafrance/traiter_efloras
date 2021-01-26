@@ -2,10 +2,7 @@
 
 import spacy
 from traiter.linker_utils import linker
-
-TRAITS = ' color color_mod count '.split()
-LINKERS = ' prep conj cc '.split()
-POS = ' ADJ VERB '.split()
+from .part_linker import TRAITS, POS
 
 SUBPART_LINKER = [
     {

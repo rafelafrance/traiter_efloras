@@ -16,23 +16,15 @@ class TestDescriptor(unittest.TestCase):
                 bisexual (unisexual and plants sometimes gynodioecious,
                 or plants dioecious"""),
             [{'reproduction': 'bisexual',
-              'trait': 'reproduction', 'part': 'plant',
-              'start': 0,
-              'end': 8},
+              'trait': 'reproduction', 'part': 'plant', 'start': 0, 'end': 8},
              {'reproduction': 'unisexual',
-              'trait': 'reproduction', 'part': 'plant',
-              'start': 10,
-              'end': 19},
+              'trait': 'reproduction', 'part': 'plant', 'start': 10, 'end': 19},
              {'part': 'plant', 'trait': 'part', 'start': 24, 'end': 30},
              {'reproduction': 'gynodioecious',
-              'trait': 'reproduction', 'part': 'plant',
-              'start': 41,
-              'end': 54},
+              'trait': 'reproduction', 'part': 'plant', 'start': 41, 'end': 54},
              {'part': 'plant', 'trait': 'part', 'start': 59, 'end': 65},
-             {'reproduction': 'dioecious',
-              'trait': 'reproduction', 'part': 'plant',
-              'start': 66,
-              'end': 75}]
+             {'reproduction': 'dioecious', 'trait': 'reproduction',
+              'part': 'plant', 'start': 66, 'end': 75}]
         )
 
     def test_descriptor_02(self):
@@ -41,8 +33,7 @@ class TestDescriptor(unittest.TestCase):
             [{'habit': 'shrub', 'trait': 'habit', 'part': 'plant',
               'start': 0, 'end': 6},
              {'length_high': 1.5, 'length_units': 'm',
-              'trait': 'size', 'part': 'plant',
-              'start': 9, 'end': 17}]
+              'trait': 'size', 'part': 'plant', 'start': 9, 'end': 17}]
         )
 
     def test_descriptor_03(self):
@@ -57,11 +48,10 @@ class TestDescriptor(unittest.TestCase):
         self.assertEqual(
             test(
                 'Herbs perennial or subshrubs, epiphytic or epilithic.'),
-            [{'woodiness': 'herbaceous', 'trait': 'woodiness', 'part': 'plant',
-              'start': 0, 'end': 5},
+            [{'woodiness': 'herbaceous', 'trait': 'woodiness',
+              'part': 'plant', 'start': 0, 'end': 5},
              {'plant_duration': 'perennial',
-              'trait': 'plant_duration', 'part': 'plant',
-              'start': 6, 'end': 15},
+              'trait': 'plant_duration', 'part': 'plant', 'start': 6, 'end': 15},
              {'habit': 'shrub', 'trait': 'habit',
               'part': 'plant', 'start': 19, 'end': 28},
              {'habitat': 'epiphytic', 'trait': 'habitat',

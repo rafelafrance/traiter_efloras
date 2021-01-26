@@ -1,7 +1,5 @@
 """Test plant count trait matcher."""
 
-# pylint: disable=missing-function-docstring, too-many-public-methods
-
 import unittest
 
 from tests.setup import test
@@ -12,8 +10,8 @@ class TestCount(unittest.TestCase):
 
     def test_count_99(self):
         dash = chr(8211)
-        dash = chr(45)
-        target = '(1 or) 2 or 3 per legume'
+        # dash = chr(45)
+        target = '1–4(–9)'
         target = target.replace('-', dash)
         test(target)
 

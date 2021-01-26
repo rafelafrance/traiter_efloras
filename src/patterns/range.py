@@ -14,6 +14,31 @@ CLOSE_TKN = {'TEXT': {'IN': CLOSE}}
 DASH_TKN = {'TEXT': {'IN': DASH}}
 CONJ_TKN = {'LOWER': {'IN': CONJ}}
 
+CONJ_CLOSE_FLOAT = {'LOWER': {'REGEX': f'^{CONJ_RE}{CLOSE_RE}{FLOAT_RE}$'}}
+FLOAT_OPEN_CONJ = {'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{CONJ_RE}$'}}
+FLOAT_OPEN_DASH_FLOAT = {
+    'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$'}}
+FLOAT_CONJ_CLOSE_FLOAT = {'LOWER': {'REGEX': (
+    f'^{FLOAT_RE}{CONJ_RE}{CLOSE_RE}{FLOAT_RE}$')}}
+FLOAT_CONJ_CLOSE_FLOAT_DASH = {'LOWER': {'REGEX': (
+    f'^{FLOAT_RE}{CONJ_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}$')}}
+FLOAT_DASH_FLOAT = {'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}$'}}
+FLOAT_DASH_CLOSE_FLOAT = {
+    'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}$'}}
+FLOAT_DASH_OPEN_DASH_FLOAT = {
+    'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$'}}
+FLOAT_DASH_FLOAT_OPEN_CONJ = {'LOWER': {'REGEX': (
+    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{OPEN_RE}{CONJ_RE}$')}}
+FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT = {'LOWER': {'REGEX': (
+    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
+FLOAT_DASH_FLOAT_DASH_OPEN_DASH_FLOAT = {'TEXT': {'REGEX': (
+    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
+FLOAT_DASH_CLOSE_FLOAT_DASH_OPEN_DASH_FLOAT = {'TEXT': {'REGEX': (
+    f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
+FLOAT_DASH_CLOSE_FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT = {'LOWER': {'REGEX': (
+    f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}{FLOAT_RE}'
+    f'{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
+
 RANGE = [
     {
         'label': 'range.low',
@@ -22,14 +47,8 @@ RANGE = [
     {
         'label': 'range.min.low',
         'patterns': [
-            [
-                OPEN_TKN,
-                {'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}$'}},
-            ],
-            [
-                OPEN_TKN, FLOAT_TKN,
-                {'LOWER': {'REGEX': f'^{CONJ_RE}{CLOSE_RE}{FLOAT_RE}$'}},
-            ],
+            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT],
+            [OPEN_TKN, FLOAT_TKN, CONJ_CLOSE_FLOAT],
         ],
     },
     {
@@ -37,100 +56,62 @@ RANGE = [
         'patterns': [
             [FLOAT_TKN, DASH_TKN, FLOAT_TKN],
             [FLOAT_TKN, CONJ_TKN, FLOAT_TKN],
-            [{'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}$'}}],
+            [FLOAT_DASH_FLOAT],
+            [FLOAT_TKN, DASH_TKN, FLOAT_DASH_FLOAT],
          ],
     },
     {
         'label': 'range.low.max',
         'patterns': [
             [FLOAT_TKN, OPEN_TKN, CONJ_TKN, FLOAT_TKN, CLOSE_TKN],
-            [
-                {'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$'}},
-                CLOSE_TKN,
-            ],
-            [
-                {'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{CONJ_RE}$'}},
-                FLOAT_TKN, CLOSE_TKN,
-            ],
+            [FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN],
+            [FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN],
         ],
     },
     {
         'label': 'range.min.low.high',
         'patterns': [
-            [
-                OPEN_TKN,
-                {'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}$'}},
-                DASH_TKN, FLOAT_TKN,
-            ],
-            [
-                FLOAT_TKN, DASH_TKN,
-                {'LOWER': {'REGEX': (
-                    f'^{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}},
-                CLOSE_TKN,
-            ],
-            [
-                OPEN_TKN, FLOAT_TKN,
-                {'LOWER': {'REGEX': f'^{CONJ_RE}{CLOSE_RE}{FLOAT_RE}$'}},
-                CONJ_TKN, FLOAT_TKN,
-            ],
+            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT, DASH_TKN, FLOAT_TKN],
+            [OPEN_TKN, FLOAT_TKN, CONJ_CLOSE_FLOAT, CONJ_TKN, FLOAT_TKN],
             [OPEN_TKN, FLOAT_TKN, CONJ_TKN, CLOSE_TKN, FLOAT_TKN, CONJ_TKN, FLOAT_TKN],
+            [FLOAT_TKN, DASH_TKN, FLOAT_DASH_OPEN_DASH_FLOAT, CLOSE_TKN],
         ],
     },
     {
         'label': 'range.min.low.max',
         'patterns': [
-            [
-                OPEN_TKN,
-                {'TEXT': {'REGEX': (
-                    f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}'
-                    f'{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}},
-                CLOSE_TKN,
-            ],
+            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT_DASH_OPEN_DASH_FLOAT, CLOSE_TKN],
         ],
         #         MIN_VAL + OR_LOW + DASH_MAX,
     },
     {
         'label': 'range.low.high.max',
         'patterns': [
-            [
-                {'TEXT': {'REGEX': (
-                    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{DASH_RE}{OPEN_RE}'
-                    f'{DASH_RE}{FLOAT_RE}$')}},
-                CLOSE_TKN,
-            ],
-            [
-                {'LOWER': {'REGEX': (
-                    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{DASH_RE}{OPEN_RE}'
-                    f'{DASH_RE}{FLOAT_RE}$')}},
-                CLOSE_TKN,
-            ],
-            [
-                FLOAT_TKN, CONJ_TKN,
-                {'TEXT': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{CONJ_RE}$'}},
-                FLOAT_TKN, CLOSE_TKN,
-            ],
+            [FLOAT_TKN, CONJ_TKN, FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN],
             [FLOAT_TKN, CONJ_TKN, FLOAT_TKN, OPEN_TKN, CONJ_TKN, FLOAT_TKN, CLOSE_TKN],
+            [FLOAT_DASH_FLOAT, CONJ_TKN, FLOAT_TKN],
+            [FLOAT_DASH_FLOAT_DASH_OPEN_DASH_FLOAT, CLOSE_TKN],
+            [FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN],
         ],
-        #         LOW + OR_HIGH + MAX,
-        #         LOW + HIGH + OR_MAX,
+        #         LOW + OR_HIGH + MAX,        #         LOW + HIGH + OR_MAX,
         #         LOW + OPEN_HIGH + CLOSE_MAX,
     },
     {
         'label': 'range.min.low.high.max',
         'patterns': [
+            [FLOAT_TKN, CONJ_TKN, FLOAT_DASH_FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN],
+            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN],
             [
-                OPEN_TKN,
-                {'LOWER': {'REGEX': (
-                    fr'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}{FLOAT_RE}'
-                    fr'{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}},
-                CLOSE_TKN,
+                OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT, DASH_TKN,
+                FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN,
             ],
             [
-                OPEN_TKN,
-                {'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}$'}},
-                DASH_TKN,
-                {'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$'}},
-                CLOSE_TKN,
+                OPEN_TKN, FLOAT_CONJ_CLOSE_FLOAT_DASH,
+                CONJ_TKN, FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN,
+            ],
+            [
+                OPEN_TKN, FLOAT_CONJ_CLOSE_FLOAT,
+                DASH_TKN, CONJ_TKN, FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN,
             ],
         ],
         #         # MIN + LOW + OR_HIGH + MAX,

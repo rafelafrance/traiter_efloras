@@ -31,8 +31,6 @@ def descriptor(ent):
 
     if value not in _IS_DESCRIPTOR:
         raise RejectMatch
-    print(f'descriptor {ent}')
-    print(label)
 
     ent._.new_label = label
-    ent._.data = {label: REPLACE.get(value, value)}
+    ent._.data = {label: REPLACE.get(value, value), 'part': 'plant'}
