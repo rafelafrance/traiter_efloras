@@ -175,9 +175,8 @@ class TestColor(unittest.TestCase):
     def test_color_13(self):
         self.assertEqual(
             test('Leaves acaulescent or nearly so, with white hairs.'),
-            [{'part': 'leaf', 'trait': 'part',
-              'start': 0, 'end': 6},
-             {'habit': 'acaulescent', 'trait': 'habit', 'part': 'plant',
+            [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
+             {'habit': 'acaulescent', 'trait': 'habit', 'part': 'leaf',
               'start': 7, 'end': 18},
              {'color': 'white',
               'trait': 'color', 'part': 'leaf', 'subpart': 'hair',
@@ -189,8 +188,7 @@ class TestColor(unittest.TestCase):
     def test_color_14(self):
         self.assertEqual(
             test('leaflets surfaces rather densely spotted with minute blackish dots'),
-            [{'part': 'leaflet', 'trait': 'part',
-              'start': 0, 'end': 8},
+            [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
              {'subpart': 'surface', 'part': 'leaflet', 'trait': 'subpart',
               'start': 9, 'end': 17},
              {'color': 'black-dots',
@@ -201,8 +199,7 @@ class TestColor(unittest.TestCase):
     def test_color_15(self):
         self.assertEqual(
             test('Petals purplish in life, whitish yel-lowish when dry;'),
-            [{'part': 'petal', 'trait': 'part',
-              'start': 0, 'end': 6},
+            [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'color', 'part': 'petal',
               'start': 7, 'end': 15},
              {'color': 'white-yellow',
@@ -225,7 +222,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_17(self):
         self.assertEqual(
-            test('twigs: young growth green or reddish-tinged'),
+            test('twigs: young growth green or reddish-tinged.'),
             [{'part': 'twig', 'trait': 'part',
               'start': 0, 'end': 5},
              {'color': 'green',

@@ -15,37 +15,38 @@ from src.patterns.part_linker import PART_LINKER
 from src.patterns.part_location import PART_LOCATION
 from src.patterns.phrase import PHRASE
 from src.patterns.range import RANGE
+from src.patterns.reject import REJECT
 from src.patterns.shape import SHAPE
 from src.patterns.shared import SHARED
 from src.patterns.size import SIZE
 from src.patterns.subpart import SUBPART
+from src.patterns.subpart_linker import SUBPART_LINKER
 from src.patterns.suffix_count import SUFFIX_COUNT
 from src.pylib.consts import TERMS
 
-MATCHERS = [
-    COUNT, COUNT_PHRASE, DESCRIPTOR, MARGIN_SHAPE, PART_LOCATION,
-    PHRASE, SHAPE, SIZE, SUFFIX_COUNT]
+MATCHERS = [COUNT_PHRASE, MARGIN_SHAPE, PART_LOCATION, SHAPE, SIZE, SUFFIX_COUNT]
 
-MATCHERS1 = [RANGE, SHARED]
-MATCHERS2 = [COLOR, PART, SUBPART]
-ALL_MATCHERS = MATCHERS1 + MATCHERS2
+TERM_MATCHERS = [RANGE, SHARED]
+ENTITY_MATCHERS = [COLOR, COUNT, DESCRIPTOR, PART, PHRASE, REJECT, SUBPART]
+LINKERS = [PART_LINKER, SUBPART_LINKER]
 
-LINKERS = [PART_LINKER]
+DEBUG_COUNT = 0
 
 
 def trait_pipeline():
     """Setup the pipeline for extracting traits."""
     nlp = spacy.load('en_core_web_sm', exclude=['ner', 'lemmatizer'])
-    # add_tokenizer(nlp)
+    add_debug_pipes(nlp, 'after tokenizer', entities=False)  # #######################
     add_term_ruler_pipe(nlp)
-    # nlp.add_pipe('debug_tokens', name='debug_tokens1')
     nlp.add_pipe('merge_entities', name='term_merger')
     nlp.add_pipe('cache_label', after='term_merger')
+    # add_debug_pipes(nlp, 'after term_merger')  # ###################################
     add_match_ruler_pipe(nlp)
-    nlp.add_pipe('debug_tokens', name='debug_tokens2')
-    nlp.add_pipe('debug_entities', name='debug_entities2')
+    # add_debug_pipes(nlp, 'after match_ruler')  # ###################################
     add_entity_data_pipe(nlp)
+    # add_debug_pipes(nlp, 'after entity_data')  # ###################################
     add_linker_pipe(nlp)
+    # add_debug_pipes(nlp)    # ######################################################
     return nlp
 
 
@@ -55,19 +56,19 @@ def add_term_ruler_pipe(nlp):
     term_ruler = nlp.add_pipe(
         'entity_ruler', name='term_ruler', config=config, before='parser')
     term_ruler.add_patterns(TERMS.for_entity_ruler())
-    add_ruler_patterns(term_ruler, *MATCHERS1)
+    add_ruler_patterns(term_ruler, *TERM_MATCHERS)
 
 
 def add_match_ruler_pipe(nlp):
     """Add a pipe to group tokens into larger traits."""
     config = {'overwrite_ents': True}
     match_ruler = nlp.add_pipe('entity_ruler', name='match_ruler', config=config)
-    add_ruler_patterns(match_ruler, *MATCHERS2)
+    add_ruler_patterns(match_ruler, *ENTITY_MATCHERS)
 
 
 def add_entity_data_pipe(nlp):
     """Add a pipe that adds data to entities."""
-    config = {'actions': EntityData.from_matchers(*ALL_MATCHERS)}
+    config = {'actions': EntityData.from_matchers(*ENTITY_MATCHERS)}
     nlp.add_pipe('entity_data', config=config)
 
 
@@ -75,3 +76,15 @@ def add_linker_pipe(nlp):
     """Add a pipe for linking body parts with other traits."""
     config = {'patterns': LINKERS}
     nlp.add_pipe('dependency', name='part_linker', config=config)
+
+
+def add_debug_pipes(nlp, message='', tokens=True, entities=True):
+    """Add pipes for debugging."""
+    global DEBUG_COUNT
+    DEBUG_COUNT += 1
+    config = {'message': message}
+    if tokens:
+        nlp.add_pipe('debug_tokens', name=f'debug_tokens{DEBUG_COUNT}', config=config)
+    if entities:
+        nlp.add_pipe(
+            'debug_entities', name=f'debug_entities{DEBUG_COUNT}', config=config)

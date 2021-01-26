@@ -26,22 +26,12 @@ COLOR = [
             ],
         ],
     },
-    {
-        'label': 'color_mod',
-        'on_match': REJECT_MATCH,
-        'patterns': [
-            [
-                {'ENT_TYPE': 'color_mod', 'OP': '+'},
-            ],
-        ],
-    },
 ]
 
 
 @spacy.registry.misc(COLOR[0]['on_match'])
 def color(ent):
     """Enrich a phrase match."""
-    print(ent)
     data = {}
     if any(t for t in ent if t.lower_ in MISSING):
         data['missing'] = True

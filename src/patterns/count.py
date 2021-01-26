@@ -1,17 +1,23 @@
 """Common count snippets."""
 
+import re
+
 import spacy
-from traiter.consts import CLOSE, CROSS, OPEN, SLASH
-from traiter.pipes.entity_data import REJECT_MATCH
+from traiter.consts import CLOSE, CROSS, FLOAT_RE, INT_RE, OPEN, SLASH
+from traiter.pipes.entity_data import REJECT_MATCH, RejectMatch
+from traiter.util import to_positive_int
 
 from ..pylib.consts import REPLACE
 
-_NO_COUNTS = (CROSS + SLASH + """ average side times days weeks by """.split())
-_NO_COUNT = set(_NO_COUNTS)
+_NOT_COUNTS = (CROSS + SLASH + """ average side times days weeks by """.split())
+_NOT_COUNT = set(_NOT_COUNTS)
 
-_COUNT_KILLER = """ metric_length mass_units """.split()
+_COUNT_KILLER = """
+    metric_length imperial_length metric_mass imperial_mass """.split()
 
 PARENS = OPEN + CLOSE
+
+IS_RANGE = {'REGEX': '^range'}
 
 COUNT = [
     {
@@ -19,17 +25,17 @@ COUNT = [
         'on_match': 'count.v1',
         'patterns': [
             [
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'per_count', 'OP': '?'},
             ],
             [
                 {'ENT_TYPE': 'per_count'},
                 {'LOWER': {'IN': ['of']}, 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
             ],
             [
                 {'TEXT': {'IN': OPEN}},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'TEXT': {'IN': CLOSE}},
                 {'ENT_TYPE': 'per_count', 'OP': '?'},
             ],
@@ -40,11 +46,20 @@ COUNT = [
         'on_match': REJECT_MATCH,
         'patterns': [
             [
-                {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
-                {'ENT_TYPE': 'range'},
-                {'LOWER': {'IN': _NO_COUNTS}, 'OP': '?'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
-                {'ENT_TYPE': 'range', 'OP': '?'},
+            ],
+            [
+                {'ENT_TYPE': IS_RANGE, 'OP': '?'},
+                {'LOWER': {'IN': _NOT_COUNTS}},
+                {'ENT_TYPE': IS_RANGE},
+                {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
+            ],
+            [
+                {'ENT_TYPE': IS_RANGE},
+                {'LOWER': {'IN': _NOT_COUNTS}},
+                {'ENT_TYPE': IS_RANGE, 'OP': '?'},
+                {'ENT_TYPE': {'IN': _COUNT_KILLER}, 'OP': '?'},
             ],
         ],
     },
@@ -57,21 +72,18 @@ def count(ent):
     data = {}
 
     for token in ent:
-        label = token.ent_type_
+        label = token._.label_cache.split('.')[0]
 
-        if label == 'range' and token._.data['_all_ints']:
-            data = {**token._.data, **data}
+        if label == 'range':
+            fields = token._.label_cache.split('.')[1:]
+            values = re.findall(FLOAT_RE, ent.text)
+            all_ints = all([re.search(INT_RE, v) for v in values])
+            if not all_ints:
+                raise RejectMatch
+            for field, value in zip(fields, values):
+                data[field] = to_positive_int(value)
 
         elif label == 'per_count':
             data['group'] = REPLACE.get(token.lower_, token.lower_)
 
-        elif token.lower_ in PARENS:
-            continue
-
-        elif token.lower_ in {'of'}:
-            continue
-
-        else:
-            return
-
-    return data
+    ent._.data = data

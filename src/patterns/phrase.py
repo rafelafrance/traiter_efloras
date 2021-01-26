@@ -28,16 +28,17 @@ PHRASE = [
 
 
 @spacy.registry.misc(PHRASE[0]['on_match'])
-def phrase(span):
+def phrase(ent):
     """Enrich the match."""
     data = {}
     negate = ''
-    for token in span:
-        label = token.ent_type_
+    for token in ent:
+        label = token._.label_cache
         value = token.lower_
         if value == 'without':
             negate = 'not '
         elif label in LITERAL_LABELS:
             value = REPLACE.get(value, value)
-            data = {'_label': label, label: negate + value}
-    return data
+            ent._.new_label = label
+            data = {label: negate + value}
+    ent._.data = data

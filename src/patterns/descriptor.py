@@ -2,6 +2,7 @@
 
 import spacy
 
+from traiter.pipes.entity_data import RejectMatch
 from ..pylib.consts import REPLACE, TERMS
 
 _DESCRIPTORS_DICT = {t['label']: t['label'] for t in TERMS
@@ -23,15 +24,15 @@ DESCRIPTOR = [
 
 
 @spacy.registry.misc(DESCRIPTOR[0]['on_match'])
-def descriptor(span):
+def descriptor(ent):
     """Enrich a phrase match."""
-    label = _DESCRIPTORS_DICT[span[0].ent_type_]
-    value = span.lower_
+    label = _DESCRIPTORS_DICT.get(ent[0]._.label_cache)
+    value = ent.text.lower()
 
     if value not in _IS_DESCRIPTOR:
-        return
+        raise RejectMatch
+    print(f'descriptor {ent}')
+    print(label)
 
-    data = dict(_label=label)
-    data[label] = REPLACE.get(value, value)
-
-    return data
+    ent._.new_label = label
+    ent._.data = {label: REPLACE.get(value, value)}

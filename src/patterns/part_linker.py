@@ -3,12 +3,9 @@
 import spacy
 from traiter.linker_utils import linker
 
-
-PARTS = ' part subpart '.split()
-TRAITS = ' color color_mod '.split()
+TRAITS = ' color color_mod count '.split()
 LINKERS = ' prep conj cc '.split()
 POS = ' ADJ VERB '.split()
-
 
 PART_LINKER = [
     {
@@ -19,7 +16,7 @@ PART_LINKER = [
             [
                 {
                     'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': PARTS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
                 },
                 {
                     'LEFT_ID': 'part',
@@ -32,7 +29,7 @@ PART_LINKER = [
             [
                 {
                     'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': PARTS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
                 },
                 {
                     'LEFT_ID': 'part',
@@ -45,7 +42,7 @@ PART_LINKER = [
             [
                 {
                     'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': PARTS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
                 },
                 {
                     'LEFT_ID': 'part',
@@ -64,7 +61,7 @@ PART_LINKER = [
             [
                 {
                     'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': PARTS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
                 },
                 {
                     'LEFT_ID': 'part',
@@ -79,11 +76,30 @@ PART_LINKER = [
                     'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
                 },
             ],
+            # part < adj >> trait
+            [
+                {
+                    'RIGHT_ID': 'part',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
+                },
+                {
+                    'LEFT_ID': 'part',
+                    'REL_OP': '<',
+                    'RIGHT_ID': 'adj1',
+                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
+                },
+                {
+                    'LEFT_ID': 'adj1',
+                    'REL_OP': '>>',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                },
+            ],
             # part > adj >> trait
             [
                 {
                     'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': PARTS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
                 },
                 {
                     'LEFT_ID': 'part',
@@ -98,6 +114,70 @@ PART_LINKER = [
                     'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
                 },
             ],
+            # part > subpart
+            [
+                {
+                    'RIGHT_ID': 'part',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
+                },
+                {
+                    'LEFT_ID': 'part',
+                    'REL_OP': '>>',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+            ],
+            # part . subpart
+            [
+                {
+                    'RIGHT_ID': 'part',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
+                },
+                {
+                    'LEFT_ID': 'part',
+                    'REL_OP': '.',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+            ],
+            # part . adj >> subpart
+            [
+                {
+                    'RIGHT_ID': 'part',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
+                },
+                {
+                    'LEFT_ID': 'part',
+                    'REL_OP': '.',
+                    'RIGHT_ID': 'adj1',
+                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
+                },
+                {
+                    'LEFT_ID': 'adj1',
+                    'REL_OP': '>>',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+            ],
+            # part > adj >> subpart
+            [
+                {
+                    'RIGHT_ID': 'part',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
+                },
+                {
+                    'LEFT_ID': 'part',
+                    'REL_OP': '>',
+                    'RIGHT_ID': 'adj1',
+                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
+                },
+                {
+                    'LEFT_ID': 'adj1',
+                    'REL_OP': '>>',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+            ],
         ],
     },
 ]
@@ -106,5 +186,4 @@ PART_LINKER = [
 @spacy.registry.misc(PART_LINKER[0]['on_match'])
 def body_part_linker(_, doc, idx, matches):
     """Use an entity matcher for entity linking."""
-    print(matches[idx])
-    linker(_, doc, idx, matches, 'part', 'subpart')
+    linker(_, doc, idx, matches, 'part')

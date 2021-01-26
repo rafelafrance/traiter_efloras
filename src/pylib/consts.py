@@ -13,10 +13,11 @@ EFLORAS_DIR = DATA_DIR / 'eFloras'
 EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
 
 TERM_PATH = BASE_DIR / 'src' / 'vocabulary' / 'terms.csv'
-TERMS = Csv.shared('units colors')
+TERMS = Csv.shared('colors units')
 TERMS += Csv.read_csv(TERM_PATH)
 TERMS += Csv.hyphenate_terms(TERMS)
 TERMS += Csv.trailing_dash(TERMS, label='color')
+TERMS.drop('imperial_length')
 
 REPLACE = TERMS.pattern_dict('replace')
 CATEGORY = TERMS.pattern_dict('category')
