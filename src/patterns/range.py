@@ -1,5 +1,5 @@
 """Shared range patterns."""
-from traiter.consts import CLOSE, CLOSE_RE, DASH, DASH_RE, FLOAT_RE, OPEN, OPEN_RE
+from traiter.const import CLOSE, CLOSE_RE, DASH, DASH_RE, FLOAT_RE, OPEN, OPEN_RE
 
 TO = ['to']
 CONJ = ['or', 'and']

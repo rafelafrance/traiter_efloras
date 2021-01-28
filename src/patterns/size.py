@@ -3,64 +3,62 @@
 import re
 
 import spacy
-from traiter.consts import CLOSE, CROSS, FLOAT_RE, OPEN
+from traiter.const import CROSS, FLOAT_RE
 from traiter.pipes.entity_data import REJECT_MATCH
+from traiter.util import to_positive_float
 
-from ..pylib.consts import REPLACE
+from ..pylib.const import IS_RANGE, REPLACE
 
-_FOLLOW = """ dimension sex_enclosed sex """.split()
-_UNCERTAIN = """ quest quest_enclosed """.split()
+_FOLLOW = """ dimension sex """.split()
 _NOT_A_SIZE = """ for """.split()
 
 SIZE = [
-    {
-        'label': 'sex_enclosed',
-        'patterns': [[
-            {'TEXT': {'IN': OPEN}},
-            {'ENT_TYPE': 'sex'},
-            {'TEXT': {'IN': CLOSE}},
-        ]],
-    },
     {
         'label': 'size',
         'on_match': 'size.v1',
         'patterns': [
             [
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length'},
                 {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
             ],
             [
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length', 'OP': '?'},
                 {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 {'LOWER': {'IN': CROSS}},
                 {'LOWER': 'to', 'OP': '?'},
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length'},
                 {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
             ],
             [
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length', 'OP': '?'},
                 {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 {'LOWER': {'IN': CROSS}},
                 {'LOWER': 'to', 'OP': '?'},
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length', 'OP': '?'},
                 {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
                 {'LOWER': {'IN': CROSS}},
                 {'LOWER': 'to', 'OP': '?'},
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length'},
                 {'ENT_TYPE': {'IN': _FOLLOW}, 'OP': '*'},
             ],
+        ],
+    },
+    {
+        'label': 'size.high_only',
+        'on_match': 'size_high_only.v1',
+        'patterns': [
             [
                 {'LOWER': 'to'},
                 {'ENT_TYPE': 'about', 'OP': '?'},
@@ -72,12 +70,12 @@ SIZE = [
         ],
     },
     {
-        'label': 'size',
+        'label': 'size.double_dim',
         'on_match': 'size_double_dim.v1',
         'patterns': [
             [
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length'},
                 {'ENT_TYPE': {'IN': 'sex_enclosed' 'sex'}, 'OP': '?'},
                 {'ENT_TYPE': 'dimension'},
@@ -93,17 +91,17 @@ SIZE = [
             [
                 {'LOWER': {'IN': _NOT_A_SIZE}},
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length'},
             ],
             [
                 {'LOWER': {'IN': _NOT_A_SIZE}},
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length', 'OP': '?'},
                 {'LOWER': {'IN': CROSS}},
                 {'ENT_TYPE': 'about', 'OP': '?'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'metric_length'},
             ],
         ],
@@ -111,24 +109,38 @@ SIZE = [
 ]
 
 
-@spacy.registry.misc(SIZE[1]['on_match'])
-def size(span, high_only=False):
+def _size(ent, high_only=False):
     """Enrich a phrase match."""
-    dims = scan_tokens(span, high_only)
+    dims = scan_tokens(ent, high_only)
     dims = fix_dimensions(dims)
     data = fill_data(dims)
+    ent._.new_label = 'size'
+    ent._.data = data
     return data
 
 
+@spacy.registry.misc(SIZE[0]['on_match'])
+def size(ent):
+    """Enrich a phrase match."""
+    _size(ent)
+
+
+@spacy.registry.misc(SIZE[1]['on_match'])
+def size_high_only(ent):
+    """Enrich a phrase match."""
+    _size(ent, True)
+
+
 @spacy.registry.misc(SIZE[2]['on_match'])
-def size_double_dim(span):
+def size_double_dim(ent):
     """Handle the case when the dimensions are doubled but values are not.
 
     Like: Legumes 2.8-4.5 mm high and wide
     """
-    data = size(span)
-    dims = [REPLACE.get(t.lower_, t.lower_) for t in span
-            if t.ent_type_ == 'dimension']
+    data = _size(ent)
+    print(data)
+    dims = [REPLACE.get(t.lower_, t.lower_) for t in ent
+            if t._.cached_label == 'dimension']
 
     new_data = {}
     for key, value in data.items():
@@ -138,18 +150,21 @@ def size_double_dim(span):
             new_key = '_'.join(parts)
             new_data[new_key] = value
 
-    return {**data, **new_data}
+    ent._.data = {**data, **new_data}
 
 
-def scan_tokens(span, high_only):
+def scan_tokens(ent, high_only):
     """Scan tokens for the various fields."""
     dims = [{}]
 
-    for token in span:
-        label = token.ent_type_
+    for token in ent:
+        label = token._.cached_label.split('.')[0]
 
         if label == 'range':
-            for key, value in token._.data.items():
+            values = re.findall(FLOAT_RE, token.text)
+            values = [to_positive_float(v) for v in values]
+            keys = token._.cached_label.split('.')[1:]
+            for key, value in zip(keys, values):
                 dims[-1][key] = value
             if high_only:
                 dims[-1]['high'] = dims[-1]['low']
@@ -161,7 +176,7 @@ def scan_tokens(span, high_only):
         elif label == 'dimension':
             dims[-1]['dimension'] = REPLACE[token.lower_]
 
-        elif label in ('sex_enclosed', 'sex'):
+        elif label == 'sex':
             dims[-1]['sex'] = re.sub(r'\W+', '', token.lower_)
 
         elif label == 'quest':

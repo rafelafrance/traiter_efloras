@@ -10,6 +10,15 @@ from tests.setup import test
 class TestShape(unittest.TestCase):
     """Test the plant shape trait parser."""
 
+    def test_count_00(self):
+        dash = chr(8211)
+        # dash = chr(45)
+        target = """
+                Leaves: petiole blade pentagonal-angulate to
+                reniform-angulate or shallowly 5-angulate."""
+        target = target.replace('-', dash)
+        test(target)
+
     def test_shape_01(self):
         self.assertEqual(
             test('leaf suborbiculate'),
@@ -129,7 +138,7 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test("""
                 Leaves: petiole blade pentagonal-angulate to
-                reniform-angulate or shallowly 5-angulate"""),
+                reniform-angulate or shallowly 5-angulate."""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
              {'part': 'petiole', 'trait': 'part', 'start': 8, 'end': 21},
              {'shape': 'polygonal',
@@ -236,8 +245,8 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test('Petals purple; bilobate;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'color': 'purple', 'trait': 'color', 'part': 'petal', 'start': 7,
-              'end': 13},
+             {'color': 'purple', 'trait': 'color', 'part': 'petal',
+              'start': 7, 'end': 13},
              {'start': 15, 'end': 23, 'low': 2, 'trait': 'count',
               'part': 'petal', 'subpart': 'lobe'}]
         )

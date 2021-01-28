@@ -1,9 +1,9 @@
 """Common suffix count snippets."""
 
 import spacy
-from traiter.consts import CLOSE, OPEN, PLUS
+from traiter.const import CLOSE, OPEN, PLUS
 
-from ..pylib.consts import CATEGORY, REPLACE
+from ..pylib.const import CATEGORY, REPLACE
 
 SUFFIX_COUNT = [
     {

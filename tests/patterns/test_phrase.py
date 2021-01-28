@@ -12,7 +12,7 @@ class TestPhrase(unittest.TestCase):
 
     def test_phrase_01(self):
         self.assertEqual(
-            test('Pistillate flowers  usually sessile; hypogynous'),
+            test('Pistillate flowers usually sessile; hypogynous'),
             [{'sex': 'female', 'part': 'flower', 'trait': 'part', 'start': 0,
               'end': 18},
              {'floral_location': 'superior', 'sex': 'female', 'part': 'flower',
@@ -24,7 +24,7 @@ class TestPhrase(unittest.TestCase):
             test('Petals glabrous, deciduous;'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'duration': 'deciduous', 'trait': 'duration',
-              'part': 'petal', 'start': 17, 'end': 26}]
+              'part': 'plant', 'start': 17, 'end': 26}]
         )
 
     def test_phrase_03(self):
@@ -32,5 +32,5 @@ class TestPhrase(unittest.TestCase):
             test('leaf blade herbaceous.'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 10},
              {'woodiness': 'herbaceous', 'trait': 'woodiness',
-              'part': 'leaf', 'start': 11, 'end': 21}]
+              'part': 'plant', 'start': 11, 'end': 21}]
         )

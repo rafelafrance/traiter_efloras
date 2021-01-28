@@ -3,10 +3,10 @@
 import re
 
 import spacy
-from traiter.consts import COLON
+from traiter.const import COLON
 from traiter.util import FLAGS
 
-from ..pylib.consts import REPLACE, TERMS
+from ..pylib.const import REPLACE, TERMS
 
 _PATTERNS = [t for t in TERMS if t['label'] == 'part']
 _PATTERNS = sorted([str(t['pattern']) for t in _PATTERNS], key=len, reverse=True)

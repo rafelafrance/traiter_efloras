@@ -1,7 +1,7 @@
 """Parse the trait."""
 
 import spacy
-from traiter.consts import DASH
+from traiter.const import DASH
 
 _LEADERS = """ shape shape_leader margin_leader """.split()
 _FOLLOWERS = """ shape margin_shape margin_follower """.split()

@@ -10,6 +10,10 @@ from tests.setup import test
 class TestSize(unittest.TestCase):
     """Test plant size trait parsers."""
 
+    def test_size_00(self):
+        target = 'Shrubs, 0.5–1[–2.5] m;'
+        test(target)
+
     def test_size_01(self):
         self.assertEqual(
             test('Leaf (12-)23-34 × 45-56 cm'),
@@ -343,32 +347,19 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('Petals ca. 8 mm,'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'length_low': 8,
-              'length_units': 'mm',
-              'trait': 'size', 'part': 'petal',
-              'start': 7,
-              'end': 15}]
+             {'length_low': 8, 'length_units': 'mm',
+              'trait': 'size', 'part': 'petal', 'start': 7, 'end': 15}]
         )
 
     def test_size_26(self):
         self.assertEqual(
             test('Legumes 7-10 mm, 2.8-4.5 mm high and wide'),
             [{'part': 'legume', 'trait': 'part', 'start': 0, 'end': 7},
-             {'length_low': 7,
-              'length_high': 10,
-              'length_units': 'mm',
-              'trait': 'size', 'part': 'legume',
-              'start': 8,
-              'end': 15},
-             {'width_low': 2.8,
-              'width_high': 4.5,
-              'width_units': 'mm',
-              'height_low': 2.8,
-              'height_high': 4.5,
-              'height_units': 'mm',
-              'trait': 'size', 'part': 'legume',
-              'start': 17,
-              'end': 41}]
+             {'length_low': 7, 'length_high': 10, 'length_units': 'mm',
+              'trait': 'size', 'part': 'legume',  'start': 8, 'end': 15},
+             {'width_low': 2.8, 'width_high': 4.5, 'width_units': 'mm',
+              'height_low': 2.8, 'height_high': 4.5, 'height_units': 'mm',
+              'trait': 'size', 'part': 'legume', 'start': 17, 'end': 41}]
         )
 
     def test_size_27(self):
@@ -399,23 +390,14 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('Seeds ca. 1.6 × 1-1.3 × 0.7-0.8 cm; hilum 8-10 mm.'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 1.6,
-              'width_low': 1.0,
-              'width_high': 1.3,
-              'thickness_low': 0.7,
-              'thickness_high': 0.8,
-              'thickness_units': 'cm',
-              'trait': 'size', 'part': 'seed',
-              'start': 6,
-              'end': 34},
+             {'length_low': 1.6, 'width_low': 1.0, 'width_high': 1.3,
+              'thickness_low': 0.7, 'thickness_high': 0.8, 'thickness_units': 'cm',
+              'trait': 'size', 'part': 'seed', 'start': 6, 'end': 34},
              {'subpart': 'hilum', 'part': 'seed', 'trait': 'subpart',
               'start': 36, 'end': 41},
-             {'length_low': 8,
-              'length_high': 10,
-              'length_units': 'mm',
+             {'length_low': 8, 'length_high': 10, 'length_units': 'mm',
               'trait': 'size', 'part': 'seed', 'subpart': 'hilum',
-              'start': 42,
-              'end': 49}]
+              'start': 42, 'end': 49}]
         )
 
     def test_size_30(self):
@@ -436,16 +418,13 @@ class TestSize(unittest.TestCase):
             [{'habit': 'shrub', 'trait': 'habit', 'part': 'plant',
               'start': 0, 'end': 6},
              {'length_low': 0.5, 'length_high': 1.0, 'length_max': 2.5,
-              'length_units': 'm',
-              'trait': 'size', 'part': 'plant',
-              'start': 8, 'end': 22}]
+              'length_units': 'm', 'trait': 'size', 'start': 8, 'end': 22}]
         )
 
     def test_size_32(self):
         self.assertEqual(
             test('trunk to 3(?) cm d.b.h.;'),
             [{'part': 'trunk', 'trait': 'part', 'start': 0, 'end': 5},
-             {'part': 'trunk',
-              'dbh_high': 3, 'dbh_units': 'cm', 'uncertain': 'true',
+             {'part': 'trunk', 'dbh_high': 3, 'dbh_units': 'cm', 'uncertain': 'true',
               'trait': 'size', 'start': 6, 'end': 23}]
         )

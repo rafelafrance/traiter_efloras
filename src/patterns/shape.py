@@ -1,10 +1,13 @@
 """Parse shape traits."""
 
+import re
+
 import spacy
-from traiter.consts import DASH
+from traiter.const import DASH, DASH_RE
 
-from ..pylib.consts import REPLACE
+from ..pylib.const import IS_RANGE, REPLACE
 
+MULTIPLE_DASHES = fr'{DASH_RE}{DASH_RE}+'
 _DASH_TO = DASH + ['to']
 
 SHAPE = [
@@ -17,8 +20,7 @@ SHAPE = [
                 {'TEXT': {'IN': DASH}, 'OP': '?'},
                 {'ENT_TYPE': 'shape', 'OP': '+'},
                 {'TEXT': {'IN': DASH}, 'OP': '?'},
-                {'ENT_TYPE': {'IN': [
-                    'shape', 'shape_suffix']}, 'OP': '?'},
+                {'ENT_TYPE': 'shape', 'OP': '?'},
             ],
             [
                 {'ENT_TYPE': 'shape_leader'},
@@ -26,23 +28,22 @@ SHAPE = [
                 {'ENT_TYPE': {'IN': [
                     'shape', 'shape_leader']}, 'OP': '+'},
                 {'TEXT': {'IN': DASH}, 'OP': '?'},
-                {'ENT_TYPE': {'IN': [
-                    'shape', 'shape_suffix']}, 'OP': '+'},
+                {'ENT_TYPE': {'IN': 'shape'}, 'OP': '+'},
             ],
             [
                 {'ENT_TYPE': {'IN': ['shape', 'shape_leader']}, 'OP': '+'},
                 {'TEXT': {'IN': DASH}, 'OP': '?'},
-                {'ENT_TYPE': {'IN': ['shape', 'shape_suffix']}, 'OP': '+'},
+                {'ENT_TYPE': 'shape', 'OP': '+'},
             ],
         ],
     },
     {
-        'label': 'shape',
+        'label': 'n_shape',
         'on_match': 'n_shape.v1',
         'patterns': [
             [
                 {'ENT_TYPE': {'IN': ['shape', 'shape_leader', 'location']}, 'OP': '*'},
-                {'ENT_TYPE': 'range'},
+                {'ENT_TYPE': IS_RANGE},
                 {'ENT_TYPE': 'shape_suffix'},
             ],
         ],
@@ -51,22 +52,24 @@ SHAPE = [
 
 
 @spacy.registry.misc(SHAPE[0]['on_match'])
-def shape(span):
+def shape(ent):
     """Enrich a phrase match."""
-    parts = {r: 1 for t in span
-             if (r := REPLACE.get(t.text, t.text))
-             and t.ent_type_ in {'shape', 'shape_suffix'}}
-    value = '-'.join(parts).replace('--', '-')
+    parts = {r: 1 for t in ent
+             if (r := REPLACE.get(t.lower_, t.lower_))
+             and t._.cached_label in {'shape', 'shape_suffix'}}
+    parts = [REPLACE.get(p, p) for p in parts]
+    value = '-'.join(parts)
+    value = re.sub(MULTIPLE_DASHES, '-', value)
     value = REPLACE.get(value, value)
     data = dict(shape=value)
-    loc = [t.lower_ for t in span if t.ent_type_ == 'location']
+    loc = [t.lower_ for t in ent if t._.cached_label == 'location']
     if loc:
         data['location'] = loc[0]
-    return data
+    ent._.data = data
 
 
 @spacy.registry.misc(SHAPE[1]['on_match'])
-def n_shape(_):
+def n_shape(ent):
     """Handle 5-angular etc."""
-    data = {'shape': 'polygonal'}
-    return data
+    ent._.new_label = 'shape'
+    ent._.data = {'shape': 'polygonal'}

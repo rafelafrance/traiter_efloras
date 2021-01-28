@@ -3,7 +3,7 @@
 import spacy
 from traiter.pipes.entity_data import text_action
 
-from ..pylib.consts import REPLACE
+from ..pylib.const import REPLACE
 
 SUBPART = [
     {

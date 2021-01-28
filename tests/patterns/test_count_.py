@@ -8,7 +8,7 @@ from tests.setup import test
 class TestCount(unittest.TestCase):
     """Test plant count trait matcher."""
 
-    def test_count_99(self):
+    def test_count_00(self):
         dash = chr(8211)
         # dash = chr(45)
         target = '1–4(–9)'

@@ -18,9 +18,9 @@ import regex
 from bs4 import BeautifulSoup
 from lxml import html
 
-import src.pylib.consts
+import src.pylib.const
 import src.pylib.util
-from src.pylib.consts import DATA_DIR
+from src.pylib.const import DATA_DIR
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -99,7 +99,7 @@ def update_families():
 
     df = pd.DataFrame(families)
     df = df.sort_values(by=['flora_id', 'family'])
-    df.to_csv(src.pylib.consts.EFLORAS_FAMILIES, index=None)
+    df.to_csv(src.pylib.const.EFLORAS_FAMILIES, index=None)
 
 
 def download_families(flora_id):

@@ -350,6 +350,14 @@ sex,female,lower,female,literal,,ADJ
 sex,male,lower,male,literal,,ADJ
 sex,pistillate,lower,female,literal,,ADJ
 sex,staminate,lower,male,literal,,ADJ
+sex,(female),lower,female,literal,,ADJ
+sex,(male),lower,male,literal,,ADJ
+sex,(pistillate),lower,female,literal,,ADJ
+sex,(staminate),lower,male,literal,,ADJ
+sex,[female],lower,female,literal,,ADJ
+sex,[male],lower,male,literal,,ADJ
+sex,[pistillate],lower,female,literal,,ADJ
+sex,[staminate],lower,male,literal,,ADJ
 shape,acicular,lower,polygonal,,,ADJ
 shape,actinomorphic,lower,radially symmetric,,,ADJ
 shape,acuminate,lower,,,,ADJ
@@ -469,6 +477,7 @@ shape,pinnatiite,lower,,,,ADJ
 shape,pinnatisect,lower,,,,ADJ
 shape,plicate,lower,,,,ADJ
 shape,polygonal,lower,,,,ADJ
+shape,polygonal - angulate,lower,polygonal,,,ADJ
 shape,polygonal-angulate,lower,polygonal,,,ADJ
 shape,pyriform,lower,,,,ADJ
 shape,quadagulate,lower,polygonal,,,ADJ
@@ -568,6 +577,8 @@ shape_leader,semi,lower,,,,ADJ
 shape_leader,shallowly,lower,,,,ADJ
 shape_leader,sometimes,lower,,,,ADJ
 shape_leader,sub,lower,,,,ADJ
+shape_suffix,- angular,lower,,,,ADJ
+shape_suffix,- angulate,lower,,,,ADJ
 shape_suffix,-angular,lower,,,,ADJ
 shape_suffix,-angulate,lower,,,,ADJ
 subpart,aculei,lower,aculeus,,,NOUN

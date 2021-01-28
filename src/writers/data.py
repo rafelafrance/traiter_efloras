@@ -2,7 +2,7 @@
 
 import json
 
-from ..pylib.consts import TERMS, TRAIT_STEP
+from ..pylib.const import TERMS, TRAIT_STEP
 from ..patterns.matcher import MATCHERS
 from src.pylib.pipeline import Pipeline
 

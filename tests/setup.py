@@ -17,9 +17,10 @@ def test(text: str) -> List[Dict]:
     doc = NLP(text)
     traits = [e._.data for e in doc.ents]
 
-    from pprint import pp
-    pp(traits)
+    # from pprint import pp
+    # pp(traits)
 
-    # displacy.serve(doc)
+    # options = {'collapse_punct': False, 'compact': True}
+    # displacy.serve(doc, options=options)
 
     return traits

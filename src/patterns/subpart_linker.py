@@ -1,7 +1,7 @@
 """Link traits to body subparts."""
 
 import spacy
-from traiter.linker_utils import linker
+from traiter.pipes.dependency import simple_linker
 from .part_linker import TRAITS, POS
 
 SUBPART_LINKER = [
@@ -9,7 +9,7 @@ SUBPART_LINKER = [
         'label': 'subpart_linker',
         'on_match': 'subpart_linker.v1',
         'patterns': [
-            # subpart > trait
+            # subpart >> trait
             [
                 {
                     'RIGHT_ID': 'subpart',
@@ -18,6 +18,19 @@ SUBPART_LINKER = [
                 {
                     'LEFT_ID': 'subpart',
                     'REL_OP': '>>',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                },
+            ],
+            # subpart < trait
+            [
+                {
+                    'RIGHT_ID': 'subpart',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+                {
+                    'LEFT_ID': 'subpart',
+                    'REL_OP': '<',
                     'RIGHT_ID': 'trait1',
                     'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
                 },
@@ -92,6 +105,25 @@ SUBPART_LINKER = [
                     'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
                 },
             ],
+            # subpart < trait >> trait
+            [
+                {
+                    'RIGHT_ID': 'subpart',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+                {
+                    'LEFT_ID': 'subpart',
+                    'REL_OP': '<',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                },
+                {
+                    'LEFT_ID': 'trait1',
+                    'REL_OP': '>>',
+                    'RIGHT_ID': 'trait2',
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                },
+            ],
             # subpart ; part < adj >> trait
             [
                 {
@@ -125,4 +157,4 @@ SUBPART_LINKER = [
 @spacy.registry.misc(SUBPART_LINKER[0]['on_match'])
 def body_subpart_linker(_, doc, idx, matches):
     """Use an entity matcher for entity linking."""
-    linker(_, doc, idx, matches, 'subpart', exclude='part')
+    simple_linker(_, doc, idx, matches, 'subpart', exclude='part')

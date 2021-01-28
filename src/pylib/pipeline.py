@@ -1,7 +1,8 @@
 """Create a trait pipeline."""
 
 import spacy
-from traiter.pattern_utils import add_ruler_patterns
+from traiter.pattern_util import add_ruler_patterns
+from traiter.tokenizer_util import breaking_prefix, breaking_suffix
 from traiter.pipes import cache, debug, dependency, sentence
 from traiter.pipes.entity_data import EntityData
 
@@ -21,12 +22,12 @@ from src.patterns.size import SIZE
 from src.patterns.subpart import SUBPART
 from src.patterns.subpart_linker import SUBPART_LINKER
 from src.patterns.suffix_count import SUFFIX_COUNT
-from src.pylib.consts import TERMS
+from src.pylib.const import TERMS
 
-MATCHERS = [MARGIN_SHAPE, PART_LOCATION, SHAPE, SIZE, SUFFIX_COUNT]
+MATCHERS = [MARGIN_SHAPE, PART_LOCATION, SUFFIX_COUNT]
 
 TERM_MATCHERS = [RANGE, SHARED]
-ENTITY_MATCHERS = [COLOR, COUNT, DESCRIPTOR, PART, PHRASE, REJECT, SUBPART]
+ENTITY_MATCHERS = [COLOR, COUNT, DESCRIPTOR, PART, PHRASE, REJECT, SHAPE, SIZE, SUBPART]
 LINKERS = [PART_LINKER, SUBPART_LINKER]
 
 DEBUG_COUNT = 0
@@ -35,17 +36,19 @@ DEBUG_COUNT = 0
 def trait_pipeline():
     """Setup the pipeline for extracting traits."""
     nlp = spacy.load('en_core_web_sm', exclude=['ner', 'lemmatizer'])
-    add_debug_pipes(nlp, 'after tokenizer', entities=False)  # #######################
-    add_term_ruler_pipe(nlp)
-    nlp.add_pipe('merge_entities', name='term_merger')
-    nlp.add_pipe('cache_label', after='term_merger')
-    # add_debug_pipes(nlp, 'after term_merger')  # ###################################
-    add_match_ruler_pipe(nlp)
+    breaking_prefix(nlp)
+    breaking_suffix(nlp)
+    add_debug_pipes(nlp, 'after tokenizer')  # #####################################
+    # add_term_ruler_pipe(nlp)
+    # nlp.add_pipe('merge_entities', name='term_merger')
+    # nlp.add_pipe('cache_label', after='term_merger')
+    # add_debug_pipes(nlp, 'before match_ruler')  # ##################################
+    # add_match_ruler_pipe(nlp)
     # add_debug_pipes(nlp, 'after match_ruler')  # ###################################
-    add_entity_data_pipe(nlp)
-    # add_debug_pipes(nlp, 'after entity_data')  # ###################################
-    add_linker_pipe(nlp)
-    # add_debug_pipes(nlp)    # ######################################################
+    # add_entity_data_pipe(nlp)
+    # add_debug_pipes(nlp, 'after entity_data', entities=True)  # ####################
+    # add_linker_pipe(nlp)
+    # add_debug_pipes(nlp, 'after linker', entities=True)  # #########################
     return nlp
 
 
@@ -77,7 +80,7 @@ def add_linker_pipe(nlp):
     nlp.add_pipe('dependency', name='part_linker', config=config)
 
 
-def add_debug_pipes(nlp, message='', tokens=True, entities=True):
+def add_debug_pipes(nlp, message='', tokens=True, entities=False):
     """Add pipes for debugging."""
     global DEBUG_COUNT
     DEBUG_COUNT += 1
