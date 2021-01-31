@@ -5,7 +5,7 @@ from typing import Dict, List
 # from spacy import displacy
 from traiter.util import shorten
 
-from src.pylib.pipeline import trait_pipeline
+from efloras.pylib.pipeline import trait_pipeline
 
 NLP = trait_pipeline()  # Singleton for testing
 

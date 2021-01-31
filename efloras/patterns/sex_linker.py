@@ -1,80 +1,85 @@
 """Link traits to body subparts."""
 
-import spacy
-from traiter.pipes.dependency import simple_linker
-from .part_linker import TRAITS, POS
+from traiter.pipes.dependency import NEAREST_LINKER
 
-SUBPART_LINKER = [
+from .part_linker import POS, TRAITS
+
+_TRAITS = TRAITS + 'part subpart'.split()
+
+SEX_LINKER = [
     {
-        'label': 'subpart_linker',
-        'on_match': 'subpart_linker.v1',
+        'label': 'sex_linker',
+        'after_match': {
+            'func': NEAREST_LINKER,
+            'kwargs': {'root': 'sex', 'exclude': ''}
+        },
         'patterns': [
-            # subpart >> trait
+            # sex >> trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '>>',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart < trait
+            # sex < trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '<',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart . trait
+            # sex . trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '.',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart . trait >> trait2
+            # sex . trait >> trait2
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '.',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
                 {
                     'LEFT_ID': 'trait1',
                     'REL_OP': '>>',
                     'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart . adj >> trait
+            # sex . adj >> trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '.',
                     'RIGHT_ID': 'adj1',
                     'RIGHT_ATTRS': {'POS': {'IN': POS}},
@@ -83,17 +88,17 @@ SUBPART_LINKER = [
                     'LEFT_ID': 'adj1',
                     'REL_OP': '>>',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart > adj >> trait
+            # sex > adj >> trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '>',
                     'RIGHT_ID': 'adj1',
                     'RIGHT_ATTRS': {'POS': {'IN': POS}},
@@ -102,36 +107,36 @@ SUBPART_LINKER = [
                     'LEFT_ID': 'adj1',
                     'REL_OP': '>>',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart < trait >> trait
+            # sex < trait >> trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': '<',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
                 {
                     'LEFT_ID': 'trait1',
                     'REL_OP': '>>',
                     'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
-            # subpart ; part < adj >> trait
+            # sex ; part < adj >> trait
             [
                 {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                    'RIGHT_ID': 'sex',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
                 },
                 {
-                    'LEFT_ID': 'subpart',
+                    'LEFT_ID': 'sex',
                     'REL_OP': ';',
                     'RIGHT_ID': 'part',
                     'RIGHT_ATTRS': {'POS': {'IN': POS}},
@@ -146,15 +151,9 @@ SUBPART_LINKER = [
                     'LEFT_ID': 'adj1',
                     'REL_OP': '>>',
                     'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': TRAITS}},
+                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
                 },
             ],
         ],
     },
 ]
-
-
-@spacy.registry.misc(SUBPART_LINKER[0]['on_match'])
-def body_subpart_linker(_, doc, idx, matches):
-    """Use an entity matcher for entity linking."""
-    simple_linker(_, doc, idx, matches, 'subpart', exclude='part')

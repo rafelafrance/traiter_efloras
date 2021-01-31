@@ -4,7 +4,7 @@ import re
 
 import spacy
 from traiter.const import CLOSE, CROSS, FLOAT_RE, INT_RE, OPEN, SLASH
-from traiter.pipes.entity_data import REJECT_MATCH, RejectMatch
+from traiter.entity_data_util import REJECT_MATCH, RejectMatch
 from traiter.util import to_positive_int
 
 from ..pylib.const import IS_RANGE, REPLACE
@@ -20,7 +20,21 @@ COUNT = [
         'patterns': [
             [
                 {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': 'per_count', 'OP': '?'},
+            ],
+            [
+                {'TEXT': {'IN': OPEN}},
+                {'ENT_TYPE': IS_RANGE},
+                {'TEXT': {'IN': CLOSE}},
+            ],
+        ],
+    },
+    {
+        'label': 'per_count',
+        'on_match': 'per_count.v1',
+        'patterns': [
+            [
+                {'ENT_TYPE': IS_RANGE},
+                {'ENT_TYPE': 'per_count'},
             ],
             [
                 {'ENT_TYPE': 'per_count'},
@@ -31,8 +45,14 @@ COUNT = [
                 {'TEXT': {'IN': OPEN}},
                 {'ENT_TYPE': IS_RANGE},
                 {'TEXT': {'IN': CLOSE}},
-                {'ENT_TYPE': 'per_count', 'OP': '?'},
+                {'ENT_TYPE': 'per_count'},
             ],
+        ],
+    },
+    {
+        'label': 'count_word',
+        'on_match': 'count_word.v1',
+        'patterns': [
             [
                 {'ENT_TYPE': 'count_word'},
             ],
@@ -56,26 +76,35 @@ COUNT = [
 @spacy.registry.misc(COUNT[0]['on_match'])
 def count(ent):
     """Enrich the match with data."""
+    ent._.data = range_values(ent)
+
+
+@spacy.registry.misc(COUNT[1]['on_match'])
+def per_count(ent):
+    """Enrich the match with data."""
+    ent._.data = range_values(ent)
+
+    if per_count_ := [t for t in ent if t._.cached_label == 'per_count']:
+        per_count_ = per_count_[0].lower_
+        ent._data['group'] = REPLACE.get(per_count_, per_count_)
+
+
+def range_values(ent):
+    """Extract values from the range and cached label."""
     data = {}
-
-    if word := [t.lower_ for t in ent if t._.cached_label == 'count_word']:
-        data['low'] = to_positive_int(REPLACE[word[0]])
-        return
-
     values = re.findall(FLOAT_RE, ent.text)
-    all_ints = all([re.search(INT_RE, v) for v in values])
-
-    if not all_ints:
+    if not all([re.search(INT_RE, v) for v in values]):
         raise RejectMatch
-
     range_ = [t for t in ent if t._.cached_label.split('.')[0] == 'range'][0]
     keys = range_._.cached_label.split('.')[1:]
-
     for key, value in zip(keys, values):
         data[key] = to_positive_int(value)
+    return data
 
-    if per_count := [t for t in ent if t._.cached_label == 'per_count']:
-        per_count = per_count[0].lower_
-        data['group'] = REPLACE.get(per_count, per_count)
 
-    ent._.data = data
+@spacy.registry.misc(COUNT[2]['on_match'])
+def count_word(ent):
+    """Enrich the match with data."""
+    word = [t.lower_ for t in ent if t._.cached_label == 'count_word']
+    ent._.data['low'] = to_positive_int(REPLACE[word[0]])
+    ent._.data['new_label'] = 'count'

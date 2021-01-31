@@ -14,8 +14,8 @@ import spacy
 from spacy.util import compounding, minibatch
 from traiter.pylib.util import now
 
-from src.pylib.const import LINK_STEP
-from src.pylib.pipeline import Pipeline
+from efloras.pylib.const import LINK_STEP
+from efloras.pylib.pipeline import Pipeline
 
 
 def main(args):

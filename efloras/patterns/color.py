@@ -4,9 +4,8 @@ import re
 
 import spacy
 from traiter.const import DASH, DASH_RE
-from traiter.pipes.entity_data import REJECT_MATCH
 
-from ..pylib.const import MISSING, REPLACE, REMOVE
+from ..pylib.const import MISSING, REMOVE, REPLACE
 
 SKIP = DASH + MISSING
 COLOR_ENTS = ['color', 'color_mod']

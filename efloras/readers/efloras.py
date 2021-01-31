@@ -7,8 +7,8 @@ from traiter.util import FLAGS  # pylint: disable=import-error
 
 import downloader
 import extract
-import src.pylib.util as util
-from src.patterns.part import PATTERN_RE
+import efloras.pylib.util as util
+from junk.part import PATTERN_RE
 
 _TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 

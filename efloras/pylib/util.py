@@ -2,7 +2,7 @@
 import csv
 from datetime import datetime
 
-from src.pylib.const import DATA_DIR, EFLORAS_FAMILIES
+from efloras.pylib.const import DATA_DIR, EFLORAS_FAMILIES
 
 CONVERT = {
     'cm': 10.0,

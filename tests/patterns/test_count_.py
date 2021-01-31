@@ -17,7 +17,7 @@ class TestCount(unittest.TestCase):
 
     def test_count_01(self):
         self.assertEqual(
-            test('Seeds [1–]3–12[–30]'),
+            test('Seeds [1–]3–12[–30].'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
              {'min': 1, 'low': 3, 'high': 12, 'max': 30,
               'trait': 'count', 'part': 'seed', 'start': 6, 'end': 19}]
@@ -26,7 +26,7 @@ class TestCount(unittest.TestCase):
     def test_count_02(self):
         """It parses a seed count."""
         self.assertEqual(
-            test('Seeds 3–12'),
+            test('Seeds 3–12.'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
              {'low': 3, 'high': 12, 'trait': 'count', 'part': 'seed',
               'start': 6, 'end': 10}]

@@ -4,7 +4,7 @@ import json
 
 from ..pylib.const import TERMS, TRAIT_STEP
 from ..patterns.matcher import MATCHERS
-from src.pylib.pipeline import Pipeline
+from efloras.pylib.pipeline import Pipeline
 
 LABELS = set()
 
