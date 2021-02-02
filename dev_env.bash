@@ -6,7 +6,7 @@ if [[ ! -z "$VIRTUAL_ENV" ]]; then
 fi
 
 rm -rf venv
-virtualenv -p python3.8 venv
+virtualenv -p python3.9 venv
 
 source ./venv/bin/activate
 
@@ -14,7 +14,7 @@ python -m pip install --upgrade pip setuptools wheel
 if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 if [ -f requirements_dev.txt ]; then pip install -r requirements_dev.txt; fi
 
-pip install -U spacy-nightly --pre
+pip install -U spacy
 python -m spacy download en_core_web_sm
 
 pip install -e ../traiter

@@ -3,9 +3,12 @@
 import re
 
 import spacy
-from traiter.const import DASH, DASH_RE
+from traiter.const import DASH
 
 from ..pylib.const import MISSING, REMOVE, REPLACE
+
+TEMP = ['\\' + c for c in DASH[:2]]
+MULTIPLE_DASHES = fr'[{"".join(TEMP)}]{{2,}}'
 
 SKIP = DASH + MISSING
 COLOR_ENTS = ['color', 'color_mod']
@@ -37,6 +40,6 @@ def color(ent):
     color_parts = {r: 1 for t in ent if (r := REPLACE.get(t.text, t.text))
                    not in SKIP and not REMOVE.get(t.lower_)}
     value = '-'.join(color_parts.keys())
-    value = re.sub(rf'\s*{DASH_RE}+\s*', r'-', value)
+    value = re.sub(rf'\s*{MULTIPLE_DASHES}\s*', r'-', value)
     data['color'] = REPLACE.get(value, value)
     ent._.data = data

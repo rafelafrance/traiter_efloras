@@ -2,7 +2,7 @@
 
 from traiter.pipes.dependency import NEAREST_LINKER
 
-TRAITS = ' color color_mod count location size shape '.split()
+TRAITS = ' color color_mod count location size shape sex '.split()
 
 POS = ' ADJ VERB '.split()
 

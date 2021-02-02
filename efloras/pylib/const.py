@@ -20,7 +20,6 @@ TERMS += Csv.trailing_dash(TERMS, label='color')
 TERMS.drop('imperial_length')
 
 REPLACE = TERMS.pattern_dict('replace')
-CATEGORY = TERMS.pattern_dict('category')
 REMOVE = TERMS.pattern_dict('remove')
 
 ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec ca """

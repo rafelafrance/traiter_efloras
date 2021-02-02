@@ -3,11 +3,13 @@
 import re
 
 import spacy
-from traiter.const import DASH, DASH_RE
+from traiter.const import DASH
 
 from ..pylib.const import IS_RANGE, REPLACE
 
-MULTIPLE_DASHES = fr'{DASH_RE}{DASH_RE}+'
+TEMP = ['\\' + c for c in DASH[:2]]
+MULTIPLE_DASHES = fr'[{"".join(TEMP)}]{{2,}}'
+
 _DASH_TO = DASH + ['to']
 
 SHAPE = [
@@ -54,14 +56,14 @@ SHAPE = [
 @spacy.registry.misc(SHAPE[0]['on_match'])
 def shape(ent):
     """Enrich a phrase match."""
-    parts = {r: 1 for t in ent
-             if (r := REPLACE.get(t.lower_, t.lower_))
+    parts = {r: 1 for t in ent.ents
+             if (r := REPLACE.get(t.text.lower(), t.text.lower()))
              and t._.cached_label in {'shape', 'shape_suffix'}}
     parts = [REPLACE.get(p, p) for p in parts]
     value = '-'.join(parts)
-    value = re.sub(MULTIPLE_DASHES, '-', value)
+    value = re.sub(rf'\s*{MULTIPLE_DASHES}\s*', r'-', value)
     value = REPLACE.get(value, value)
-    data = dict(shape=value)
+    data = {'shape': value}
     loc = [t.lower_ for t in ent if t._.cached_label == 'location']
     if loc:
         data['location'] = loc[0]

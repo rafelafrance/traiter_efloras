@@ -1,5 +1,6 @@
 """Link traits to body subparts."""
 
+from traiter.const import DASH
 from traiter.pipes.dependency import NEAREST_LINKER
 
 from .part_linker import POS, TRAITS
@@ -14,6 +15,25 @@ SUBPART_LINKER = [
             'kwargs': {'root': 'subpart', 'exclude': 'part'}
         },
         'patterns': [
+            # subpart ; dash ; count
+            [
+                {
+                    'RIGHT_ID': 'subpart',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
+                },
+                {
+                    'LEFT_ID': 'subpart',
+                    'REL_OP': ';',
+                    'RIGHT_ID': 'dash1',
+                    'RIGHT_ATTRS': {'TEXT': {'IN': DASH}},
+                },
+                {
+                    'LEFT_ID': 'dash1',
+                    'REL_OP': ';',
+                    'RIGHT_ID': 'trait1',
+                    'RIGHT_ATTRS': {'ENT_TYPE': 'count'},
+                },
+            ],
             # subpart >> trait
             [
                 {

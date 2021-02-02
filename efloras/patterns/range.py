@@ -1,123 +1,86 @@
 """Shared range patterns."""
-from traiter.const import CLOSE, CLOSE_RE, DASH, DASH_RE, FLOAT_RE, OPEN, OPEN_RE
 
-TO = ['to']
-CONJ = ['or', 'and']
-DASH_TO = DASH + TO
-DASH_TO_CONJ = DASH_TO + CONJ
+from traiter.const import CLOSE as CLOSE_, DASH as DASH_, FLOAT_RE, OPEN as OPEN_
 
-CONJ_RE = r'\s*(or|and)\s*'
+TO_ = ['to']
+CONJ_ = ['or', 'and']
 
-FLOAT_TKN = {'TEXT': {'REGEX': f'^{FLOAT_RE}$'}}
-OPEN_TKN = {'TEXT': {'IN': OPEN}}
-CLOSE_TKN = {'TEXT': {'IN': CLOSE}}
-DASH_TKN = {'TEXT': {'IN': DASH}}
-CONJ_TKN = {'LOWER': {'IN': CONJ}}
-
-CONJ_CLOSE_FLOAT = {'LOWER': {'REGEX': f'^{CONJ_RE}{CLOSE_RE}{FLOAT_RE}$'}}
-FLOAT_OPEN_CONJ = {'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{CONJ_RE}$'}}
-FLOAT_OPEN_DASH_FLOAT = {
-    'LOWER': {'REGEX': f'^{FLOAT_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$'}}
-FLOAT_CONJ_CLOSE_FLOAT = {'LOWER': {'REGEX': (
-    f'^{FLOAT_RE}{CONJ_RE}{CLOSE_RE}{FLOAT_RE}$')}}
-FLOAT_CONJ_CLOSE_FLOAT_DASH = {'LOWER': {'REGEX': (
-    f'^{FLOAT_RE}{CONJ_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}$')}}
-FLOAT_DASH_FLOAT = {'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}$'}}
-FLOAT_DASH_CLOSE_FLOAT = {
-    'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}$'}}
-FLOAT_DASH_OPEN_DASH_FLOAT = {
-    'LOWER': {'REGEX': f'^{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$'}}
-FLOAT_DASH_FLOAT_OPEN_CONJ = {'LOWER': {'REGEX': (
-    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{OPEN_RE}{CONJ_RE}$')}}
-FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT = {'LOWER': {'REGEX': (
-    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
-FLOAT_DASH_FLOAT_DASH_OPEN_DASH_FLOAT = {'TEXT': {'REGEX': (
-    f'^{FLOAT_RE}{DASH_RE}{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
-FLOAT_DASH_CLOSE_FLOAT_DASH_OPEN_DASH_FLOAT = {'TEXT': {'REGEX': (
-    f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
-FLOAT_DASH_CLOSE_FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT = {'LOWER': {'REGEX': (
-    f'^{FLOAT_RE}{DASH_RE}{CLOSE_RE}{FLOAT_RE}{DASH_RE}{FLOAT_RE}'
-    f'{OPEN_RE}{DASH_RE}{FLOAT_RE}$')}}
+NUM = {'TEXT': {'REGEX': f'^{FLOAT_RE}$'}}
+OPEN = {'TEXT': {'IN': OPEN_}}
+CLOSE = {'TEXT': {'IN': CLOSE_}}
+CONJ = {'LOWER': {'IN': CONJ_}}
+DASH = {'TEXT': {'IN': DASH_}}
+TO = {'LOWER': {'IN': DASH_ + TO_}}
+OR = {'LOWER': {'IN': DASH_ + TO_ + CONJ_}}
 
 RANGE = [
     {
         'label': 'range.low',
-        'patterns': [[FLOAT_TKN]],
+        'patterns': [[NUM]],
     },
     {
         'label': 'range.min.low',
         'patterns': [
-            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT],
-            [OPEN_TKN, FLOAT_TKN, CONJ_CLOSE_FLOAT],
+            [OPEN, NUM, OR, CLOSE, NUM],
         ],
     },
     {
         'label': 'range.low.high',
         'patterns': [
-            [FLOAT_TKN, DASH_TKN, FLOAT_TKN],
-            [FLOAT_TKN, CONJ_TKN, FLOAT_TKN],
-            [FLOAT_DASH_FLOAT],
-            [FLOAT_TKN, DASH_TKN, FLOAT_DASH_FLOAT],
-         ],
+            [NUM, CONJ, NUM],
+            [NUM, DASH, DASH, NUM],
+            [NUM, DASH, NUM, DASH, NUM],
+            [NUM, DASH, NUM],
+        ],
     },
     {
         'label': 'range.low.max',
         'patterns': [
-            [FLOAT_TKN, OPEN_TKN, CONJ_TKN, FLOAT_TKN, CLOSE_TKN],
-            [FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN],
-            [FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN],
+            [NUM, OPEN, CONJ, NUM, CLOSE],
+            [NUM, OPEN, DASH, NUM, CLOSE],
         ],
     },
     {
         'label': 'range.min.low.high',
         'patterns': [
-            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT, DASH_TKN, FLOAT_TKN],
-            [OPEN_TKN, FLOAT_TKN, CONJ_CLOSE_FLOAT, CONJ_TKN, FLOAT_TKN],
-            [OPEN_TKN, FLOAT_TKN, CONJ_TKN, CLOSE_TKN, FLOAT_TKN, CONJ_TKN, FLOAT_TKN],
-            [FLOAT_TKN, DASH_TKN, FLOAT_DASH_OPEN_DASH_FLOAT, CLOSE_TKN],
+            [NUM, DASH, NUM, DASH, OPEN, DASH, NUM, CLOSE],
+            [NUM, OPEN, CONJ, NUM, TO, NUM, CLOSE],
+            [OPEN, NUM, CONJ, CLOSE, NUM, CONJ, NUM],
+            [OPEN, NUM, DASH, CLOSE, NUM, DASH, NUM],
+            [OPEN, NUM, OR, CLOSE, NUM, DASH, CONJ, NUM],
         ],
     },
     {
         'label': 'range.min.low.max',
         'patterns': [
-            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT_DASH_OPEN_DASH_FLOAT, CLOSE_TKN],
+            [OPEN, NUM, DASH, CLOSE, NUM, DASH, OPEN, DASH, NUM, CLOSE],
+            [NUM, DASH, CONJ, NUM, TO, NUM],
         ],
-        #         MIN_VAL + OR_LOW + DASH_MAX,
     },
     {
         'label': 'range.low.high.max',
         'patterns': [
-            [FLOAT_TKN, CONJ_TKN, FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN],
-            [FLOAT_TKN, CONJ_TKN, FLOAT_TKN, OPEN_TKN, CONJ_TKN, FLOAT_TKN, CLOSE_TKN],
-            [FLOAT_DASH_FLOAT, CONJ_TKN, FLOAT_TKN],
-            [FLOAT_DASH_FLOAT_DASH_OPEN_DASH_FLOAT, CLOSE_TKN],
-            [FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN],
+            [NUM, CONJ, NUM, OPEN, CONJ, NUM, CLOSE],
+            [NUM, DASH, NUM, CONJ, NUM],
+            [NUM, DASH, NUM, DASH, OPEN, DASH, NUM, CLOSE],
+            [NUM, DASH, NUM, OPEN, DASH, NUM, CLOSE],
+            [NUM, DASH, CONJ, NUM, OPEN, OR, NUM, CLOSE],
+            [NUM, TO, NUM, CONJ, NUM],
+            [NUM, OPEN, CONJ, NUM, OR, NUM, CLOSE],
         ],
-        #         LOW + OR_HIGH + MAX,        #         LOW + HIGH + OR_MAX,
-        #         LOW + OPEN_HIGH + CLOSE_MAX,
     },
     {
         'label': 'range.min.low.high.max',
         'patterns': [
-            [FLOAT_TKN, CONJ_TKN, FLOAT_DASH_FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN],
-            [OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT_DASH_FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN],
-            [
-                OPEN_TKN, FLOAT_DASH_CLOSE_FLOAT, DASH_TKN,
-                FLOAT_OPEN_DASH_FLOAT, CLOSE_TKN,
-            ],
-            [
-                OPEN_TKN, FLOAT_CONJ_CLOSE_FLOAT_DASH,
-                CONJ_TKN, FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN,
-            ],
-            [
-                OPEN_TKN, FLOAT_CONJ_CLOSE_FLOAT,
-                DASH_TKN, CONJ_TKN, FLOAT_OPEN_CONJ, FLOAT_TKN, CLOSE_TKN,
-            ],
+            [NUM, CONJ, NUM, DASH, NUM, OPEN, OR, NUM, CLOSE],
+            [OPEN, NUM, CONJ, CLOSE, NUM, DASH, CONJ, NUM, OPEN, CONJ, NUM, CLOSE],
+            [OPEN, NUM, DASH, CLOSE, NUM, DASH, NUM, OPEN, DASH, NUM, CLOSE],
+            [OPEN, NUM, DASH, CLOSE, NUM, DASH,NUM, OPEN, DASH, NUM, CLOSE],
+            [OPEN, NUM, OR, CLOSE, NUM, DASH, CONJ, NUM, OPEN, OR, NUM, CLOSE],
+            [NUM, NUM, TO, CONJ, NUM, OPEN, OR, NUM, CLOSE],
+            [NUM, DASH, CONJ, NUM, TO, NUM, OPEN, OR, NUM, CLOSE],
+            [NUM, DASH, CONJ, NUM, DASH, CONJ, NUM, TO, NUM],
+            [NUM, TO, NUM, OPEN, OR, NUM, CLOSE, OPEN, OR, NUM, CLOSE],
         ],
-        #         # MIN + LOW + OR_HIGH + MAX,
-        #         # MIN_VAL + LOW + HIGH + MAX,
-        #         # MIN_VAL + OR_LOW + HIGH + MAX,
-        #         # MIN_VAL + OR_LOW + OR_HIGH + DASH_MAX,
-        #         # MIN_VAL + DASH_LOW + HIGH_PARENS + MAX,
     },
 ]
