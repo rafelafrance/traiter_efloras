@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, OPEN, SLASH
 from traiter.terms.csv_ import Csv
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
@@ -12,6 +13,8 @@ DATA_DIR = BASE_DIR / 'data'
 EFLORAS_DIR = DATA_DIR / 'eFloras'
 EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
 
+# #########################################################################
+# Term related constants
 TERM_PATH = BASE_DIR / 'efloras' / 'vocabulary' / 'terms.csv'
 TERMS = Csv.shared('colors units')
 TERMS += Csv.read_csv(TERM_PATH)
@@ -22,8 +25,31 @@ TERMS.drop('imperial_length')
 REPLACE = TERMS.pattern_dict('replace')
 REMOVE = TERMS.pattern_dict('remove')
 
-ABBREVS = """Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec ca """
+# #########################################################################
+# Tokenizer constants
+ABBREVS = """
+    Jan. Feb. Mar. Apr. Jun. Jul. Aug. Sep. Sept. Oct. Nov. Dec.
+    ca. """.split()
 
+# #########################################################################
+# Pattern related constants
+CONJ = ['or', 'and']
+TO = ['to']
 MISSING = """ without missing lack lacking except excepting not rarely """.split()
 
-IS_RANGE = {'REGEX': '^range'}
+COMMON_PATTERNS = {
+    '(': {'TEXT': {'IN': OPEN}},
+    ')': {'TEXT': {'IN': CLOSE}},
+    '-': {'TEXT': {'IN': DASH}},
+    '/': {'TEXT': {'IN': SLASH}},
+    ',': {'TEXT': {'IN': COMMA}},
+    'to': {'LOWER': {'IN': TO}},
+    '-/or': {'LOWER': {'IN': DASH + TO + CONJ}},
+    '-/to': {'LOWER': {'IN': DASH + TO}},
+    'and/or': {'LOWER': {'IN': CONJ}},
+    'missing': {'LOWER': {'IN': MISSING}},
+    '9': {'IS_DIGIT': True},
+    '99.9': {'TEXT': {'REGEX': FLOAT_TOKEN_RE}},
+    '99-99': {'ENT_TYPE': {'REGEX': '^range'}},
+    '99.9-99.9': {'ENT_TYPE': {'REGEX': '^range'}},
+}

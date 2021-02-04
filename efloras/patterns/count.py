@@ -3,83 +3,58 @@
 import re
 
 import spacy
-from traiter.const import CLOSE, CROSS, DASH, FLOAT_RE, INT_TOKEN_RE, OPEN, SLASH
+from traiter.const import CROSS, FLOAT_RE, INT_TOKEN_RE, SLASH
+from traiter.matcher_compiler import MatcherCompiler
 from traiter.pipe_util import REJECT_MATCH, RejectMatch
 from traiter.util import to_positive_int
 
-from ..pylib.const import IS_RANGE, REPLACE
+from ..pylib.const import COMMON_PATTERNS, REPLACE
 
 NOT_COUNT_WORDS = CROSS + SLASH + """ average side times days weeks by """.split()
-
 NOT_COUNT_ENTS = """ imperial_length metric_mass imperial_mass """.split()
+
+COMPILE = MatcherCompiler(COMMON_PATTERNS | {
+    'adp': {'POS': {'IN': ['ADP']}},
+    'count_suffix': {'ENT_TYPE': 'count_suffix'},
+    'count_word': {'ENT_TYPE': 'count_word'},
+    'not_count_ent': {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}},
+    'not_count_word': {'LOWER': {'IN': NOT_COUNT_WORDS}},
+    'per_count': {'ENT_TYPE': 'per_count'},
+})
 
 COUNT = [
     {
         'label': 'count',
-        'after_match': {'func': 'count.v1'},
-        'patterns': [
-            [
-                {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': 'per_count', 'OP': '?'},
-                {'ENT_TYPE': 'count_suffix', 'OP': '?'},
-            ],
-            [
-                {'ENT_TYPE': IS_RANGE},
-                {'TEXT': {'IN': DASH}, 'OP': '?'},
-                {'ENT_TYPE': 'per_count', 'OP': '?'},
-            ],
-            [
-                {'ENT_TYPE': 'per_count'},
-                {'POS': {'IN': ['ADP']}, 'OP': '?'},
-                {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': 'count_suffix', 'OP': '?'},
-            ],
-            [
-                {'TEXT': {'IN': OPEN}},
-                {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': 'count_suffix', 'OP': '?'},
-                {'TEXT': {'IN': CLOSE}},
-                {'ENT_TYPE': 'per_count'},
-            ],
-        ],
+        'on_match': 'count.v1',
+        'patterns': COMPILE(
+            '99-99 -? per_count?',
+            '99-99 per_count count_suffix?',
+            'per_count adp? 99-99 count_suffix?',
+            '( 99-99 count_suffix? ) per_count',
+        ),
     },
     {
         'label': 'count_word',
-        'after_match': {'func': 'count_word.v1'},
-        'patterns': [
-            [
-                {'ENT_TYPE': 'count_word'},
-            ],
-        ],
+        'on_match': 'count_word.v1',
+        'patterns': COMPILE(
+            'count_word',
+        )
     },
     {
         'label': '_not_a_count',
-        'after_match': {'func': REJECT_MATCH},
-        'patterns': [
-            [
-                {'ENT_TYPE': IS_RANGE},
-                {'LOWER': {'IN': NOT_COUNT_WORDS}},
-                {'ENT_TYPE': IS_RANGE, 'OP': '?'},
-            ],
-            [
-                {'ENT_TYPE': IS_RANGE},
-                {'LOWER': {'IN': NOT_COUNT_WORDS}},
-                {'ENT_TYPE': IS_RANGE, 'OP': '?'},
-                {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}, 'OP': '?'},
-            ],
-            [
-                {'ENT_TYPE': IS_RANGE},
-                {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}},
-            ],
-        ],
+        'on_match': REJECT_MATCH,
+        'patterns': COMPILE(
+            '99-99 not_count_ent',
+            '99-99 not_count_word 99-99? not_count_ent?',
+            '9 / 9',
+        ),
     },
 ]
 
 
-@spacy.registry.misc(COUNT[0]['after_match']['func'])
+@spacy.registry.misc(COUNT[0]['on_match'])
 def count(ent):
     """Enrich the match with data."""
-    print('count', ent)
     range_ = range_values(ent)
 
     if per_count_ := [e for e in ent.ents if e.label_ == 'per_count']:
@@ -87,7 +62,7 @@ def count(ent):
         range_._.data['group'] = REPLACE.get(per_count_, per_count_)
 
 
-@spacy.registry.misc(COUNT[1]['after_match']['func'])
+@spacy.registry.misc(COUNT[1]['on_match'])
 def count_word(ent):
     """Enrich the match with data."""
     ent._.new_label = 'count'

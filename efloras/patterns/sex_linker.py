@@ -1,159 +1,35 @@
 """Link traits to body subparts."""
 
-from traiter.pipes.dependency import NEAREST_LINKER
+from traiter.dependency_compiler import DependencyCompiler
+from traiter.pipes.dependency import NEAREST_ANCHOR
 
-from .part_linker import POS, TRAITS
+TRAITS = ' color color_mod count location part size shape sex subpart '.split()
+POS = ' ADJ VERB '.split()
 
-_TRAITS = TRAITS + 'part subpart'.split()
+COMPILE = DependencyCompiler({
+    'sex': {'ENT_TYPE': 'sex'},
+    'trait': {'ENT_TYPE': {'IN': TRAITS}},
+    'adj': {'POS': {'IN': POS}},
+    'count': {'ENT_TYPE': 'count'},
+    'part': {'ENT_TYPE': 'part'},
+})
 
 SEX_LINKER = [
     {
         'label': 'sex_linker',
-        'after_match': {
-            'func': NEAREST_LINKER,
-            'kwargs': {'root': 'sex', 'exclude': ''}
+        'on_match': {
+            'func': NEAREST_ANCHOR,
+            'kwargs': {'anchor': 'sex', 'exclude': ''}
         },
-        'patterns': [
-            # sex >> trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex < trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex . trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex . trait >> trait2
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-                {
-                    'LEFT_ID': 'trait1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex . adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex > adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '>',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex < trait >> trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-                {
-                    'LEFT_ID': 'trait1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # sex ; part < adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'sex',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'sex'},
-                },
-                {
-                    'LEFT_ID': 'sex',
-                    'REL_OP': ';',
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-        ],
+        'patterns': COMPILE(
+            'sex >> trait',
+            'sex <  trait',
+            'sex .  trait',
+            'sex .  trait >> trait',
+            'sex .  adj   >> trait',
+            'sex >  adj   >> trait',
+            'sex <  trait >> trait',
+            'sex ;  part  <  adj >> trait',
+        ),
     },
 ]

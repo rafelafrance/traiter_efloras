@@ -1,86 +1,85 @@
 """Shared range patterns."""
 
-from traiter.const import CLOSE as CLOSE_, DASH as DASH_, FLOAT_RE, OPEN as OPEN_
+from traiter.matcher_compiler import MatcherCompiler
+from traiter.pipe_util import REJECT_MATCH
 
-TO_ = ['to']
-CONJ_ = ['or', 'and']
+from ..pylib.const import COMMON_PATTERNS
 
-NUM = {'TEXT': {'REGEX': f'^{FLOAT_RE}$'}}
-OPEN = {'TEXT': {'IN': OPEN_}}
-CLOSE = {'TEXT': {'IN': CLOSE_}}
-CONJ = {'LOWER': {'IN': CONJ_}}
-DASH = {'TEXT': {'IN': DASH_}}
-TO = {'LOWER': {'IN': DASH_ + TO_}}
-OR = {'LOWER': {'IN': DASH_ + TO_ + CONJ_}}
+COMPILE = MatcherCompiler(COMMON_PATTERNS)
 
 RANGE = [
     {
         'label': 'range.low',
-        'patterns': [[NUM]],
+        'patterns': COMPILE('99.9'),
     },
     {
         'label': 'range.min.low',
-        'patterns': [
-            [OPEN, NUM, OR, CLOSE, NUM],
-        ],
+        'patterns': COMPILE(
+            '( 99.9 -/or ) 99.9',
+            '( 99.9 -/to ) 99.9',
+        ),
     },
     {
         'label': 'range.low.high',
-        'patterns': [
-            [NUM, CONJ, NUM],
-            [NUM, DASH, DASH, NUM],
-            [NUM, DASH, NUM, DASH, NUM],
-            [NUM, DASH, NUM],
-        ],
+        'patterns': COMPILE(
+            '99.9 and/or 99.9',
+            '99.9 -/to   99.9',
+        ),
     },
     {
         'label': 'range.low.max',
-        'patterns': [
-            [NUM, OPEN, CONJ, NUM, CLOSE],
-            [NUM, OPEN, DASH, NUM, CLOSE],
-        ],
+        'patterns': COMPILE(
+            '99.9 ( and/or 99.9 )',
+            '99.9 ( -/to   99.9 )',
+        ),
     },
     {
         'label': 'range.min.low.high',
-        'patterns': [
-            [NUM, DASH, NUM, DASH, OPEN, DASH, NUM, CLOSE],
-            [NUM, OPEN, CONJ, NUM, TO, NUM, CLOSE],
-            [OPEN, NUM, CONJ, CLOSE, NUM, CONJ, NUM],
-            [OPEN, NUM, DASH, CLOSE, NUM, DASH, NUM],
-            [OPEN, NUM, OR, CLOSE, NUM, DASH, CONJ, NUM],
-        ],
+        'patterns': COMPILE(
+            '( 99.9   -/or )   99.9 -/to     99.9',
+            '( 99.9   -/or )   99.9 - and/or 99.9',
+            '( 99.9   and/or ) 99.9   and/or 99.9',
+            '  99.9 ( and/or   99.9    -/to  99.9 )',
+        ),
     },
     {
         'label': 'range.min.low.max',
-        'patterns': [
-            [OPEN, NUM, DASH, CLOSE, NUM, DASH, OPEN, DASH, NUM, CLOSE],
-            [NUM, DASH, CONJ, NUM, TO, NUM],
-        ],
+        'patterns': COMPILE(
+            '( 99.9 - ) 99.9 - ( -/to 99.9 )',
+            '  99.9 -   99.9 - ( -/to 99.9 )',
+            '  99.9 - and/or 99.9 -/to 99.9',
+        ),
     },
     {
         'label': 'range.low.high.max',
-        'patterns': [
-            [NUM, CONJ, NUM, OPEN, CONJ, NUM, CLOSE],
-            [NUM, DASH, NUM, CONJ, NUM],
-            [NUM, DASH, NUM, DASH, OPEN, DASH, NUM, CLOSE],
-            [NUM, DASH, NUM, OPEN, DASH, NUM, CLOSE],
-            [NUM, DASH, CONJ, NUM, OPEN, OR, NUM, CLOSE],
-            [NUM, TO, NUM, CONJ, NUM],
-            [NUM, OPEN, CONJ, NUM, OR, NUM, CLOSE],
-        ],
+        'patterns': COMPILE(
+            '99.9 ( and/or 99.9 -/or 99.9 )',
+            '99.9 - 99.9   ( -/to 99.9 )',
+            '99.9 - 99.9 - ( -/to 99.9 )',
+            '99.9 - 99.9 - 99.9',
+            '99.9 -/to 99.9 and/or 99.9',
+            '99.9 - and/or 99.9 ( -/or 99.9 )',
+            '99.9 and/or 99.9 ( and/or 99.9 )',
+        ),
     },
     {
         'label': 'range.min.low.high.max',
-        'patterns': [
-            [NUM, CONJ, NUM, DASH, NUM, OPEN, OR, NUM, CLOSE],
-            [OPEN, NUM, CONJ, CLOSE, NUM, DASH, CONJ, NUM, OPEN, CONJ, NUM, CLOSE],
-            [OPEN, NUM, DASH, CLOSE, NUM, DASH, NUM, OPEN, DASH, NUM, CLOSE],
-            [OPEN, NUM, DASH, CLOSE, NUM, DASH,NUM, OPEN, DASH, NUM, CLOSE],
-            [OPEN, NUM, OR, CLOSE, NUM, DASH, CONJ, NUM, OPEN, OR, NUM, CLOSE],
-            [NUM, NUM, TO, CONJ, NUM, OPEN, OR, NUM, CLOSE],
-            [NUM, DASH, CONJ, NUM, TO, NUM, OPEN, OR, NUM, CLOSE],
-            [NUM, DASH, CONJ, NUM, DASH, CONJ, NUM, TO, NUM],
-            [NUM, TO, NUM, OPEN, OR, NUM, CLOSE, OPEN, OR, NUM, CLOSE],
-        ],
+        'patterns': COMPILE(
+            '( 99.9 - ) 99.9 - 99.9 ( -/to 99.9 )',
+            '( 99.9 -/or ) 99.9 - and/or 99.9 ( -/or 99.9 )',
+            '( 99.9 and/or ) 99.9 - and/or 99.9 ( and/or 99.9 )',
+            '99.9 - and/or 99.9 - and/or 99.9 -/to 99.9',
+            '99.9 - and/or 99.9 -/to 99.9 ( -/or 99.9 )',
+            '99.9 -/to 99.9 ( -/or 99.9 ) ( -/or 99.9 )',
+            '99.9 99.9 -/to and/or 99.9 ( -/or 99.9 )',
+            '99.9 and/or 99.9 - 99.9 ( -/or 99.9 )',
+        ),
+    },
+    {
+        'label': 'not_a_range',
+        'on_match': REJECT_MATCH,
+        'patterns': COMPILE(
+            '9 / 9',
+        ),
     },
 ]

@@ -1,179 +1,38 @@
 """Link traits to body subparts."""
 
 from traiter.const import DASH
-from traiter.pipes.dependency import NEAREST_LINKER
+from traiter.dependency_compiler import DependencyCompiler
+from traiter.pipes.dependency import NEAREST_ANCHOR
 
-from .part_linker import POS, TRAITS
+TRAITS = ' color color_mod count location margin_shape size shape sex '.split()
+POS = ' ADJ VERB '.split()
 
-_TRAITS = TRAITS
+COMPILE = DependencyCompiler({
+    'subpart': {'ENT_TYPE': 'subpart'},
+    'part': {'ENT_TYPE': 'part'},
+    'trait': {'ENT_TYPE': {'IN': TRAITS}},
+    'adj': {'POS': {'IN': POS}},
+    'count': {'ENT_TYPE': 'count'},
+    'dash': {'TEXT': {'IN': DASH}},
+})
 
 SUBPART_LINKER = [
     {
         'label': 'subpart_linker',
-        'after_match': {
-            'func': NEAREST_LINKER,
-            'kwargs': {'root': 'subpart', 'exclude': 'part'}
+        'on_match': {
+            'func': NEAREST_ANCHOR,
+            'kwargs': {'anchor': 'subpart', 'exclude': 'part'}
         },
-        'patterns': [
-            # subpart ; dash ; count
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': ';',
-                    'RIGHT_ID': 'dash1',
-                    'RIGHT_ATTRS': {'TEXT': {'IN': DASH}},
-                },
-                {
-                    'LEFT_ID': 'dash1',
-                    'REL_OP': ';',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'count'},
-                },
-            ],
-            # subpart >> trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart < trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart . trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart . trait >> trait2
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-                {
-                    'LEFT_ID': 'trait1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart . adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart > adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '>',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart < trait >> trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-                {
-                    'LEFT_ID': 'trait1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # subpart ; part < adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'subpart',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'subpart'},
-                },
-                {
-                    'LEFT_ID': 'subpart',
-                    'REL_OP': ';',
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-        ],
-    },
+        'patterns': COMPILE(
+            'subpart ; dash ; count',
+            'subpart >> trait',
+            'subpart <  trait',
+            'subpart .  trait',
+            'subpart .  trait >> trait',
+            'subpart .  adj   >> trait',
+            'subpart >  adj   >> trait',
+            'subpart <  trait >> trait',
+            'subpart ;  part   < adj >> trait',
+        ),
+     },
 ]

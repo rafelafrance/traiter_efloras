@@ -209,9 +209,9 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test('<base truncate to cordate>'),
             [{'subpart': 'base', 'trait': 'subpart', 'start': 1, 'end': 5},
-             {'shape': 'truncate', 'trait': 'shape', 'part': 'plant',
+             {'shape': 'truncate', 'trait': 'shape',
               'subpart': 'base', 'start': 6, 'end': 14},
-             {'shape': 'cordate', 'trait': 'shape', 'part': 'plant',
+             {'shape': 'cordate', 'trait': 'shape',
               'subpart': 'base', 'start': 18, 'end': 25}]
         )
 
@@ -219,9 +219,9 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test('<base truncate to cordate>'),
             [{'subpart': 'base', 'trait': 'subpart', 'start': 1, 'end': 5},
-             {'shape': 'truncate', 'trait': 'shape', 'part': 'plant',
+             {'shape': 'truncate', 'trait': 'shape',
               'subpart': 'base', 'start': 6, 'end': 14},
-             {'shape': 'cordate', 'trait': 'shape', 'part': 'plant',
+             {'shape': 'cordate', 'trait': 'shape',
               'subpart': 'base', 'start': 18, 'end': 25}]
         )
 
@@ -247,8 +247,8 @@ class TestShape(unittest.TestCase):
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
              {'color': 'purple', 'trait': 'color', 'part': 'petal',
               'start': 7, 'end': 13},
-             {'start': 15, 'end': 23, 'low': 2, 'trait': 'count',
-              'part': 'petal', 'subpart': 'lobe'}]
+             {'start': 15, 'end': 23, 'trait': 'shape', 'shape': 'bilobate',
+              'part': 'petal'}]
         )
 
     def test_shape_22(self):

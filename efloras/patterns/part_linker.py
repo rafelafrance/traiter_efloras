@@ -1,156 +1,33 @@
 """Link traits to body parts."""
 
-from traiter.pipes.dependency import NEAREST_LINKER
+from traiter.dependency_compiler import DependencyCompiler
+from traiter.pipes.dependency import NEAREST_ANCHOR
 
-TRAITS = ' color color_mod count location size shape sex '.split()
-
+TRAITS = ' color color_mod count location size shape sex subpart '.split()
 POS = ' ADJ VERB '.split()
 
-_TRAITS = TRAITS + ' subpart '.split()
-
+COMPILE = DependencyCompiler({
+    'part': {'ENT_TYPE': 'part'},
+    'trait': {'ENT_TYPE': {'IN': TRAITS}},
+    'adj': {'POS': {'IN': POS}},
+})
 
 PART_LINKER = [
     {
         'label': 'part_linker',
-        'after_match': {
-            'func': NEAREST_LINKER,
-            'kwargs': {'root': 'part', 'exclude': ''}
+        'on_match': {
+            'func': NEAREST_ANCHOR,
+            'kwargs': {'anchor': 'part', 'exclude': ''}
         },
-        'patterns': [
-            # part >> trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part < trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part . trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part . trait >> trait2
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-                {
-                    'LEFT_ID': 'trait1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part . adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '.',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part < adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part > adj >> trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '>',
-                    'RIGHT_ID': 'adj1',
-                    'RIGHT_ATTRS': {'POS': {'IN': POS}},
-                },
-                {
-                    'LEFT_ID': 'adj1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-            # part < trait >> trait
-            [
-                {
-                    'RIGHT_ID': 'part',
-                    'RIGHT_ATTRS': {'ENT_TYPE': 'part'},
-                },
-                {
-                    'LEFT_ID': 'part',
-                    'REL_OP': '<',
-                    'RIGHT_ID': 'trait1',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-                {
-                    'LEFT_ID': 'trait1',
-                    'REL_OP': '>>',
-                    'RIGHT_ID': 'trait2',
-                    'RIGHT_ATTRS': {'ENT_TYPE': {'IN': _TRAITS}},
-                },
-            ],
-        ],
+        'patterns': COMPILE(
+            'part <  trait',
+            'part .  trait',
+            'part >> trait',
+            'part .  trait >> trait',
+            'part .  adj   >> trait',
+            'part <  adj   >> trait',
+            'part >  adj   >> trait',
+            'part <  trait >> trait',
+        ),
     },
 ]

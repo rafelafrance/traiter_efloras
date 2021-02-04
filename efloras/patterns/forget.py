@@ -1,19 +1,27 @@
 """Traits to reject."""
 
 from traiter.pipe_util import REJECT_MATCH
-from ..pylib.const import IS_RANGE
+from ..pylib.const import COMMON_PATTERNS
+from traiter.matcher_compiler import MatcherCompiler
 
 
-REJECTS = """ color_mod dimension imperial_length imperial_mass metric_mass 
-    shape_leader shape_suffix surface per_count """.split()
+REJECTS = """ about color_mod dimension imperial_length imperial_mass
+    margin_leader
+    metric_length metric_mass not_a_range per_count quest
+    shape_leader shape_suffix surface """.split()
+
+COMPILE = MatcherCompiler(COMMON_PATTERNS | {
+    'reject': {'ENT_TYPE': {'IN': REJECTS}}
+})
+
 
 FORGET = [
     {
         'label': 'color_mod',
         'on_match': REJECT_MATCH,
-        'patterns': [
-            [{'ENT_TYPE': {'IN': REJECTS}, 'OP': '+'}],
-            [{'ENT_TYPE': IS_RANGE}],
-        ],
+        'patterns': COMPILE(
+            'reject',
+            '99-99',
+        ),
     },
 ]

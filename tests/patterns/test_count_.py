@@ -29,9 +29,10 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test('blade 5–10 × 4–9 cm'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 5, 'length_high': 10,
-              'width_low': 4, 'width_high': 9, 'width_units': 'cm',
-              'trait': 'size', 'part': 'leaf', 'start': 6, 'end': 19}]
+             {'length_low': 5.0, 'length_high': 10.0, 'length_units': 'cm',
+              'trait': 'size', 'start': 6, 'end': 10, 'part': 'leaf'},
+             {'width_low': 4.0, 'width_high': 9.0, 'width_units': 'cm',
+              'trait': 'size', 'start': 13, 'end': 16, 'part': 'leaf'}]
         )
 
     def test_count_04(self):
@@ -54,17 +55,19 @@ class TestCount(unittest.TestCase):
     def test_count_06(self):
         self.assertEqual(
             test('Staminate flowers (3–)5–10(–20)'),
-            [{'sex': 'male', 'part': 'flower', 'trait': 'sex', 'start': 0, 'end': 9},
-             {'part': 'flower', 'trait': 'part', 'start': 10, 'end': 17, 'sex': 'male'},
+            [{'sex': 'staminate', 'part': 'flower', 'trait': 'sex',
+              'start': 0, 'end': 9},
+             {'part': 'flower', 'trait': 'part', 'start': 10, 'end': 17,
+              'sex': 'staminate'},
              {'min': 3, 'low': 5, 'high': 10, 'max': 20,
               'trait': 'count', 'start': 18, 'end': 31,
-              'part': 'flower', 'sex': 'male'}]
+              'part': 'flower', 'sex': 'staminate'}]
         )
 
     def test_count_07(self):
         self.assertEqual(
             test('Ovaries (4 or)5,'),
-            [{'part': 'ovary', 'trait': 'part',  'start': 0, 'end': 7},
+            [{'part': 'ovary', 'trait': 'part', 'start': 0, 'end': 7},
              {'min': 4, 'low': 5, 'trait': 'count', 'part': 'ovary',
               'start': 8, 'end': 15}]
         )
@@ -102,9 +105,7 @@ class TestCount(unittest.TestCase):
             test('Male flowers with 2-8(-20) stamens;'),
             [{'sex': 'male', 'trait': 'sex', 'start': 0, 'end': 4, 'part': 'flower'},
              {'part': 'flower', 'trait': 'part', 'start': 5, 'end': 12, 'sex': 'male'},
-             {'low': 2, 'trait': 'count', 'start': 18, 'end': 19,
-              'part': 'flower', 'sex': 'male'},
-             {'low': 8, 'max': 20, 'trait': 'count', 'start': 20, 'end': 26,
+             {'low': 2, 'high': 8, 'max': 20, 'trait': 'count', 'start': 18, 'end': 26,
               'part': 'stamen', 'sex': 'male'},
              {'part': 'stamen', 'trait': 'part', 'start': 27, 'end': 34, 'sex': 'male'}]
         )
@@ -147,30 +148,35 @@ class TestCount(unittest.TestCase):
             test("""
                 Pistillate flowers: hyaline bristle at apex of hypanthial
                 aculei 0.5–1 times as long as opaque base."""),
-            [{'sex': 'female', 'trait': 'sex', 'start': 0, 'end': 10, 'part': 'flower'},
+            [{'sex': 'pistillate', 'trait': 'sex', 'start': 0, 'end': 10,
+              'part': 'flower'},
              {'part': 'flower', 'trait': 'part', 'start': 11, 'end': 18,
-              'sex': 'female'},
+              'sex': 'pistillate'},
              {'subpart': 'apex', 'trait': 'subpart', 'start': 39, 'end': 43,
-              'part': 'flower', 'sex': 'female'},
+              'part': 'flower', 'sex': 'pistillate'},
              {'subpart': 'aculeus', 'trait': 'subpart', 'start': 58, 'end': 64,
-              'part': 'flower', 'sex': 'female'},
+              'part': 'flower', 'sex': 'pistillate'},
              {'subpart': 'base', 'trait': 'subpart', 'start': 95, 'end': 99,
-              'part': 'flower', 'sex': 'female'}]
+              'part': 'flower', 'sex': 'pistillate'}]
         )
 
     def test_count_18(self):
         self.assertEqual(
             test('rarely 1- or 5-7-foliolate;'),
-            [{'min': 1, 'low': 5, 'high': 7, 'trait': 'count', 'part': 'leaflet',
-              'start': 7, 'end': 26}]
+            [{'min': 1, 'low': 5, 'max': 7, 'trait': 'count', 'start': 7, 'end': 16,
+              'subpart': 'leaflet'},
+             {'subpart': 'leaflet', 'trait': 'subpart', 'start': 17, 'end': 26}]
+
         )
 
     def test_count_19(self):
         self.assertEqual(
             test('Leaves imparipinnate, 5- or 7(or 9)-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 5, 'high': 7, 'max': 9, 'trait': 'count', 'part': 'leaflet',
-              'start': 22, 'end': 45}]
+             {'low': 5, 'high': 7, 'max': 9, 'trait': 'count',
+              'start': 22, 'end': 35, 'part': 'leaf', 'subpart': 'leaflet'},
+             {'subpart': 'leaflet', 'trait': 'subpart', 'start': 36, 'end': 45,
+              'part': 'leaf'}]
         )
 
     def test_count_20(self):
@@ -185,16 +191,18 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test('Racemes compact, 1- or 2- or 5-7-flowered'),
             [{'part': 'inflorescence', 'trait': 'part', 'start': 0, 'end': 7},
-             {'min': 1, 'low': 2, 'high': 5, 'max': 7,
-              'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
-              'start': 17, 'end': 41}]
+             {'min': 1, 'low': 2, 'high': 5, 'max': 7, 'trait': 'count',
+              'start': 17, 'end': 32, 'part': 'inflorescence', 'subpart': 'flowered'},
+             {'subpart': 'flowered', 'trait': 'subpart',
+              'start': 33, 'end': 41, 'part': 'inflorescence'}]
         )
 
     def test_count_22(self):
         self.assertEqual(
             test('3(or 5-9)-foliolate;'),
-            [{'low': 3, 'high': 5, 'max': 9,
-              'trait': 'count', 'part': 'leaflet', 'start': 0, 'end': 19}]
+            [{'min': 3, 'low': 5, 'high': 9, 'trait': 'count',
+              'start': 0, 'end': 9, 'subpart': 'leaflet'},
+             {'subpart': 'leaflet', 'trait': 'subpart', 'start': 10, 'end': 19}]
         )
 
     def test_count_23(self):
@@ -278,7 +286,7 @@ class TestCount(unittest.TestCase):
     def test_count_31(self):
         self.assertEqual(
             test('sepals absent;'),
-            [{'part': 'sepal', 'trait': 'part',  'start': 0, 'end': 6},
+            [{'part': 'sepal', 'trait': 'part', 'start': 0, 'end': 6},
              {'low': 0, 'trait': 'count', 'part': 'sepal', 'start': 7, 'end': 13}]
         )
 
@@ -288,14 +296,16 @@ class TestCount(unittest.TestCase):
                 staminate catkins in 1 or more clusters of 3--6;
                 pistillate catkins in 1 or more clusters of 2--7
                 """),
-            [{'sex': 'male', 'trait': 'sex', 'start': 0, 'end': 9, 'part': 'catkin'},
-             {'part': 'catkin', 'trait': 'part', 'start': 10, 'end': 17, 'sex': 'male'},
+            [{'sex': 'staminate', 'trait': 'sex',
+              'start': 0, 'end': 9, 'part': 'catkin'},
+             {'part': 'catkin', 'trait': 'part',
+              'start': 10, 'end': 17, 'sex': 'staminate'},
              {'low': 3, 'high': 6, 'trait': 'count', 'start': 43, 'end': 47,
-              'group': 'cluster', 'part': 'catkin', 'sex': 'female'},
-             {'sex': 'female', 'trait': 'sex', 'start': 49, 'end': 59,
+              'group': 'cluster', 'part': 'catkin', 'sex': 'staminate'},
+             {'sex': 'pistillate', 'trait': 'sex', 'start': 49, 'end': 59,
               'part': 'catkin'},
              {'part': 'catkin', 'trait': 'part', 'start': 60, 'end': 67,
-              'sex': 'female'},
+              'sex': 'pistillate'},
              {'low': 2, 'high': 7, 'trait': 'count', 'start': 93, 'end': 97,
-              'group': 'cluster', 'part': 'catkin', 'sex': 'female'}]
+              'group': 'cluster', 'part': 'catkin', 'sex': 'pistillate'}]
         )
