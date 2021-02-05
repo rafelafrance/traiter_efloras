@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Parse src treatments."""
+"""Parse efloras treatments."""
 
 import argparse
 import sys
@@ -8,17 +8,17 @@ import textwrap
 from copy import deepcopy
 from itertools import product
 
-import src.pylib.util
-from src.matchers.pipeline import Pipeline
-from src.readers.efloras import efloras_reader
-from src.writers.csv_ import csv_writer
-from src.writers.data import biluo_writer, iob_writer, ner_writer
-from src.writers.html_ import html_writer
+import efloras.pylib.util
+from efloras.pylib.pipeline import Pipeline
+from efloras.readers.efloras import efloras_reader
+from efloras.writers.csv_ import csv_writer
+from efloras.writers.data import biluo_writer, iob_writer, ner_writer
+from efloras.writers.html_ import html_writer
 
 
 def get_efloras_families(args):
     """Handle eFloras extractions"""
-    families = {k: v for k, v in src.pylib.util.get_families().items() if v['count']}
+    families = {k: v for k, v in efloras.pylib.util.get_families().items() if v['count']}
 
     if not check_family_flora_ids(args, families):
         sys.exit(1)
@@ -134,7 +134,7 @@ def parse_args():
             genera this is really just a filter on the taxa names so you
             can put in anything that matches a taxon name.""")
 
-    flora_ids = src.pylib.util.get_flora_ids()
+    flora_ids = efloras.pylib.util.get_flora_ids()
     arg_parser.add_argument(
         '--flora-id', '-e', action='append',
         choices=[str(k) for k in flora_ids],
