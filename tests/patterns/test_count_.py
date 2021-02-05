@@ -163,19 +163,32 @@ class TestCount(unittest.TestCase):
     def test_count_18(self):
         self.assertEqual(
             test('rarely 1- or 5-7-foliolate;'),
-            [{'min': 1, 'low': 5, 'max': 7, 'trait': 'count', 'start': 7, 'end': 16,
-              'subpart': 'leaflet'},
-             {'subpart': 'leaflet', 'trait': 'subpart', 'start': 17, 'end': 26}]
-
+            [{'min': 1,
+              'low': 5,
+              'max': 7,
+              'trait': 'count',
+              'start': 7,
+              'end': 16,
+              'subpart': 'foliolate'},
+             {'subpart': 'foliolate', 'trait': 'subpart', 'start': 17, 'end': 26}]
         )
 
     def test_count_19(self):
         self.assertEqual(
             test('Leaves imparipinnate, 5- or 7(or 9)-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 5, 'high': 7, 'max': 9, 'trait': 'count',
-              'start': 22, 'end': 35, 'part': 'leaf', 'subpart': 'leaflet'},
-             {'subpart': 'leaflet', 'trait': 'subpart', 'start': 36, 'end': 45,
+             {'low': 5,
+              'high': 7,
+              'max': 9,
+              'trait': 'count',
+              'start': 22,
+              'end': 35,
+              'part': 'leaf',
+              'subpart': 'foliolate'},
+             {'subpart': 'foliolate',
+              'trait': 'subpart',
+              'start': 36,
+              'end': 45,
               'part': 'leaf'}]
         )
 
@@ -183,8 +196,14 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test('Seeds (1 or)2 or 3 per legume,'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
-             {'min': 1, 'low': 2, 'high': 3, 'trait': 'count', 'part': 'seed',
-              'start': 6, 'end': 18}]
+             {'min': 1,
+              'low': 2,
+              'high': 3,
+              'trait': 'count',
+              'start': 6,
+              'end': 18,
+              'part': 'seed'},
+             {'part': 'legume', 'trait': 'part', 'start': 23, 'end': 29}]
         )
 
     def test_count_21(self):
@@ -200,9 +219,14 @@ class TestCount(unittest.TestCase):
     def test_count_22(self):
         self.assertEqual(
             test('3(or 5-9)-foliolate;'),
-            [{'min': 3, 'low': 5, 'high': 9, 'trait': 'count',
-              'start': 0, 'end': 9, 'subpart': 'leaflet'},
-             {'subpart': 'leaflet', 'trait': 'subpart', 'start': 10, 'end': 19}]
+            [{'min': 3,
+              'low': 5,
+              'high': 9,
+              'trait': 'count',
+              'start': 0,
+              'end': 9,
+              'subpart': 'foliolate'},
+             {'subpart': 'foliolate', 'trait': 'subpart', 'start': 10, 'end': 19}]
         )
 
     def test_count_23(self):
@@ -218,10 +242,19 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test('Leaves (19-)23- or 25-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'min': 19, 'low': 23, 'high': 25, 'trait': 'count',
-              'start': 7, 'end': 21, 'part': 'leaf', 'subpart': 'leaflet'},
-             {'subpart': 'leaflet', 'trait': 'subpart',
-              'start': 22, 'end': 31, 'part': 'leaf'}]
+             {'min': 19,
+              'low': 23,
+              'high': 25,
+              'trait': 'count',
+              'start': 7,
+              'end': 21,
+              'part': 'leaf',
+              'subpart': 'foliolate'},
+             {'subpart': 'foliolate',
+              'trait': 'subpart',
+              'start': 22,
+              'end': 31,
+              'part': 'leaf'}]
         )
 
     def test_count_25(self):

@@ -18,7 +18,7 @@ COMPILE = MatcherCompiler(COMMON_PATTERNS | {
     'shape_leader': {'ENT_TYPE': 'shape_leader'},
     'shape_loc': {'ENT_TYPE': {'IN': ['shape', 'shape_leader', 'location']}},
     'shape_word': {'ENT_TYPE': {'IN': ['shape', 'shape_leader']}},
-    'angular': {'ENT_TYPE': 'angular'},
+    'angular': {'LOWER': {'IN': ['angular', 'angulate']}},
 })
 
 SHAPE = [

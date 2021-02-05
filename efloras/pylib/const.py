@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, OPEN, SLASH
+from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, INT_TOKEN_RE, OPEN, SLASH
 from traiter.terms.csv_ import Csv
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
@@ -49,6 +49,7 @@ COMMON_PATTERNS = {
     'and/or': {'LOWER': {'IN': CONJ}},
     'missing': {'LOWER': {'IN': MISSING}},
     '9': {'IS_DIGIT': True},
+    # '9': {'TEXT': {'REGEX': INT_TOKEN_RE}},
     '99.9': {'TEXT': {'REGEX': FLOAT_TOKEN_RE}},
     '99-99': {'ENT_TYPE': {'REGEX': '^range'}},
     '99.9-99.9': {'ENT_TYPE': {'REGEX': '^range'}},

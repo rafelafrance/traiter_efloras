@@ -14,16 +14,25 @@ class TestPartLocation(unittest.TestCase):
         self.assertEqual(
             test('stipules 3-8 mm, semiamplexicaul, adnate to petiole for 1-2 mm'),
             [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
-             {'length_low': 3, 'length_high': 8, 'length_units': 'mm',
-              'trait': 'size', 'part': 'stipule',
-              'start': 9, 'end': 15}]
+             {'length_low': 3.0,
+              'length_high': 8.0,
+              'length_units': 'mm',
+              'trait': 'size',
+              'start': 9,
+              'end': 12,
+              'part': 'stipule'},
+             {'part': 'petiole', 'trait': 'part', 'start': 44, 'end': 51}]
         )
 
     def test_part_location_02(self):
         self.assertEqual(
             test('completely embracing stem but not connate'),
-            [{'shape': 'not connate',
-              'trait': 'shape', 'part': 'plant', 'start': 30, 'end': 41}]
+            [{'part': 'stem', 'trait': 'part', 'start': 21, 'end': 25},
+             {'shape': 'not connate',
+              'trait': 'shape',
+              'start': 30,
+              'end': 41,
+              'part': 'stem'}]
         )
 
     def test_part_location_03(self):

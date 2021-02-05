@@ -10,9 +10,6 @@ from tests.setup import test
 class TestSize(unittest.TestCase):
     """Test plant size trait parsers."""
 
-    # def test_size_00(self):
-    #     test('ca. 4-5 cm')
-
     def test_size_01(self):
         self.assertEqual(
             test('Leaf (12-)23-34 × 45-56 cm'),
@@ -79,12 +76,26 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('petiolules 2–5 mm; coarsely serrate; petioles 16–28 mm.'),
             [{'part': 'petiolule', 'trait': 'part', 'start': 0, 'end': 10},
-             {'length_low': 2.0, 'length_high': 5.0, 'length_units': 'mm',
-              'trait': 'size', 'start': 11, 'end': 14, 'part': 'petiolule'},
-             {'trait': 'margin_shape', 'start': 19, 'end': 35, 'part': 'petiole'},
+             {'length_low': 2.0,
+              'length_high': 5.0,
+              'length_units': 'mm',
+              'trait': 'size',
+              'start': 11,
+              'end': 14,
+              'part': 'petiolule'},
+             {'margin_shape': 'serrate',
+              'trait': 'margin_shape',
+              'start': 19,
+              'end': 35,
+              'part': 'petiole'},
              {'part': 'petiole', 'trait': 'part', 'start': 37, 'end': 45},
-             {'length_low': 16.0, 'length_high': 28.0, 'length_units': 'mm',
-              'trait': 'size', 'start': 46, 'end': 51, 'part': 'petiole'}]
+             {'length_low': 16.0,
+              'length_high': 28.0,
+              'length_units': 'mm',
+              'trait': 'size',
+              'start': 46,
+              'end': 51,
+              'part': 'petiole'}]
         )
 
     def test_size_09(self):
@@ -131,18 +142,18 @@ class TestSize(unittest.TestCase):
                 Leaves 3-foliolate, lateral pair of leaflets
                 deeply lobed, petiolules 2–5 mm,"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 3, 'trait': 'count', 'start': 7, 'end': 8,
-              'part': 'leaf', 'subpart': 'leaflet'},
-             {'subpart': 'leaflet', 'trait': 'subpart',
-              'start': 9, 'end': 18, 'part': 'leaf'},
-             {'location': 'lateral', 'trait': 'location',
-              'start': 20, 'end': 27, 'part': 'petiole'},
+             {'low': 3, 'trait': 'count', 'start': 7, 'end': 8, 'part': 'leaf',
+              'subpart': 'foliolate'},
+             {'subpart': 'foliolate', 'trait': 'subpart', 'start': 9, 'end': 18,
+              'part': 'leaf'},
+             {'location': 'lateral', 'trait': 'location', 'start': 20, 'end': 27,
+              'part': 'leaflet'},
              {'part': 'leaflet', 'trait': 'part', 'start': 36, 'end': 44},
              {'subpart': 'lobe', 'trait': 'subpart', 'start': 52, 'end': 57,
-              'part': 'petiole'},
-             {'part': 'petiole', 'trait': 'part', 'start': 59, 'end': 69},
+              'part': 'leaflet'},
+             {'part': 'petiolule', 'trait': 'part', 'start': 59, 'end': 69},
              {'length_low': 2.0, 'length_high': 5.0, 'length_units': 'mm',
-              'trait': 'size', 'start': 70, 'end': 73, 'part': 'petiole'}]
+              'trait': 'size', 'start': 70, 'end': 73, 'part': 'petiolule'}]
         )
 
     def test_size_14(self):
@@ -338,8 +349,12 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('Petals ca 8 mm.'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6},
-             {'length_low': 8.0, 'length_units': 'mm', 'trait': 'size',
-              'start': 10, 'end': 11}]
+             {'length_low': 8.0,
+              'length_units': 'mm',
+              'trait': 'size',
+              'start': 10,
+              'end': 11,
+              'part': 'petal'}]
         )
 
     def test_size_26(self):

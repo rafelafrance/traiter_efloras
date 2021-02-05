@@ -35,22 +35,19 @@ class TestPart(unittest.TestCase):
     def test_part_04(self):
         self.assertEqual(
             test('Flowers: sepals (pistillate)'),
-            [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 7},
-             {'part': 'sepal', 'sex': 'female',
-              'trait': 'part', 'start': 9, 'end': 28}]
+            [{'part': 'flower', 'sex': 'pistillate', 'trait': 'part',
+              'start': 0, 'end': 7},
+             {'part': 'sepal', 'trait': 'part', 'start': 9, 'end': 15,
+              'sex': 'pistillate'},
+             {'sex': 'pistillate', 'trait': 'sex', 'start': 16, 'end': 28,
+              'part': 'sepal'}]
         )
 
     def test_part_05(self):
         self.assertEqual(
-            test('Flowers: sepals (pistillate)'),
-            [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 7},
-             {'part': 'sepal', 'sex': 'female',
-              'trait': 'part', 'start': 9, 'end': 28}]
-        )
-
-    def test_part_06(self):
-        self.assertEqual(
             test('Flowers: staminate:'),
-            [{'part': 'flower', 'sex': 'male',
-              'trait': 'part', 'start': 0, 'end': 18}]
+            [{'part': 'flower', 'trait': 'part', 'start': 0, 'end': 7,
+              'sex': 'staminate'},
+             {'sex': 'staminate', 'trait': 'sex', 'start': 9, 'end': 18,
+              'part': 'flower'}]
         )

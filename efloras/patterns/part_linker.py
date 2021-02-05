@@ -3,13 +3,15 @@
 from traiter.dependency_compiler import DependencyCompiler
 from traiter.pipes.dependency import NEAREST_ANCHOR
 
-TRAITS = ' color color_mod count location size shape sex subpart '.split()
+TRAITS = ' color color_mod count location size shape sex subpart woodiness '.split()
 POS = ' ADJ VERB '.split()
 
 COMPILE = DependencyCompiler({
     'part': {'ENT_TYPE': 'part'},
     'trait': {'ENT_TYPE': {'IN': TRAITS}},
-    'adj': {'POS': {'IN': POS}},
+    'subpart': {'ENT_TYPE': 'subpart'},
+    'adv':  {'POS': {'IN': ['ADV']}},
+    'link': {'POS': {'IN': ['ADJ', 'AUX', 'VERB']}},
 })
 
 PART_LINKER = [
@@ -24,10 +26,12 @@ PART_LINKER = [
             'part .  trait',
             'part >> trait',
             'part .  trait >> trait',
-            'part .  adj   >> trait',
-            'part <  adj   >> trait',
-            'part >  adj   >> trait',
+            'part .  link  >> trait',
+            'part <  link  >> trait',
+            'part >  link  >> trait',
             'part <  trait >> trait',
+            'part .  adv   .  trait',
+            'part < subpart < trait',
         ),
     },
 ]

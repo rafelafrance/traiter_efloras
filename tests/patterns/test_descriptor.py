@@ -32,7 +32,7 @@ class TestDescriptor(unittest.TestCase):
             test('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
             [{'habit': 'shrub', 'trait': 'habit', 'start': 0, 'end': 6},
              {'length_high': 1.5, 'length_units': 'm',
-              'trait': 'size', 'part': 'plant', 'start': 12, 'end': 15}]
+              'trait': 'size', 'start': 12, 'end': 15}]
         )
 
     def test_descriptor_03(self):

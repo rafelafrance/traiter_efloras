@@ -19,8 +19,6 @@ def test(text: str) -> List[Dict]:
     # from pprint import pp
     # pp(traits)
 
-    # print(NLP.tokenizer.explain(text))
-
     # from spacy import displacy
     # options = {'collapse_punct': False, 'compact': True}
     # displacy.serve(doc, options=options)

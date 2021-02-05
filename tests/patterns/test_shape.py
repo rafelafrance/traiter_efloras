@@ -10,15 +10,6 @@ from tests.setup import test
 class TestShape(unittest.TestCase):
     """Test the plant shape trait parser."""
 
-    def test_count_00(self):
-        dash = chr(8211)
-        # dash = chr(45)
-        target = """
-                Leaves: petiole blade pentagonal-angulate to
-                reniform-angulate or shallowly 5-angulate."""
-        target = target.replace('-', dash)
-        test(target)
-
     def test_shape_01(self):
         self.assertEqual(
             test('leaf suborbiculate'),
@@ -38,8 +29,8 @@ class TestShape(unittest.TestCase):
     def test_shape_03(self):
         self.assertEqual(
             test('petiolule narrowly oblanceolate,'),
-            [{'part': 'petiole', 'trait': 'part', 'start': 0, 'end': 9},
-             {'shape': 'oblanceolate', 'trait': 'shape', 'part': 'petiole',
+            [{'part': 'petiolule', 'trait': 'part', 'start': 0, 'end': 9},
+             {'shape': 'oblanceolate', 'trait': 'shape', 'part': 'petiolule',
               'start': 10, 'end': 31}]
         )
 
@@ -118,20 +109,39 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test('Leaf blades lobe apex rounded'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 11},
-             {'subpart': 'lobe', 'trait': 'subpart', 'part': 'leaf',
-              'start': 12, 'end': 16},
-             {'subpart': 'apex', 'trait': 'subpart', 'part': 'leaf',
-              'start': 17, 'end': 21},
-             {'shape': 'orbicular', 'trait': 'shape', 'part': 'leaf',
-              'subpart': 'apex', 'start': 22, 'end': 29}]
+             {'subpart': 'lobe',
+              'trait': 'subpart',
+              'start': 12,
+              'end': 16,
+              'part': 'leaf'},
+             {'subpart': 'apex',
+              'trait': 'subpart',
+              'start': 17,
+              'end': 21,
+              'part': 'leaf'},
+             {'shape': 'orbicular',
+              'trait': 'shape',
+              'start': 22,
+              'end': 29,
+              'part': 'leaf',
+              'subpart': 'apex'}]
         )
 
     def test_shape_10(self):
         self.assertEqual(
             test('Leaf blades mostly orbiculate, deeply to shallowly lobed,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 11},
-             {'shape': 'orbicular', 'trait': 'shape', 'part': 'leaf',
-              'start': 12, 'end': 29}]
+             {'shape': 'orbicular',
+              'trait': 'shape',
+              'start': 12,
+              'end': 29,
+              'part': 'leaf',
+              'subpart': 'lobe'},
+             {'subpart': 'lobe',
+              'trait': 'subpart',
+              'start': 51,
+              'end': 56,
+              'part': 'leaf'}]
         )
 
     def test_shape_11(self):
@@ -181,10 +191,8 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test('blade orbic-ulate to pentagonal,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'shape': 'orbicular', 'trait': 'shape', 'part': 'leaf',
-              'start': 6, 'end': 17},
-             {'shape': 'polygonal', 'trait': 'shape', 'part': 'leaf',
-              'start': 21, 'end': 31}]
+             {'shape': 'orbicular', 'trait': 'shape', 'start': 6, 'end': 17},
+             {'shape': 'polygonal', 'trait': 'shape', 'start': 21, 'end': 31}]
         )
 
     def test_shape_15(self):
