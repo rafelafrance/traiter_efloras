@@ -23,7 +23,7 @@ COLOR = [
         'label': 'color',
         'on_match': 'color.v1',
         'patterns': COMPILE(
-            'missing? color_words* -? color+ -? color_words*',
+            'missing? color_words* -* color+ -* color_words*',
         ),
     },
 ]

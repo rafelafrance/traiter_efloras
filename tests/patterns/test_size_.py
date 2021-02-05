@@ -256,6 +256,9 @@ class TestSize(unittest.TestCase):
               'part': 'flower'}]
         )
 
+    def test_size_00(self):
+        test("""3--8.5 cm,""")
+
     def test_size_21(self):
         self.assertEqual(
             test("""

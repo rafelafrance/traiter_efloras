@@ -27,7 +27,7 @@ COUNT = [
         'label': 'count',
         'on_match': 'count.v1',
         'patterns': COMPILE(
-            '99-99 -? per_count?',
+            '99-99 -* per_count?',
             '99-99 per_count count_suffix?',
             'per_count adp? 99-99 count_suffix?',
             '( 99-99 count_suffix? ) per_count',

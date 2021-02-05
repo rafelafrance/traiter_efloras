@@ -26,10 +26,10 @@ SHAPE = [
         'label': 'shape',
         'on_match': 'shape.v1',
         'patterns': COMPILE(
-            'shape_loc* -? shape+',
-            'shape_loc* -? shape -? shape+',
-            'shape_leader -/to shape_word+ -? shape+',
-            'shape_word+ -? shape+',
+            'shape_loc* -* shape+',
+            'shape_loc* -* shape -* shape+',
+            'shape_leader -/to shape_word+ -* shape+',
+            'shape_word+ -* shape+',
         ),
     },
     {

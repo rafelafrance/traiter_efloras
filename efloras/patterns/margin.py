@@ -27,10 +27,10 @@ MARGIN_SHAPE = [
         'label': 'margin_shape',
         'on_match': 'margin.v1',
         'patterns': COMPILE(
-            'leader* -? margin_shape+',
-            'leader* -? margin_shape -? follower*',
-            'leader* -? margin_shape -? shape? follower+ shape?',
-            'shape+ -? follower+',
+            'leader* -* margin_shape+',
+            'leader* -* margin_shape -* follower*',
+            'leader* -* margin_shape -* shape? follower+ shape?',
+            'shape+ -* follower+',
         ),
     },
 ]
