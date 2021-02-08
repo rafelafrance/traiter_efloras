@@ -4,7 +4,10 @@ from traiter.const import DASH
 from traiter.patterns.dependency_patterns import DependencyPatterns
 from traiter.pipes.dependency import NEAREST_ANCHOR
 
-TRAITS = ' color color_mod count location margin_shape size shape sex '.split()
+from efloras.pylib.const import TRAITS
+from efloras.pylib.util import trim_traits
+
+TRAITS_ = trim_traits(TRAITS, 'subpart')
 
 SUBPART_LINKER = DependencyPatterns(
     'subpart_linker',
@@ -15,7 +18,7 @@ SUBPART_LINKER = DependencyPatterns(
     decoder={
         'subpart': {'ENT_TYPE': 'subpart'},
         'part': {'ENT_TYPE': 'part'},
-        'trait': {'ENT_TYPE': {'IN': TRAITS}},
+        'trait': {'ENT_TYPE': {'IN': TRAITS_}},
         'count': {'ENT_TYPE': 'count'},
         'dash': {'TEXT': {'IN': DASH}},
         'link': {'POS': {'IN': ['ADJ', 'AUX', 'VERB']}},

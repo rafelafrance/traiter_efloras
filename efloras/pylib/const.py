@@ -25,6 +25,10 @@ TERMS.drop('imperial_length')
 REPLACE = TERMS.pattern_dict('replace')
 REMOVE = TERMS.pattern_dict('remove')
 
+TRAITS = set(""" color color_mod count location margin_shape part
+    size shape sex subpart woodiness """.split())
+
+
 # #########################################################################
 # Tokenizer constants
 ABBREVS = """

@@ -9,7 +9,7 @@ from copy import deepcopy
 from itertools import product
 
 import efloras.pylib.util
-from efloras.pylib.pipeline import Pipeline
+from efloras.pylib.pipeline import pipeline
 from efloras.readers.efloras import efloras_reader
 from efloras.writers.csv_ import csv_writer
 from efloras.writers.data import biluo_writer, iob_writer, ner_writer
@@ -32,13 +32,13 @@ def get_efloras_families(args):
 
 def main(args):
     """Perform actions based on the arguments."""
-    pipeline = Pipeline()
+    nlp = pipeline()
     families = get_efloras_families(args)
 
     rows = efloras_reader(args, families)
 
     for row in rows:
-        row['doc'] = pipeline.nlp(row['text'])
+        row['doc'] = nlp(row['text'])
         row['traits'] = pipeline.trait_list(row['doc'])
 
     if args.csv_file:

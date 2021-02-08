@@ -23,6 +23,13 @@ def convert(number, units):
     return number * CONVERT.get(units, 1.0)
 
 
+def trim_traits(old_set: set, *remove: str) -> list:
+    """Remove an element from a copy of the set."""
+    removes = {r for r in remove}
+    new_set = {e for e in old_set if e not in removes}
+    return list(new_set)
+
+
 def get_families():
     """Get a list of all families in the eFloras catalog."""
     families = {}

@@ -12,6 +12,7 @@ from traiter.tokenizer_util import append_abbrevs, append_tokenizer_regexes
 from efloras.patterns.color import COLOR
 from efloras.patterns.count import COUNT, COUNT_WORD, NOT_A_COUNT
 from efloras.patterns.forget import FORGET
+from efloras.patterns.location_linker import LOCATION_LINKER
 from efloras.patterns.margin import MARGIN_SHAPE
 from efloras.patterns.part_linker import PART_LINKER
 from efloras.patterns.range import (
@@ -26,9 +27,13 @@ from efloras.pylib.const import ABBREVS, REPLACE, TERMS
 TERM_RULES = [
     RANGE_LOW, RANGE_MIN_LOW, RANGE_LOW_HIGH, RANGE_LOW_MAX, RANGE_MIN_LOW_HIGH,
     RANGE_MIN_LOW_MAX, RANGE_LOW_HIGH_MAX, RANGE_MIN_LOW_HIGH_MAX, NOT_A_RANGE]
+
 ADD_DATA = [COLOR, FORGET, MARGIN_SHAPE, N_SHAPE, SHAPE]
+
 UPDATE_DATA = [
     COUNT, COUNT_WORD, NOT_A_COUNT, SIZE, SIZE_HIGH_ONLY, SIZE_DOUBLE_DIM, NOT_A_SIZE]
+
+LINKERS = [LOCATION_LINKER, PART_LINKER, SEX_LINKER, SUBPART_LINKER]
 
 DEBUG_COUNT = 0  # Used to rename debug pipes
 
@@ -69,7 +74,7 @@ def pipeline():
 
     # add_debug_pipes(nlp, 'after add_data', entities=True)  # ####################
 
-    config = {'patterns': as_dicts([PART_LINKER, SEX_LINKER, SUBPART_LINKER])}
+    config = {'patterns': as_dicts(LINKERS)}
     nlp.add_pipe(DEPENDENCY, name='part_linker', config=config)
 
     # add_debug_pipes(nlp, 'done', entities=True)  # #########################

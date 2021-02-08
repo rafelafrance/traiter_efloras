@@ -13,10 +13,19 @@ class TestSubpart(unittest.TestCase):
     def test_subpart_01(self):
         self.assertEqual(
             test('terminal lobe ovate-trullate,'),
-            [{'location': 'terminal', 'subpart': 'lobe',
-              'trait': 'location', 'start': 0, 'end': 8},
-             {'end': 13, 'start': 9, 'subpart': 'lobe', 'trait': 'subpart'},
+            [{'location': 'terminal',
+              'trait': 'location',
+              'start': 0,
+              'end': 8,
+              'subpart': 'lobe'},
+             {'subpart': 'lobe',
+              'trait': 'subpart',
+              'start': 9,
+              'end': 13,
+              'location': 'terminal'},
              {'shape': 'ovate-trullate',
-              'trait': 'shape', 'subpart': 'lobe',
-              'start': 14, 'end': 28}]
+              'trait': 'shape',
+              'start': 14,
+              'end': 28,
+              'subpart': 'lobe'}]
         )
