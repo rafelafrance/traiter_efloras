@@ -1,7 +1,5 @@
 """Test the plant color matcher."""
 
-# pylint: disable=missing-function-docstring
-
 import unittest
 
 from tests.setup import test
@@ -232,3 +230,7 @@ class TestColor(unittest.TestCase):
               'trait': 'color', 'part': 'twig',
               'start': 29, 'end': 43}]
         )
+
+
+if __name__ == '__main__':
+    unittest.main(argv=['first-arg-is-ignored'], exit=False)

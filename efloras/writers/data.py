@@ -2,8 +2,8 @@
 
 import json
 
-from ..pylib.const import TERMS, TRAIT_STEP
-from ..patterns.matcher import MATCHERS
+from efloras.patterns.matcher import MATCHERS
+from efloras.pylib.const import TERMS, TRAIT_STEP
 from efloras.pylib.pipeline import Pipeline
 
 LABELS = set()

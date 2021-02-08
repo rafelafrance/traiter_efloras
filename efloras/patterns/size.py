@@ -2,68 +2,15 @@
 
 import re
 
-import spacy
+from traiter.actions import REJECT_MATCH
 from traiter.const import CROSS, FLOAT_RE
-from traiter.matcher_compiler import MatcherCompiler
-from traiter.pipe_util import REJECT_MATCH
+from traiter.patterns.matcher_patterns import MatcherPatterns
 from traiter.util import to_positive_float
 
-from ..pylib.const import COMMON_PATTERNS, REPLACE
+from efloras.pylib.const import COMMON_PATTERNS, REPLACE
 
 FOLLOW = """ dimension sex """.split()
 NOT_A_SIZE = """ for """.split()
-
-COMPILE = MatcherCompiler(COMMON_PATTERNS | {
-    '[?]': {'ENT_TYPE': 'quest'},
-    'about': {'ENT_TYPE': 'about'},
-    'and': {'LOWER': 'and'},
-    'cm': {'ENT_TYPE': 'metric_length'},
-    'dim': {'ENT_TYPE': 'dimension'},
-    'follow': {'ENT_TYPE': {'IN': FOLLOW}},
-    'not_size': {'LOWER': {'IN': NOT_A_SIZE}},
-    'sex': {'ENT_TYPE': 'sex'},
-    'x': {'LOWER': {'IN': CROSS}},
-})
-
-SIZE = [
-    {
-        'label': 'size',
-        'on_match': 'size.v1',
-        'patterns': COMPILE(
-            'about? 99.9-99.9 cm follow*',
-
-            ('      about? 99.9-99.9 cm? follow* '
-             'x to? about? 99.9-99.9 cm  follow*'),
-
-            ('      about? 99.9-99.9 cm? follow* '
-             'x to? about? 99.9-99.9 cm? follow* '
-             'x to? about? 99.9-99.9 cm  follow*'),
-        ),
-    },
-    {
-        'label': 'size.high_only',
-        'on_match': 'size_high_only.v1',
-        'patterns': COMPILE(
-            'to about? 99.9 [?]? cm follow*',
-        ),
-    },
-    {
-        'label': 'size.double_dim',
-        'on_match': 'size_double_dim.v1',
-        'patterns': COMPILE(
-            'about? 99.9-99.9 cm  sex? ,? dim and dim',
-            'about? 99.9-99.9 cm? sex? ,? 99.9-99.9 cm dim and dim',
-        ),
-    },
-    {
-        'label': '_not_a_size',
-        'on_match': REJECT_MATCH,
-        'patterns': COMPILE(
-            'not_size about? 99.9-99.9 cm',
-            'not_size about? 99.9-99.9 cm? x about? 99.9-99.9 cm',
-        ),
-    },
-]
 
 
 def _size(ent, high_only=False):
@@ -74,19 +21,16 @@ def _size(ent, high_only=False):
     fill_data(dims, ent)
 
 
-@spacy.registry.misc(SIZE[0]['on_match'])
 def size(ent):
     """Enrich a phrase match."""
     _size(ent)
 
 
-@spacy.registry.misc(SIZE[1]['on_match'])
 def size_high_only(ent):
     """Enrich a phrase match."""
     _size(ent, True)
 
 
-@spacy.registry.misc(SIZE[2]['on_match'])
 def size_double_dim(ent):
     """Handle the case when the dimensions are doubled but values are not.
 
@@ -195,3 +139,61 @@ def fill_data(dims, ent):
 
         range_._.data = data
         range_._.new_label = 'size'
+
+
+DECODER = COMMON_PATTERNS | {
+    '[?]': {'ENT_TYPE': 'quest'},
+    'about': {'ENT_TYPE': 'about'},
+    'and': {'LOWER': 'and'},
+    'cm': {'ENT_TYPE': 'metric_length'},
+    'dim': {'ENT_TYPE': 'dimension'},
+    'follow': {'ENT_TYPE': {'IN': FOLLOW}},
+    'not_size': {'LOWER': {'IN': NOT_A_SIZE}},
+    'sex': {'ENT_TYPE': 'sex'},
+    'x': {'LOWER': {'IN': CROSS}},
+}
+
+SIZE = MatcherPatterns(
+    'size',
+    on_match=size,
+    decoder=DECODER,
+    patterns=[
+        'about? 99.9-99.9 cm follow*',
+
+        ('      about? 99.9-99.9 cm? follow* '
+         'x to? about? 99.9-99.9 cm  follow*'),
+
+        ('      about? 99.9-99.9 cm? follow* '
+         'x to? about? 99.9-99.9 cm? follow* '
+         'x to? about? 99.9-99.9 cm  follow*'),
+    ],
+)
+
+SIZE_HIGH_ONLY = MatcherPatterns(
+    'size.high_only',
+    on_match=size_high_only,
+    decoder=DECODER,
+    patterns=[
+        'to about? 99.9 [?]? cm follow*',
+    ],
+)
+
+SIZE_DOUBLE_DIM = MatcherPatterns(
+    'size.double_dim',
+    on_match=size_double_dim,
+    decoder=DECODER,
+    patterns=[
+        'about? 99.9-99.9 cm  sex? ,? dim and dim',
+        'about? 99.9-99.9 cm? sex? ,? 99.9-99.9 cm dim and dim',
+    ],
+)
+
+NOT_A_SIZE = MatcherPatterns(
+    'not_a_size',
+    on_match=REJECT_MATCH,
+    decoder=DECODER,
+    patterns=[
+        'not_size about? 99.9-99.9 cm',
+        'not_size about? 99.9-99.9 cm? x about? 99.9-99.9 cm',
+    ],
+)

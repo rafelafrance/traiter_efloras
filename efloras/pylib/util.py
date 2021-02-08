@@ -1,10 +1,9 @@
 """Misc. utils."""
+
 import csv
-import re
 from datetime import datetime
 
-from efloras.patterns.shape import MULTIPLE_DASHES
-from efloras.pylib.const import DATA_DIR, EFLORAS_FAMILIES, REPLACE
+from efloras.pylib.const import DATA_DIR, EFLORAS_FAMILIES
 
 CONVERT = {
     'cm': 10.0,
