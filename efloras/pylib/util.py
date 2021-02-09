@@ -2,6 +2,7 @@
 
 import csv
 from datetime import datetime
+from itertools import product
 
 from efloras.pylib.const import DATA_DIR, EFLORAS_FAMILIES
 
@@ -65,3 +66,9 @@ def get_flora_ids():
         for family in csv.DictReader(in_file):
             flora_ids[int(family['flora_id'])] = family['flora_name']
     return flora_ids
+
+
+def get_family_flora_ids(args, families):
+    """Get family and flora ID combinations."""
+    return [c for c in product(args.family, args.flora_id)
+            if c in families]

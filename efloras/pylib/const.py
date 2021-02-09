@@ -1,5 +1,6 @@
 """Project-wide constants."""
 
+import re
 from pathlib import Path
 
 from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, OPEN, SLASH
@@ -28,12 +29,17 @@ REMOVE = TERMS.pattern_dict('remove')
 TRAITS = set(""" color color_mod count location margin_shape part
     size shape sex subpart woodiness """.split())
 
+# #########################################################################
+# Used to filter paragraphs in the source documents.
+PARA_RE = [t['pattern'] for t in TERMS.with_label('part')]
+PARA_RE = '|'.join(PARA_RE)
+PARA_RE = re.compile(PARA_RE)
 
 # #########################################################################
 # Tokenizer constants
 ABBREVS = """
     Jan. Feb. Mar. Apr. Jun. Jul. Aug. Sep. Sept. Oct. Nov. Dec.
-    ca. """.split()
+    ca. al. """.split()
 
 # #########################################################################
 # Pattern related constants

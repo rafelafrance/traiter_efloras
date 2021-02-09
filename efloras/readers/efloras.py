@@ -3,19 +3,18 @@
 import re
 
 from bs4 import BeautifulSoup
-from traiter.util import FLAGS  # pylint: disable=import-error
+from traiter.const import FLAGS
 
 import downloader
-import extract
 import efloras.pylib.util as util
-from junk.part import PATTERN_RE
+from efloras.pylib.const import PARA_RE
 
-_TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
+TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 
 
 def efloras_reader(args, families):
     """Perform the parsing."""
-    families_flora = extract.get_family_flora_ids(args, families)
+    families_flora = util.get_family_flora_ids(args, families)
     flora_ids = util.get_flora_ids()
 
     # Build a filter for the taxon names
@@ -73,7 +72,7 @@ def get_family_tree(family):
 
         soup = BeautifulSoup(page, features='lxml')
 
-        for link in soup.findAll('a', attrs={'title': _TAXON_RE}):
+        for link in soup.findAll('a', attrs={'title': TAXON_RE}):
             href = link.attrs['href']
             taxon_id = downloader.get_taxon_id(href)
             taxa[taxon_id] = link.text
@@ -97,7 +96,7 @@ def get_traits(treatment):
     high = 0
     for para in treatment.find_all('p'):
         text = ' '.join(para.get_text().split())
-        unique = set(PATTERN_RE.findall(text))
+        unique = set(PARA_RE.findall(text))
         if len(unique) > high:
             best = text
             high = len(unique)

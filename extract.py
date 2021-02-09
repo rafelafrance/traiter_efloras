@@ -6,40 +6,27 @@ import argparse
 import sys
 import textwrap
 from copy import deepcopy
-from itertools import product
 
-import efloras.pylib.util
+import efloras.pylib.util as util
 from efloras.pylib.pipeline import pipeline
+from efloras.pylib.util import get_family_flora_ids
 from efloras.readers.efloras import efloras_reader
 from efloras.writers.csv_ import csv_writer
 from efloras.writers.data import biluo_writer, iob_writer, ner_writer
+from efloras.writers.database import database
 from efloras.writers.html_ import html_writer
-
-
-def get_efloras_families(args):
-    """Handle eFloras extractions"""
-    families = {k: v for k, v in efloras.pylib.util.get_families().items() if v['count']}
-
-    if not check_family_flora_ids(args, families):
-        sys.exit(1)
-
-    if args.list_families:
-        print_families(families)
-        sys.exit()
-
-    return families
 
 
 def main(args):
     """Perform actions based on the arguments."""
     nlp = pipeline()
+    # sent_pipe = sent_pipeline()
     families = get_efloras_families(args)
 
     rows = efloras_reader(args, families)
 
     for row in rows:
         row['doc'] = nlp(row['text'])
-        row['traits'] = pipeline.trait_list(row['doc'])
 
     if args.csv_file:
         copied = deepcopy(rows)
@@ -60,6 +47,25 @@ def main(args):
     if args.biluo_file:
         copied = deepcopy(rows)
         biluo_writer(args, copied)
+
+    if args.sqlite or args.duckdb:
+        copied = deepcopy(rows)
+        database(args, copied)
+
+
+def get_efloras_families(args):
+    """Handle eFloras extractions"""
+    families = {k: v for k, v in util.get_families().items() if
+                v['count']}
+
+    if not check_family_flora_ids(args, families):
+        sys.exit(1)
+
+    if args.list_families:
+        print_families(families)
+        sys.exit()
+
+    return families
 
 
 def check_family_flora_ids(args, families):
@@ -84,12 +90,6 @@ def check_family_flora_ids(args, families):
             print(f'Flora ID "{id_}" is not being used.')
 
     return ok
-
-
-def get_family_flora_ids(args, families):
-    """Get family and flora ID combinations."""
-    return [c for c in product(args.family, args.flora_id)
-            if c in families]
 
 
 def print_families(families):
@@ -134,7 +134,7 @@ def parse_args():
             genera this is really just a filter on the taxa names so you
             can put in anything that matches a taxon name.""")
 
-    flora_ids = efloras.pylib.util.get_flora_ids()
+    flora_ids = util.get_flora_ids()
     arg_parser.add_argument(
         '--flora-id', '-e', action='append',
         choices=[str(k) for k in flora_ids],
@@ -143,6 +143,12 @@ def parse_args():
     arg_parser.add_argument(
         '--html-file', '-H', type=argparse.FileType('w'),
         help="""Output the results to this HTML file.""")
+
+    arg_parser.add_argument(
+        '--sqlite', '-S', help="""Output to this sqlite3 database.""")
+
+    arg_parser.add_argument(
+        '--duckdb', '-D', help="""Output to this duckDB database.""")
 
     arg_parser.add_argument(
         '--csv-file', '-C', type=argparse.FileType('w'),
@@ -179,7 +185,7 @@ def parse_args():
         args.flora_id = [1]
 
     if not (args.csv_file or args.html_file or args.ner_file or args.iob_file
-            or args.biluo_file):
+            or args.biluo_file or args.sqlite or args.duckdb):
         setattr(args, 'csv_file', sys.stdout)
 
     return args

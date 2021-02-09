@@ -2,28 +2,28 @@
 
 import json
 
-from efloras.patterns.matcher import MATCHERS
-from efloras.pylib.const import TERMS, TRAIT_STEP
-from efloras.pylib.pipeline import Pipeline
+# from efloras.patterns.matcher import MATCHERS
+# from efloras.pylib.const import TERMS, TRAIT_STEP
+# from efloras.pylib.pipeline import Pipeline
 
 LABELS = set()
 
 
-def _get_labels():
-    """Get the suffix lengths of the traits."""
-    if LABELS:
-        return
-    for matcher in MATCHERS:
-        for step, step_patterns in matcher.items():
-            if step == TRAIT_STEP:
-                for pattern_group in step_patterns:
-                    label = pattern_group['label'].split('_')
-                    if label[0]:
-                        LABELS.add(tuple(label))
-    for term in TERMS:
-        if term['category'] in {'descriptor', 'literal'}:
-            label = term['label'].split('_')
-            LABELS.add(tuple(label))
+# def _get_labels():
+#     """Get the suffix lengths of the traits."""
+#     if LABELS:
+#         return
+#     for matcher in MATCHERS:
+#         for step, step_patterns in matcher.items():
+#             if step == TRAIT_STEP:
+#                 for pattern_group in step_patterns:
+#                     label = pattern_group['label'].split('_')
+#                     if label[0]:
+#                         LABELS.add(tuple(label))
+#     for term in TERMS:
+#         if term['category'] in {'descriptor', 'literal'}:
+#             label = term['label'].split('_')
+#             LABELS.add(tuple(label))
 
 
 def get_entities(sent):
@@ -39,7 +39,7 @@ def get_entities(sent):
 
 def ner_writer(args, rows):
     """Output named entity recognition training data."""
-    _get_labels()
+    # _get_labels()
     for row in rows:
         for sent in row['doc'].sents:
             entities = get_entities(sent)
@@ -62,35 +62,35 @@ def biluo_writer(args, rows):
 
 def iob_biluo_writer(out_file, rows, updater):
     """Logic common to both the IOB and BILUO writers."""
-    _get_labels()
-    nlp = Pipeline(training=True).nlp
-    for row in rows:
-        for sent in row['doc'].sents:
-            entities = get_entities(sent) + [(9_999_999, 9_999_999, '')]
-            doc = nlp(sent.text)
-            start, end, label = entities.pop(0)
-            tags = []
-            inside = False
-            for token in doc:
-                if token.idx >= end:
-                    inside = False
-                    start, end, label = entities.pop(0)
-
-                if start <= token.idx < end:
-                    prefix = 'I' if inside else 'B'
-                    if prefix == 'B':
-                        updater(tags)
-                    tags.append(f'{prefix}-{label}')
-                    inside = True
-                else:
-                    updater(tags)
-                    tags.append('O')
-                    inside = False
-
-            updater(tags)
-            line = json.dumps([sent.text, tags])
-            out_file.write(line)
-            out_file.write('\n')
+    # _get_labels()
+    # nlp = Pipeline(training=True).nlp
+    # for row in rows:
+    #     for sent in row['doc'].sents:
+    #         entities = get_entities(sent) + [(9_999_999, 9_999_999, '')]
+    #         doc = nlp(sent.text)
+    #         start, end, label = entities.pop(0)
+    #         tags = []
+    #         inside = False
+    #         for token in doc:
+    #             if token.idx >= end:
+    #                 inside = False
+    #                 start, end, label = entities.pop(0)
+    #
+    #             if start <= token.idx < end:
+    #                 prefix = 'I' if inside else 'B'
+    #                 if prefix == 'B':
+    #                     updater(tags)
+    #                 tags.append(f'{prefix}-{label}')
+    #                 inside = True
+    #             else:
+    #                 updater(tags)
+    #                 tags.append('O')
+    #                 inside = False
+    #
+    #         updater(tags)
+    #         line = json.dumps([sent.text, tags])
+    #         out_file.write(line)
+    #         out_file.write('\n')
 
 
 def update_prev_tag(tags):

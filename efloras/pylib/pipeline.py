@@ -7,6 +7,7 @@ from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
 from traiter.pipes.dependency import DEPENDENCY
 from traiter.pipes.simple_entity_data import SIMPLE_ENTITY_DATA
 from traiter.pipes.update_entity_data import UPDATE_ENTITY_DATA
+from traiter.pipes.sentence import SENTENCE
 from traiter.tokenizer_util import append_abbrevs, append_tokenizer_regexes
 
 from efloras.patterns.color import COLOR
@@ -40,7 +41,7 @@ DEBUG_COUNT = 0  # Used to rename debug pipes
 
 def pipeline():
     """Create a pipeline for extracting traits."""
-    nlp = spacy.load('en_core_web_sm', exclude=['ner', 'lemmatizer'])
+    nlp = spacy.load('en_core_web_sm', exclude=['ner'])
     append_tokenizer_regexes(nlp)
     append_abbrevs(nlp, ABBREVS)
 
@@ -52,6 +53,8 @@ def pipeline():
         'entity_ruler', name='term_ruler', config=config, before='parser')
     term_ruler.add_patterns(TERMS.for_entity_ruler())
     add_ruler_patterns(term_ruler, TERM_RULES)
+
+    nlp.add_pipe(SENTENCE, before='parser')
 
     nlp.add_pipe('merge_entities', name='term_merger')
     nlp.add_pipe(SIMPLE_ENTITY_DATA, after='term_merger', config={'replace': REPLACE})
@@ -78,6 +81,8 @@ def pipeline():
     nlp.add_pipe(DEPENDENCY, name='part_linker', config=config)
 
     # add_debug_pipes(nlp, 'done', entities=True)  # #########################
+
+    # print(nlp.pipe_names)
     return nlp
 
 
