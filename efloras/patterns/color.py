@@ -2,6 +2,7 @@
 
 import re
 
+from spacy import registry
 from traiter.const import DASH
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
@@ -12,7 +13,20 @@ MULTIPLE_DASHES = fr'[{"".join(TEMP)}]{{2,}}'
 
 SKIP = DASH + MISSING
 
+COLOR = MatcherPatterns(
+    'color',
+    on_match='color.v1',
+    decoder=COMMON_PATTERNS | {
+        'color_words': {'ENT_TYPE': {'IN': ['color', 'color_mod']}},
+        'color': {'ENT_TYPE': 'color'},
+    },
+    patterns=[
+        'missing? color_words* -* color+ -* color_words*',
+    ],
+)
 
+
+@registry.misc(COLOR.on_match)
 def color(ent):
     """Enrich a phrase match."""
     parts = {r: 1 for t in ent
@@ -23,16 +37,3 @@ def color(ent):
     ent._.data['color'] = REPLACE.get(value, value)
     if any(t for t in ent if t.lower_ in MISSING):
         ent._.data['missing'] = True
-
-
-COLOR = MatcherPatterns(
-    'color',
-    on_match=color,
-    decoder=COMMON_PATTERNS | {
-        'color_words': {'ENT_TYPE': {'IN': ['color', 'color_mod']}},
-        'color': {'ENT_TYPE': 'color'},
-    },
-    patterns=[
-        'missing? color_words* -* color+ -* color_words*',
-    ],
-)

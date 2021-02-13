@@ -2,6 +2,7 @@
 
 import re
 
+from spacy import registry
 from traiter.actions import REJECT_MATCH
 from traiter.const import CROSS, FLOAT_RE
 from traiter.patterns.matcher_patterns import MatcherPatterns
@@ -12,25 +13,77 @@ from efloras.pylib.const import COMMON_PATTERNS, REPLACE
 FOLLOW = """ dimension sex """.split()
 NOT_A_SIZE = """ for """.split()
 
+DECODER = COMMON_PATTERNS | {
+    '[?]': {'ENT_TYPE': 'quest'},
+    'about': {'ENT_TYPE': 'about'},
+    'and': {'LOWER': 'and'},
+    'cm': {'ENT_TYPE': 'metric_length'},
+    'dim': {'ENT_TYPE': 'dimension'},
+    'follow': {'ENT_TYPE': {'IN': FOLLOW}},
+    'not_size': {'LOWER': {'IN': NOT_A_SIZE}},
+    'sex': {'ENT_TYPE': 'sex'},
+    'x': {'LOWER': {'IN': CROSS}},
+}
 
-def _size(ent, high_only=False):
-    """Enrich a phrase match."""
-    dims = scan_tokens(ent, high_only)
-    dims = fix_dimensions(dims)
-    dims = fix_units(dims)
-    fill_data(dims, ent)
+SIZE = MatcherPatterns(
+    'size',
+    on_match='size.v1',
+    decoder=DECODER,
+    patterns=[
+        'about? 99.9-99.9 cm follow*',
+
+        ('      about? 99.9-99.9 cm? follow* '
+         'x to? about? 99.9-99.9 cm  follow*'),
+
+        ('      about? 99.9-99.9 cm? follow* '
+         'x to? about? 99.9-99.9 cm? follow* '
+         'x to? about? 99.9-99.9 cm  follow*'),
+    ],
+)
+
+SIZE_HIGH_ONLY = MatcherPatterns(
+    'size.high_only',
+    on_match='size_high_only.v1',
+    decoder=DECODER,
+    patterns=[
+        'to about? 99.9 [?]? cm follow*',
+    ],
+)
+
+SIZE_DOUBLE_DIM = MatcherPatterns(
+    'size.double_dim',
+    on_match='size_double_dim.v1',
+    decoder=DECODER,
+    patterns=[
+        'about? 99.9-99.9 cm  sex? ,? dim and dim',
+        'about? 99.9-99.9 cm? sex? ,? 99.9-99.9 cm dim and dim',
+    ],
+)
+
+NOT_A_SIZE = MatcherPatterns(
+    'not_a_size',
+    on_match=REJECT_MATCH,
+    decoder=DECODER,
+    patterns=[
+        'not_size about? 99.9-99.9 cm',
+        'not_size about? 99.9-99.9 cm? x about? 99.9-99.9 cm',
+    ],
+)
 
 
+@registry.misc(SIZE.on_match)
 def size(ent):
     """Enrich a phrase match."""
     _size(ent)
 
 
+@registry.misc(SIZE_HIGH_ONLY.on_match)
 def size_high_only(ent):
     """Enrich a phrase match."""
     _size(ent, True)
 
 
+@registry.misc(SIZE_DOUBLE_DIM.on_match)
 def size_double_dim(ent):
     """Handle the case when the dimensions are doubled but values are not.
 
@@ -52,6 +105,14 @@ def size_double_dim(ent):
             else:
                 new_data[key] = value
         range_._.data = new_data
+
+
+def _size(ent, high_only=False):
+    """Enrich a phrase match."""
+    dims = scan_tokens(ent, high_only)
+    dims = fix_dimensions(dims)
+    dims = fix_units(dims)
+    fill_data(dims, ent)
 
 
 def scan_tokens(ent, high_only):
@@ -139,61 +200,3 @@ def fill_data(dims, ent):
 
         range_._.data = data
         range_._.new_label = 'size'
-
-
-DECODER = COMMON_PATTERNS | {
-    '[?]': {'ENT_TYPE': 'quest'},
-    'about': {'ENT_TYPE': 'about'},
-    'and': {'LOWER': 'and'},
-    'cm': {'ENT_TYPE': 'metric_length'},
-    'dim': {'ENT_TYPE': 'dimension'},
-    'follow': {'ENT_TYPE': {'IN': FOLLOW}},
-    'not_size': {'LOWER': {'IN': NOT_A_SIZE}},
-    'sex': {'ENT_TYPE': 'sex'},
-    'x': {'LOWER': {'IN': CROSS}},
-}
-
-SIZE = MatcherPatterns(
-    'size',
-    on_match=size,
-    decoder=DECODER,
-    patterns=[
-        'about? 99.9-99.9 cm follow*',
-
-        ('      about? 99.9-99.9 cm? follow* '
-         'x to? about? 99.9-99.9 cm  follow*'),
-
-        ('      about? 99.9-99.9 cm? follow* '
-         'x to? about? 99.9-99.9 cm? follow* '
-         'x to? about? 99.9-99.9 cm  follow*'),
-    ],
-)
-
-SIZE_HIGH_ONLY = MatcherPatterns(
-    'size.high_only',
-    on_match=size_high_only,
-    decoder=DECODER,
-    patterns=[
-        'to about? 99.9 [?]? cm follow*',
-    ],
-)
-
-SIZE_DOUBLE_DIM = MatcherPatterns(
-    'size.double_dim',
-    on_match=size_double_dim,
-    decoder=DECODER,
-    patterns=[
-        'about? 99.9-99.9 cm  sex? ,? dim and dim',
-        'about? 99.9-99.9 cm? sex? ,? 99.9-99.9 cm dim and dim',
-    ],
-)
-
-NOT_A_SIZE = MatcherPatterns(
-    'not_a_size',
-    on_match=REJECT_MATCH,
-    decoder=DECODER,
-    patterns=[
-        'not_size about? 99.9-99.9 cm',
-        'not_size about? 99.9-99.9 cm? x about? 99.9-99.9 cm',
-    ],
-)

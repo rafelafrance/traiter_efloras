@@ -64,3 +64,12 @@ COMMON_PATTERNS = {
     '99-99': {'ENT_TYPE': {'REGEX': '^range'}},
     '99.9-99.9': {'ENT_TYPE': {'REGEX': '^range'}},
 }
+
+# #########################################################################
+# Remove these stray entities
+FORGET = """ about color_mod dimension imperial_length imperial_mass
+    margin_leader metric_length metric_mass not_a_range per_count quest
+    shape_leader shape_suffix surface
+    range.low range.min.low range.low.high range.low.max range.min.low.high
+    range.min.low.max range.low.high.max range.min.low.high.max
+    """.split()

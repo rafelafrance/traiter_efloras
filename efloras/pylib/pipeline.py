@@ -3,16 +3,16 @@
 import spacy
 from traiter.patterns.matcher_patterns import add_ruler_patterns, as_dicts
 from traiter.pipes.add_entity_data import ADD_ENTITY_DATA
+from traiter.pipes.cleanup import CLEANUP
 from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
 from traiter.pipes.dependency import DEPENDENCY
+from traiter.pipes.sentence import SENTENCE
 from traiter.pipes.simple_entity_data import SIMPLE_ENTITY_DATA
 from traiter.pipes.update_entity_data import UPDATE_ENTITY_DATA
-from traiter.pipes.sentence import SENTENCE
 from traiter.tokenizer_util import append_abbrevs, append_tokenizer_regexes
 
 from efloras.patterns.color import COLOR
 from efloras.patterns.count import COUNT, COUNT_WORD, NOT_A_COUNT
-from efloras.patterns.forget import FORGET
 from efloras.patterns.location_linker import LOCATION_LINKER
 from efloras.patterns.margin import MARGIN_SHAPE
 from efloras.patterns.part_linker import PART_LINKER
@@ -21,15 +21,15 @@ from efloras.patterns.range import (
     RANGE_MIN_LOW, RANGE_MIN_LOW_HIGH, RANGE_MIN_LOW_HIGH_MAX, RANGE_MIN_LOW_MAX)
 from efloras.patterns.sex_linker import SEX_LINKER
 from efloras.patterns.shape import N_SHAPE, SHAPE
-from efloras.patterns.size import SIZE, SIZE_HIGH_ONLY, SIZE_DOUBLE_DIM, NOT_A_SIZE
+from efloras.patterns.size import NOT_A_SIZE, SIZE, SIZE_DOUBLE_DIM, SIZE_HIGH_ONLY
 from efloras.patterns.subpart_linker import SUBPART_LINKER
-from efloras.pylib.const import ABBREVS, REPLACE, TERMS
+from efloras.pylib.const import ABBREVS, FORGET, REPLACE, TERMS
 
 TERM_RULES = [
     RANGE_LOW, RANGE_MIN_LOW, RANGE_LOW_HIGH, RANGE_LOW_MAX, RANGE_MIN_LOW_HIGH,
     RANGE_MIN_LOW_MAX, RANGE_LOW_HIGH_MAX, RANGE_MIN_LOW_HIGH_MAX, NOT_A_RANGE]
 
-ADD_DATA = [COLOR, FORGET, MARGIN_SHAPE, N_SHAPE, SHAPE]
+ADD_DATA = [COLOR, MARGIN_SHAPE, N_SHAPE, SHAPE]
 
 UPDATE_DATA = [
     COUNT, COUNT_WORD, NOT_A_COUNT, SIZE, SIZE_HIGH_ONLY, SIZE_DOUBLE_DIM, NOT_A_SIZE]
@@ -74,6 +74,8 @@ def pipeline():
     # add_debug_pipes(nlp, 'before add_data', entities=True)  # ###################
 
     nlp.add_pipe(ADD_ENTITY_DATA, config={'patterns': as_dicts(ADD_DATA)})
+
+    nlp.add_pipe(CLEANUP, config={'entities': FORGET})
 
     # add_debug_pipes(nlp, 'after add_data', entities=True)  # ####################
 
