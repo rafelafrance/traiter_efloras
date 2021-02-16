@@ -2,6 +2,7 @@
 
 import re
 from array import array
+from collections import deque
 
 from spacy import registry
 from traiter.actions import REJECT_MATCH
@@ -123,7 +124,9 @@ def scan_tokens(ent, high_only):
     # Map tokens to entities
     token_2_ent = array('i', [-1] * len(ent))
     for i, sub_ent in enumerate(ent.ents):
-        token_2_ent[sub_ent.start:sub_ent.end] = array('i', [i] * len(sub_ent))
+        start = sub_ent.start - ent.start
+        end = sub_ent.end - ent.start
+        token_2_ent[start:end] = array('i', [i] * len(sub_ent))
 
     # Process tokens in the entity
     for t, token in enumerate(ent):
@@ -144,19 +147,19 @@ def scan_tokens(ent, high_only):
 
         elif label == 'metric_length':
             dims[-1]['units'] = REPLACE[token.lower_]
-            dims[-1]['metric_length_idx'] = token_2_ent[t]
+            dims[-1]['units_link'] = token_2_ent[t]
 
         elif label == 'dimension':
             dims[-1]['dimension'] = REPLACE[token.lower_]
-            dims[-1]['dimension_idx'] = token_2_ent[t]
+            dims[-1]['dimension_link'] = token_2_ent[t]
 
         elif label == 'sex':
             dims[-1]['sex'] = re.sub(r'\W+', '', token.lower_)
-            dims[-1]['sex_idx'] = token_2_ent[t]
+            dims[-1]['sex_link'] = token_2_ent[t]
 
         elif label == 'quest':
             dims[-1]['uncertain'] = True
-            dims[-1]['uncertain_idx'] = token_2_ent[t]
+            dims[-1]['uncertain_link'] = token_2_ent[t]
 
         elif token.lower_ in CROSS:
             dims.append({})
@@ -166,26 +169,25 @@ def scan_tokens(ent, high_only):
 
 def fix_dimensions(dims):
     """Handle width comes before length and one of them is missing units."""
-    dim = ''
-    if len(dims) == 1:
-        dims[0]['dimension'] = dims[0].get('dimension', 'length')
-    elif not dims[0].get('dimension') and (dim := dims[1].get('dimension')):
-        dims[0]['dimension'] = 'length' if dim == 'width' else 'width'
-    elif not dims[1].get('dimension') and (dim := dims[0].get('dimension')):
-        dims[1]['dimension'] = 'length' if dim == 'width' else 'width'
-    else:
-        dims[0]['dimension'] = 'length'
-        dims[1]['dimension'] = 'width'
-        if len(dims) > 2:
-            dims[2]['dimension'] = 'thickness'
+    noted = [d for n in dims if (d := n.get('dimension'))]
+    defaults = deque(d for d in ('length', 'width', 'thickness') if d not in noted)
+
+    for dim in dims:
+        if not dim.get('dimension'):
+            dim['dimension'] = defaults.popleft()
+
     return dims
 
 
 def fix_units(dims):
     """Fill in missing units."""
     default = [d.get('units') for d in dims][-1]
+    default_link = [d.get('units_link') for d in dims][-1]
+
     for dim in dims:
         dim['units'] = dim.get('units', default)
+        dim['units_link'] = dim.get('units_link', default_link)
+
     return dims
 
 
@@ -211,6 +213,17 @@ def fill_data(dims, ent):
 
         if dim.get('uncertain'):
             data['uncertain'] = 'true'
+
+        if (idx := dim.get('units_link')) is not None:
+            range_._.links['units_link'] = idx + ent.start
+            ent.ents[idx]._.new_label = 'units'
+
+        if (idx := dim.get('dimension_link')) is not None:
+            range_._.links['size_dimension_link'] = idx + ent.start
+            ent.ents[idx]._.new_label = 'size_dimension'
+
+        if (idx := dim.get('sex_link')) is not None:
+            range_._.links['sex_link'] = idx + ent.start
 
         range_._.data = data
         range_._.new_label = 'size'

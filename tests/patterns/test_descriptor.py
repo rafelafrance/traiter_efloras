@@ -31,8 +31,12 @@ class TestDescriptor(unittest.TestCase):
         self.assertEqual(
             test('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
             [{'habit': 'shrub', 'trait': 'habit', 'start': 0, 'end': 6},
-             {'length_high': 1.5, 'length_units': 'm',
-              'trait': 'size', 'start': 12, 'end': 15}]
+             {'length_high': 1.5,
+              'length_units': 'm',
+              'trait': 'size',
+              'start': 12,
+              'end': 15},
+             {'units': 'm', 'trait': 'units', 'start': 16, 'end': 17}]
         )
 
     def test_descriptor_03(self):

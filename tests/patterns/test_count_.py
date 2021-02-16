@@ -29,10 +29,21 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test('blade 5–10 × 4–9 cm'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 5.0, 'length_high': 10.0, 'length_units': 'cm',
-              'trait': 'size', 'start': 6, 'end': 10, 'part': 'leaf'},
-             {'width_low': 4.0, 'width_high': 9.0, 'width_units': 'cm',
-              'trait': 'size', 'start': 13, 'end': 16, 'part': 'leaf'}]
+             {'length_low': 5.0,
+              'length_high': 10.0,
+              'length_units': 'cm',
+              'trait': 'size',
+              'start': 6,
+              'end': 10,
+              'part': 'leaf'},
+             {'width_low': 4.0,
+              'width_high': 9.0,
+              'width_units': 'cm',
+              'trait': 'size',
+              'start': 13,
+              'end': 16,
+              'part': 'leaf'},
+             {'units': 'cm', 'trait': 'units', 'start': 17, 'end': 19}]
         )
 
     def test_count_04(self):
