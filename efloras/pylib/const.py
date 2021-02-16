@@ -30,9 +30,6 @@ TERMS.drop('imperial_length')
 REPLACE = TERMS.pattern_dict('replace')
 REMOVE = TERMS.pattern_dict('remove')
 
-TRAITS = set(""" color color_mod count location margin_shape part
-    size shape sex subpart woodiness """.split())
-
 # #########################################################################
 # Used to filter paragraphs in the source documents.
 PARA_RE = [t['pattern'] for t in TERMS.with_label('part')]
@@ -71,10 +68,14 @@ COMMON_PATTERNS = {
 }
 
 # #########################################################################
-# Remove entity parts that never got uses.
+# Entities
+
+TRAITS = set(""" color color_mod count location margin_shape part
+    size shape sex subpart woodiness part_location """.split())
+
 FORGET = """ about color_mod dimension imperial_length imperial_mass
-    margin_leader metric_length metric_mass not_a_range per_count quest
-    shape_leader shape_suffix surface
+    margin_leader metric_length metric_mass not_a_range per_count
+    quest shape_leader shape_suffix surface
     range.low range.min.low range.low.high range.low.max range.min.low.high
     range.min.low.max range.low.high.max range.min.low.high.max
     """.split()
