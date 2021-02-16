@@ -90,14 +90,13 @@ def get_traits(treatment):
     best = ''
     high = 0
     for para in treatment.find_all('p'):
-        text = ' '.join(para.get_text().split())
-        unique = set(PARA_RE.findall(text))
-        if len(unique) > high:
-            best = text
-            high = len(unique)
+        bolds = para.find_all('b')
+        if len(bolds) > high:
+            best = ' '.join(para.get_text().split())
+            high = len(bolds)
         if high >= 5:
             return best
-    return best if high >= 5 else ''
+    return best if high >= 4 else ''
 
 
 def treatment_link(flora_id, taxon_id):

@@ -19,6 +19,9 @@ def html_writer(args, rows):
     rows = sorted(rows, key=lambda r: (
         r.get('flora_id'), r['family'], r['taxon']))
 
+    for row in rows:
+        row['traits'] = [e._.data for e in row['doc'].ents]
+
     classes = build_classes(rows)
 
     for row in rows:

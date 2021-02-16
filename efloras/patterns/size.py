@@ -1,6 +1,7 @@
 """Common size snippets."""
 
 import re
+from array import array
 
 from spacy import registry
 from traiter.actions import REJECT_MATCH
@@ -119,30 +120,43 @@ def scan_tokens(ent, high_only):
     """Scan tokens for the various fields."""
     dims = [{}]
 
-    for token in ent:
+    # Map tokens to entities
+    token_2_ent = array('i', [-1] * len(ent))
+    for i, sub_ent in enumerate(ent.ents):
+        token_2_ent[sub_ent.start:sub_ent.end] = array('i', [i] * len(sub_ent))
+
+    # Process tokens in the entity
+    for t, token in enumerate(ent):
         label = token._.cached_label.split('.')[0]
 
         if label == 'range':
             values = re.findall(FLOAT_RE, token.text)
             values = [to_positive_float(v) for v in values]
+
             keys = token._.cached_label.split('.')[1:]
+
             for key, value in zip(keys, values):
                 dims[-1][key] = value
+
             if high_only:
                 dims[-1]['high'] = dims[-1]['low']
                 del dims[-1]['low']
 
         elif label == 'metric_length':
             dims[-1]['units'] = REPLACE[token.lower_]
+            dims[-1]['metric_length_idx'] = token_2_ent[t]
 
         elif label == 'dimension':
             dims[-1]['dimension'] = REPLACE[token.lower_]
+            dims[-1]['dimension_idx'] = token_2_ent[t]
 
         elif label == 'sex':
             dims[-1]['sex'] = re.sub(r'\W+', '', token.lower_)
+            dims[-1]['sex_idx'] = token_2_ent[t]
 
         elif label == 'quest':
             dims[-1]['uncertain'] = True
+            dims[-1]['uncertain_idx'] = token_2_ent[t]
 
         elif token.lower_ in CROSS:
             dims.append({})

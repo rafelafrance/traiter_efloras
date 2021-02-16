@@ -3,12 +3,13 @@
 import os
 import sqlite3
 from datetime import datetime
-from pprint import pp
 
 import duckdb
 import pandas as pd
 
 from efloras.pylib.const import PROCESSED_DATA, SITE
+
+FIELD_SKIPS = """ source_id trait_id """.split()
 
 
 def database(args, rows):
@@ -19,32 +20,71 @@ def database(args, rows):
     cxn = connect(args, path)
     create_tables(cxn)
 
-    print(get_tables(cxn))
-
     source_df = get_sources(rows)
-    pp(source_df.shape)
+    cxn.register('source_df', source_df)
 
     taxon_df = get_taxa(rows)
-    pp(taxon_df.shape)
+    cxn.register('taxon_df', taxon_df)
 
     raw_traits = get_raw_traits(rows, cxn)
+    from pprint import pp
     pp(raw_traits)
 
-    trait_df, value_df = get_traits(raw_traits)
+    trait_df, field_df = get_traits(raw_traits)
+    cxn.register('trait_df', trait_df)
+    cxn.register('field_df', field_df)
 
+    delete_old_recs(cxn)
+    inset_new_recs(cxn)
+
+    drop_views(cxn)
     cxn.close()
+
+
+def drop_views(cxn):
+    """Remove data frame views."""
+    cxn.execute('DROP VIEW source_df;')
+    cxn.execute('DROP VIEW taxon_df;')
+    cxn.execute('DROP VIEW trait_df;')
+    cxn.execute('DROP VIEW field_df;')
+
+
+def inset_new_recs(cxn):
+    """Add the new data."""
+    cxn.execute("""INSERT INTO sources SELECT * FROM source_df;""")
+    cxn.execute("""INSERT INTO traits SELECT * FROM trait_df;""")
+    cxn.execute("""INSERT INTO fields SELECT * FROM field_df;""")
+    cxn.execute("""
+        INSERT INTO taxa
+        SELECT * FROM taxon_df
+         WHERE taxon_df.taxon NOT IN (SELECT taxon FROM taxa);
+    """)
+
+
+def delete_old_recs(cxn):
+    """Remove old records before inserting new ones."""
+    cxn.execute("""
+        DELETE FROM sources WHERE source_id IN (SELECT source_id FROM source_df);
+    """)
+    cxn.execute("""
+        DELETE FROM traits WHERE source_id IN (SELECT source_id FROM source_df);
+    """)
+    cxn.execute("""
+        DELETE FROM fields WHERE source_id IN (SELECT source_id FROM source_df);
+    """)
 
 
 def get_traits(raw_traits):
     """Build traits data frame."""
     trait_df = []
-    value_df = []
+    field_df = []
     for trait in raw_traits:
         trait_df.append({
             'trait_id': trait['trait_id'],
             'source_id': trait['source_id'],
             'trait': trait['trait'],
             'taxon': trait['taxon'],
+            'part': trait.get('part', ''),
             'sex': trait.get('sex', ''),
             'notes': '',
         })
@@ -54,21 +94,28 @@ def get_traits(raw_traits):
                 continue
             if isinstance(value, list):
                 for val in value:
-                    append_value(value_df, trait, field, val)
+                    append_value(field_df, trait, field, val)
             else:
-                append_value(value_df, trait, field, value)
+                append_value(field_df, trait, field, value)
 
-    return trait_df, value_df
+    trait_df = pd.DataFrame(trait_df)
+    field_df = pd.DataFrame(field_df)
+
+    return trait_df, field_df
 
 
-def append_value(value_df, trait, field, value):
+def append_value(field_df, trait, field, value):
     """Append a value record to the data frame."""
-    value_df.append({
+    if field in FIELD_SKIPS:
+        return
+
+    field_df.append({
         'trait_id': trait['trait_id'],
         'source_id': trait['source_id'],
         'field': field,
-        'string': value if isinstance(value, str) else None,
-        'number': value if not isinstance(value, str) else None,
+        'string_value': value if isinstance(value, str) else None,
+        'int_value': value if isinstance(value, int) else None,
+        'float_value': value if isinstance(value, float) else None,
     })
 
 
@@ -92,8 +139,8 @@ def get_raw_traits(rows, cxn):
                 ent[1] | ent[2] |
                 {
                     'trait_id': ent[0],
-                    'taxon': row['taxon'],
                     'source_id': row['source_id'],
+                    'taxon': row['taxon'],
                 })
 
     return traits
@@ -108,30 +155,50 @@ def get_taxa(rows):
     """Build taxa data frame."""
     df = []
     for row in rows:
-        taxon = row['taxon']
-        level = taxon.split()
-        if len(level) == 1 and taxon.lower() == row['family'].lower():
+        family = row['family'].capitalize()
+
+        taxon = row['taxon'].capitalize()
+        taxon_parts = taxon.split()
+
+        if taxon == family:
             level = 'family'
-        elif len(level) == 1:
+            genus = ''
+            species = ''
+
+        elif len(taxon_parts) == 1:
             level = 'genus'
-        elif len(level) == 2:
+            genus = taxon_parts[0]
+            species = ''
+
+        elif len(taxon_parts) == 2:
             level = 'species'
+            genus = taxon_parts[0]
+            species = ' '.join(taxon_parts[:2])
+
         elif taxon.lower().find('subsp.') > -1:
             level = 'subspecies'
+            genus = taxon_parts[0]
+            species = ' '.join(taxon_parts[:2])
+
         elif taxon.lower().find('var.') > -1:
             level = 'variant'
+            genus = taxon_parts[0]
+            species = ' '.join(taxon_parts[:2])
+
         else:
             raise ValueError(f"Unknown level: {row['level']}")
 
         taxon = {
             'taxon': row['taxon'],
             'level': level,
+            'family': family,
+            'genus': genus,
+            'species': species,
             'notes': '',
         }
         df.append(taxon)
 
     df = pd.DataFrame(df)
-    df = df.set_index('taxon')
     return df
 
 
@@ -157,7 +224,6 @@ def get_sources(rows):
         row['source_id'] = source_id
 
     df = pd.DataFrame(df)
-    df = df.set_index('source_id')
     return df
 
 
@@ -201,9 +267,12 @@ def create_tables(cxn):
 
     cxn.execute("""
         CREATE TABLE IF NOT EXISTS taxa (
-            taxon  VARCHAR PRIMARY KEY,
-            level  VARCHAR,
-            notes  VARCHAR
+            taxon   VARCHAR PRIMARY KEY,
+            level   VARCHAR,
+            family  VARCHAR,
+            genus   VARCHAR,
+            species VARCHAR,
+            notes   VARCHAR
         );
     """)
 
@@ -214,16 +283,18 @@ def create_tables(cxn):
             trait     VARCHAR,
             taxon     VARCHAR,
             part      VARCHAR,
+            sex       VARCHAR,
             notes     VARCHAR
         );
     """)
 
     cxn.execute("""
-        CREATE TABLE IF NOT EXISTS values (
-            trait_id  UBIGINT,
-            source_id UBIGINT,
-            field     VARCHAR,
-            string    VARCHAR,
-            number    REAL
+        CREATE TABLE IF NOT EXISTS fields (
+            trait_id     UBIGINT,
+            source_id    UBIGINT,
+            field        VARCHAR,
+            string_value VARCHAR,
+            int_value    BIGINT,
+            float_value  DOUBLE
         );
     """)

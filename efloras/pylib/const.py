@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 
-from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, OPEN, SLASH
+from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, OPEN, PLUS, SLASH
 from traiter.terms.csv_ import Csv
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
@@ -56,6 +56,7 @@ COMMON_PATTERNS = {
     ')': {'TEXT': {'IN': CLOSE}},
     '-': {'TEXT': {'IN': DASH}, 'OP': '+'},
     '-*': {'TEXT': {'IN': DASH}, 'OP': '*'},
+    '[+]': {'TEXT': {'IN': PLUS}},
     '/': {'TEXT': {'IN': SLASH}},
     ',': {'TEXT': {'IN': COMMA}},
     'to': {'LOWER': {'IN': TO}},
@@ -70,7 +71,7 @@ COMMON_PATTERNS = {
 }
 
 # #########################################################################
-# Remove these stray entities
+# Remove entity parts that never got uses.
 FORGET = """ about color_mod dimension imperial_length imperial_mass
     margin_leader metric_length metric_mass not_a_range per_count quest
     shape_leader shape_suffix surface
