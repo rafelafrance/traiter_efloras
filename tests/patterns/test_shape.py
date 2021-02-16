@@ -191,8 +191,16 @@ class TestShape(unittest.TestCase):
         self.assertEqual(
             test('blade orbic-ulate to pentagonal,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'shape': 'orbicular', 'trait': 'shape', 'start': 6, 'end': 17},
-             {'shape': 'polygonal', 'trait': 'shape', 'start': 21, 'end': 31}]
+             {'shape': 'orbicular',
+              'trait': 'shape',
+              'start': 6,
+              'end': 17,
+              'part': 'leaf'},
+             {'shape': 'polygonal',
+              'trait': 'shape',
+              'start': 21,
+              'end': 31,
+              'part': 'leaf'}]
         )
 
     def test_shape_15(self):

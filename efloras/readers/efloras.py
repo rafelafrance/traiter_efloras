@@ -33,6 +33,8 @@ def efloras_reader(args, families):
             text = get_treatment(path)
             text = get_traits(text)
             taxon_id = downloader.get_taxon_id(path)
+
+            # Must have a taxon name
             if not taxa.get(taxon_id):
                 continue
 
@@ -40,23 +42,16 @@ def efloras_reader(args, families):
             if genera and not re.search(genera, taxa[taxon_id], flags=FLAGS):
                 continue
 
-            row = {
+            rows.append({
                 'family': family['family'],
                 'flora_id': flora_id,
                 'flora_name': flora_ids[flora_id],
                 'taxon': taxa[taxon_id],
                 'taxon_id': taxon_id,
                 'link': treatment_link(flora_id, taxon_id),
-                'text': '',
-                'traits': {},
-            }
-
-            if text is None:
-                rows.append(row)
-                continue
-
-            row['text'] = text
-            rows.append(row)
+                'path': path,
+                'text': text if text else '',
+            })
 
     return rows
 

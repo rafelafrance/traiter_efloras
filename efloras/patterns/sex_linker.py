@@ -4,9 +4,9 @@ from traiter.patterns.dependency_patterns import DependencyPatterns
 from traiter.pipes.dependency import NEAREST_ANCHOR
 
 from efloras.pylib.const import TRAITS
-from efloras.pylib.util import trim_traits
+from efloras.pylib.util import remove_traits
 
-TRAITS_ = trim_traits(TRAITS, 'sex')
+TRAITS_ = remove_traits(TRAITS, 'sex')
 
 SEX_LINKER = DependencyPatterns(
     'sex_linker',

@@ -1,7 +1,9 @@
 beautifulsoup4~=4.9.3
-pandas~=1.2.0
-Jinja2==2.11.2
+duckdb~=0.2.4
+pandas~=1.2.1
+Jinja2~=2.11.2
 regex~=2020.11.13
 lxml~=4.6.2
+pandas~=1.2.2
 selenium~=3.141.0
-spacy~=3.0.1
+spacy~=3.0.3

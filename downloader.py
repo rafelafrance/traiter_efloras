@@ -20,7 +20,7 @@ from lxml import html
 
 import efloras.pylib.const
 import efloras.pylib.util
-from efloras.pylib.const import DATA_DIR
+from efloras.pylib.const import DATA_DIR, SITE
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -37,7 +37,6 @@ socket.setdefaulttimeout(TIMEOUT)
 
 FAMILY_DIR = DATA_DIR / 'efloras_families'
 
-SITE = 'http://www.efloras.org'
 EFLORAS_FAMILIES = FAMILY_DIR / 'eFloras_family_list.csv'
 TAXON_RE = re.compile(r'Accepted Name', flags=re.IGNORECASE)
 

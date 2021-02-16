@@ -4,10 +4,9 @@ from traiter.patterns.dependency_patterns import DependencyPatterns
 from traiter.pipes.dependency import NEAREST_ANCHOR
 
 from efloras.pylib.const import TRAITS
-from efloras.pylib.util import trim_traits
+from efloras.pylib.util import remove_traits
 
-TRAITS_ = trim_traits(TRAITS, 'part')
-POS = ' ADJ VERB '.split()
+TRAITS_ = remove_traits(TRAITS, 'part')
 
 PART_LINKER = DependencyPatterns(
     'part_linker',
@@ -18,7 +17,7 @@ PART_LINKER = DependencyPatterns(
     decoder={
         'part': {'ENT_TYPE': 'part'},
         'trait': {'ENT_TYPE': {'IN': TRAITS_}},
-        'adv': {'POS': {'IN': ['ADV']}},
+        'adv': {'POS': 'ADV'},
         'link': {'POS': {'IN': ['ADJ', 'AUX', 'VERB']}},
         'subpart': {'ENT_TYPE': 'subpart'},
     },

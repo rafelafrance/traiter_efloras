@@ -48,7 +48,7 @@ def main(args):
         copied = deepcopy(rows)
         biluo_writer(args, copied)
 
-    if args.sqlite or args.duckdb:
+    if args.sqlite3 or args.duckdb:
         copied = deepcopy(rows)
         database(args, copied)
 
@@ -145,7 +145,7 @@ def parse_args():
         help="""Output the results to this HTML file.""")
 
     arg_parser.add_argument(
-        '--sqlite', '-S', help="""Output to this sqlite3 database.""")
+        '--sqlite3', '-S', help="""Output to this sqlite3 database.""")
 
     arg_parser.add_argument(
         '--duckdb', '-D', help="""Output to this duckDB database.""")
@@ -172,6 +172,10 @@ def parse_args():
         '--list-families', '-l', action='store_true',
         help="""List families available to extract and exit.""")
 
+    arg_parser.add_argument(
+        '--clear-db', action='store_true',
+        help="""Clear the database before writing to it.""")
+
     args = arg_parser.parse_args()
 
     if args.family:
@@ -185,7 +189,7 @@ def parse_args():
         args.flora_id = [1]
 
     if not (args.csv_file or args.html_file or args.ner_file or args.iob_file
-            or args.biluo_file or args.sqlite or args.duckdb):
+            or args.biluo_file or args.sqlite3 or args.duckdb):
         setattr(args, 'csv_file', sys.stdout)
 
     return args

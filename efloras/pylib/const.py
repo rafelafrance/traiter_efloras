@@ -10,9 +10,13 @@ BASE_DIR = Path.cwd().resolve().parts[-1]
 BASE_DIR = Path.cwd() if BASE_DIR.find('floras') > -1 else Path.cwd().parent
 
 DATA_DIR = BASE_DIR / 'data'
+PROCESSED_DATA = DATA_DIR / 'processed'
 
 EFLORAS_DIR = DATA_DIR / 'eFloras'
 EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
+
+# Download site
+SITE = 'http://www.efloras.org'
 
 # #########################################################################
 # Term related constants
