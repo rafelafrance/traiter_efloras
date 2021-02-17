@@ -16,11 +16,12 @@ DECODER = COMMON_PATTERNS | {
     'leader': {'LOWER': {'IN': LOCATION_LEADERS}},
     'not_loc': {'ENT_TYPE': {'IN': ['sex', 'location']}},
     'sex': {'ENT_TYPE': 'sex'},
-    'of': {'LOWER': 'of'}
+    'of': {'LOWER': 'of'},
+    'adj': {'POS': 'ADJ'},
 }
 
 PART_AS_LOCATION = MatcherPatterns(
-    'part_location',
+    'part_as_loc',
     on_match=TEXT_ACTION,
     decoder=DECODER,
     patterns=[
@@ -34,7 +35,7 @@ SUBPART_AS_LOCATION = MatcherPatterns(
     decoder=DECODER,
     patterns=[
         'leader subpart',
-        'leader subpart of part'
+        'leader subpart of adj? subpart'
     ],
 )
 
@@ -42,5 +43,5 @@ SUBPART_AS_LOCATION = MatcherPatterns(
 @registry.misc(SUBPART_AS_LOCATION.on_match)
 def subpart_location(ent):
     """Enrich the match with data."""
-    ent._.new_label = 'part_location'
+    ent._.new_label = 'part_as_loc'
     text_action(ent)

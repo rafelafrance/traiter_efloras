@@ -174,14 +174,23 @@ class TestCount(unittest.TestCase):
                 aculei 0.5–1 times as long as opaque base."""),
             [{'sex': 'pistillate', 'trait': 'sex', 'start': 0, 'end': 10,
               'part': 'flower'},
-             {'part': 'flower', 'trait': 'part', 'start': 11, 'end': 18,
+             {'part': 'flower',
+              'trait': 'part',
+              'start': 11,
+              'end': 18,
               'sex': 'pistillate'},
-             {'subpart': 'apex', 'trait': 'subpart', 'start': 39, 'end': 43,
-              'part': 'flower', 'sex': 'pistillate'},
-             {'subpart': 'aculeus', 'trait': 'subpart', 'start': 58, 'end': 64,
-              'part': 'flower', 'sex': 'pistillate'},
-             {'subpart': 'base', 'trait': 'subpart', 'start': 95, 'end': 99,
-              'part': 'flower', 'sex': 'pistillate'}]
+             {'part_as_loc': 'at apex of hypanthial aculei',
+              'trait': 'part_as_loc',
+              'start': 36,
+              'end': 64,
+              'part': 'flower',
+              'sex': 'pistillate'},
+             {'subpart': 'base',
+              'trait': 'subpart',
+              'start': 95,
+              'end': 99,
+              'part': 'flower',
+              'sex': 'pistillate'}]
         )
 
     def test_count_18(self):

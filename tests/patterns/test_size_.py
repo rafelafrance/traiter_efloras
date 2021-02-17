@@ -86,10 +86,17 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('leaf sinuses 1/5–1/4 to base'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
-             {'subpart': 'sinus', 'trait': 'subpart',
-              'part': 'leaf', 'start': 5, 'end': 12},
-             {'subpart': 'base', 'trait': 'subpart',
-              'part': 'leaf', 'start': 24, 'end': 28}]
+             {'subpart': 'sinus',
+              'trait': 'subpart',
+              'start': 5,
+              'end': 12,
+              'part': 'leaf'},
+             {'part_as_loc': 'to base',
+              'trait': 'part_as_loc',
+              'start': 21,
+              'end': 28,
+              'part': 'leaf',
+              'subpart': 'sinus'}]
         )
 
     def test_size_07(self):

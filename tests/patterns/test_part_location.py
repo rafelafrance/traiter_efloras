@@ -22,8 +22,8 @@ class TestPartLocation(unittest.TestCase):
               'end': 12,
               'part': 'stipule'},
              {'units': 'mm', 'trait': 'units', 'start': 13, 'end': 15},
-             {'part_location': 'to petiole',
-              'trait': 'part_location',
+             {'part_as_loc': 'to petiole',
+              'trait': 'part_as_loc',
               'start': 41,
               'end': 51,
               'part': 'stipule'}]
@@ -32,8 +32,8 @@ class TestPartLocation(unittest.TestCase):
     def test_part_location_02(self):
         self.assertEqual(
             test('completely embracing stem but not connate'),
-            [{'part_location': 'embracing stem',
-              'trait': 'part_location',
+            [{'part_as_loc': 'embracing stem',
+              'trait': 'part_as_loc',
               'start': 11,
               'end': 25},
              {'shape': 'not connate', 'trait': 'shape', 'start': 30, 'end': 41}]
@@ -48,8 +48,8 @@ class TestPartLocation(unittest.TestCase):
               'start': 17,
               'end': 24,
               'part': 'stipule'},
-             {'part_location': 'at margin',
-              'trait': 'part_location',
+             {'part_as_loc': 'at margin',
+              'trait': 'part_as_loc',
               'start': 25,
               'end': 34,
               'part': 'stipule'}]
