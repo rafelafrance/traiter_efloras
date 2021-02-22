@@ -60,12 +60,12 @@ def count(ent):
     """Enrich the match with data."""
     range_ = range_values(ent)
 
-    if per_count := [(i, e) for i, e in enumerate(ent.ents) if e.label_ == 'per_count']:
-        pc_idx, pc_ent = per_count[0]
-        pc_text = pc_ent.text.lower()
-        pc_ent._.new_label = 'count_group'
+    if pc := [e for e in ent.ents if e.label_ == 'per_count']:
+        pc = pc[0]
+        pc_text = pc.text.lower()
+        pc._.new_label = 'count_group'
         range_._.data['count_group'] = REPLACE.get(pc_text, pc_text)
-        range_._.links['count_group_link'].append(pc_idx)
+        range_._.links['count_group_link'] = [(pc.start_char, pc.end_char)]
 
 
 @registry.misc(COUNT_WORD.on_match)
