@@ -22,7 +22,7 @@ def sqlite3_db(args, rows):
     create_tables(cxn)
 
     source_df = get_sources(rows)
-    taxon_df = get_taxa(rows)
+    taxon_df = get_taxa(rows, cxn)
     raw_traits = get_raw_traits(rows, cxn)
     trait_df, field_df = get_traits(raw_traits)
 
@@ -101,12 +101,10 @@ def get_raw_traits(rows, cxn):
     next_id = get_max_trait_id(cxn)
 
     for row in rows:
-
         all_ents = {}
-        doc = row['doc']
 
         # Create an ID and key entities by their span start & end characters
-        for ent in doc.ents:
+        for ent in row['doc'].ents:
             next_id += 1
             all_ents[(ent.start_char, ent.end_char)] = {
                 'id': next_id,
@@ -119,8 +117,7 @@ def get_raw_traits(rows, cxn):
             link_ids = {k: all_ents[i]['id']
                         for k, v in ent['links'].items() for i in v}
             traits.append(
-                ent['data'] | link_ids |
-                {
+                ent['data'] | link_ids | {
                     'trait_id': ent['id'],
                     'source_id': row['source_id'],
                     'taxon': row['taxon'],
@@ -130,18 +127,26 @@ def get_raw_traits(rows, cxn):
 
 
 def get_max_trait_id(cxn):
-    """Get the max index for the table."""
+    """Get taxa already in the database."""
     return cxn.execute('SELECT MAX(trait_id) FROM traits;').fetchone()[0] or 0
 
 
-def get_taxa(rows):
+def get_taxa(rows, cxn):
     """Build taxa data frame."""
+    existing = {r[0] for r in cxn.execute('SELECT taxon FROM taxa;').fetchall()}
+
     df = []
     for row in rows:
-        family = row['family'].capitalize()
         taxon = row['taxon'].capitalize()
 
-        level, genus, species = get_taxon_level(row, family, taxon)
+        if taxon in existing:
+            continue
+
+        existing.add(taxon)
+
+        family = row['family'].capitalize()
+
+        level, genus, species = get_taxon_level(family, taxon)
 
         taxon = {
             'taxon': row['taxon'],
@@ -157,7 +162,7 @@ def get_taxa(rows):
     return df
 
 
-def get_taxon_level(row, family, taxon):
+def get_taxon_level(family, taxon):
     """Calculate the taxon level and any """
     taxon_parts = taxon.split()
 
@@ -186,8 +191,13 @@ def get_taxon_level(row, family, taxon):
         genus = taxon_parts[0]
         species = ' '.join(taxon_parts[:2])
 
+    elif taxon.lower().find('sect.') > -1:
+        level = 'section'
+        genus = taxon_parts[0]
+        species = ''
+
     else:
-        raise ValueError(f"Unknown level: {row['level']}")
+        raise ValueError(f"Cannot find taxon level in: {taxon}")
 
     return level, genus, species
 

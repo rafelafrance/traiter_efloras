@@ -90,10 +90,11 @@ def get_traits(treatment):
     best = ''
     high = 0
     for para in treatment.find_all('p'):
-        bolds = para.find_all('b')
-        if len(bolds) > high:
+        text = ' '.join(para.get_text().split())
+        unique = set(PARA_RE.findall(text))
+        if len(unique) > high:
             best = ' '.join(para.get_text().split())
-            high = len(bolds)
+            high = len(unique)
         if high >= 5:
             return best
     return best if high >= 4 else ''
