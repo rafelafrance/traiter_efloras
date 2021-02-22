@@ -13,8 +13,9 @@ from efloras.pylib.util import get_family_flora_ids
 from efloras.readers.efloras import efloras_reader
 from efloras.writers.csv_ import csv_writer
 from efloras.writers.data import biluo_writer, iob_writer, ner_writer
-from efloras.writers.database import database
+from efloras.writers.duck_db import duck_db
 from efloras.writers.html_ import html_writer
+from efloras.writers.sqlite3_db import sqlite3_db
 
 
 def main(args):
@@ -48,9 +49,13 @@ def main(args):
         copied = deepcopy(rows)
         biluo_writer(args, copied)
 
-    if args.sqlite3 or args.duckdb:
+    if args.sqlite3:
         copied = deepcopy(rows)
-        database(args, copied)
+        sqlite3_db(args, copied)
+
+    if args.duckdb:
+        copied = deepcopy(rows)
+        duck_db(args, copied)
 
 
 def get_efloras_families(args):
@@ -145,10 +150,10 @@ def parse_args():
         help="""Output the results to this HTML file.""")
 
     arg_parser.add_argument(
-        '--sqlite3', '-S', help="""Output to this sqlite3 database.""")
+        '--sqlite3', '-S', help="""Output to this sqlite3 duck_db.""")
 
     arg_parser.add_argument(
-        '--duckdb', '-D', help="""Output to this duckDB database.""")
+        '--duckdb', '-D', help="""Output to this duckDB duck_db.""")
 
     arg_parser.add_argument(
         '--csv-file', '-C', type=argparse.FileType('w'),
@@ -174,7 +179,7 @@ def parse_args():
 
     arg_parser.add_argument(
         '--clear-db', action='store_true',
-        help="""Clear the database before writing to it.""")
+        help="""Clear the duck_db before writing to it.""")
 
     args = arg_parser.parse_args()
 

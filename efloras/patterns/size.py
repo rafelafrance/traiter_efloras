@@ -1,7 +1,6 @@
 """Common size snippets."""
 
 import re
-from array import array
 from collections import deque
 
 from spacy import registry
@@ -12,7 +11,7 @@ from traiter.util import to_positive_float
 
 from efloras.pylib.const import COMMON_PATTERNS, REPLACE
 
-FOLLOW = """ dimension sex """.split()
+FOLLOW = """ dim sex """.split()
 NOT_A_SIZE = """ for """.split()
 
 DECODER = COMMON_PATTERNS | {
@@ -20,7 +19,7 @@ DECODER = COMMON_PATTERNS | {
     'about': {'ENT_TYPE': 'about'},
     'and': {'LOWER': 'and'},
     'cm': {'ENT_TYPE': 'metric_length'},
-    'dim': {'ENT_TYPE': 'dimension'},
+    'dim': {'ENT_TYPE': 'dim'},
     'follow': {'ENT_TYPE': {'IN': FOLLOW}},
     'not_size': {'LOWER': {'IN': NOT_A_SIZE}},
     'sex': {'ENT_TYPE': 'sex'},
@@ -92,7 +91,7 @@ def size_double_dim(ent):
     Like: Legumes 2.8-4.5 mm high and wide
     """
     dims = [REPLACE.get(t.lower_, t.lower_) for t in ent
-            if t._.cached_label == 'dimension']
+            if t._.cached_label == 'dim']
 
     ranges = [e for e in ent.ents if e._.cached_label.split('.')[0] == 'range']
 
@@ -121,16 +120,14 @@ def scan_tokens(ent, high_only):
     """Scan tokens for the various fields."""
     dims = [{}]
 
-    # Map tokens to entities
-    token_2_ent = array('i', [-1] * len(ent))
-    for i, sub_ent in enumerate(ent.ents):
-        start = sub_ent.start - ent.start
-        end = sub_ent.end - ent.start
-        token_2_ent[start:end] = array('i', [i] * len(sub_ent))
+    # Map token indices to the char span for the sub-entities
+    token_2_ent = {(i - ent.start): (e.start_char, e.end_char)
+                   for e in ent.ents for i in range(e.start, ent.end)}
 
     # Process tokens in the entity
     for t, token in enumerate(ent):
         label = token._.cached_label.split('.')[0]
+        print(label)
 
         if label == 'range':
             values = re.findall(FLOAT_RE, token.text)
@@ -149,7 +146,7 @@ def scan_tokens(ent, high_only):
             dims[-1]['units'] = REPLACE[token.lower_]
             dims[-1]['units_link'] = token_2_ent[t]
 
-        elif label == 'dimension':
+        elif label == 'dim':
             dims[-1]['dimension'] = REPLACE[token.lower_]
             dims[-1]['dimension_link'] = token_2_ent[t]
 
@@ -193,6 +190,9 @@ def fix_units(dims):
 
 def fill_data(dims, ent):
     """Move fields into correct place & give them consistent names."""
+    # Need to find entities using their character offsets
+    link_2_ent = {(e.start_char, e.end_char): e for e in ent.ents}
+
     ranges = [e for e in ent.ents if e._.cached_label.split('.')[0] == 'range']
 
     for dim, range_ in zip(dims, ranges):
@@ -214,16 +214,18 @@ def fill_data(dims, ent):
         if dim.get('uncertain'):
             data['uncertain'] = 'true'
 
-        if (idx := dim.get('units_link')) is not None:
-            range_._.links['units_link'] = idx + ent.start
-            ent.ents[idx]._.new_label = 'units'
+        if (link := dim.get('units_link')) is not None:
+            range_._.links['units_link'] = [link]
+            sub_ent = link_2_ent[link]
+            sub_ent._.new_label = 'units'
 
-        if (idx := dim.get('dimension_link')) is not None:
-            range_._.links['size_dimension_link'] = idx + ent.start
-            ent.ents[idx]._.new_label = 'size_dimension'
+        if (link := dim.get('dimension_link')) is not None:
+            range_._.links['dimension_link'] = [link]
+            sub_ent = link_2_ent[link]
+            sub_ent._.new_label = 'dimension'
 
-        if (idx := dim.get('sex_link')) is not None:
-            range_._.links['sex_link'] = idx + ent.start
+        if (link := dim.get('sex_link')) is not None:
+            range_._.links['sex_link'] = [link]
 
         range_._.data = data
         range_._.new_label = 'size'
