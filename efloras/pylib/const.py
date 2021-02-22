@@ -71,7 +71,7 @@ COMMON_PATTERNS = {
 # Entities
 
 TRAITS = set(""" color color_mod count location margin_shape part
-    size shape sex dimension subpart woodiness part_as_loc units """.split())
+    size shape sex subpart woodiness part_as_loc """.split())
 
 FORGET = """ about color_mod dim imperial_length imperial_mass
     margin_leader metric_length metric_mass not_a_range per_count

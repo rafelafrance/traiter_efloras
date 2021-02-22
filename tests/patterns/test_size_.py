@@ -78,7 +78,7 @@ class TestSize(unittest.TestCase):
               'end': 9,
               'part': 'leaf'},
              {'units': 'cm', 'trait': 'units', 'start': 10, 'end': 12},
-             {'size_dimension': 'width', 'trait': 'size_dimension', 'start': 13,
+             {'dimension': 'width', 'trait': 'dimension', 'start': 13,
               'end': 17}]
         )
 
@@ -212,7 +212,7 @@ class TestSize(unittest.TestCase):
               'end': 39,
               'part': 'leaf'},
              {'units': 'cm', 'trait': 'units', 'start': 40, 'end': 42},
-             {'size_dimension': 'width', 'trait': 'size_dimension', 'start': 43,
+             {'dimension': 'width', 'trait': 'dimension', 'start': 43,
               'end': 47}]
         )
 
@@ -423,8 +423,8 @@ class TestSize(unittest.TestCase):
               'end': 12,
               'part': 'flower'},
              {'units': 'cm', 'trait': 'units', 'start': 13, 'end': 15},
-             {'size_dimension': 'diameter',
-              'trait': 'size_dimension',
+             {'dimension': 'diameter',
+              'trait': 'dimension',
               'start': 16,
               'end': 20},
              {'part': 'hypanthium', 'trait': 'part', 'start': 23, 'end': 33},
@@ -531,8 +531,8 @@ class TestSize(unittest.TestCase):
               'end': 19,
               'part': 'calyx'},
              {'units': 'mm', 'trait': 'units', 'start': 20, 'end': 22},
-             {'size_dimension': 'height',
-              'trait': 'size_dimension',
+             {'dimension': 'height',
+              'trait': 'dimension',
               'start': 23,
               'end': 27}]
         )
@@ -713,6 +713,6 @@ class TestSize(unittest.TestCase):
               'end': 10,
               'part': 'trunk'},
              {'units': 'cm', 'trait': 'units', 'start': 14, 'end': 16},
-             {'size_dimension': 'dbh', 'trait': 'size_dimension', 'start': 17,
+             {'dimension': 'dbh', 'trait': 'dimension', 'start': 17,
               'end': 23}]
         )

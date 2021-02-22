@@ -127,7 +127,6 @@ def scan_tokens(ent, high_only):
     # Process tokens in the entity
     for t, token in enumerate(ent):
         label = token._.cached_label.split('.')[0]
-        print(label)
 
         if label == 'range':
             values = re.findall(FLOAT_RE, token.text)
