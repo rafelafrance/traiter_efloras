@@ -217,6 +217,7 @@ def get_sources(rows):
             'source_id': source_id,
             'source': SITE,
             'url': row['link'],
+            'text_': row['text'],
             'downloaded': downloaded,
             'notes': f"{row['family']}, {row['flora_name']}, {row['taxon']}"
         }
@@ -234,6 +235,7 @@ def create_tables(cxn):
             source_id  INTEGER PRIMARY KEY,
             source     TEXT,
             url        TEXT,
+            text_      TEXT,
             downloaded DATE,
             notes      TEXT
         );

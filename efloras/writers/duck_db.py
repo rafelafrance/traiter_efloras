@@ -74,6 +74,7 @@ def create_tables(cxn):
             source_id  UBIGINT PRIMARY KEY,
             source     VARCHAR,
             url        VARCHAR,
+            text_      VARCHAR,
             downloaded DATE,
             notes      VARCHAR
         );
