@@ -150,10 +150,10 @@ def parse_args():
         help="""Output the results to this HTML file.""")
 
     arg_parser.add_argument(
-        '--sqlite3', '-S', help="""Output to this sqlite3 duck_db.""")
+        '--sqlite3', '-S', help="""Output to this sqlite3 database.""")
 
     arg_parser.add_argument(
-        '--duckdb', '-D', help="""Output to this duckDB duck_db.""")
+        '--duckdb', '-D', help="""Output to this duckDB database.""")
 
     arg_parser.add_argument(
         '--csv-file', '-C', type=argparse.FileType('w'),
