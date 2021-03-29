@@ -20,9 +20,7 @@ SITE = 'http://www.efloras.org'
 
 # #########################################################################
 # Term related constants
-TERM_PATH = BASE_DIR / 'efloras' / 'vocabulary' / 'terms.csv'
-TERMS = Csv.shared('colors units')
-TERMS += Csv.read_csv(TERM_PATH)
+TERMS = Csv.shared('colors units plant_treatment')
 TERMS += Csv.hyphenate_terms(TERMS)
 TERMS += Csv.trailing_dash(TERMS, label='color')
 TERMS.drop('imperial_length')
