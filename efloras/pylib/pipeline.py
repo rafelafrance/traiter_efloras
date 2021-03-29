@@ -1,7 +1,8 @@
 """Create a trait pipeline."""
 
 import spacy
-from traiter.patterns.matcher_patterns import add_ruler_patterns, as_dicts
+from traiter.patterns.matcher_patterns import (
+    add_ruler_patterns, as_dicts, patterns_to_dispatch)
 from traiter.pipes.add_entity_data import ADD_ENTITY_DATA
 from traiter.pipes.cleanup import CLEANUP
 from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
@@ -75,7 +76,7 @@ def pipeline():
 
     # add_debug_pipes(nlp, 'before add_data', entities=True)  # ###################
 
-    nlp.add_pipe(ADD_ENTITY_DATA, config={'patterns': as_dicts(ADD_DATA)})
+    nlp.add_pipe(ADD_ENTITY_DATA, config={'dispatch': patterns_to_dispatch(ADD_DATA)})
 
     nlp.add_pipe(CLEANUP, config={'entities': FORGET})
 
