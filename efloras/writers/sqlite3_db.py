@@ -89,9 +89,7 @@ def append_value(field_df, trait, field, value):
         'trait_id': trait['trait_id'],
         'source_id': trait['source_id'],
         'field': field,
-        'string_value': value if isinstance(value, str) else None,
-        'int_value': value if isinstance(value, int) else None,
-        'float_value': value if isinstance(value, float) else None,
+        'value': value,
     })
 
 
@@ -276,12 +274,10 @@ def create_tables(cxn):
 
     cxn.executescript("""
         CREATE TABLE IF NOT EXISTS fields (
-            trait_id     INTEGER,
-            source_id    INTEGER,
-            field        TEXT,
-            string_value TEXT,
-            int_value    INTEGER,
-            float_value  REAL
+            trait_id  INTEGER,
+            source_id INTEGER,
+            field     TEXT,
+            value
         );
         CREATE INDEX IF NOT EXISTS fields_source_id ON fields (source_id);
         CREATE INDEX IF NOT EXISTS fields_field ON fields (field);
