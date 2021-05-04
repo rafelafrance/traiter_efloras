@@ -24,7 +24,7 @@ DECODER = COMMON_PATTERNS | {
 
 COUNT = MatcherPatterns(
     'count',
-    on_match='count.v1',
+    on_match='efloras.count.v1',
     decoder=DECODER,
     patterns=[
         '99-99 -* per_count?',
@@ -36,7 +36,7 @@ COUNT = MatcherPatterns(
 
 COUNT_WORD = MatcherPatterns(
     'count_word',
-    on_match='count_word.v1',
+    on_match='efloras.count_word.v1',
     decoder=DECODER,
     patterns=[
         'count_word',

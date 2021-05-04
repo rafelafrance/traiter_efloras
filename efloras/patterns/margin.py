@@ -17,7 +17,7 @@ SHAPES = """ margin_shape shape """.split()
 
 MARGIN_SHAPE = MatcherPatterns(
     'margin_shape',
-    on_match='margin.v1',
+    on_match='efloras.margin.v1',
     decoder=COMMON_PATTERNS | {
         'margin_shape': {'ENT_TYPE': 'margin_shape'},
         'shape': {'ENT_TYPE': {'IN': SHAPES}},

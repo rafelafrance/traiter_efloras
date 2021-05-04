@@ -31,7 +31,7 @@ PART_AS_LOCATION = MatcherPatterns(
 
 SUBPART_AS_LOCATION = MatcherPatterns(
     'subpart_location',
-    on_match='subpart_location.v1',
+    on_match='efloras.subpart_location.v1',
     decoder=DECODER,
     patterns=[
         'leader subpart',

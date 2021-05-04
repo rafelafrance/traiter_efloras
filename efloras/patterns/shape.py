@@ -21,7 +21,7 @@ DECODER = COMMON_PATTERNS | {
 
 SHAPE = MatcherPatterns(
     'shape',
-    on_match='shape.v1',
+    on_match='efloras.shape.v1',
     decoder=DECODER,
     patterns=[
         'shape_loc* -* shape+',
@@ -33,7 +33,7 @@ SHAPE = MatcherPatterns(
 
 N_SHAPE = MatcherPatterns(
     'n_shape',
-    on_match='n_shape.v1',
+    on_match='efloras.n_shape.v1',
     decoder=DECODER,
     patterns=[
         'shape_loc* 9 - angular',
