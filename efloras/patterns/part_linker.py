@@ -1,4 +1,9 @@
-"""Link traits to body parts."""
+"""Link traits to plant parts.
+
+We are linking parts like "petal" or "leaf" to traits like color or size.
+For example: "with thick, woody rootstock" should link the "rootstock" part with
+the "woody" trait.
+"""
 
 from traiter.patterns.dependency_patterns import DependencyPatterns
 from traiter.pipes.dependency import NEAREST_ANCHOR
@@ -12,7 +17,7 @@ PART_LINKER = DependencyPatterns(
     'part_linker',
     on_match={
         'func': NEAREST_ANCHOR,
-        'kwargs': {'anchor': 'part'}
+        'kwargs': {'anchor': 'part'},
     },
     decoder={
         'part': {'ENT_TYPE': 'part'},

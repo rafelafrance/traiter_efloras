@@ -1,4 +1,10 @@
-"""Link traits to body subparts."""
+"""Link subparts to traits.
+
+We are linking a subpart like "hairs" to a trait like "length" or "color".
+For example: "leaves are covered with white hairs 1-(1.5) mm long."
+Should link "hairs" with the color "white" and to the length "1 to 1.5 mm".
+Named entity recognition (NER) must be run first.
+"""
 
 from traiter.const import DASH
 from traiter.patterns.dependency_patterns import DependencyPatterns
@@ -13,7 +19,7 @@ SUBPART_LINKER = DependencyPatterns(
     'subpart_linker',
     on_match={
         'func': NEAREST_ANCHOR,
-        'kwargs': {'anchor': 'subpart', 'exclude': 'part'}
+        'kwargs': {'anchor': 'subpart', 'exclude': 'part'},
     },
     decoder={
         'subpart': {'ENT_TYPE': 'subpart'},

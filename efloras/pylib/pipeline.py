@@ -5,7 +5,7 @@ from traiter.patterns.matcher_patterns import (
     add_ruler_patterns, as_dicts, patterns_to_dispatch)
 from traiter.pipes.add_entity_data import ADD_ENTITY_DATA
 from traiter.pipes.cleanup import CLEANUP
-from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
+# from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
 from traiter.pipes.dependency import DEPENDENCY
 from traiter.pipes.sentence import SENTENCE
 from traiter.pipes.simple_entity_data import SIMPLE_ENTITY_DATA
@@ -39,8 +39,6 @@ UPDATE_DATA = [
 
 LINKERS = [LOCATION_LINKER, PART_LINKER, SEX_LINKER, SUBPART_LINKER]
 
-DEBUG_COUNT = 0  # Used to rename debug pipes
-
 
 def pipeline():
     """Create a pipeline for extracting traits."""
@@ -72,33 +70,9 @@ def pipeline():
 
     nlp.add_pipe(CLEANUP, config={'entities': FORGET})
 
+    # nlp.add_pipe(DEBUG_TOKENS, config={'message': ''})
+
     config = {'patterns': as_dicts(LINKERS)}
     nlp.add_pipe(DEPENDENCY, name='part_linker', config=config)
 
     return nlp
-
-
-def debug_tokens(nlp, message='', **kwargs):
-    """Add pipes for debugging."""
-    global DEBUG_COUNT
-    DEBUG_COUNT += 1
-    config = {'message': message}
-    nlp.add_pipe(
-        DEBUG_TOKENS,
-        name=f'tokens_{DEBUG_COUNT}',
-        config=config,
-        **kwargs,
-    )
-
-
-def debug_ents(nlp, message='', **kwargs):
-    """Add pipes for debugging."""
-    global DEBUG_COUNT
-    DEBUG_COUNT += 1
-    config = {'message': message}
-    nlp.add_pipe(
-        DEBUG_ENTITIES,
-        name=f'entities_{DEBUG_COUNT}',
-        config=config,
-        **kwargs,
-    )

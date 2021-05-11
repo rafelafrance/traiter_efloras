@@ -12,7 +12,6 @@ NLP = pipeline()  # Singleton for testing
 def test(text: str) -> List[Dict]:
     """Find entities in the doc."""
     text = shorten(text)
-
     doc = NLP(text)
     traits = [e._.data for e in doc.ents]
 
