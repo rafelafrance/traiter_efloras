@@ -5,7 +5,6 @@ from traiter.patterns.matcher_patterns import (
     add_ruler_patterns, as_dicts, patterns_to_dispatch)
 from traiter.pipes.add_entity_data import ADD_ENTITY_DATA
 from traiter.pipes.cleanup import CLEANUP
-# from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
 from traiter.pipes.dependency import DEPENDENCY
 from traiter.pipes.sentence import SENTENCE
 from traiter.pipes.simple_entity_data import SIMPLE_ENTITY_DATA
@@ -26,6 +25,8 @@ from efloras.patterns.shape import N_SHAPE, SHAPE
 from efloras.patterns.size import NOT_A_SIZE, SIZE, SIZE_DOUBLE_DIM, SIZE_HIGH_ONLY
 from efloras.patterns.subpart_linker import SUBPART_LINKER
 from efloras.pylib.const import ABBREVS, FORGET, REPLACE, TERMS
+
+# from traiter.pipes.debug import DEBUG_ENTITIES, DEBUG_TOKENS
 
 TERM_RULES = [
     RANGE_LOW, RANGE_MIN_LOW, RANGE_LOW_HIGH, RANGE_LOW_MAX, RANGE_MIN_LOW_HIGH,
@@ -68,9 +69,10 @@ def pipeline():
 
     nlp.add_pipe(ADD_ENTITY_DATA, config={'dispatch': patterns_to_dispatch(ADD_DATA)})
 
-    nlp.add_pipe(CLEANUP, config={'entities': FORGET})
+    nlp.add_pipe(CLEANUP, config={'forget': FORGET})
 
     # nlp.add_pipe(DEBUG_TOKENS, config={'message': ''})
+    # nlp.add_pipe(DEBUG_ENTITIES, config={'message': ''})
 
     config = {'patterns': as_dicts(LINKERS)}
     nlp.add_pipe(DEPENDENCY, name='part_linker', config=config)

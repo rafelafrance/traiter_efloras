@@ -8,7 +8,7 @@ Named entity recognition (NER) must be run first.
 
 from traiter.const import DASH
 from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.pipes.dependency import NEAREST_ANCHOR
+from traiter.pipes.dependency import LINK_NEAREST
 
 from efloras.pylib.const import TRAITS
 from efloras.pylib.util import remove_traits
@@ -18,7 +18,7 @@ TRAITS_ = remove_traits(TRAITS, 'subpart')
 SUBPART_LINKER = DependencyPatterns(
     'subpart_linker',
     on_match={
-        'func': NEAREST_ANCHOR,
+        'func': LINK_NEAREST,
         'kwargs': {'anchor': 'subpart', 'exclude': 'part'},
     },
     decoder={
@@ -27,7 +27,7 @@ SUBPART_LINKER = DependencyPatterns(
         'trait': {'ENT_TYPE': {'IN': TRAITS_}},
         'count': {'ENT_TYPE': 'count'},
         'dash': {'TEXT': {'IN': DASH}},
-        'link': {'POS': {'IN': ['ADJ', 'AUX', 'VERB']}},
+        'link': {'POS': {'IN': ['ADJ', 'AUX', 'VERB', 'PART']}},
     },
     patterns=[
         'subpart ; dash ; count',
@@ -39,5 +39,6 @@ SUBPART_LINKER = DependencyPatterns(
         'subpart >  link  >> trait',
         'subpart <  trait >> trait',
         'subpart ;  part  <  link >> trait',
+        'subpart . trait . link . trait',
     ],
 )

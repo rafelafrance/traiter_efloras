@@ -20,7 +20,7 @@ from efloras.writers.sqlite3_db import sqlite3_db
 def main(args):
     """Perform actions based on the arguments."""
     nlp = pipeline()
-    # sent_pipe = sent_pipeline()
+
     families = get_efloras_families(args)
 
     rows = efloras_reader(args, families)
@@ -151,8 +151,8 @@ def parse_args():
     arg_parser.add_argument(
         '--sqlite3', '-S', help="""Output to this sqlite3 database.""")
 
-    arg_parser.add_argument(
-        '--duckdb', '-D', help="""Output to this duckDB database.""")
+    # arg_parser.add_argument(
+    #     '--duckdb', '-D', help="""Output to this duckDB database.""")
 
     arg_parser.add_argument(
         '--csv-file', '-C', type=argparse.FileType('w'),

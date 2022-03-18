@@ -10,10 +10,9 @@ class TestColor(unittest.TestCase):
 
     def test_color_01(self):
         self.assertEqual(
-            test("""
-                hypanthium green or greenish yellow,
+            test("""hypanthium green or greenish yellow,
                 usually not purple-spotted, rarely purple-spotted distally.
-                """),
+            """),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
              {'color': 'green', 'trait': 'color', 'part': 'hypanthium',
               'start': 11, 'end': 16},
@@ -84,8 +83,8 @@ class TestColor(unittest.TestCase):
               'start': 59, 'end': 68},
              {'color': 'brown', 'trait': 'color', 'part': 'petal',
               'start': 72, 'end': 82},
-             {'color': 'green', 'trait': 'color', 'part': 'petal',
-              'start': 115, 'end': 120},
+             {'color': 'light-green', 'trait': 'color', 'part': 'petal',
+              'start': 109, 'end': 120},
              {'color': 'white-longitudinal-stripes',
               'trait': 'color', 'part': 'petal',
               'start': 124, 'end': 150}]

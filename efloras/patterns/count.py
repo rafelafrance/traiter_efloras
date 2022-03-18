@@ -20,6 +20,7 @@ DECODER = COMMON_PATTERNS | {
     'not_count_ent': {'ENT_TYPE': {'IN': NOT_COUNT_ENTS}},
     'not_count_word': {'LOWER': {'IN': NOT_COUNT_WORDS}},
     'per_count': {'ENT_TYPE': 'per_count'},
+    'subpart': {'ENT_TYPE': 'subpart'},
 }
 
 COUNT = MatcherPatterns(
@@ -31,6 +32,7 @@ COUNT = MatcherPatterns(
         '99-99 per_count count_suffix?',
         'per_count adp? 99-99 count_suffix?',
         '( 99-99 count_suffix? ) per_count',
+        '99-99 - subpart',
     ],
 )
 

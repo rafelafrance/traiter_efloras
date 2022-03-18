@@ -6,7 +6,7 @@ the "woody" trait.
 """
 
 from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.pipes.dependency import NEAREST_ANCHOR
+from traiter.pipes.dependency import LINK_NEAREST
 
 from efloras.pylib.const import TRAITS
 from efloras.pylib.util import remove_traits
@@ -16,7 +16,7 @@ TRAITS_ = remove_traits(TRAITS, 'part')
 PART_LINKER = DependencyPatterns(
     'part_linker',
     on_match={
-        'func': NEAREST_ANCHOR,
+        'func': LINK_NEAREST,
         'kwargs': {'anchor': 'part'},
     },
     decoder={
@@ -25,17 +25,24 @@ PART_LINKER = DependencyPatterns(
         'adv': {'POS': 'ADV'},
         'link': {'POS': {'IN': ['ADJ', 'AUX', 'VERB']}},
         'subpart': {'ENT_TYPE': 'subpart'},
+        'x': {'_': {'cached_label': 'cross'}},
+        'ca': {'_': {'cached_label': 'about'}},
     },
     patterns=[
         'part <  trait',
         'part .  trait',
         'part >> trait',
-        'part .  trait >> trait',
-        'part .  link  >> trait',
-        'part <  link  >> trait',
-        'part >  link  >> trait',
-        'part <  trait >> trait',
-        'part .  adv   .  trait',
-        'part < subpart < trait',
+        'part .  trait   >> trait',
+        'part .  link    >> trait',
+        'part <  link    >> trait',
+        'part >  link    >> trait',
+        'part <  trait   >> trait',
+        'part .  adv     .  trait',
+        'part <  subpart <  trait',
+        'part <  subpart <  subpart < trait',
+        'part <  trait   <  trait',
+        'part .  link    .  trait',
+        'part .  trait   .  x       . trait',
+        'part .  trait   .  x       . ca . trait',
     ],
 )

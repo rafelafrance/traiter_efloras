@@ -5,9 +5,10 @@
 .idea/
 .mypy_cache/
 .~lock.*
+.virtual_documents/
 
 # Environment
-venv/
+.venv/
 
 # Python
 *.pyc

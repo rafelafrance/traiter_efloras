@@ -21,7 +21,6 @@ class TestPartLocation(unittest.TestCase):
               'start': 9,
               'end': 12,
               'part': 'stipule'},
-             {'units': 'mm', 'trait': 'units', 'start': 13, 'end': 15},
              {'part_as_loc': 'to petiole',
               'trait': 'part_as_loc',
               'start': 41,

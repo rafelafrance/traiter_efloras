@@ -35,8 +35,7 @@ class TestDescriptor(unittest.TestCase):
               'length_units': 'm',
               'trait': 'size',
               'start': 12,
-              'end': 15},
-             {'units': 'm', 'trait': 'units', 'start': 16, 'end': 17}]
+              'end': 15}]
         )
 
     def test_descriptor_03(self):

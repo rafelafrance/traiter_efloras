@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 
-from traiter.const import CLOSE, COMMA, DASH, FLOAT_TOKEN_RE, OPEN, PLUS, SLASH
+from traiter.const import CLOSE, COMMA, CROSS, DASH, FLOAT_TOKEN_RE, OPEN, PLUS, SLASH
 from traiter.terms.csv_ import Csv
 
 BASE_DIR = Path.cwd().resolve().parts[-1]
@@ -54,6 +54,7 @@ COMMON_PATTERNS = {
     '[+]': {'TEXT': {'IN': PLUS}},
     '/': {'TEXT': {'IN': SLASH}},
     ',': {'TEXT': {'IN': COMMA}},
+    'x': {'TEXT': {'IN': CROSS}},
     'to': {'LOWER': {'IN': TO}},
     '-/or': {'LOWER': {'IN': DASH + TO + CONJ}, 'OP': '+'},
     '-/to': {'LOWER': {'IN': DASH + TO}, 'OP': '+'},
@@ -71,9 +72,9 @@ COMMON_PATTERNS = {
 TRAITS = set(""" color color_mod count location margin_shape part
     size shape sex subpart woodiness part_as_loc """.split())
 
-FORGET = """ about color_mod dim imperial_length imperial_mass
+FORGET = """ about cross color_mod dim imperial_length imperial_mass
     margin_leader metric_length metric_mass not_a_range per_count
-    quest shape_leader shape_suffix surface
+    quest shape_leader shape_suffix surface units
     range.low range.min.low range.low.high range.low.max range.min.low.high
     range.min.low.max range.low.high.max range.min.low.high.max
     """.split()

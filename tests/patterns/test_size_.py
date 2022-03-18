@@ -31,8 +31,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 18,
               'end': 23,
-              'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 24, 'end': 26}]
+              'part': 'leaf'}]
         )
 
     def test_size_02(self):
@@ -52,8 +51,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 6,
               'end': 15,
-              'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 16, 'end': 18}]
+              'part': 'leaf'}]
         )
 
     def test_size_04(self):
@@ -77,7 +75,6 @@ class TestSize(unittest.TestCase):
               'start': 5,
               'end': 9,
               'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 10, 'end': 12},
              {'dimension': 'width', 'trait': 'dimension', 'start': 13,
               'end': 17}]
         )
@@ -109,8 +106,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 11,
               'end': 14,
-              'part': 'petiolule'},
-             {'units': 'mm', 'trait': 'units', 'start': 15, 'end': 17}]
+              'part': 'petiolule'}]
         )
 
     def test_size_08(self):
@@ -124,7 +120,6 @@ class TestSize(unittest.TestCase):
               'start': 11,
               'end': 14,
               'part': 'petiolule'},
-             {'units': 'mm', 'trait': 'units', 'start': 15, 'end': 17},
              {'margin_shape': 'serrate',
               'trait': 'margin_shape',
               'start': 19,
@@ -137,8 +132,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 46,
               'end': 51,
-              'part': 'petiole'},
-             {'units': 'mm', 'trait': 'units', 'start': 52, 'end': 54}]
+              'part': 'petiole'}]
         )
 
     def test_size_09(self):
@@ -152,8 +146,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 16,
               'end': 20,
-              'part': 'petiole'},
-             {'units': 'cm', 'trait': 'units', 'start': 21, 'end': 23}]
+              'part': 'petiole'}]
         )
 
     def test_size_10(self):
@@ -168,8 +161,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 8,
               'end': 21,
-              'part': 'petiole'},
-             {'units': 'mm', 'trait': 'units', 'start': 22, 'end': 24}]
+              'part': 'petiole'}]
         )
 
     def test_size_11(self):
@@ -183,15 +175,13 @@ class TestSize(unittest.TestCase):
               'start': 5,
               'end': 8,
               'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 9, 'end': 11},
              {'width_low': 2.0,
               'width_high': 10.0,
               'width_units': 'mm',
               'trait': 'size',
               'start': 14,
               'end': 18,
-              'part': 'leaf'},
-             {'units': 'mm', 'trait': 'units', 'start': 19, 'end': 21}]
+              'part': 'leaf'}]
         )
 
     def test_size_12(self):
@@ -211,7 +201,6 @@ class TestSize(unittest.TestCase):
               'start': 32,
               'end': 39,
               'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 40, 'end': 42},
              {'dimension': 'width', 'trait': 'dimension', 'start': 43,
               'end': 47}]
         )
@@ -222,39 +211,48 @@ class TestSize(unittest.TestCase):
                 Leaves 3-foliolate, lateral pair of leaflets
                 deeply lobed, petiolules 2–5 mm,"""),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 3,
-              'trait': 'count',
-              'start': 7,
-              'end': 8,
-              'part': 'leaf',
-              'subpart': 'foliolate'},
-             {'subpart': 'foliolate',
-              'trait': 'subpart',
-              'start': 9,
-              'end': 18,
-              'part': 'leaf'},
-             {'location': 'lateral',
-              'trait': 'location',
-              'start': 20,
-              'end': 27,
-              'part': 'leaflet',
-              'subpart': 'foliolate'},
+             {
+                 'low': 3,
+                 'trait': 'count',
+                 'start': 7,
+                 'end': 8,
+                 'part': 'leaf',
+                 'subpart': 'foliolate'
+             },
+             {
+                 'subpart': 'foliolate',
+                 'trait': 'subpart',
+                 'start': 9,
+                 'end': 18,
+                 'part': 'leaf'
+             },
+             {
+                 'location': 'lateral',
+                 'trait': 'location',
+                 'start': 20,
+                 'end': 27,
+                 'part': 'leaf',
+                 'subpart': 'lobe'
+             },
              {'part': 'leaflet', 'trait': 'part', 'start': 36, 'end': 44},
-             {'subpart': 'lobe',
-              'trait': 'subpart',
-              'start': 52,
-              'end': 57,
-              'part': 'leaflet'},
+             {
+                 'subpart': 'lobe',
+                 'trait': 'subpart',
+                 'start': 52,
+                 'end': 57,
+                 'part': 'leaflet'
+             },
              {'part': 'petiolule', 'trait': 'part', 'start': 59, 'end': 69},
-             {'length_low': 2.0,
-              'length_high': 5.0,
-              'length_units': 'mm',
-              'trait': 'size',
-              'start': 70,
-              'end': 73,
-              'part': 'petiolule',
-              'subpart': 'lobe'},
-             {'units': 'mm', 'trait': 'units', 'start': 74, 'end': 76}]
+             {
+                 'length_low': 2.0,
+                 'length_high': 5.0,
+                 'length_units': 'mm',
+                 'trait': 'size',
+                 'start': 70,
+                 'end': 73,
+                 'part': 'petiolule',
+                 'subpart': 'lobe'
+             }]
         )
 
     def test_size_14(self):
@@ -278,7 +276,6 @@ class TestSize(unittest.TestCase):
               'end': 20,
               'location': 'terminal',
               'part': 'leaflet'},
-             {'units': 'cm', 'trait': 'units', 'start': 21, 'end': 23},
              {'part': 'leaf',
               'trait': 'part',
               'start': 25,
@@ -296,8 +293,7 @@ class TestSize(unittest.TestCase):
               'start': 41,
               'end': 45,
               'location': 'terminal',
-              'part': 'petiolule'},
-             {'units': 'mm', 'trait': 'units', 'start': 46, 'end': 48}]
+              'part': 'petiolule'}]
         )
 
     def test_size_15(self):
@@ -323,8 +319,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 30,
               'end': 34,
-              'part': 'leaf',
-              'subpart': 'lobe'},
+              'part': 'leaf'},
              {'width_min': 8.0,
               'width_low': 10.0,
               'width_high': 25.0,
@@ -333,9 +328,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 37,
               'end': 51,
-              'part': 'leaf',
-              'subpart': 'lobe'},
-             {'units': 'cm', 'trait': 'units', 'start': 52, 'end': 54}]
+              'part': 'leaf'}]
         )
 
     def test_size_16(self):
@@ -361,9 +354,7 @@ class TestSize(unittest.TestCase):
               'width_units': 'cm',
               'trait': 'size',
               'start': 25,
-              'end': 29,
-              'subpart': 'lobe'},
-             {'units': 'cm', 'trait': 'units', 'start': 30, 'end': 32}]
+              'end': 29}]
         )
 
     def test_size_17(self):
@@ -375,11 +366,11 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 11,
               'end': 13,
-              'part': 'petiole'},
-             {'units': 'cm', 'trait': 'units', 'start': 14, 'end': 16}]
+              'part': 'petiole'}]
         )
 
     def test_size_18(self):
+        self.maxDiff = None
         self.assertEqual(
             test('petals (1–)3–10(–12) mm (pistillate) or 5–8(–10) mm (staminate)'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6,
@@ -394,7 +385,6 @@ class TestSize(unittest.TestCase):
               'start': 7,
               'end': 20,
               'part': 'petal'},
-             {'units': 'mm', 'trait': 'units', 'start': 21, 'end': 23},
              {'sex': 'pistillate', 'trait': 'sex', 'start': 24, 'end': 36,
               'part': 'petal'},
              {'length_low': 5.0,
@@ -406,7 +396,6 @@ class TestSize(unittest.TestCase):
               'start': 40,
               'end': 48,
               'part': 'petal'},
-             {'units': 'mm', 'trait': 'units', 'start': 49, 'end': 51},
              {'sex': 'staminate', 'trait': 'sex', 'start': 52, 'end': 63,
               'part': 'petal'}]
         )
@@ -422,7 +411,6 @@ class TestSize(unittest.TestCase):
               'start': 8,
               'end': 12,
               'part': 'flower'},
-             {'units': 'cm', 'trait': 'units', 'start': 13, 'end': 15},
              {'dimension': 'diameter',
               'trait': 'dimension',
               'start': 16,
@@ -434,8 +422,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 34,
               'end': 37,
-              'part': 'hypanthium'},
-             {'units': 'mm', 'trait': 'units', 'start': 38, 'end': 40}]
+              'part': 'hypanthium'}]
         )
 
     def test_size_20(self):
@@ -455,8 +442,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 16,
               'end': 21,
-              'part': 'flower'},
-             {'units': 'cm', 'trait': 'units', 'start': 22, 'end': 24}]
+              'part': 'flower'}]
         )
 
     def test_size_21(self):
@@ -467,8 +453,7 @@ class TestSize(unittest.TestCase):
             [{'part': 'inflorescence',
               'trait': 'part',
               'start': 0,
-              'end': 14,
-              'sex': 'staminate'},
+              'end': 14},
              {'sex': 'staminate', 'trait': 'sex', 'start': 73, 'end': 82,
               'part': 'catkin'},
              {'part': 'catkin',
@@ -483,8 +468,7 @@ class TestSize(unittest.TestCase):
               'start': 91,
               'end': 97,
               'part': 'catkin',
-              'sex': 'staminate'},
-             {'units': 'cm', 'trait': 'units', 'start': 98, 'end': 100}]
+              'sex': 'staminate'}]
         )
 
     def test_size_22(self):
@@ -507,8 +491,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 42,
               'end': 46,
-              'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 47, 'end': 49}]
+              'part': 'leaf'}]
         )
 
     def test_size_23(self):
@@ -522,7 +505,6 @@ class TestSize(unittest.TestCase):
               'start': 7,
               'end': 11,
               'part': 'calyx'},
-             {'units': 'mm', 'trait': 'units', 'start': 12, 'end': 14},
              {'height_low': 3.0,
               'height_high': 4.0,
               'height_units': 'mm',
@@ -530,11 +512,12 @@ class TestSize(unittest.TestCase):
               'start': 16,
               'end': 19,
               'part': 'calyx'},
-             {'units': 'mm', 'trait': 'units', 'start': 20, 'end': 22},
              {'dimension': 'height',
               'trait': 'dimension',
               'start': 23,
-              'end': 27}]
+              'end': 27,
+             'part': 'calyx'
+             }]
         )
 
     def test_size_24(self):
@@ -553,8 +536,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 19,
               'end': 20,
-              'part': 'petal'},
-             {'units': 'mm', 'trait': 'units', 'start': 21, 'end': 23}]
+              'part': 'petal'}]
         )
 
     def test_size_25(self):
@@ -566,8 +548,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 10,
               'end': 11,
-              'part': 'petal'},
-             {'units': 'mm', 'trait': 'units', 'start': 12, 'end': 14}]
+              'part': 'petal'}]
         )
 
     def test_size_26(self):
@@ -598,8 +579,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 8,
               'end': 11,
-              'part': 'inflorescence'},
-             {'units': 'cm', 'trait': 'units', 'start': 12, 'end': 14}]
+              'part': 'inflorescence'}]
         )
 
     def test_size_28(self):
@@ -624,41 +604,41 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('Seeds ca. 1.6 × 1-1.3 × 0.7-0.8 cm; hilum 8-10 mm.'),
             [{'part': 'seed', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 1.6,
-              'length_units': 'cm',
-              'trait': 'size',
-              'start': 10,
-              'end': 13,
-              'part': 'seed'},
-             {'width_low': 1.0,
-              'width_high': 1.3,
-              'width_units': 'cm',
-              'trait': 'size',
-              'start': 16,
-              'end': 21,
-              'part': 'seed'},
-             {'thickness_low': 0.7,
-              'thickness_high': 0.8,
-              'thickness_units': 'cm',
-              'trait': 'size',
-              'start': 24,
-              'end': 31,
-              'part': 'seed'},
-             {'units': 'cm', 'trait': 'units', 'start': 32, 'end': 34},
-             {'subpart': 'hilum',
-              'trait': 'subpart',
-              'start': 36,
-              'end': 41,
-              'part': 'seed'},
-             {'length_low': 8.0,
-              'length_high': 10.0,
-              'length_units': 'mm',
-              'trait': 'size',
-              'start': 42,
-              'end': 46,
-              'part': 'seed',
-              'subpart': 'hilum'},
-             {'units': 'mm', 'trait': 'units', 'start': 47, 'end': 49}]
+             {
+                 'length_low': 1.6,
+                 'length_units': 'cm',
+                 'trait': 'size',
+                 'start': 10,
+                 'end': 13,
+                 'part': 'seed'
+             },
+             {
+                 'width_low': 1.0,
+                 'width_high': 1.3,
+                 'width_units': 'cm',
+                 'trait': 'size',
+                 'start': 16,
+                 'end': 21,
+                 'part': 'seed'
+             },
+             {
+                 'thickness_low': 0.7,
+                 'thickness_high': 0.8,
+                 'thickness_units': 'cm',
+                 'trait': 'size',
+                 'start': 24,
+                 'end': 31
+             },
+             {'subpart': 'hilum', 'trait': 'subpart', 'start': 36, 'end': 41},
+             {
+                 'length_low': 8.0,
+                 'length_high': 10.0,
+                 'length_units': 'mm',
+                 'trait': 'size',
+                 'start': 42,
+                 'end': 46,
+                 'subpart': 'hilum'
+             }]
         )
 
     def test_size_30(self):
@@ -682,8 +662,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 29,
               'end': 32,
-              'part': 'leaflet'},
-             {'units': 'cm', 'trait': 'units', 'start': 33, 'end': 35}]
+              'part': 'leaflet'}]
 
         )
 
@@ -697,22 +676,27 @@ class TestSize(unittest.TestCase):
               'length_units': 'm',
               'trait': 'size',
               'start': 8,
-              'end': 19},
-             {'units': 'm', 'trait': 'units', 'start': 20, 'end': 22}]
+              'end': 19}]
         )
 
     def test_size_32(self):
         self.assertEqual(
             test('trunk to 3(?) cm d.b.h.;'),
             [{'part': 'trunk', 'trait': 'part', 'start': 0, 'end': 5},
-             {'dbh_high': 3.0,
-              'dbh_units': 'cm',
-              'uncertain': 'true',
-              'trait': 'size',
-              'start': 9,
-              'end': 10,
-              'part': 'trunk'},
-             {'units': 'cm', 'trait': 'units', 'start': 14, 'end': 16},
-             {'dimension': 'dbh', 'trait': 'dimension', 'start': 17,
-              'end': 23}]
+             {
+                 'dbh_high': 3.0,
+                 'dbh_units': 'cm',
+                 'uncertain': 'true',
+                 'trait': 'size',
+                 'start': 9,
+                 'end': 10,
+                 'part': 'trunk'
+             },
+             {
+                 'trait': 'dimension',
+                 'start': 17,
+                 'end': 23,
+                 'dimension': 'dbh',
+                 'part': 'trunk'
+             }]
         )

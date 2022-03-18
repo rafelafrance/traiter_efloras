@@ -42,8 +42,7 @@ class TestCount(unittest.TestCase):
               'trait': 'size',
               'start': 13,
               'end': 16,
-              'part': 'leaf'},
-             {'units': 'cm', 'trait': 'units', 'start': 17, 'end': 19}]
+              'part': 'leaf'}]
         )
 
     def test_count_04(self):
@@ -275,7 +274,8 @@ class TestCount(unittest.TestCase):
               'start': 9,
               'end': 27,
               'part': 'leaflet'},
-             {'count_group': 'paired', 'trait': 'count_group', 'start': 28, 'end': 34}]
+             {'count_group': 'paired', 'trait': 'count_group', 'part': 'leaflet',
+              'start': 28, 'end': 34}]
         )
 
     def test_count_24(self):
@@ -338,7 +338,8 @@ class TestCount(unittest.TestCase):
               'start': 7,
               'end': 12,
               'part': 'stem'},
-             {'count_group': 'pairs', 'trait': 'count_group', 'start': 14, 'end': 19}]
+             {'count_group': 'pairs', 'trait': 'count_group',  'part': 'stem',
+              'start': 14, 'end': 19}]
 
         )
 
@@ -485,6 +486,7 @@ class TestCount(unittest.TestCase):
              {'part': 'x', 'trait': 'part', 'start': 19, 'end': 22},
              {'low': 9,
               'trait': 'count',
+              'subpart': 'locular',
               'start': 23,
               'end': 24,
               'part': 'x'}]

@@ -38,6 +38,7 @@ def sqlite3_db(args, rows):
 
 def delete_old_recs(cxn):
     """Remove old records before inserting new ones."""
+    # TODO: Fill this with sources from the current pages
     cxn.executescript("""
         DELETE FROM sources WHERE source_id IN (SELECT source_id FROM source_ids);
         DELETE FROM traits WHERE source_id IN (SELECT source_id FROM source_ids);
@@ -283,6 +284,7 @@ def create_tables(cxn):
         CREATE INDEX IF NOT EXISTS fields_field ON fields (field);
     """)
 
+    # TODO: Fill this with sources from the current pages
     cxn.executescript("""
         CREATE TEMP TABLE source_ids (
             source_id INTEGER

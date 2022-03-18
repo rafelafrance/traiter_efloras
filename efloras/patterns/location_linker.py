@@ -1,7 +1,7 @@
 """Link traits to body parts."""
 
 from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.pipes.dependency import NEAREST_ANCHOR
+from traiter.pipes.dependency import LINK_NEAREST
 
 from efloras.pylib.const import TRAITS
 from efloras.pylib.util import remove_traits
@@ -11,7 +11,7 @@ TRAITS_ = remove_traits(TRAITS, 'location')
 LOCATION_LINKER = DependencyPatterns(
     'location_linker',
     on_match={
-        'func': NEAREST_ANCHOR,
+        'func': LINK_NEAREST,
         'kwargs': {'anchor': 'location'}
     },
     decoder={
