@@ -19,9 +19,11 @@ COLOR = MatcherPatterns(
     decoder=COMMON_PATTERNS | {
         'color_words': {'ENT_TYPE': {'IN': ['color', 'color_mod']}},
         'color': {'ENT_TYPE': 'color'},
+        'to': {'POS': {'IN': ['AUX']}},
     },
     patterns=[
         'missing? color_words* -* color+ -* color_words*',
+        'missing? color_words+ to color_words+ color+ -* color_words*',
     ],
 )
 
@@ -29,10 +31,17 @@ COLOR = MatcherPatterns(
 @registry.misc(COLOR.on_match)
 def color(ent):
     """Enrich a phrase match."""
-    parts = {r: 1 for t in ent
-             if (r := REPLACE.get(t.lower_, t.lower_)) not in SKIP
-             and not REMOVE.get(t.lower_)}
-    value = '-'.join(parts.keys())
+    parts = []
+    for token in ent:
+        replace = REPLACE.get(token.lower_, token.lower_)
+        if replace in SKIP:
+            continue
+        if REMOVE.get(token.lower_):
+            continue
+        if token.pos_ in ['AUX']:
+            continue
+        parts.append(replace)
+    value = '-'.join(parts)
     value = re.sub(MULTIPLE_DASHES, r'-', value)
     ent._.data['color'] = REPLACE.get(value, value)
     if any(t for t in ent if t.lower_ in MISSING):

@@ -66,6 +66,7 @@ class TestColor(unittest.TestCase):
 
     def test_color_05(self):
         """It handles pattern notations within colors."""
+        self.maxDiff = None
         self.assertEqual(
             test("""
                 petals distinct, white to cream, greenish yellow,
@@ -83,7 +84,7 @@ class TestColor(unittest.TestCase):
               'start': 59, 'end': 68},
              {'color': 'brown', 'trait': 'color', 'part': 'petal',
               'start': 72, 'end': 82},
-             {'color': 'light-green', 'trait': 'color', 'part': 'petal',
+             {'color': 'green', 'trait': 'color', 'part': 'petal',
               'start': 109, 'end': 120},
              {'color': 'white-longitudinal-stripes',
               'trait': 'color', 'part': 'petal',

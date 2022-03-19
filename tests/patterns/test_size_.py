@@ -74,9 +74,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 5,
               'end': 9,
-              'part': 'leaf'},
-             {'dimension': 'width', 'trait': 'dimension', 'start': 13,
-              'end': 17}]
+              'part': 'leaf'}]
         )
 
     def test_size_06(self):
@@ -200,9 +198,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 32,
               'end': 39,
-              'part': 'leaf'},
-             {'dimension': 'width', 'trait': 'dimension', 'start': 43,
-              'end': 47}]
+              'part': 'leaf'}]
         )
 
     def test_size_13(self):
@@ -370,7 +366,6 @@ class TestSize(unittest.TestCase):
         )
 
     def test_size_18(self):
-        self.maxDiff = None
         self.assertEqual(
             test('petals (1–)3–10(–12) mm (pistillate) or 5–8(–10) mm (staminate)'),
             [{'part': 'petal', 'trait': 'part', 'start': 0, 'end': 6,
@@ -411,11 +406,7 @@ class TestSize(unittest.TestCase):
               'start': 8,
               'end': 12,
               'part': 'flower'},
-             {'dimension': 'diameter',
-              'trait': 'dimension',
-              'start': 16,
-              'end': 20},
-             {'part': 'hypanthium', 'trait': 'part', 'start': 23, 'end': 33},
+              {'part': 'hypanthium', 'trait': 'part', 'start': 23, 'end': 33},
              {'length_low': 4.0,
               'length_high': 8.0,
               'length_units': 'mm',
@@ -511,13 +502,7 @@ class TestSize(unittest.TestCase):
               'trait': 'size',
               'start': 16,
               'end': 19,
-              'part': 'calyx'},
-             {'dimension': 'height',
-              'trait': 'dimension',
-              'start': 23,
-              'end': 27,
-             'part': 'calyx'
-             }]
+              'part': 'calyx'}]
         )
 
     def test_size_24(self):
@@ -669,12 +654,13 @@ class TestSize(unittest.TestCase):
     def test_size_31(self):
         self.assertEqual(
             test('Shrubs, 0.5–1[–2.5] m.'),
-            [{'habit': 'shrub', 'trait': 'habit', 'start': 0, 'end': 6},
+            [{'part': 'shrub', 'trait': 'part', 'start': 0, 'end': 6},
              {'length_low': 0.5,
               'length_high': 1.0,
               'length_max': 2.5,
               'length_units': 'm',
               'trait': 'size',
+              'part': 'shrub',
               'start': 8,
               'end': 19}]
         )
@@ -691,12 +677,48 @@ class TestSize(unittest.TestCase):
                  'start': 9,
                  'end': 10,
                  'part': 'trunk'
-             },
+             }]
+        )
+
+    def test_size_33(self):
+        self.assertEqual(
+            test('Trees to 25 m tall; bark yellow-brown, fissured.'),
+            [{'part': 'tree', 'trait': 'part', 'start': 0, 'end': 5},
              {
-                 'trait': 'dimension',
-                 'start': 17,
-                 'end': 23,
-                 'dimension': 'dbh',
-                 'part': 'trunk'
+                 'height_high': 25.0,
+                 'height_units': 'm',
+                 'trait': 'size',
+                 'start': 9,
+                 'end': 11,
+                 'part': 'tree'
+             },
+             {'part': 'bark', 'trait': 'part', 'start': 20, 'end': 24},
+             {
+                 'color': 'yellow-brown',
+                 'trait': 'color',
+                 'start': 25,
+                 'end': 37,
+                 'part': 'bark'
+             }]
+        )
+
+    def test_size_34(self):
+        self.assertEqual(
+            test('Shrubs or trees , 3-50 m. Bark light to dark gray'),
+            [{'part': 'shrub', 'trait': 'part', 'start': 0, 'end': 6},
+             {'part': 'tree', 'trait': 'part', 'start': 10, 'end': 15},
+             {
+                 'length_low': 3.0,
+                 'length_high': 50.0,
+                 'length_units': 'm',
+                 'trait': 'size',
+                 'start': 18,
+                 'end': 22,
+                 'part': 'shrub'
+             },
+             {'part': 'bark', 'trait': 'part', 'start': 26, 'end': 30},
+             {
+                 'color': 'gray', 'trait': 'color', 'start': 31, 'end': 49,
+                 'part': 'bark'
              }]
         )

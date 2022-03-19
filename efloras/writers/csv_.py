@@ -12,12 +12,12 @@ def csv_writer(args, rows):
     rows = sorted(rows, key=lambda r: (r['flora_id'], r['family'], r['taxon']))
 
     for row in rows:
-        row['raw_traits'] = row['traits']
-        del row['traits']
+        row['raw_traits'] = [e._.data for e in row['doc'].ents]
         del row['doc']
         build_columns(row)
 
     df = pd.DataFrame(rows)
+    df['raw_traits'] = None
     df.to_csv(args.csv_file, index=False)
 
 

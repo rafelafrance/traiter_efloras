@@ -28,11 +28,13 @@ class TestDescriptor(unittest.TestCase):
         )
 
     def test_descriptor_02(self):
+        self.maxDiff = None
         self.assertEqual(
             test('Shrubs , to 1.5 m, forming rhizomatous colonies.'),
-            [{'habit': 'shrub', 'trait': 'habit', 'start': 0, 'end': 6},
+            [{'part': 'shrub', 'trait': 'part', 'start': 0, 'end': 6},
              {'length_high': 1.5,
               'length_units': 'm',
+              'part': 'shrub',
               'trait': 'size',
               'start': 12,
               'end': 15}]
@@ -52,7 +54,7 @@ class TestDescriptor(unittest.TestCase):
             [{'woodiness': 'herbaceous', 'trait': 'woodiness', 'start': 0, 'end': 5},
              {'plant_duration': 'perennial', 'trait': 'plant_duration',
               'start': 6, 'end': 15},
-             {'habit': 'shrub', 'trait': 'habit', 'start': 19, 'end': 28},
+             {'part': 'shrub', 'trait': 'part', 'start': 19, 'end': 28},
              {'habitat': 'epiphytic', 'trait': 'habitat', 'start': 30, 'end': 39},
              {'habitat': 'epilithic', 'trait': 'habitat', 'start': 43, 'end': 52}]
         )

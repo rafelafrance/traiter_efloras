@@ -113,10 +113,8 @@ def get_raw_traits(rows, cxn):
 
         # Convert entity indices into trait IDs & append it to the list
         for ent in all_ents.values():
-            link_ids = {k: all_ents[i]['id']
-                        for k, v in ent['links'].items() for i in v}
             traits.append(
-                ent['data'] | link_ids | {
+                ent['data'] | {
                     'trait_id': ent['id'],
                     'source_id': row['source_id'],
                     'taxon': row['taxon'],
