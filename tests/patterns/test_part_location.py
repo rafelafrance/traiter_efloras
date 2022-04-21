@@ -42,14 +42,25 @@ class TestPartLocation(unittest.TestCase):
         self.assertEqual(
             test('stipules shortly ciliate at margin'),
             [{'part': 'stipule', 'trait': 'part', 'start': 0, 'end': 8},
-             {'margin_shape': 'ciliate',
-              'trait': 'margin_shape',
-              'start': 17,
-              'end': 24,
-              'part': 'stipule'},
-             {'part_as_loc': 'at margin',
-              'trait': 'part_as_loc',
-              'start': 25,
-              'end': 34,
-              'part': 'stipule'}]
+             {
+                 'surface_leader': 'shortly',
+                 'trait': 'surface_leader',
+                 'start': 9,
+                 'end': 16,
+                 'part': 'stipule'
+             },
+             {
+                 'margin_shape': 'ciliate',
+                 'trait': 'margin_shape',
+                 'start': 17,
+                 'end': 24,
+                 'part': 'stipule'
+             },
+             {
+                 'part_as_loc': 'at margin',
+                 'trait': 'part_as_loc',
+                 'start': 25,
+                 'end': 34,
+                 'part': 'stipule'
+             }]
         )

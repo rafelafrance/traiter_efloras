@@ -44,7 +44,7 @@ class TestDescriptor(unittest.TestCase):
         self.assertEqual(
             test('Stems often caespitose'),
             [{'part': 'stem', 'trait': 'part', 'start': 0, 'end': 5},
-             {'habit': 'cespitose', 'trait': 'habit', 'start': 12, 'end': 22}]
+             {'habit': 'caespitose', 'trait': 'habit', 'start': 12, 'end': 22}]
         )
 
     def test_descriptor_04(self):
@@ -52,8 +52,7 @@ class TestDescriptor(unittest.TestCase):
             test(
                 'Herbs perennial or subshrubs, epiphytic or epilithic.'),
             [{'woodiness': 'herbaceous', 'trait': 'woodiness', 'start': 0, 'end': 5},
-             {'plant_duration': 'perennial', 'trait': 'plant_duration',
-              'start': 6, 'end': 15},
+             {'duration': 'perennial', 'trait': 'duration', 'start': 6, 'end': 15},
              {'part': 'shrub', 'trait': 'part', 'start': 19, 'end': 28},
              {'habitat': 'epiphytic', 'trait': 'habitat', 'start': 30, 'end': 39},
              {'habitat': 'epilithic', 'trait': 'habitat', 'start': 43, 'end': 52}]

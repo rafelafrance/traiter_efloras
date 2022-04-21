@@ -61,7 +61,7 @@ class TestSize(unittest.TestCase):
              {'low': 5, 'high': 7, 'trait': 'count',
               'start': 25, 'end': 28, 'part': 'leaf', 'subpart': 'lobe'},
              {'subpart': 'lobe', 'trait': 'subpart',
-              'start': 29, 'end': 34, 'part': 'leaf'}]
+              'start': 28, 'end': 34, 'part': 'leaf'}]
         )
 
     def test_size_05(self):
@@ -213,13 +213,10 @@ class TestSize(unittest.TestCase):
                  'start': 7,
                  'end': 8,
                  'part': 'leaf',
-                 'subpart': 'foliolate'
+                 'subpart': 'lobe'
              },
              {
-                 'subpart': 'foliolate',
-                 'trait': 'subpart',
-                 'start': 9,
-                 'end': 18,
+                 'subpart': 'lobe', 'trait': 'subpart', 'start': 8, 'end': 18,
                  'part': 'leaf'
              },
              {
@@ -296,35 +293,42 @@ class TestSize(unittest.TestCase):
         self.assertEqual(
             test('leaf shallowly 3–5(–7)-lobed, 5–25 × (8–)10–25(–30) cm,'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 4},
-             {'low': 3,
-              'high': 5,
-              'max': 7,
-              'trait': 'count',
-              'start': 15,
-              'end': 22,
-              'part': 'leaf',
-              'subpart': 'lobe'},
-             {'subpart': 'lobe',
-              'trait': 'subpart',
-              'start': 23,
-              'end': 28,
-              'part': 'leaf'},
-             {'length_low': 5.0,
-              'length_high': 25.0,
-              'length_units': 'cm',
-              'trait': 'size',
-              'start': 30,
-              'end': 34,
-              'part': 'leaf'},
-             {'width_min': 8.0,
-              'width_low': 10.0,
-              'width_high': 25.0,
-              'width_max': 30.0,
-              'width_units': 'cm',
-              'trait': 'size',
-              'start': 37,
-              'end': 51,
-              'part': 'leaf'}]
+             {
+                 'low': 3,
+                 'high': 5,
+                 'max': 7,
+                 'trait': 'count',
+                 'start': 15,
+                 'end': 22,
+                 'part': 'leaf'
+             },
+             {
+                 'subpart': 'lobe',
+                 'trait': 'subpart',
+                 'start': 22,
+                 'end': 28,
+                 'part': 'leaf'
+             },
+             {
+                 'length_low': 5.0,
+                 'length_high': 25.0,
+                 'length_units': 'cm',
+                 'trait': 'size',
+                 'start': 30,
+                 'end': 34,
+                 'part': 'leaf'
+             },
+             {
+                 'width_min': 8.0,
+                 'width_low': 10.0,
+                 'width_high': 25.0,
+                 'width_max': 30.0,
+                 'width_units': 'cm',
+                 'trait': 'size',
+                 'start': 37,
+                 'end': 51,
+                 'part': 'leaf'
+             }]
         )
 
     def test_size_16(self):
@@ -336,7 +340,7 @@ class TestSize(unittest.TestCase):
               'start': 0,
               'end': 5,
               'subpart': 'lobe'},
-             {'subpart': 'lobe', 'trait': 'subpart', 'start': 6, 'end': 11},
+             {'subpart': 'lobe', 'trait': 'subpart', 'start': 5, 'end': 11},
              {'length_low': 6.0,
               'length_high': 20.0,
               'length_max': 30.0,

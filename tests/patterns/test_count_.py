@@ -171,57 +171,83 @@ class TestCount(unittest.TestCase):
             test("""
                 Pistillate flowers: hyaline bristle at apex of hypanthial
                 aculei 0.5–1 times as long as opaque base."""),
-            [{'sex': 'pistillate', 'trait': 'sex', 'start': 0, 'end': 10,
-              'part': 'flower'},
-             {'part': 'flower',
-              'trait': 'part',
-              'start': 11,
-              'end': 18,
-              'sex': 'pistillate'},
-             {'part_as_loc': 'at apex of hypanthial aculei',
-              'trait': 'part_as_loc',
-              'start': 36,
-              'end': 64,
-              'part': 'flower',
-              'sex': 'pistillate'},
-             {'subpart': 'base',
-              'trait': 'subpart',
-              'start': 95,
-              'end': 99,
-              'part': 'flower',
-              'sex': 'pistillate'}]
+            [{
+                 'sex': 'pistillate',
+                 'trait': 'sex',
+                 'start': 0,
+                 'end': 10,
+                 'part': 'flower',
+                 'subpart': 'setae'
+             },
+             {
+                 'part': 'flower',
+                 'trait': 'part',
+                 'start': 11,
+                 'end': 18,
+                 'sex': 'pistillate'
+             },
+             {
+                 'subpart': 'setae',
+                 'trait': 'subpart',
+                 'start': 28,
+                 'end': 35,
+                 'part': 'flower',
+                 'sex': 'pistillate'
+             },
+             {
+                 'part_as_loc': 'at apex of hypanthial aculei',
+                 'trait': 'part_as_loc',
+                 'start': 36,
+                 'end': 64,
+                 'part': 'flower',
+                 'sex': 'pistillate',
+                 'subpart': 'setae'
+             },
+             {
+                 'subpart': 'base',
+                 'trait': 'subpart',
+                 'start': 95,
+                 'end': 99,
+                 'part': 'flower',
+                 'sex': 'pistillate'
+             }]
         )
 
     def test_count_18(self):
         self.assertEqual(
             test('rarely 1- or 5-7-foliolate;'),
-            [{'min': 1,
-              'low': 5,
-              'max': 7,
-              'trait': 'count',
-              'start': 7,
-              'end': 16,
-              'subpart': 'foliolate'},
-             {'subpart': 'foliolate', 'trait': 'subpart', 'start': 17, 'end': 26}]
+            [{
+                 'min': 1,
+                 'low': 5,
+                 'max': 7,
+                 'trait': 'count',
+                 'start': 7,
+                 'end': 16,
+                 'subpart': 'lobe'
+             },
+             {'subpart': 'lobe', 'trait': 'subpart', 'start': 16, 'end': 26}]
         )
 
     def test_count_19(self):
         self.assertEqual(
             test('Leaves imparipinnate, 5- or 7(or 9)-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'low': 5,
-              'high': 7,
-              'max': 9,
-              'trait': 'count',
-              'start': 22,
-              'end': 35,
-              'part': 'leaf',
-              'subpart': 'foliolate'},
-             {'subpart': 'foliolate',
-              'trait': 'subpart',
-              'start': 36,
-              'end': 45,
-              'part': 'leaf'}]
+             {
+                 'low': 5,
+                 'high': 7,
+                 'max': 9,
+                 'trait': 'count',
+                 'start': 22,
+                 'end': 35,
+                 'part': 'leaf'
+             },
+             {
+                 'subpart': 'lobe',
+                 'trait': 'subpart',
+                 'start': 35,
+                 'end': 45,
+                 'part': 'leaf'
+             }]
         )
 
     def test_count_20(self):
@@ -245,56 +271,69 @@ class TestCount(unittest.TestCase):
              {'min': 1, 'low': 2, 'high': 5, 'max': 7, 'trait': 'count',
               'start': 17, 'end': 32, 'part': 'inflorescence', 'subpart': 'flowered'},
              {'subpart': 'flowered', 'trait': 'subpart',
-              'start': 33, 'end': 41, 'part': 'inflorescence'}]
+              'start': 32, 'end': 41, 'part': 'inflorescence'}]
         )
 
     def test_count_22(self):
         self.assertEqual(
             test('3(or 5-9)-foliolate;'),
-            [{'min': 3,
-              'low': 5,
-              'high': 9,
-              'trait': 'count',
-              'start': 0,
-              'end': 9,
-              'subpart': 'foliolate'},
-             {'subpart': 'foliolate', 'trait': 'subpart', 'start': 10, 'end': 19}]
+            [{
+                 'min': 3,
+                 'low': 5,
+                 'high': 9,
+                 'trait': 'count',
+                 'start': 0,
+                 'end': 9,
+                 'subpart': 'lobe'
+             },
+             {'subpart': 'lobe', 'trait': 'subpart', 'start': 9, 'end': 19}]
         )
 
     def test_count_23(self):
         self.assertEqual(
             test('leaflets (2or)3- or 4(or 5)-paired'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
-             {'min': 2,
-              'low': 3,
-              'high': 4,
-              'max': 5,
-              'count_group': 'paired',
-              'trait': 'count',
-              'start': 9,
-              'end': 27,
-              'part': 'leaflet'},
-             {'count_group': 'paired', 'trait': 'count_group', 'part': 'leaflet',
-              'start': 28, 'end': 34}]
+             {
+                 'min': 2,
+                 'low': 3,
+                 'high': 4,
+                 'max': 5,
+                 'count_group': 'pair',
+                 'trait': 'count',
+                 'start': 9,
+                 'end': 27,
+                 'part': 'leaflet'
+             },
+             {
+                 'trait': 'count_group',
+                 'start': 27,
+                 'end': 34,
+                 'count_group': 'pair',
+                 'part': 'leaflet'
+             }]
         )
 
     def test_count_24(self):
         self.assertEqual(
             test('Leaves (19-)23- or 25-foliolate;'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 6},
-             {'min': 19,
-              'low': 23,
-              'high': 25,
-              'trait': 'count',
-              'start': 7,
-              'end': 21,
-              'part': 'leaf',
-              'subpart': 'foliolate'},
-             {'subpart': 'foliolate',
-              'trait': 'subpart',
-              'start': 22,
-              'end': 31,
-              'part': 'leaf'}]
+             {
+                 'min': 19,
+                 'low': 23,
+                 'high': 25,
+                 'trait': 'count',
+                 'start': 7,
+                 'end': 21,
+                 'part': 'leaf',
+                 'subpart': 'lobe'
+             },
+             {
+                 'subpart': 'lobe',
+                 'trait': 'subpart',
+                 'start': 21,
+                 'end': 31,
+                 'part': 'leaf'
+             }]
         )
 
     def test_count_25(self):
@@ -304,7 +343,7 @@ class TestCount(unittest.TestCase):
              {'low': 5, 'trait': 'count', 'part': 'calyx', 'subpart': 'lobe',
               'start': 7, 'end': 8},
              {'subpart': 'lobe', 'trait': 'subpart',
-              'start': 9, 'end': 14, 'part': 'calyx'}]
+              'start': 8, 'end': 14, 'part': 'calyx'}]
         )
 
     def test_count_26(self):
@@ -379,7 +418,7 @@ class TestCount(unittest.TestCase):
               'trait': 'count', 'part': 'inflorescence', 'subpart': 'flowered',
               'start': 15, 'end': 30},
              {'subpart': 'flowered', 'trait': 'subpart',
-              'start': 31, 'end': 39, 'part': 'inflorescence'}]
+              'start': 30, 'end': 39, 'part': 'inflorescence'}]
         )
 
     def test_count_31(self):
@@ -395,41 +434,53 @@ class TestCount(unittest.TestCase):
                 staminate catkins in 1 or more clusters of 3--6;
                 pistillate catkins in 1 or more clusters of 2--7
                 """),
-            [{'sex': 'staminate', 'trait': 'sex', 'start': 0, 'end': 9,
-              'part': 'catkin'},
-             {'part': 'catkin',
-              'trait': 'part',
-              'start': 10,
-              'end': 17,
-              'sex': 'staminate'},
-             {'count_group': 'cluster', 'trait': 'count_group', 'start': 21, 'end': 39},
-             {'low': 3,
-              'high': 6,
-              'count_group': 'cluster',
-              'trait': 'count',
-              'start': 43,
-              'end': 47,
-              'part': 'catkin',
-              'sex': 'staminate'},
-             {'sex': 'pistillate',
-              'trait': 'sex',
-              'start': 49,
-              'end': 59,
-              'part': 'catkin'},
-             {'part': 'catkin',
-              'trait': 'part',
-              'start': 60,
-              'end': 67,
-              'sex': 'pistillate'},
-             {'count_group': 'cluster', 'trait': 'count_group', 'start': 71, 'end': 89},
-             {'low': 2,
-              'high': 7,
-              'count_group': 'cluster',
-              'trait': 'count',
-              'start': 93,
-              'end': 97,
-              'part': 'catkin',
-              'sex': 'pistillate'}]
+            [{
+                 'sex': 'staminate', 'trait': 'sex', 'start': 0, 'end': 9,
+                 'part': 'catkin'
+             },
+             {
+                 'part': 'catkin',
+                 'trait': 'part',
+                 'start': 10,
+                 'end': 17,
+                 'sex': 'staminate'
+             },
+             {'trait': 'count_group', 'start': 21, 'end': 39, 'count_group': 'cluster'},
+             {
+                 'low': 3,
+                 'high': 6,
+                 'count_group': 'cluster',
+                 'trait': 'count',
+                 'start': 43,
+                 'end': 47,
+                 'part': 'catkin',
+                 'sex': 'staminate'
+             },
+             {
+                 'sex': 'pistillate',
+                 'trait': 'sex',
+                 'start': 49,
+                 'end': 59,
+                 'part': 'catkin'
+             },
+             {
+                 'part': 'catkin',
+                 'trait': 'part',
+                 'start': 60,
+                 'end': 67,
+                 'sex': 'pistillate'
+             },
+             {'trait': 'count_group', 'start': 71, 'end': 89, 'count_group': 'cluster'},
+             {
+                 'low': 2,
+                 'high': 7,
+                 'count_group': 'cluster',
+                 'trait': 'count',
+                 'start': 93,
+                 'end': 97,
+                 'part': 'catkin',
+                 'sex': 'staminate'
+             }]
         )
 
     def test_count_33(self):
@@ -444,7 +495,7 @@ class TestCount(unittest.TestCase):
               'subpart': 'flowered'},
              {'subpart': 'flowered',
               'trait': 'subpart',
-              'start': 21,
+              'start': 20,
               'end': 29,
               'part': 'cyme'}]
         )
@@ -463,7 +514,7 @@ class TestCount(unittest.TestCase):
               'subpart': 'locular'},
              {'subpart': 'locular',
               'trait': 'subpart',
-              'start': 20,
+              'start': 19,
               'end': 27,
               'part': 'capsule'}]
         )
@@ -472,22 +523,21 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test("""Capsule 2-locular. x = 9."""),
             [{'part': 'capsule', 'trait': 'part', 'start': 0, 'end': 7},
-             {'low': 2,
-              'trait': 'count',
-              'start': 8,
-              'end': 9,
-              'part': 'capsule',
-              'subpart': 'locular'},
-             {'subpart': 'locular',
-              'trait': 'subpart',
-              'start': 10,
-              'end': 17,
-              'part': 'capsule'},
+             {
+                 'low': 2,
+                 'trait': 'count',
+                 'start': 8,
+                 'end': 9,
+                 'part': 'capsule',
+                 'subpart': 'locular'
+             },
+             {
+                 'subpart': 'locular',
+                 'trait': 'subpart',
+                 'start': 9,
+                 'end': 17,
+                 'part': 'capsule'
+             },
              {'part': 'x', 'trait': 'part', 'start': 19, 'end': 22},
-             {'low': 9,
-              'trait': 'count',
-              'subpart': 'locular',
-              'start': 23,
-              'end': 24,
-              'part': 'x'}]
+             {'low': 9, 'trait': 'count', 'start': 23, 'end': 24, 'part': 'x'}]
         )

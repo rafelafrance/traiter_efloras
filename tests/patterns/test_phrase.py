@@ -13,17 +13,30 @@ class TestPhrase(unittest.TestCase):
     def test_phrase_01(self):
         self.assertEqual(
             test('Pistillate flowers usually sessile; hypogynous'),
-            [{'sex': 'pistillate', 'trait': 'sex', 'start': 0, 'end': 10,
-              'part': 'flower'},
-             {'part': 'flower',
-              'trait': 'part',
-              'start': 11,
-              'end': 18,
-              'sex': 'pistillate'},
-             {'floral_location': 'superior',
-              'trait': 'floral_location',
-              'start': 36,
-              'end': 46}]
+            [{
+                 'sex': 'pistillate', 'trait': 'sex', 'start': 0, 'end': 10,
+                 'part': 'flower'
+             },
+             {
+                 'part': 'flower',
+                 'trait': 'part',
+                 'start': 11,
+                 'end': 18,
+                 'sex': 'pistillate'
+             },
+             {
+                 'shape': 'sessile',
+                 'trait': 'shape',
+                 'start': 27,
+                 'end': 34,
+                 'part': 'flower'
+             },
+             {
+                 'floral_location': 'superior',
+                 'trait': 'floral_location',
+                 'start': 36,
+                 'end': 46
+             }]
         )
 
     def test_phrase_02(self):

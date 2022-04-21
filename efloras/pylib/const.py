@@ -1,28 +1,37 @@
 """Project-wide constants."""
-
+import os
 import re
 from pathlib import Path
 
 from traiter.const import CLOSE, COMMA, CROSS, DASH, FLOAT_TOKEN_RE, OPEN, PLUS, SLASH
-from traiter.terms.csv_ import Csv
-
-BASE_DIR = Path.cwd().resolve().parts[-1]
-BASE_DIR = Path.cwd() if BASE_DIR.find('floras') > -1 else Path.cwd().parent
-
-DATA_DIR = BASE_DIR / 'data'
-PROCESSED_DATA = DATA_DIR / 'processed'
-
-EFLORAS_DIR = DATA_DIR / 'eFloras'
-EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
+from traiter.terms.db import Db
 
 # Download site
 SITE = 'http://www.efloras.org'
 
+BASE_DIR = Path.cwd().resolve().parts[-1]
+BASE_DIR = Path.cwd() if BASE_DIR.find('floras') > -1 else Path.cwd().parent
+
+CURR_DIR = Path(os.getcwd())
+IS_SUBDIR = CURR_DIR.name in ("notebooks", "experiments")
+ROOT_DIR = Path("../.." if IS_SUBDIR else ".")
+
+DATA_DIR = ROOT_DIR / "data"
+MOCK_DIR = ROOT_DIR / "tests" / "mock_data"
+
+EFLORAS_DIR = DATA_DIR / 'eFloras'
+EFLORAS_FAMILIES = DATA_DIR / 'efloras_families' / 'eFloras_family_list.csv'
+
+TERM_DB = DATA_DIR / "plant_terms.sqlite"
+if not TERM_DB.exists():
+    TERM_DB = MOCK_DIR / "plant_terms.sqlite"
+
 # #########################################################################
 # Term related constants
-TERMS = Csv.shared('colors units plant_treatment')
-TERMS += Csv.hyphenate_terms(TERMS)
-TERMS += Csv.trailing_dash(TERMS, label='color')
+TERMS = Db.shared('colors units')
+TERMS += Db.select_term_set(TERM_DB, "plant_treatment")
+TERMS += Db.hyphenate_terms(TERMS)
+TERMS += Db.trailing_dash(TERMS, label='color')
 TERMS.drop('imperial_length')
 
 REPLACE = TERMS.pattern_dict('replace')

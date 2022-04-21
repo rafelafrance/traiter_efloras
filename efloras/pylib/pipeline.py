@@ -2,12 +2,12 @@
 
 import spacy
 from traiter.patterns import matcher_patterns
-from traiter.pipes.add_entity_data import ADD_ENTITY_DATA
-from traiter.pipes.cleanup import CLEANUP
-from traiter.pipes.dependency import DEPENDENCY
-from traiter.pipes.sentence import SENTENCE
-from traiter.pipes.simple_entity_data import SIMPLE_ENTITY_DATA
-from traiter.pipes.update_entity_data import UPDATE_ENTITY_DATA
+from traiter.old_pipes.add_entity_data import ADD_ENTITY_DATA
+from traiter.old_pipes.cleanup import CLEANUP
+from traiter.old_pipes.dependency import DEPENDENCY
+from traiter.old_pipes.sentence import SENTENCE
+from traiter.old_pipes.simple_entity_data import SIMPLE_ENTITY_DATA
+from traiter.old_pipes.update_entity_data import UPDATE_ENTITY_DATA
 from traiter.tokenizer_util import append_abbrevs, append_tokenizer_regexes
 
 from efloras.patterns import (
@@ -63,9 +63,11 @@ def pipeline():
     append_abbrevs(nlp, const.ABBREVS)
 
     # Add a pipe to identify phrases and patterns as base-level traits.
-    config = {'phrase_matcher_attr': 'LOWER'}
     term_ruler = nlp.add_pipe(
-        'entity_ruler', name='term_ruler', config=config, before='parser'
+        'entity_ruler',
+        name='term_ruler',
+        before='parser',
+        config={'phrase_matcher_attr': 'LOWER'}
     )
     term_ruler.add_patterns(const.TERMS.for_entity_ruler())
     matcher_patterns.add_ruler_patterns(term_ruler, TERM_RULES)

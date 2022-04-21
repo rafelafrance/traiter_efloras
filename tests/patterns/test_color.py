@@ -14,14 +14,44 @@ class TestColor(unittest.TestCase):
                 usually not purple-spotted, rarely purple-spotted distally.
             """),
             [{'part': 'hypanthium', 'trait': 'part', 'start': 0, 'end': 10},
-             {'color': 'green', 'trait': 'color', 'part': 'hypanthium',
-              'start': 11, 'end': 16},
-             {'color': 'green-yellow', 'trait': 'color', 'part': 'hypanthium',
-              'start': 20, 'end': 35},
-             {'color': 'purple-spotted', 'trait': 'color', 'part': 'hypanthium',
-              'missing': True, 'start': 45, 'end': 63},
-             {'color': 'purple-spotted', 'trait': 'color', 'part': 'hypanthium',
-              'missing': True, 'start': 65, 'end': 86}]
+             {
+                 'color': 'green',
+                 'trait': 'color',
+                 'start': 11,
+                 'end': 16,
+                 'part': 'hypanthium'
+             },
+             {
+                 'color': 'green-yellow',
+                 'trait': 'color',
+                 'start': 20,
+                 'end': 35,
+                 'part': 'hypanthium'
+             },
+             {
+                 'color': 'purple-spotted',
+                 'missing': True,
+                 'trait': 'color',
+                 'start': 45,
+                 'end': 63,
+                 'part': 'hypanthium'
+             },
+             {
+                 'color': 'purple-spotted',
+                 'missing': True,
+                 'trait': 'color',
+                 'start': 65,
+                 'end': 86,
+                 'location': 'distally',
+                 'part': 'hypanthium'
+             },
+             {
+                 'location': 'distally',
+                 'trait': 'location',
+                 'start': 87,
+                 'end': 95,
+                 'part': 'hypanthium'
+             }]
         )
 
     def test_color_02(self):
@@ -187,11 +217,27 @@ class TestColor(unittest.TestCase):
         self.assertEqual(
             test('leaflets surfaces rather densely spotted with minute blackish dots'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
-             {'subpart': 'surface', 'part': 'leaflet', 'trait': 'subpart',
-              'start': 9, 'end': 17},
-             {'color': 'black-dots',
-              'trait': 'color', 'part': 'leaflet', 'subpart': 'surface',
-              'start': 53, 'end': 66}]
+             {
+                 'subpart': 'surface',
+                 'trait': 'subpart',
+                 'start': 9,
+                 'end': 17,
+                 'part': 'leaflet'
+             },
+             {
+                 'surface_leader': 'densely',
+                 'trait': 'surface_leader',
+                 'start': 25,
+                 'end': 32
+             },
+             {
+                 'color': 'black-dots',
+                 'trait': 'color',
+                 'start': 53,
+                 'end': 66,
+                 'part': 'leaflet',
+                 'subpart': 'surface'
+             }]
         )
 
     def test_color_15(self):
