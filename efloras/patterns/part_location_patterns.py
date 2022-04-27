@@ -4,13 +4,13 @@ from traiter.actions import TEXT_ACTION
 from traiter.actions import text_action
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
-from efloras.pylib.const import COMMON_PATTERNS
+from ..pylib import const
 
 LOCATION_LEADERS = """
     to at embracing
     """.split()
 
-DECODER = COMMON_PATTERNS | {
+DECODER = const.COMMON_PATTERNS | {
     "part": {"ENT_TYPE": "part"},
     "subpart": {"ENT_TYPE": "subpart"},
     "leader": {"LOWER": {"IN": LOCATION_LEADERS}},

@@ -3,7 +3,7 @@ from collections import defaultdict
 
 import pandas as pd
 
-from efloras.pylib.util import convert
+from ..pylib import util
 
 
 def csv_writer(args, rows):
@@ -86,9 +86,9 @@ def extract_sizes(row, header, value_list):
             if len(parts) > 1 and parts[1] == "units":
                 row[key] = value
             elif parts[0] == "length":
-                row[key] = convert(value, length_units)
+                row[key] = util.convert(value, length_units)
             elif parts[0] == "width":
-                row[key] = convert(value, width_units)
+                row[key] = util.convert(value, width_units)
             elif parts[0].endswith("units"):
                 units = f"{parts[0]}_units"
-                row[key] = convert(value, extract.get(units))
+                row[key] = util.convert(value, extract.get(units))

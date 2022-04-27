@@ -3,8 +3,7 @@ import csv
 from datetime import datetime
 from itertools import product
 
-from efloras.pylib.const import DATA_DIR
-from efloras.pylib.const import EFLORAS_FAMILIES
+from ..pylib import const
 
 CONVERT = {
     "cm": 10.0,
@@ -35,13 +34,15 @@ def get_families():
     """Get a list of all families in the eFloras catalog."""
     families = {}
 
-    with open(EFLORAS_FAMILIES) as in_file:
+    with open(const.EFLORAS_FAMILIES) as in_file:
 
         for family in csv.DictReader(in_file):
 
             times = {"created": "", "modified": "", "count": 0}
 
-            path = DATA_DIR / "eFloras" / f"{family['family']}_{family['flora_id']}"
+            path = (
+                const.DATA_DIR / "eFloras" / f"{family['family']}_{family['flora_id']}"
+            )
 
             if path.exists():
                 times["count"] = len(list(path.glob("**/treatments/*.html")))
@@ -63,7 +64,7 @@ def get_families():
 def get_flora_ids():
     """Get a list of flora IDs."""
     flora_ids = {}
-    with open(EFLORAS_FAMILIES) as in_file:
+    with open(const.EFLORAS_FAMILIES) as in_file:
         for family in csv.DictReader(in_file):
             flora_ids[int(family["flora_id"])] = family["flora_name"]
     return flora_ids

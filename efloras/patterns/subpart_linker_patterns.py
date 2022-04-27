@@ -9,10 +9,10 @@ from traiter.const import DASH
 from traiter.patterns.dependency_patterns import DependencyPatterns
 from traiter.pipes.dependency_pipe import LINK_NEAREST
 
-from efloras.pylib.const import TRAITS
-from efloras.pylib.util import remove_traits
+from ..pylib import const
+from ..pylib import util
 
-TRAITS_ = remove_traits(TRAITS, "subpart")
+TRAITS_ = util.remove_traits(const.TRAITS, "subpart")
 
 SUBPART_LINKER = DependencyPatterns(
     "subpart_linker",

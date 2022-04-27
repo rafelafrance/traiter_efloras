@@ -32,8 +32,8 @@ SIZE = MatcherPatterns(
     on_match="efloras.size.v1",
     decoder=DECODER,
     patterns=[
-        "about? 99.9-99.9 cm follow*",
-        ("      about? 99.9-99.9 cm? follow* " "x to? about? 99.9-99.9 cm  follow*"),
+        "about? 99.9-99.9 cm  follow*",
+        "about? 99.9-99.9 cm? follow* " "x to? about? 99.9-99.9 cm  follow*",
         (
             "      about? 99.9-99.9 cm? follow* "
             "x to? about? 99.9-99.9 cm? follow* "

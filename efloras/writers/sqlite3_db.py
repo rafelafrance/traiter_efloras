@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from efloras.pylib.const import SITE
+from ..pylib import const
 
 
 def sqlite3_db(args, rows):
@@ -219,7 +219,7 @@ def get_sources(rows):
 
         source = {
             "source_id": source_id,
-            "source": SITE,
+            "source": const.SITE,
             "url": row["link"],
             "text_": row["text"],
             "downloaded": downloaded,

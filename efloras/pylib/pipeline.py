@@ -9,18 +9,18 @@ from traiter.pipes.sentence_pipe import SENTENCE
 from traiter.pipes.simple_traits_pipe import SIMPLE_TRAITS
 from traiter.pipes.term_pipe import TERM_PIPE
 
-from efloras.patterns import color
-from efloras.patterns import count
-from efloras.patterns import location_linker
-from efloras.patterns import margin
-from efloras.patterns import part_linker
-from efloras.patterns import part_location
-from efloras.patterns import range_
-from efloras.patterns import sex_linker
-from efloras.patterns import shape
-from efloras.patterns import size
-from efloras.patterns import subpart_linker
-from efloras.pylib import const
+from ..patterns import color_patterns
+from ..patterns import count_patterns
+from ..patterns import location_linker_patterns
+from ..patterns import margin_patterns
+from ..patterns import part_linker_patterns
+from ..patterns import part_location_patterns
+from ..patterns import range_patterns
+from ..patterns import sex_linker_patterns
+from ..patterns import shape_patterns
+from ..patterns import size_patterns
+from ..patterns import subpart_linker_patterns
+from ..pylib import const
 
 # from traiter.pipes.debug import DEBUG_TOKENS, DEBUG_ENTITIES
 
@@ -48,15 +48,15 @@ def pipeline():
         config={
             "patterns": matcher_patterns.as_dicts(
                 [
-                    range_.RANGE_LOW,
-                    range_.RANGE_MIN_LOW,
-                    range_.RANGE_LOW_HIGH,
-                    range_.RANGE_LOW_MAX,
-                    range_.RANGE_MIN_LOW_HIGH,
-                    range_.RANGE_MIN_LOW_MAX,
-                    range_.RANGE_LOW_HIGH_MAX,
-                    range_.RANGE_MIN_LOW_HIGH_MAX,
-                    range_.NOT_A_RANGE,
+                    range_patterns.RANGE_LOW,
+                    range_patterns.RANGE_MIN_LOW,
+                    range_patterns.RANGE_LOW_HIGH,
+                    range_patterns.RANGE_LOW_MAX,
+                    range_patterns.RANGE_MIN_LOW_HIGH,
+                    range_patterns.RANGE_MIN_LOW_MAX,
+                    range_patterns.RANGE_LOW_HIGH_MAX,
+                    range_patterns.RANGE_MIN_LOW_HIGH_MAX,
+                    range_patterns.NOT_A_RANGE,
                 ]
             )
         },
@@ -71,19 +71,19 @@ def pipeline():
         config={
             "patterns": matcher_patterns.as_dicts(
                 [
-                    size.SIZE,
-                    size.SIZE_HIGH_ONLY,
-                    size.SIZE_DOUBLE_DIM,
-                    size.NOT_A_SIZE,
-                    count.COUNT,
-                    count.COUNT_WORD,
-                    count.NOT_A_COUNT,
-                    color.COLOR,
-                    margin.MARGIN_SHAPE,
-                    shape.N_SHAPE,
-                    shape.SHAPE,
-                    part_location.PART_AS_LOCATION,
-                    part_location.SUBPART_AS_LOCATION,
+                    size_patterns.SIZE,
+                    size_patterns.SIZE_HIGH_ONLY,
+                    size_patterns.SIZE_DOUBLE_DIM,
+                    size_patterns.NOT_A_SIZE,
+                    count_patterns.COUNT,
+                    count_patterns.COUNT_WORD,
+                    count_patterns.NOT_A_COUNT,
+                    color_patterns.COLOR,
+                    margin_patterns.MARGIN_SHAPE,
+                    shape_patterns.N_SHAPE,
+                    shape_patterns.SHAPE,
+                    part_location_patterns.PART_AS_LOCATION,
+                    part_location_patterns.SUBPART_AS_LOCATION,
                 ]
             )
         },
@@ -100,10 +100,10 @@ def pipeline():
         config={
             "patterns": matcher_patterns.as_dicts(
                 [
-                    location_linker.LOCATION_LINKER,
-                    part_linker.PART_LINKER,
-                    sex_linker.SEX_LINKER,
-                    subpart_linker.SUBPART_LINKER,
+                    location_linker_patterns.LOCATION_LINKER,
+                    part_linker_patterns.PART_LINKER,
+                    sex_linker_patterns.SEX_LINKER,
+                    subpart_linker_patterns.SUBPART_LINKER,
                 ]
             )
         },

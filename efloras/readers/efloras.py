@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 from traiter.const import FLAGS
 
 import downloader
-import efloras.pylib.util as util
-from efloras.pylib.const import PARA_RE
+from ..pylib import const
+from ..pylib import util
 
 TAXON_RE = re.compile(r"Accepted Name", flags=re.IGNORECASE)
 
@@ -92,7 +92,7 @@ def get_traits(treatment):
     high = 0
     for para in treatment.find_all("p"):
         text = " ".join(para.get_text().split())
-        unique = set(PARA_RE.findall(text))
+        unique = set(const.PARA_RE.findall(text))
         if len(unique) > high:
             best = " ".join(para.get_text().split())
             high = len(unique)

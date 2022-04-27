@@ -4,11 +4,11 @@ from spacy import registry
 from traiter import actions
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
-from efloras.pylib.const import COMMON_PATTERNS
+from ..pylib import const
 
 ON_RANGE_MATCH = "efloras.range.v1"
 
-DECODER = COMMON_PATTERNS | {
+DECODER = const.COMMON_PATTERNS | {
     "ambiguous": {"LOWER": {"IN": ["few", "many"]}},
 }
 

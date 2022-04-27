@@ -3,10 +3,7 @@ from pathlib import Path
 
 import duckdb
 
-from efloras.writers.sqlite3_db import get_raw_traits
-from efloras.writers.sqlite3_db import get_sources
-from efloras.writers.sqlite3_db import get_taxa
-from efloras.writers.sqlite3_db import get_traits
+from . import sqlite3_db
 
 
 def duck_db(args, rows):
@@ -20,15 +17,15 @@ def duck_db(args, rows):
 
     create_tables(cxn)
 
-    source_df = get_sources(rows)
+    source_df = sqlite3_db.get_sources(rows)
     cxn.register("source_df", source_df)
 
-    taxon_df = get_taxa(rows, cxn)
+    taxon_df = sqlite3_db.get_taxa(rows, cxn)
     cxn.register("taxon_df", taxon_df)
 
-    raw_traits = get_raw_traits(rows, cxn)
+    raw_traits = sqlite3_db.get_raw_traits(rows, cxn)
 
-    trait_df, field_df = get_traits(raw_traits)
+    trait_df, field_df = sqlite3_db.get_traits(raw_traits)
     cxn.register("trait_df", trait_df)
     cxn.register("field_df", field_df)
 
