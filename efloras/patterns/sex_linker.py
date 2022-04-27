@@ -7,7 +7,7 @@ Named entity recognition (NER) must be run first.
 """
 
 from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.old_pipes.dependency import LINK_NEAREST
+from traiter.pipes.dependency_pipe import LINK_NEAREST
 
 from efloras.pylib.const import TRAITS
 from efloras.pylib.util import remove_traits

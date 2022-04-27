@@ -83,7 +83,5 @@ TRAITS = set(""" color color_mod count location margin_shape part
 
 FORGET = """ about cross color_mod dim dimension imperial_length imperial_mass
     margin_leader metric_length metric_mass not_a_range per_count
-    quest shape_leader shape_suffix surface units
-    range.low range.min.low range.low.high range.low.max range.min.low.high
-    range.min.low.max range.low.high.max range.min.low.high.max
+    quest shape_leader shape_suffix surface units range
     """.split()

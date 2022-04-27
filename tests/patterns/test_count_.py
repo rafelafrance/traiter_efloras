@@ -29,20 +29,18 @@ class TestCount(unittest.TestCase):
         self.assertEqual(
             test('blade 5–10 × 4–9 cm'),
             [{'part': 'leaf', 'trait': 'part', 'start': 0, 'end': 5},
-             {'length_low': 5.0,
-              'length_high': 10.0,
-              'length_units': 'cm',
-              'trait': 'size',
-              'start': 6,
-              'end': 10,
-              'part': 'leaf'},
-             {'width_low': 4.0,
-              'width_high': 9.0,
-              'width_units': 'cm',
-              'trait': 'size',
-              'start': 13,
-              'end': 16,
-              'part': 'leaf'}]
+             {
+                 'length_low': 5.0,
+                 'length_high': 10.0,
+                 'length_units': 'cm',
+                 'width_low': 4.0,
+                 'width_high': 9.0,
+                 'width_units': 'cm',
+                 'trait': 'size',
+                 'start': 6,
+                 'end': 19,
+                 'part': 'leaf'
+             }]
         )
 
     def test_count_04(self):
@@ -121,6 +119,7 @@ class TestCount(unittest.TestCase):
         )
 
     def test_count_13(self):
+        self.maxDiff = None
         self.assertEqual(
             test('leaflets in 3 or 4 pairs,'),
             [{'part': 'leaflet', 'trait': 'part', 'start': 0, 'end': 8},
@@ -129,9 +128,8 @@ class TestCount(unittest.TestCase):
               'count_group': 'pairs',
               'trait': 'count',
               'start': 12,
-              'end': 18,
-              'part': 'leaflet'},
-             {'count_group': 'pairs', 'trait': 'count_group', 'start': 19, 'end': 24}]
+              'end': 24,
+              'part': 'leaflet'}]
         )
 
     def test_count_14(self):
@@ -154,9 +152,8 @@ class TestCount(unittest.TestCase):
               'count_group': 'pairs',
               'trait': 'count',
               'start': 12,
-              'end': 24,
-              'part': 'leaflet'},
-             {'count_group': 'pairs', 'trait': 'count_group', 'start': 25, 'end': 30}]
+              'end': 30,
+              'part': 'leaflet'}]
         )
 
     def test_count_16(self):
@@ -195,7 +192,7 @@ class TestCount(unittest.TestCase):
                  'sex': 'pistillate'
              },
              {
-                 'part_as_loc': 'at apex of hypanthial aculei',
+                 'subpart_location': 'at apex of hypanthial aculei',
                  'trait': 'part_as_loc',
                  'start': 36,
                  'end': 64,
@@ -301,14 +298,7 @@ class TestCount(unittest.TestCase):
                  'count_group': 'pair',
                  'trait': 'count',
                  'start': 9,
-                 'end': 27,
-                 'part': 'leaflet'
-             },
-             {
-                 'trait': 'count_group',
-                 'start': 27,
                  'end': 34,
-                 'count_group': 'pair',
                  'part': 'leaflet'
              }]
         )
@@ -359,11 +349,9 @@ class TestCount(unittest.TestCase):
               'count_group': 'per side',
               'trait': 'count',
               'start': 12,
-              'end': 26,
+              'end': 35,
               'part': 'leaf',
-              'subpart': 'lobe'},
-             {'count_group': 'per side', 'trait': 'count_group', 'start': 27,
-              'end': 35}]
+              'subpart': 'lobe'}]
         )
 
     def test_count_27(self):
@@ -374,11 +362,9 @@ class TestCount(unittest.TestCase):
               'high': 16,
               'count_group': 'pairs',
               'trait': 'count',
-              'start': 7,
-              'end': 12,
-              'part': 'stem'},
-             {'count_group': 'pairs', 'trait': 'count_group',  'part': 'stem',
-              'start': 14, 'end': 19}]
+              'start': 6,
+              'end': 19,
+              'part': 'stem'}]
 
         )
 
@@ -403,11 +389,9 @@ class TestCount(unittest.TestCase):
               'count_group': 'per side',
               'trait': 'count',
               'start': 12,
-              'end': 24,
+              'end': 33,
               'part': 'leaf',
-              'subpart': 'lobe'},
-             {'count_group': 'per side', 'trait': 'count_group', 'start': 25,
-              'end': 33}]
+              'subpart': 'lobe'}]
         )
 
     def test_count_30(self):
@@ -445,11 +429,17 @@ class TestCount(unittest.TestCase):
                  'end': 17,
                  'sex': 'staminate'
              },
-             {'trait': 'count_group', 'start': 21, 'end': 39, 'count_group': 'cluster'},
+             {
+                 'low': 1,
+                 'trait': 'count',
+                 'start': 21,
+                 'end': 22,
+                 'part': 'catkin',
+                 'sex': 'staminate'
+             },
              {
                  'low': 3,
                  'high': 6,
-                 'count_group': 'cluster',
                  'trait': 'count',
                  'start': 43,
                  'end': 47,
@@ -470,11 +460,17 @@ class TestCount(unittest.TestCase):
                  'end': 67,
                  'sex': 'pistillate'
              },
-             {'trait': 'count_group', 'start': 71, 'end': 89, 'count_group': 'cluster'},
+             {
+                 'low': 1,
+                 'trait': 'count',
+                 'start': 71,
+                 'end': 72,
+                 'part': 'catkin',
+                 'sex': 'pistillate'
+             },
              {
                  'low': 2,
                  'high': 7,
-                 'count_group': 'cluster',
                  'trait': 'count',
                  'start': 93,
                  'end': 97,
@@ -540,4 +536,10 @@ class TestCount(unittest.TestCase):
              },
              {'part': 'x', 'trait': 'part', 'start': 19, 'end': 22},
              {'low': 9, 'trait': 'count', 'start': 23, 'end': 24, 'part': 'x'}]
+        )
+
+    def test_count_36(self):
+        self.assertEqual(
+            test("Seeds 1000"),
+            [{'end': 5, 'part': 'seed', 'start': 0, 'trait': 'part'}],
         )

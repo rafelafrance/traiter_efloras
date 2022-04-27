@@ -19,7 +19,7 @@ class TestPartLocation(unittest.TestCase):
               'length_units': 'mm',
               'trait': 'size',
               'start': 9,
-              'end': 12,
+              'end': 15,
               'part': 'stipule'},
              {'part_as_loc': 'to petiole',
               'trait': 'part_as_loc',
@@ -57,7 +57,7 @@ class TestPartLocation(unittest.TestCase):
                  'part': 'stipule'
              },
              {
-                 'part_as_loc': 'at margin',
+                 'subpart_location': 'at margin',
                  'trait': 'part_as_loc',
                  'start': 25,
                  'end': 34,

@@ -1,19 +1,17 @@
 """Common count snippets."""
 
-import re
-
 from spacy import registry
-from traiter.actions import REJECT_MATCH, RejectMatch
-from traiter.const import CROSS, FLOAT_RE, INT_TOKEN_RE, SLASH
+from traiter.actions import REJECT_MATCH
+from traiter.const import CROSS, SLASH
 from traiter.patterns.matcher_patterns import MatcherPatterns
-from traiter.util import to_positive_int
+from traiter import util as t_util
 
-from efloras.pylib.const import COMMON_PATTERNS, REPLACE
+from ..pylib import const
 
 NOT_COUNT_WORDS = CROSS + SLASH + """ average side times days weeks by """.split()
 NOT_COUNT_ENTS = """ imperial_length metric_mass imperial_mass """.split()
 
-DECODER = COMMON_PATTERNS | {
+DECODER = const.COMMON_PATTERNS | {
     'adp': {'POS': {'IN': ['ADP']}},
     'count_suffix': {'ENT_TYPE': 'count_suffix'},
     'count_word': {'ENT_TYPE': 'count_word'},
@@ -23,6 +21,7 @@ DECODER = COMMON_PATTERNS | {
     'subpart': {'ENT_TYPE': 'subpart'},
 }
 
+# ####################################################################################
 COUNT = MatcherPatterns(
     'count',
     on_match='efloras.count.v1',
@@ -36,6 +35,30 @@ COUNT = MatcherPatterns(
     ],
 )
 
+
+@registry.misc(COUNT.on_match)
+def count(ent):
+    """Enrich the match with data."""
+    ent._.new_label = "count"
+
+    range_ = [t for t in ent if t.ent_type_ == "range"][0]
+    ent._.data = range_._.data
+
+    for key in ["min", "low", "high", "max"]:
+        if key in ent._.data:
+            ent._.data[key] = t_util.to_positive_int(ent._.data[key])
+
+    if ent._.data.get("range"):
+        del ent._.data["range"]
+
+    if pc := [e for e in ent.ents if e.label_ == "per_count"]:
+        pc = pc[0]
+        pc_text = pc.text.lower()
+        pc._.new_label = "count_group"
+        ent._.data["count_group"] = const.REPLACE.get(pc_text, pc_text)
+
+
+# ####################################################################################
 COUNT_WORD = MatcherPatterns(
     'count_word',
     on_match='efloras.count_word.v1',
@@ -45,6 +68,15 @@ COUNT_WORD = MatcherPatterns(
     ],
 )
 
+
+@registry.misc(COUNT_WORD.on_match)
+def count_word(ent):
+    ent._.new_label = "count"
+    word = [e for e in ent.ents if e.label_ == "count_word"][0]
+    word._.data = {"low": t_util.to_positive_int(const.REPLACE[word.text.lower()])}
+
+
+# ####################################################################################
 NOT_A_COUNT = MatcherPatterns(
     'not_a_count',
     on_match=REJECT_MATCH,
@@ -55,44 +87,3 @@ NOT_A_COUNT = MatcherPatterns(
         '9 / 9',
     ],
 )
-
-
-@registry.misc(COUNT.on_match)
-def count(ent):
-    """Enrich the match with data."""
-    range_ = range_values(ent)
-
-    if pc := [e for e in ent.ents if e.label_ == 'per_count']:
-        pc = pc[0]
-        pc_text = pc.text.lower()
-        pc._.new_label = 'count_group'
-        range_._.data['count_group'] = REPLACE.get(pc_text, pc_text)
-        range_._.links['count_group_link'] = [(pc.start_char, pc.end_char)]
-
-
-@registry.misc(COUNT_WORD.on_match)
-def count_word(ent):
-    """Enrich the match with data."""
-    ent._.new_label = 'count'
-    word = [e for e in ent.ents if e.label_ == 'count_word'][0]
-    word._.data = {'low': to_positive_int(REPLACE[word.text])}
-    word._.new_label = 'count'
-
-
-def range_values(ent):
-    """Extract values from the range and cached label."""
-    data = {}
-    range_ = [e for e in ent.ents if e._.cached_label.split('.')[0] == 'range'][0]
-
-    values = re.findall(FLOAT_RE, range_.text)
-
-    if not all([re.search(INT_TOKEN_RE, v) for v in values]):
-        raise RejectMatch
-
-    keys = range_.label_.split('.')[1:]
-    for key, value in zip(keys, values):
-        data[key] = to_positive_int(value)
-
-    range_._.data = data
-    range_._.new_label = 'count'
-    return range_
