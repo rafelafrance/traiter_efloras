@@ -1,21 +1,21 @@
 """Misc. utils."""
-
 import csv
 from datetime import datetime
 from itertools import product
 
-from efloras.pylib.const import DATA_DIR, EFLORAS_FAMILIES
+from efloras.pylib.const import DATA_DIR
+from efloras.pylib.const import EFLORAS_FAMILIES
 
 CONVERT = {
-    'cm': 10.0,
-    'dm': 100.0,
-    'm': 1000.0,
-    'mm': 1.0,
-    'µm': 1.0e-3,
-    'centimeters': 10.0,
-    'decimeters': 100.0,
-    'meters': 1000.0,
-    'millimeters': 1.0,
+    "cm": 10.0,
+    "dm": 100.0,
+    "m": 1000.0,
+    "mm": 1.0,
+    "µm": 1.0e-3,
+    "centimeters": 10.0,
+    "decimeters": 100.0,
+    "meters": 1000.0,
+    "millimeters": 1.0,
 }
 
 
@@ -39,21 +39,22 @@ def get_families():
 
         for family in csv.DictReader(in_file):
 
-            times = {'created': '', 'modified': '', 'count': 0}
+            times = {"created": "", "modified": "", "count": 0}
 
-            path = (DATA_DIR / 'eFloras'
-                    / f"{family['family']}_{family['flora_id']}")
+            path = DATA_DIR / "eFloras" / f"{family['family']}_{family['flora_id']}"
 
             if path.exists():
-                times['count'] = len(list(path.glob('**/treatments/*.html')))
-                if times['count']:
+                times["count"] = len(list(path.glob("**/treatments/*.html")))
+                if times["count"]:
                     stat = path.stat()
-                    times['created'] = datetime.fromtimestamp(
-                        stat.st_ctime).strftime('%Y-%m-%d %H:%M')
-                    times['modified'] = datetime.fromtimestamp(
-                        stat.st_mtime).strftime('%Y-%m-%d %H:%M')
+                    times["created"] = datetime.fromtimestamp(stat.st_ctime).strftime(
+                        "%Y-%m-%d %H:%M"
+                    )
+                    times["modified"] = datetime.fromtimestamp(stat.st_mtime).strftime(
+                        "%Y-%m-%d %H:%M"
+                    )
 
-            key = (family['family'].lower(), int(family['flora_id']))
+            key = (family["family"].lower(), int(family["flora_id"]))
             families[key] = {**family, **times}
 
     return families
@@ -64,11 +65,10 @@ def get_flora_ids():
     flora_ids = {}
     with open(EFLORAS_FAMILIES) as in_file:
         for family in csv.DictReader(in_file):
-            flora_ids[int(family['flora_id'])] = family['flora_name']
+            flora_ids[int(family["flora_id"])] = family["flora_name"]
     return flora_ids
 
 
 def get_family_flora_ids(args, families):
     """Get family and flora ID combinations."""
-    return [c for c in product(args.family, args.flora_id)
-            if c in families]
+    return [c for c in product(args.family, args.flora_id) if c in families]

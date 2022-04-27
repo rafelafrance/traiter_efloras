@@ -1,10 +1,12 @@
 """Write data to a duck_db."""
-
 from pathlib import Path
 
 import duckdb
 
-from efloras.writers.sqlite3_db import get_raw_traits, get_sources, get_taxa, get_traits
+from efloras.writers.sqlite3_db import get_raw_traits
+from efloras.writers.sqlite3_db import get_sources
+from efloras.writers.sqlite3_db import get_taxa
+from efloras.writers.sqlite3_db import get_traits
 
 
 def duck_db(args, rows):
@@ -19,16 +21,16 @@ def duck_db(args, rows):
     create_tables(cxn)
 
     source_df = get_sources(rows)
-    cxn.register('source_df', source_df)
+    cxn.register("source_df", source_df)
 
     taxon_df = get_taxa(rows, cxn)
-    cxn.register('taxon_df', taxon_df)
+    cxn.register("taxon_df", taxon_df)
 
     raw_traits = get_raw_traits(rows, cxn)
 
     trait_df, field_df = get_traits(raw_traits)
-    cxn.register('trait_df', trait_df)
-    cxn.register('field_df', field_df)
+    cxn.register("trait_df", trait_df)
+    cxn.register("field_df", field_df)
 
     delete_old_recs(cxn)
     inset_new_recs(cxn)
@@ -39,14 +41,14 @@ def duck_db(args, rows):
 
 def drop_views(cxn):
     """Remove data frame views."""
-    cxn.unregister('source_df')
-    cxn.unregister('taxon_df')
-    cxn.unregister('trait_df')
-    cxn.unregister('field_df')
-    cxn.execute('DROP VIEW source_df;')
-    cxn.execute('DROP VIEW taxon_df;')
-    cxn.execute('DROP VIEW trait_df;')
-    cxn.execute('DROP VIEW field_df;')
+    cxn.unregister("source_df")
+    cxn.unregister("taxon_df")
+    cxn.unregister("trait_df")
+    cxn.unregister("field_df")
+    cxn.execute("DROP VIEW source_df;")
+    cxn.execute("DROP VIEW taxon_df;")
+    cxn.execute("DROP VIEW trait_df;")
+    cxn.execute("DROP VIEW field_df;")
 
 
 def inset_new_recs(cxn):
@@ -59,17 +61,24 @@ def inset_new_recs(cxn):
 
 def delete_old_recs(cxn):
     """Remove old records before inserting new ones."""
-    cxn.execute("""
-        DELETE FROM sources WHERE source_id IN (SELECT source_id FROM source_df);""")
-    cxn.execute("""
-        DELETE FROM traits WHERE source_id IN (SELECT source_id FROM source_df);""")
-    cxn.execute("""
-        DELETE FROM fields WHERE source_id IN (SELECT source_id FROM source_df);""")
+    cxn.execute(
+        """
+        DELETE FROM sources WHERE source_id IN (SELECT source_id FROM source_df);"""
+    )
+    cxn.execute(
+        """
+        DELETE FROM traits WHERE source_id IN (SELECT source_id FROM source_df);"""
+    )
+    cxn.execute(
+        """
+        DELETE FROM fields WHERE source_id IN (SELECT source_id FROM source_df);"""
+    )
 
 
 def create_tables(cxn):
     """Create tables and indices."""
-    cxn.execute("""
+    cxn.execute(
+        """
         CREATE TABLE IF NOT EXISTS sources (
             source_id  UBIGINT PRIMARY KEY,
             source     VARCHAR,
@@ -78,9 +87,11 @@ def create_tables(cxn):
             downloaded DATE,
             notes      VARCHAR
         );
-    """)
+    """
+    )
 
-    cxn.execute("""
+    cxn.execute(
+        """
         CREATE TABLE IF NOT EXISTS taxa (
             taxon   VARCHAR PRIMARY KEY,
             level   VARCHAR,
@@ -89,9 +100,11 @@ def create_tables(cxn):
             species VARCHAR,
             notes   VARCHAR
         );
-    """)
+    """
+    )
 
-    cxn.execute("""
+    cxn.execute(
+        """
         CREATE TABLE IF NOT EXISTS traits (
             trait_id  UBIGINT PRIMARY KEY,
             source_id UBIGINT,
@@ -101,9 +114,11 @@ def create_tables(cxn):
             sex       VARCHAR,
             notes     VARCHAR
         );
-    """)
+    """
+    )
 
-    cxn.execute("""
+    cxn.execute(
+        """
         CREATE TABLE IF NOT EXISTS fields (
             trait_id     UBIGINT,
             source_id    UBIGINT,
@@ -112,4 +127,5 @@ def create_tables(cxn):
             int_value    BIGINT,
             float_value  DOUBLE
         );
-    """)
+    """
+    )

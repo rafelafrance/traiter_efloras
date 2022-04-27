@@ -9,109 +9,109 @@ from efloras.pylib.const import COMMON_PATTERNS
 ON_RANGE_MATCH = "efloras.range.v1"
 
 DECODER = COMMON_PATTERNS | {
-    'ambiguous': {'LOWER': {'IN': ['few', 'many']}},
+    "ambiguous": {"LOWER": {"IN": ["few", "many"]}},
 }
 
 RANGE_LOW = MatcherPatterns(
-    'range.low',
+    "range.low",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '99.9',
-        '( 99.9 -/or ) ambiguous ( -/to ambiguous )',
+        "99.9",
+        "( 99.9 -/or ) ambiguous ( -/to ambiguous )",
     ],
 )
 
 RANGE_MIN_LOW = MatcherPatterns(
-    'range.min.low',
+    "range.min.low",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '( 99.9 -/or ) 99.9',
-        '( 99.9 -/to ) 99.9',
+        "( 99.9 -/or ) 99.9",
+        "( 99.9 -/to ) 99.9",
     ],
 )
 
 RANGE_LOW_HIGH = MatcherPatterns(
-    'range.low.high',
+    "range.low.high",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '99.9 and/or 99.9',
-        '99.9 -/to   99.9',
+        "99.9 and/or 99.9",
+        "99.9 -/to   99.9",
     ],
 )
 
 RANGE_LOW_MAX = MatcherPatterns(
-    'range.low.max',
+    "range.low.max",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '99.9 ( and/or 99.9 )',
-        '99.9 ( -/to   99.9 )',
+        "99.9 ( and/or 99.9 )",
+        "99.9 ( -/to   99.9 )",
     ],
 )
 
 RANGE_MIN_LOW_HIGH = MatcherPatterns(
-    'range.min.low.high',
+    "range.min.low.high",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '( 99.9   -/or )   99.9 -/to     99.9',
-        '( 99.9   -/or )   99.9 - and/or 99.9',
-        '( 99.9   and/or ) 99.9   and/or 99.9',
-        '  99.9 ( and/or   99.9    -/to  99.9 )',
+        "( 99.9   -/or )   99.9 -/to     99.9",
+        "( 99.9   -/or )   99.9 - and/or 99.9",
+        "( 99.9   and/or ) 99.9   and/or 99.9",
+        "  99.9 ( and/or   99.9    -/to  99.9 )",
     ],
 )
 
 RANGE_MIN_LOW_MAX = MatcherPatterns(
-    'range.min.low.max',
+    "range.min.low.max",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '( 99.9 - ) 99.9 -? ( -/to 99.9 [+]? )',
-        '  99.9 -   99.9 - ( -/to 99.9 )',
-        '  99.9 - and/or 99.9 -/to 99.9',
+        "( 99.9 - ) 99.9 -? ( -/to 99.9 [+]? )",
+        "  99.9 -   99.9 - ( -/to 99.9 )",
+        "  99.9 - and/or 99.9 -/to 99.9",
     ],
 )
 
 RANGE_LOW_HIGH_MAX = MatcherPatterns(
-    'range.low.high.max',
+    "range.low.high.max",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '99.9 ( and/or 99.9 -/or 99.9 [+]? )',
-        '99.9 - 99.9   ( -/to 99.9 [+]? )',
-        '99.9 - 99.9 - ( -/to 99.9 [+]? )',
-        '99.9 - 99.9 - 99.9',
-        '99.9 -/to 99.9 and/or 99.9',
-        '99.9 - and/or 99.9 ( -/or 99.9 [+]? )',
-        '99.9 and/or 99.9 ( and/or 99.9 [+]? )',
+        "99.9 ( and/or 99.9 -/or 99.9 [+]? )",
+        "99.9 - 99.9   ( -/to 99.9 [+]? )",
+        "99.9 - 99.9 - ( -/to 99.9 [+]? )",
+        "99.9 - 99.9 - 99.9",
+        "99.9 -/to 99.9 and/or 99.9",
+        "99.9 - and/or 99.9 ( -/or 99.9 [+]? )",
+        "99.9 and/or 99.9 ( and/or 99.9 [+]? )",
     ],
 )
 
 RANGE_MIN_LOW_HIGH_MAX = MatcherPatterns(
-    'range.min.low.high.max',
+    "range.min.low.high.max",
     on_match=ON_RANGE_MATCH,
     decoder=DECODER,
     patterns=[
-        '( 99.9 - ) 99.9 - 99.9 ( -/to 99.9 [+]? )',
-        '( 99.9 -/or ) 99.9 - and/or 99.9 ( -/or 99.9 [+]? )',
-        '( 99.9 and/or ) 99.9 - and/or 99.9 ( and/or 99.9 [+]? )',
-        '99.9 - and/or 99.9 - and/or 99.9 -/to 99.9',
-        '99.9 - and/or 99.9 -/to 99.9 ( -/or 99.9 [+]? )',
-        '99.9 -/to 99.9 ( -/or 99.9 ) ( -/or 99.9 [+]? )',
-        '99.9 99.9 -/to and/or 99.9 ( -/or 99.9 [+]? )',
-        '99.9 and/or 99.9 - 99.9 ( -/or 99.9 [+]? )',
+        "( 99.9 - ) 99.9 - 99.9 ( -/to 99.9 [+]? )",
+        "( 99.9 -/or ) 99.9 - and/or 99.9 ( -/or 99.9 [+]? )",
+        "( 99.9 and/or ) 99.9 - and/or 99.9 ( and/or 99.9 [+]? )",
+        "99.9 - and/or 99.9 - and/or 99.9 -/to 99.9",
+        "99.9 - and/or 99.9 -/to 99.9 ( -/or 99.9 [+]? )",
+        "99.9 -/to 99.9 ( -/or 99.9 ) ( -/or 99.9 [+]? )",
+        "99.9 99.9 -/to and/or 99.9 ( -/or 99.9 [+]? )",
+        "99.9 and/or 99.9 - 99.9 ( -/or 99.9 [+]? )",
     ],
 )
 
 NOT_A_RANGE = MatcherPatterns(
-    'not_a_range',
+    "not_a_range",
     on_match=actions.REJECT_MATCH,
     decoder=DECODER,
     patterns=[
-        '9 / 9',
+        "9 / 9",
     ],
 )
 

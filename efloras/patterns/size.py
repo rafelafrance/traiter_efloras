@@ -1,5 +1,4 @@
 """Common size snippets."""
-
 import re
 from collections import deque
 
@@ -17,59 +16,58 @@ NOT_A_SIZE = """ for """.split()
 SIZE_FIELDS = """ min low high max """.split()
 
 DECODER = const.COMMON_PATTERNS | {
-    '[?]': {'ENT_TYPE': 'quest'},
-    'about': {'ENT_TYPE': 'about'},
-    'and': {'LOWER': 'and'},
-    'cm': {'ENT_TYPE': 'metric_length'},
-    'dim': {'ENT_TYPE': 'dim'},
-    'follow': {'ENT_TYPE': {'IN': FOLLOW}},
-    'not_size': {'LOWER': {'IN': NOT_A_SIZE}},
-    'sex': {'ENT_TYPE': 'sex'},
-    'x': {'LOWER': {'IN': CROSS}},
+    "[?]": {"ENT_TYPE": "quest"},
+    "about": {"ENT_TYPE": "about"},
+    "and": {"LOWER": "and"},
+    "cm": {"ENT_TYPE": "metric_length"},
+    "dim": {"ENT_TYPE": "dim"},
+    "follow": {"ENT_TYPE": {"IN": FOLLOW}},
+    "not_size": {"LOWER": {"IN": NOT_A_SIZE}},
+    "sex": {"ENT_TYPE": "sex"},
+    "x": {"LOWER": {"IN": CROSS}},
 }
 
 SIZE = MatcherPatterns(
-    'size',
-    on_match='efloras.size.v1',
+    "size",
+    on_match="efloras.size.v1",
     decoder=DECODER,
     patterns=[
-        'about? 99.9-99.9 cm follow*',
-
-        ('      about? 99.9-99.9 cm? follow* '
-         'x to? about? 99.9-99.9 cm  follow*'),
-
-        ('      about? 99.9-99.9 cm? follow* '
-         'x to? about? 99.9-99.9 cm? follow* '
-         'x to? about? 99.9-99.9 cm  follow*'),
+        "about? 99.9-99.9 cm follow*",
+        ("      about? 99.9-99.9 cm? follow* " "x to? about? 99.9-99.9 cm  follow*"),
+        (
+            "      about? 99.9-99.9 cm? follow* "
+            "x to? about? 99.9-99.9 cm? follow* "
+            "x to? about? 99.9-99.9 cm  follow*"
+        ),
     ],
 )
 
 SIZE_HIGH_ONLY = MatcherPatterns(
-    'size.high_only',
-    on_match='efloras.size_high_only.v1',
+    "size.high_only",
+    on_match="efloras.size_high_only.v1",
     decoder=DECODER,
     patterns=[
-        'to about? 99.9 [?]? cm follow*',
+        "to about? 99.9 [?]? cm follow*",
     ],
 )
 
 SIZE_DOUBLE_DIM = MatcherPatterns(
-    'size.double_dim',
-    on_match='efloras.size_double_dim.v1',
+    "size.double_dim",
+    on_match="efloras.size_double_dim.v1",
     decoder=DECODER,
     patterns=[
-        'about? 99.9-99.9 cm  sex? ,? dim and dim',
-        'about? 99.9-99.9 cm? sex? ,? 99.9-99.9 cm dim and dim',
+        "about? 99.9-99.9 cm  sex? ,? dim and dim",
+        "about? 99.9-99.9 cm? sex? ,? 99.9-99.9 cm dim and dim",
     ],
 )
 
 NOT_A_SIZE = MatcherPatterns(
-    'not_a_size',
+    "not_a_size",
     on_match=REJECT_MATCH,
     decoder=DECODER,
     patterns=[
-        'not_size about? 99.9-99.9 cm',
-        'not_size about? 99.9-99.9 cm? x about? 99.9-99.9 cm',
+        "not_size about? 99.9-99.9 cm",
+        "not_size about? 99.9-99.9 cm? x about? 99.9-99.9 cm",
     ],
 )
 
@@ -92,9 +90,7 @@ def size_double_dim(ent):
 
     Like: Legumes 2.8-4.5 mm high and wide
     """
-    dims = [
-        const.REPLACE.get(t.lower_, t.lower_) for t in ent if t.ent_type_ == "dim"
-    ]
+    dims = [const.REPLACE.get(t.lower_, t.lower_) for t in ent if t.ent_type_ == "dim"]
 
     ranges = [e for e in ent.ents if e.label_ == "range"]
 

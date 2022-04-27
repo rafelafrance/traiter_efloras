@@ -1,5 +1,4 @@
 """Test the sentence splitter."""
-
 import unittest
 
 from traiter.util import shorten
@@ -8,7 +7,7 @@ from tests.setup import NLP
 
 
 class TestSentence(unittest.TestCase):
-    """"Test the sentence splitter."""
+    """ "Test the sentence splitter."""
 
     def test_sentencizer_01(self):
         text = shorten("""It was common “along a tiny stream.” Argia apicalis.""")
@@ -37,19 +36,23 @@ class TestSentence(unittest.TestCase):
         self.assertEqual(len(sents), 2)
 
     def test_sentencizer_05(self):
-        text = shorten("""
+        text = shorten(
+            """
             Plants perennial (rhizomatous), usually glabrous, sometimes sparsely hairy.
             Stems [10–]30–70[–100] cm. Leaves: stipules lanceolate to oblong.
-            """)
+            """
+        )
         doc = NLP(text)
         sents = list(doc.sents)
         self.assertEqual(len(sents), 3)
 
     def test_sentencizer_06(self):
-        text = shorten("""
-            Capsules 8–15 × 6–12 mm, larger wings deltate-rounded, 10–17 mm wide, 
+        text = shorten(
+            """
+            Capsules 8–15 × 6–12 mm, larger wings deltate-rounded, 10–17 mm wide,
             smaller 3.5–5 mm wide. 2n = 34, 56 (South America).
-            """)
+            """
+        )
         doc = NLP(text)
         sents = list(doc.sents)
         self.assertEqual(len(sents), 2)

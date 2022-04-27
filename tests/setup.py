@@ -1,7 +1,4 @@
 """Setup for all tests."""
-
-from typing import Dict, List
-
 from traiter.util import shorten
 
 from efloras.pylib.pipeline import pipeline
@@ -9,7 +6,7 @@ from efloras.pylib.pipeline import pipeline
 NLP = pipeline()  # Singleton for testing
 
 
-def test(text: str) -> List[Dict]:
+def test(text: str) -> list[dict]:
     """Find entities in the doc."""
     text = shorten(text)
     doc = NLP(text)

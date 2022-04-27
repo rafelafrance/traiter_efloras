@@ -1,5 +1,4 @@
 """Write training data to a JSONL file."""
-
 import json
 
 # from efloras.patterns.matcher import MATCHERS
@@ -41,11 +40,11 @@ def ner_writer(args, rows):
     """Output named entity recognition training data."""
     # _get_labels()
     for row in rows:
-        for sent in row['doc'].sents:
+        for sent in row["doc"].sents:
             entities = get_entities(sent)
-            line = json.dumps([sent.text, {'entities': entities}])
+            line = json.dumps([sent.text, {"entities": entities}])
             args.ner_file.write(line)
-            args.ner_file.write('\n')
+            args.ner_file.write("\n")
 
 
 def iob_writer(args, rows):
@@ -95,8 +94,8 @@ def iob_biluo_writer(out_file, rows, updater):
 
 def update_prev_tag(tags):
     """Update the previous tags for BILUO tagging scheme."""
-    prev = tags[-1] if tags else ''
-    if prev.startswith('I'):
-        tags[-1] = 'L' + prev[1:]
-    if prev.startswith('B'):
-        tags[-1] = 'U' + prev[1:]
+    prev = tags[-1] if tags else ""
+    if prev.startswith("I"):
+        tags[-1] = "L" + prev[1:]
+    if prev.startswith("B"):
+        tags[-1] = "U" + prev[1:]

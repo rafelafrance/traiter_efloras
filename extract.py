@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Parse efloras treatments."""
-
 import argparse
 import sys
 import textwrap
@@ -11,7 +10,9 @@ from efloras.pylib.pipeline import pipeline
 from efloras.pylib.util import get_family_flora_ids
 from efloras.readers.efloras import efloras_reader
 from efloras.writers.csv_ import csv_writer
-from efloras.writers.data import biluo_writer, iob_writer, ner_writer
+from efloras.writers.data import biluo_writer
+from efloras.writers.data import iob_writer
+from efloras.writers.data import ner_writer
 from efloras.writers.html_ import html_writer
 from efloras.writers.sqlite3_db import sqlite3_db
 
@@ -25,7 +26,7 @@ def main(args):
     rows = efloras_reader(args, families)
 
     for row in rows:
-        row['doc'] = nlp(row['text'])
+        row["doc"] = nlp(row["text"])
 
     if args.csv_file:
         copied = deepcopy(rows)
@@ -54,8 +55,7 @@ def main(args):
 
 def get_efloras_families(args):
     """Handle eFloras extractions"""
-    families = {k: v for k, v in util.get_families().items() if
-                v['count']}
+    families = {k: v for k, v in util.get_families().items() if v["count"]}
 
     if not check_family_flora_ids(args, families):
         sys.exit(1)
@@ -93,84 +93,117 @@ def check_family_flora_ids(args, families):
 
 def print_families(families):
     """Display a list of all families."""
-    template = '{:<20} {:>8} {:>8} {:<30}  {:<20} {:<20} {:>8}'
+    template = "{:<20} {:>8} {:>8} {:<30}  {:<20} {:<20} {:>8}"
 
-    print(template.format(
-        'Family',
-        'Taxon Id',
-        'Flora Id',
-        'Flora Name',
-        'Directory Created',
-        'Directory Modified',
-        'Treatments'))
+    print(
+        template.format(
+            "Family",
+            "Taxon Id",
+            "Flora Id",
+            "Flora Name",
+            "Directory Created",
+            "Directory Modified",
+            "Treatments",
+        )
+    )
 
     for family in families.values():
-        print(template.format(
-            family['family'],
-            family['taxon_id'],
-            family['flora_id'],
-            family['flora_name'],
-            family['created'],
-            family['modified'],
-            family['count'] if family['count'] else ''))
+        print(
+            template.format(
+                family["family"],
+                family["taxon_id"],
+                family["flora_id"],
+                family["flora_name"],
+                family["created"],
+                family["modified"],
+                family["count"] if family["count"] else "",
+            )
+        )
 
 
 def parse_args():
     """Process command-line arguments."""
     description = """Parse data from flora website."""
     arg_parser = argparse.ArgumentParser(
-        description=textwrap.dedent(description),
-        fromfile_prefix_chars='@')
+        description=textwrap.dedent(description), fromfile_prefix_chars="@"
+    )
 
     arg_parser.add_argument(
-        '--family', '-f', action='append',
-        help="""Which family to extract.""")
+        "--family", "-f", action="append", help="""Which family to extract."""
+    )
 
     arg_parser.add_argument(
-        '--genus', '-g', action='append',
+        "--genus",
+        "-g",
+        action="append",
         help="""Which genus to extract with in the family. Default is
             to select all genera. Although this is designed for selecting
             genera this is really just a filter on the taxa names so you
-            can put in anything that matches a taxon name.""")
+            can put in anything that matches a taxon name.""",
+    )
 
     flora_ids = util.get_flora_ids()
     arg_parser.add_argument(
-        '--flora-id', '-e', action='append',
+        "--flora-id",
+        "-e",
+        action="append",
         choices=[str(k) for k in flora_ids],
-        help="""Which flora ID to extract. Default 1.""")
+        help="""Which flora ID to extract. Default 1.""",
+    )
 
     arg_parser.add_argument(
-        '--html-file', '-H', type=argparse.FileType('w'),
-        help="""Output the results to this HTML file.""")
+        "--html-file",
+        "-H",
+        type=argparse.FileType("w"),
+        help="""Output the results to this HTML file.""",
+    )
 
     arg_parser.add_argument(
-        '--sqlite3', '-S', help="""Output to this sqlite3 database.""")
+        "--sqlite3", "-S", help="""Output to this sqlite3 database."""
+    )
 
     arg_parser.add_argument(
-        '--csv-file', '-C', type=argparse.FileType('w'),
-        help="""Output the results to this CSV file.""")
+        "--csv-file",
+        "-C",
+        type=argparse.FileType("w"),
+        help="""Output the results to this CSV file.""",
+    )
 
     arg_parser.add_argument(
-        '--ner-file', '-N', type=argparse.FileType('a'),
-        help="""Append formatted NER training data to this file.""")
+        "--ner-file",
+        "-N",
+        type=argparse.FileType("a"),
+        help="""Append formatted NER training data to this file.""",
+    )
 
     arg_parser.add_argument(
-        '--iob-file', '-I', type=argparse.FileType('a'),
+        "--iob-file",
+        "-I",
+        type=argparse.FileType("a"),
         help="""Append formatted training data in IOB format
-            to this file.""")
+            to this file.""",
+    )
 
     arg_parser.add_argument(
-        '--biluo-file', '-B', type=argparse.FileType('a'),
+        "--biluo-file",
+        "-B",
+        type=argparse.FileType("a"),
         help="""Append formatted training data in BILUO format
-            to this file.""")
+            to this file.""",
+    )
 
     arg_parser.add_argument(
-        '--list-families', '-l', action='store_true',
-        help="""List families available to extract and exit.""")
+        "--list-families",
+        "-l",
+        action="store_true",
+        help="""List families available to extract and exit.""",
+    )
 
     arg_parser.add_argument(
-        '--clear-db', action='store_true',
-        help="""Clear the duck_db before writing to it.""")
+        "--clear-db",
+        action="store_true",
+        help="""Clear the duck_db before writing to it.""",
+    )
 
     args = arg_parser.parse_args()
 
@@ -184,13 +217,20 @@ def parse_args():
     else:
         args.flora_id = [1]
 
-    if not (args.csv_file or args.html_file or args.ner_file or args.iob_file
-            or args.biluo_file or args.sqlite3 or args.duckdb):
-        setattr(args, 'csv_file', sys.stdout)
+    if not (
+        args.csv_file
+        or args.html_file
+        or args.ner_file
+        or args.iob_file
+        or args.biluo_file
+        or args.sqlite3
+        or args.duckdb
+    ):
+        setattr(args, "csv_file", sys.stdout)
 
     return args
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ARGS = parse_args()
     main(ARGS)
