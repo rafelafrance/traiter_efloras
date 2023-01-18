@@ -4,13 +4,13 @@ from traiter.actions import TEXT_ACTION
 from traiter.actions import text_action
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
-from ..pylib import const
+from . import common_patterns
 
 LOCATION_LEADERS = """
     to at embracing
     """.split()
 
-DECODER = const.COMMON_PATTERNS | {
+DECODER = common_patterns.COMMON_PATTERNS | {
     "part": {"ENT_TYPE": "part"},
     "subpart": {"ENT_TYPE": "subpart"},
     "leader": {"LOWER": {"IN": LOCATION_LEADERS}},

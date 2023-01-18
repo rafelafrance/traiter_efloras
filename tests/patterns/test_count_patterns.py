@@ -285,6 +285,7 @@ class TestCount(unittest.TestCase):
         )
 
     def test_count_17(self):
+        self.maxDiff = None
         self.assertEqual(
             test(
                 """

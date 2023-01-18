@@ -1,26 +1,32 @@
-"""Parse shape traits."""
 import re
 
 from spacy import registry
-from traiter.const import DASH
+from traiter import const as t_const
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
-from ..pylib import const
+from . import common_patterns
+from . import term_patterns
 
-TEMP = ["\\" + c for c in DASH[:2]]
+
+TEMP = ["\\" + c for c in t_const.DASH[:2]]
 MULTIPLE_DASHES = rf'[{"".join(TEMP)}]{{2,}}'
 
-DECODER = const.COMMON_PATTERNS | {
+SHAPE_LOC = ["shape", "shape_leader", "location"]
+SHAPE_WORD = ["shape", "shape_leader"]
+
+DECODER = common_patterns.COMMON_PATTERNS | {
     "shape": {"ENT_TYPE": "shape"},
     "shape_leader": {"ENT_TYPE": "shape_leader"},
-    "shape_loc": {"ENT_TYPE": {"IN": ["shape", "shape_leader", "location"]}},
-    "shape_word": {"ENT_TYPE": {"IN": ["shape", "shape_leader"]}},
+    "shape_loc": {"ENT_TYPE": {"IN": SHAPE_LOC}},
+    "shape_word": {"ENT_TYPE": {"IN": SHAPE_WORD}},
     "angular": {"LOWER": {"IN": ["angular", "angulate"]}},
 }
 
+
+# #####################################################################################
 SHAPE = MatcherPatterns(
     "shape",
-    on_match="efloras.shape.v1",
+    on_match="mimosa.shape.v1",
     decoder=DECODER,
     patterns=[
         "shape_loc* -* shape+",
@@ -30,9 +36,31 @@ SHAPE = MatcherPatterns(
     ],
 )
 
+
+@registry.misc(SHAPE.on_match)
+def on_shape_match(ent):
+    # Sets do not preserve order
+    cached_labels = ["shape", "shape_suffix"]
+    parts = {
+        r: 1
+        for t in ent
+        if (r := term_patterns.REPLACE.get(t.lower_, t.lower_))
+        and t._.cached_label in cached_labels
+    }
+
+    value = "-".join(parts.keys())
+    value = re.sub(rf"\s*{MULTIPLE_DASHES}\s*", r"-", value)
+    ent._.new_label = "shape"
+    ent._.data["shape"] = term_patterns.REPLACE.get(value, value)
+    loc = [t.lower_ for t in ent if t._.cached_label == "location"]
+    if loc:
+        ent._.data["location"] = loc[0]
+
+
+# #####################################################################################
 N_SHAPE = MatcherPatterns(
     "n_shape",
-    on_match="efloras.n_shape.v1",
+    on_match="mimosa.n_shape.v1",
     decoder=DECODER,
     patterns=[
         "shape_loc* 9 - angular",
@@ -40,25 +68,8 @@ N_SHAPE = MatcherPatterns(
 )
 
 
-@registry.misc(SHAPE.on_match)
-def shape(ent):
-    """Enrich a phrase match."""
-    parts = {
-        r: 1
-        for t in ent
-        if (r := const.REPLACE.get(t.lower_, t.lower_))
-        and t._.cached_label in {"shape", "shape_suffix"}
-    }
-    value = "-".join(parts.keys())
-    value = re.sub(rf"\s*{MULTIPLE_DASHES}\s*", r"-", value)
-    ent._.data["shape"] = const.REPLACE.get(value, value)
-    loc = [t.lower_ for t in ent if t._.cached_label == "location"]
-    if loc:
-        ent._.data["location"] = loc[0]
-
-
 @registry.misc(N_SHAPE.on_match)
-def n_shape(ent):
+def on_n_shape_match(ent):
     """Handle 5-angular etc."""
     ent._.new_label = "shape"
     ent._.data = {"shape": "polygonal"}

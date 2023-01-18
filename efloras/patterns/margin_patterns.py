@@ -5,7 +5,8 @@ from spacy import registry
 from traiter.const import DASH
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
-from ..pylib import const
+from . import common_patterns
+from . import term_patterns
 
 TEMP = ["\\" + c for c in DASH[:2]]
 MULTIPLE_DASHES = rf'[{"".join(TEMP)}]{{2,}}'
@@ -17,7 +18,7 @@ SHAPES = """ margin_shape shape """.split()
 MARGIN_SHAPE = MatcherPatterns(
     "margin_shape",
     on_match="efloras.margin.v1",
-    decoder=const.COMMON_PATTERNS
+    decoder=common_patterns.COMMON_PATTERNS
     | {
         "margin_shape": {"ENT_TYPE": "margin_shape"},
         "shape": {"ENT_TYPE": {"IN": SHAPES}},
@@ -39,8 +40,9 @@ def margin(ent):
     value = {
         r: 1
         for t in ent
-        if (r := const.REPLACE.get(t.text, t.text)) and t._.cached_label in SHAPES
+        if (r := term_patterns.REPLACE.get(t.text, t.text))
+        and t._.cached_label in SHAPES
     }
     value = "-".join(value.keys())
     value = re.sub(rf"\s*{MULTIPLE_DASHES}\s*", r"-", value)
-    ent._.data["margin_shape"] = const.REPLACE.get(value, value)
+    ent._.data["margin_shape"] = term_patterns.REPLACE.get(value, value)

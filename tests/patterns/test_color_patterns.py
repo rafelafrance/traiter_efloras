@@ -44,11 +44,11 @@ class TestColor(unittest.TestCase):
                     "trait": "color",
                     "start": 65,
                     "end": 86,
-                    "location": "distally",
+                    "location": "distal",
                     "part": "hypanthium",
                 },
                 {
-                    "location": "distally",
+                    "location": "distal",
                     "trait": "location",
                     "start": 87,
                     "end": 95,
@@ -375,9 +375,8 @@ class TestColor(unittest.TestCase):
             [
                 {"part": "leaf", "trait": "part", "start": 0, "end": 6},
                 {
-                    "habit": "acaulescent",
-                    "trait": "habit",
-                    "part": "leaf",
+                    "plant_habit": "acaulescent",
+                    "trait": "plant_habit",
                     "start": 7,
                     "end": 18,
                 },
@@ -405,13 +404,6 @@ class TestColor(unittest.TestCase):
             [
                 {"part": "leaflet", "trait": "part", "start": 0, "end": 8},
                 {
-                    "subpart": "surface",
-                    "trait": "subpart",
-                    "start": 9,
-                    "end": 17,
-                    "part": "leaflet",
-                },
-                {
                     "surface_leader": "densely",
                     "trait": "surface_leader",
                     "start": 25,
@@ -423,7 +415,6 @@ class TestColor(unittest.TestCase):
                     "start": 53,
                     "end": 66,
                     "part": "leaflet",
-                    "subpart": "surface",
                 },
             ],
         )

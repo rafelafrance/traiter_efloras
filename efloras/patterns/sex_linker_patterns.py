@@ -5,38 +5,24 @@ For example: "petals (1–)3–10(–12) mm (pistillate) or 5–8(–10) mm (sta
 Should note that pistillate petals are 3-10 mm and staminate petals are 5-8 mm.
 Named entity recognition (NER) must be run first.
 """
-from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.pipes.dependency_pipe import LINK_NEAREST
+from traiter.patterns import matcher_patterns
 
-from ..pylib import const
-from ..pylib import util
+from . import common_patterns
+from . import term_patterns
 
-TRAITS_ = util.remove_traits(const.TRAITS, "sex")
 
-SEX_LINKER = DependencyPatterns(
+SEX_PARENTS = ["sex"]
+SEX_CHILDREN = term_patterns.all_traits_except(["sex"])
+
+SEX_LINKER = matcher_patterns.MatcherPatterns(
     "sex_linker",
-    on_match={
-        "func": LINK_NEAREST,
-        "kwargs": {"anchor": "sex", "dir_bias": "after"},
-    },
-    decoder={
-        "sex": {"ENT_TYPE": "sex"},
-        "trait": {"ENT_TYPE": {"IN": TRAITS_}},
-        "count": {"ENT_TYPE": "count"},
-        "part": {"ENT_TYPE": "part"},
-        "link": {"POS": {"IN": ["ADJ", "AUX", "VERB"]}},
-        "mm": {"_": {"cached_label": "metric_length"}},
+    decoder=common_patterns.COMMON_PATTERNS
+    | {
+        "sex": {"ENT_TYPE": {"IN": SEX_PARENTS}},
+        "trait": {"ENT_TYPE": {"IN": SEX_CHILDREN}},
     },
     patterns=[
-        "sex   >> trait",
-        "sex   <  trait",
-        "sex   .  trait",
-        "sex   .  trait >> trait",
-        "sex   .  link  >> trait",
-        "sex   >  link  >> trait",
-        "sex   <  trait >> trait",
-        "sex   <  part  <  part",
-        "sex   ;  part  <  link >> trait",
-        "trait .  mm    .  sex",
+        "trait phrase* sex",
+        "sex   phrase* trait",
     ],
 )

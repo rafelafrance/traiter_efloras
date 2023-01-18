@@ -1,44 +1,46 @@
-"""Create a trait pipeline."""
 import spacy
 from traiter import tokenizer_util
 from traiter.patterns import matcher_patterns
 from traiter.pipes.add_traits_pipe import ADD_TRAITS
 from traiter.pipes.delete_traits_pipe import DELETE_TRAITS
-from traiter.pipes.dependency_pipe import DEPENDENCY
+from traiter.pipes.link_traits_pipe import LINK_TRAITS
 from traiter.pipes.sentence_pipe import SENTENCE
 from traiter.pipes.simple_traits_pipe import SIMPLE_TRAITS
 from traiter.pipes.term_pipe import TERM_PIPE
 
 from ..patterns import color_patterns
+from ..patterns import common_patterns
 from ..patterns import count_patterns
 from ..patterns import location_linker_patterns
 from ..patterns import margin_patterns
 from ..patterns import part_linker_patterns
 from ..patterns import part_location_patterns
+from ..patterns import part_patterns
 from ..patterns import range_patterns
 from ..patterns import sex_linker_patterns
 from ..patterns import shape_patterns
 from ..patterns import size_patterns
 from ..patterns import subpart_linker_patterns
-from ..pylib import const
+from ..patterns import term_patterns
 
-# from traiter.pipes.debug import DEBUG_TOKENS, DEBUG_ENTITIES
+# from traiter.pipes import debug_pipes
 
 
 def pipeline():
-    """Create a pipeline for extracting traits."""
     nlp = spacy.load("en_core_web_sm", exclude=["ner"])
+
     tokenizer_util.append_tokenizer_regexes(nlp)
-    tokenizer_util.append_abbrevs(nlp, const.ABBREVS)
+    tokenizer_util.append_abbrevs(nlp, common_patterns.ABBREVS)
 
     nlp.add_pipe(
         TERM_PIPE,
         before="parser",
         config={
-            "terms": const.TERMS.terms,
-            "replace": const.REPLACE,
+            "terms": term_patterns.TERMS.terms,
+            "replace": term_patterns.REPLACE,
         },
     )
+    nlp.add_pipe("merge_entities", name="merge_terms")
 
     nlp.add_pipe(SENTENCE, before="parser")
 
@@ -63,7 +65,22 @@ def pipeline():
     )
     nlp.add_pipe("merge_entities")
 
-    nlp.add_pipe(SIMPLE_TRAITS, config={"replace": const.REPLACE})
+    nlp.add_pipe(
+        ADD_TRAITS,
+        name="part_traits",
+        config={
+            "patterns": matcher_patterns.as_dicts(
+                [
+                    part_patterns.PART,
+                    # part_patterns.MISSING_PART,
+                    # subpart_patterns.SUBPART,
+                    # subpart_patterns.SUBPART_SUFFIX,
+                ]
+            )
+        },
+    )
+
+    nlp.add_pipe(SIMPLE_TRAITS, config={"replace": term_patterns.REPLACE})
 
     nlp.add_pipe(
         ADD_TRAITS,
@@ -89,23 +106,54 @@ def pipeline():
         },
     )
 
-    nlp.add_pipe(DELETE_TRAITS, config={"delete": const.FORGET})
-
-    # nlp.add_pipe(DEBUG_TOKENS, config={'message': ''})
-    # nlp.add_pipe(DEBUG_ENTITIES, config={'message': ''})
+    nlp.add_pipe(DELETE_TRAITS, config={"delete": common_patterns.FORGET})
 
     nlp.add_pipe(
-        DEPENDENCY,
-        name="part_linker",
+        LINK_TRAITS,
+        name="link_parts",
         config={
+            "parents": part_linker_patterns.PART_PARENTS,
+            "children": part_linker_patterns.PART_CHILDREN,
+            "patterns": matcher_patterns.as_dicts([part_linker_patterns.PART_LINKER]),
+        },
+    )
+
+    nlp.add_pipe(
+        LINK_TRAITS,
+        name="link_subparts",
+        config={
+            "parents": subpart_linker_patterns.SUBPART_PARENTS,
+            "children": subpart_linker_patterns.SUBPART_CHILDREN,
             "patterns": matcher_patterns.as_dicts(
-                [
-                    location_linker_patterns.LOCATION_LINKER,
-                    part_linker_patterns.PART_LINKER,
-                    sex_linker_patterns.SEX_LINKER,
-                    subpart_linker_patterns.SUBPART_LINKER,
-                ]
-            )
+                [subpart_linker_patterns.SUBPART_LINKER]
+            ),
+        },
+    )
+
+    # debug_pipes.ents(nlp)  # #######################################################
+    # debug_pipes.tokens(nlp)  # #####################################################
+
+    nlp.add_pipe(
+        LINK_TRAITS,
+        name="link_sex",
+        config={
+            "parents": sex_linker_patterns.SEX_PARENTS,
+            "children": sex_linker_patterns.SEX_CHILDREN,
+            "patterns": matcher_patterns.as_dicts(
+                [sex_linker_patterns.SEX_LINKER],
+            ),
+        },
+    )
+
+    nlp.add_pipe(
+        LINK_TRAITS,
+        name="link_locations",
+        config={
+            "parents": location_linker_patterns.LOCATION_PARENTS,
+            "children": location_linker_patterns.LOCATION_CHILDREN,
+            "patterns": matcher_patterns.as_dicts(
+                [location_linker_patterns.LOCATION_LINKER],
+            ),
         },
     )
 

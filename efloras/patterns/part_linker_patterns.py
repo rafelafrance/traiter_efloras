@@ -1,47 +1,38 @@
-"""Link traits to plant parts.
+from traiter.patterns import matcher_patterns
 
-We are linking parts like "petal" or "leaf" to traits like color or size.
-For example: "with thick, woody rootstock" should link the "rootstock" part with
-the "woody" trait.
-"""
-from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.pipes.dependency_pipe import LINK_NEAREST
-
-from ..pylib import const
+from . import common_patterns
 from ..pylib import util
 
-TRAITS_ = util.remove_traits(const.TRAITS, "part")
+TRAITS_ = util.remove_traits(common_patterns.TRAITS, "part")
 
-PART_LINKER = DependencyPatterns(
+PART_PARENTS = ["part"]
+PART_CHILDREN = util.remove_traits(common_patterns.TRAITS, "part")
+
+PART_LINKER = matcher_patterns.MatcherPatterns(
     "part_linker",
-    on_match={
-        "func": LINK_NEAREST,
-        "kwargs": {"anchor": "part"},
-    },
-    decoder={
-        "part": {"ENT_TYPE": "part"},
-        "trait": {"ENT_TYPE": {"IN": TRAITS_}},
-        "adv": {"POS": "ADV"},
-        "link": {"POS": {"IN": ["ADJ", "AUX", "VERB"]}},
-        "subpart": {"ENT_TYPE": "subpart"},
-        "x": {"_": {"cached_label": "cross"}},
-        "ca": {"_": {"cached_label": "about"}},
+    decoder=common_patterns.COMMON_PATTERNS
+    | {
+        "part": {"ENT_TYPE": {"IN": PART_PARENTS}},
+        "trait": {"ENT_TYPE": {"IN": PART_CHILDREN}},
     },
     patterns=[
-        "part <  trait",
-        "part .  trait",
-        "part >> trait",
-        "part .  trait   >> trait",
-        "part .  link    >> trait",
-        "part <  link    >> trait",
-        "part >  link    >> trait",
-        "part <  trait   >> trait",
-        "part .  adv     .  trait",
-        "part <  subpart <  trait",
-        "part <  subpart <  subpart < trait",
-        "part <  trait   <  trait",
-        "part .  link    .  trait",
-        "part .  trait   .  x       . trait",
-        "part .  trait   .  x       . ca . trait",
+        "trait any* part",
+        "part  any* trait",
+    ],
+)
+
+# ####################################################################################
+LINK_PART_ONCE_PARENTS = PART_PARENTS
+LINK_PART_ONCE_CHILDREN = ["size", "count"]
+LINK_PART_ONCE = matcher_patterns.MatcherPatterns(
+    "link_part_once",
+    decoder=common_patterns.COMMON_PATTERNS
+    | {
+        "part": {"ENT_TYPE": {"IN": LINK_PART_ONCE_PARENTS}},
+        "trait": {"ENT_TYPE": {"IN": LINK_PART_ONCE_CHILDREN}},
+    },
+    patterns=[
+        "trait any* part",
+        "part  any* trait",
     ],
 )

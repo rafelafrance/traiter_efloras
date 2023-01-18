@@ -5,39 +5,44 @@ For example: "leaves are covered with white hairs 1-(1.5) mm long."
 Should link "hairs" with the color "white" and to the length "1 to 1.5 mm".
 Named entity recognition (NER) must be run first.
 """
-from traiter.const import DASH
-from traiter.patterns.dependency_patterns import DependencyPatterns
-from traiter.pipes.dependency_pipe import LINK_NEAREST
+from traiter.patterns import matcher_patterns
 
-from ..pylib import const
-from ..pylib import util
+from . import common_patterns
+from . import term_patterns
 
-TRAITS_ = util.remove_traits(const.TRAITS, "subpart")
+# ####################################################################################
+SUBPART_PARENTS = ["subpart"]
+SUBPART_CHILDREN = term_patterns.all_traits_except(
+    " subpart sex reproduction plant_habit habit ".split()
+    + term_patterns.LOCATIONS
+    + term_patterns.PARTS
+)
 
-SUBPART_LINKER = DependencyPatterns(
+SUBPART_LINKER = matcher_patterns.MatcherPatterns(
     "subpart_linker",
-    on_match={
-        "func": LINK_NEAREST,
-        "kwargs": {"anchor": "subpart", "exclude": "part"},
-    },
-    decoder={
-        "subpart": {"ENT_TYPE": "subpart"},
-        "part": {"ENT_TYPE": "part"},
-        "trait": {"ENT_TYPE": {"IN": TRAITS_}},
-        "count": {"ENT_TYPE": "count"},
-        "dash": {"TEXT": {"IN": DASH}},
-        "link": {"POS": {"IN": ["ADJ", "AUX", "VERB", "PART"]}},
+    decoder=common_patterns.COMMON_PATTERNS
+    | {
+        "subpart": {"ENT_TYPE": {"IN": SUBPART_PARENTS}},
+        "trait": {"ENT_TYPE": {"IN": SUBPART_CHILDREN}},
     },
     patterns=[
-        "subpart ; dash ; count",
-        "subpart >> trait",
-        "subpart <  trait",
-        "subpart .  trait",
-        "subpart .  trait >> trait",
-        "subpart .  link  >> trait",
-        "subpart >  link  >> trait",
-        "subpart <  trait >> trait",
-        "subpart ;  part  <  link >> trait",
-        "subpart . trait . link . trait",
+        "trait   clause* subpart",
+        "subpart clause* trait",
+    ],
+)
+
+# ####################################################################################
+SUBPART_SUFFIX_PARENTS = ["subpart_suffix"]
+SUBPART_SUFFIX_CHILDREN = SUBPART_CHILDREN
+SUBPART_SUFFIX_LINKER = matcher_patterns.MatcherPatterns(
+    "subpart_suffix_linker",
+    decoder=common_patterns.COMMON_PATTERNS
+    | {
+        "subpart_suffix": {"ENT_TYPE": {"IN": SUBPART_SUFFIX_PARENTS}},
+        "trait": {"ENT_TYPE": {"IN": SUBPART_SUFFIX_CHILDREN}},
+    },
+    patterns=[
+        "trait   subpart_suffix",
+        "trait - subpart_suffix",
     ],
 )

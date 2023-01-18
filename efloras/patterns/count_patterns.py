@@ -6,12 +6,13 @@ from traiter.const import CROSS
 from traiter.const import SLASH
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
-from ..pylib import const
+from . import common_patterns
+from . import term_patterns
 
 NOT_COUNT_WORDS = CROSS + SLASH + """ average side times days weeks by """.split()
 NOT_COUNT_ENTS = """ imperial_length metric_mass imperial_mass """.split()
 
-DECODER = const.COMMON_PATTERNS | {
+DECODER = common_patterns.COMMON_PATTERNS | {
     "adp": {"POS": {"IN": ["ADP"]}},
     "count_suffix": {"ENT_TYPE": "count_suffix"},
     "count_word": {"ENT_TYPE": "count_word"},
@@ -55,7 +56,7 @@ def count(ent):
         pc = pc[0]
         pc_text = pc.text.lower()
         pc._.new_label = "count_group"
-        ent._.data["count_group"] = const.REPLACE.get(pc_text, pc_text)
+        ent._.data["count_group"] = term_patterns.REPLACE.get(pc_text, pc_text)
 
 
 # ####################################################################################
@@ -73,7 +74,9 @@ COUNT_WORD = MatcherPatterns(
 def count_word(ent):
     ent._.new_label = "count"
     word = [e for e in ent.ents if e.label_ == "count_word"][0]
-    word._.data = {"low": t_util.to_positive_int(const.REPLACE[word.text.lower()])}
+    word._.data = {
+        "low": t_util.to_positive_int(term_patterns.REPLACE[word.text.lower()])
+    }
 
 
 # ####################################################################################
