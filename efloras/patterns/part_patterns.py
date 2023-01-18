@@ -16,7 +16,7 @@ DECODER = common_patterns.COMMON_PATTERNS | {
 # ####################################################################################
 PART = MatcherPatterns(
     "part",
-    on_match="mimosa.part.v1",
+    on_match="efloras.part.v1",
     decoder=DECODER,
     patterns=[
         "leader? part",
@@ -42,3 +42,22 @@ def on_part_match(ent):
             for t in ent
             if t.ent_type_ in term_patterns.PARTS_SET
         ]
+
+
+# ####################################################################################
+MISSING_PART = MatcherPatterns(
+    "missing_part",
+    on_match="efloras.missing_part.v1",
+    decoder=DECODER,
+    patterns=[
+        "missing part",
+        "missing part - part",
+        "missing part and part",
+    ],
+)
+
+
+@registry.misc(MISSING_PART.on_match)
+def missing_part_match(ent):
+    if part := next((t for t in ent if t.ent_type_ == "part"), None):
+        ent._.data["part"] = part.lower_

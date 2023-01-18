@@ -22,7 +22,7 @@ SEX_LINKER = matcher_patterns.MatcherPatterns(
         "trait": {"ENT_TYPE": {"IN": SEX_CHILDREN}},
     },
     patterns=[
-        "trait phrase* sex",
-        "sex   phrase* trait",
+        "trait define* sex",
+        "sex   define* trait",
     ],
 )

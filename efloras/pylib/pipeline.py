@@ -1,6 +1,7 @@
 import spacy
 from traiter import tokenizer_util
 from traiter.patterns import matcher_patterns
+from traiter.pipes import debug_pipes
 from traiter.pipes.add_traits_pipe import ADD_TRAITS
 from traiter.pipes.delete_traits_pipe import DELETE_TRAITS
 from traiter.pipes.link_traits_pipe import LINK_TRAITS
@@ -21,9 +22,8 @@ from ..patterns import sex_linker_patterns
 from ..patterns import shape_patterns
 from ..patterns import size_patterns
 from ..patterns import subpart_linker_patterns
+from ..patterns import subpart_patterns
 from ..patterns import term_patterns
-
-# from traiter.pipes import debug_pipes
 
 
 def pipeline():
@@ -40,7 +40,6 @@ def pipeline():
             "replace": term_patterns.REPLACE,
         },
     )
-    nlp.add_pipe("merge_entities", name="merge_terms")
 
     nlp.add_pipe(SENTENCE, before="parser")
 
@@ -63,6 +62,7 @@ def pipeline():
             )
         },
     )
+
     nlp.add_pipe("merge_entities")
 
     nlp.add_pipe(
@@ -72,9 +72,9 @@ def pipeline():
             "patterns": matcher_patterns.as_dicts(
                 [
                     part_patterns.PART,
-                    # part_patterns.MISSING_PART,
-                    # subpart_patterns.SUBPART,
-                    # subpart_patterns.SUBPART_SUFFIX,
+                    part_patterns.MISSING_PART,
+                    subpart_patterns.SUBPART,
+                    subpart_patterns.SUBPART_SUFFIX,
                 ]
             )
         },
@@ -130,8 +130,8 @@ def pipeline():
         },
     )
 
-    # debug_pipes.ents(nlp)  # #######################################################
-    # debug_pipes.tokens(nlp)  # #####################################################
+    debug_pipes.ents(nlp)  # #######################################################
+    debug_pipes.tokens(nlp)  # #####################################################
 
     nlp.add_pipe(
         LINK_TRAITS,

@@ -1,12 +1,10 @@
 from traiter.patterns import matcher_patterns
 
 from . import common_patterns
-from ..pylib import util
-
-TRAITS_ = util.remove_traits(common_patterns.TRAITS, "part")
+from . import term_patterns
 
 PART_PARENTS = ["part"]
-PART_CHILDREN = util.remove_traits(common_patterns.TRAITS, "part")
+PART_CHILDREN = term_patterns.all_traits_except(["part"])
 
 PART_LINKER = matcher_patterns.MatcherPatterns(
     "part_linker",

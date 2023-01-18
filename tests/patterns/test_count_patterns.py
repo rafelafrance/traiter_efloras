@@ -317,13 +317,12 @@ class TestCount(unittest.TestCase):
                     "sex": "pistillate",
                 },
                 {
-                    "subpart_location": "at apex of hypanthial aculei",
-                    "trait": "part_as_loc",
+                    "subpart_as_loc": "at apex of hypanthial aculei",
+                    "trait": "subpart_as_loc",
                     "start": 36,
                     "end": 64,
                     "part": "flower",
                     "sex": "pistillate",
-                    "subpart": "setae",
                 },
                 {
                     "subpart": "base",

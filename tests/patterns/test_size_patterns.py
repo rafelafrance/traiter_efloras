@@ -110,7 +110,7 @@ class TestSize(unittest.TestCase):
                     "part": "leaf",
                 },
                 {
-                    "subpart_location": "to base",
+                    "subpart_as_loc": "to base",
                     "trait": "part_as_loc",
                     "start": 21,
                     "end": 28,

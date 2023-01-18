@@ -65,7 +65,7 @@ class TestPartLocation(unittest.TestCase):
                     "part": "stipule",
                 },
                 {
-                    "subpart_location": "at margin",
+                    "subpart_as_loc": "at margin",
                     "trait": "part_as_loc",
                     "start": 25,
                     "end": 34,

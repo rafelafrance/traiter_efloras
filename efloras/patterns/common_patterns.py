@@ -38,6 +38,7 @@ COMMON_PATTERNS = {
     "99.9": {"TEXT": {"REGEX": FLOAT_TOKEN_RE}},
     "99-99": {"ENT_TYPE": {"REGEX": "^range"}},
     "99.9-99.9": {"ENT_TYPE": {"REGEX": "^range"}},
+    "define": {"LOWER": {"REGEX": r"^([^.;]+)$"}},
     "phrase": {"LOWER": {"REGEX": r"^([^.;:]+)$"}},
     "clause": {"LOWER": {"REGEX": r"^([^.;:,]+)$"}},
 }
@@ -46,8 +47,3 @@ FORGET = """ about cross color_mod dim dimension imperial_length imperial_mass
     joined margin_leader metric_length metric_mass not_a_range per_count
     quest shape_leader shape_suffix surface units range
     """.split()
-
-TRAITS = set(
-    """ color color_mod count location margin_shape part
-    size shape sex subpart woodiness part_as_loc """.split()
-)

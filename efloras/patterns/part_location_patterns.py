@@ -1,44 +1,82 @@
 """For when plant parts are being used as a location."""
 from spacy import registry
-from traiter.actions import TEXT_ACTION
-from traiter.actions import text_action
+from traiter import actions
 from traiter.patterns.matcher_patterns import MatcherPatterns
 
 from . import common_patterns
-
-LOCATION_LEADERS = """
-    to at embracing
-    """.split()
+from . import size_patterns
+from . import term_patterns
 
 DECODER = common_patterns.COMMON_PATTERNS | {
-    "part": {"ENT_TYPE": "part"},
-    "subpart": {"ENT_TYPE": "subpart"},
-    "leader": {"LOWER": {"IN": LOCATION_LEADERS}},
-    "not_loc": {"ENT_TYPE": {"IN": ["sex", "location"]}},
-    "sex": {"ENT_TYPE": "sex"},
-    "of": {"LOWER": "of"},
     "adj": {"POS": "ADJ"},
+    "cm": {"ENT_TYPE": "metric_length"},
+    "joined": {"ENT_TYPE": "joined"},
+    "leader": {"LOWER": {"IN": """to at embracing immersed from""".split()}},
+    "location": {"ENT_TYPE": {"IN": term_patterns.LOCATIONS}},
+    "of": {"LOWER": "of"},
+    "part": {"ENT_TYPE": {"IN": term_patterns.PARTS}},
+    "prep": {"POS": "ADP"},
+    "sex": {"ENT_TYPE": "sex"},
+    "subpart": {"ENT_TYPE": "subpart"},
 }
+
+
+def get_joined(ent):
+    if joined := [e for e in ent.ents if e.label_ == "joined"]:
+        text = joined[0].text.lower()
+        return term_patterns.REPLACE.get(text, text)
+    return ""
+
+
+# ####################################################################################
+ON_AS_LOCATION_MATCH = "efloras.as_location.v1"
 
 PART_AS_LOCATION = MatcherPatterns(
     "part_as_loc",
-    on_match=TEXT_ACTION,
+    on_match=ON_AS_LOCATION_MATCH,
     decoder=DECODER,
     patterns=[
-        "leader part",
+        "joined?  leader part",
+        "location leader part",
+        "leader prep part",
     ],
 )
 
 SUBPART_AS_LOCATION = MatcherPatterns(
-    "subpart_location",
-    on_match="efloras.subpart_location.v1",
+    "subpart_as_loc",
+    on_match=ON_AS_LOCATION_MATCH,
     decoder=DECODER,
-    patterns=["leader subpart", "leader subpart of adj? subpart"],
+    patterns=[
+        "joined?  leader subpart",
+        "joined?  leader subpart of adj? subpart",
+        "location leader subpart",
+        "location leader subpart of adj? subpart",
+    ],
 )
 
 
-@registry.misc(SUBPART_AS_LOCATION.on_match)
-def subpart_location(ent):
-    """Enrich the match with data."""
+@registry.misc(ON_AS_LOCATION_MATCH)
+def on_as_location_match(ent):
+    if joined := get_joined(ent):
+        ent._.data["joined"] = joined
+    actions.text_action(ent)
+
+
+# ####################################################################################
+PART_AS_DISTANCE = MatcherPatterns(
+    "part_as_distance",
+    on_match="efloras.part_as_distance.v1",
+    decoder=DECODER,
+    patterns=[
+        "joined?  leader part prep? 99-99 cm",
+        "location leader part prep? 99-99 cm",
+    ],
+)
+
+
+@registry.misc(PART_AS_DISTANCE.on_match)
+def on_part_as_distance_match(ent):
+    if joined := get_joined(ent):
+        ent._.data["joined"] = joined
+    size_patterns.size(ent)
     ent._.new_label = "part_as_loc"
-    text_action(ent)
