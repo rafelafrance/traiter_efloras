@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "traiter_efloras"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 license = {file = "LICENSE"}
 authors = [{name="Raphael LaFrance", email="rafelafrance@proton.me"}]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "Jinja2",
     "beautifulsoup4",
@@ -17,7 +17,7 @@ dependencies = [
     "pandas",
     "numpy",
     "selenium",
-    "spacy==3.3.0",
+    "spacy",
 ]
 optional-dependencies.dev = [
     "autopep8",

@@ -1,4 +1,4 @@
-from traiterplants.pipeline_builder import PipelineBuilder
+from traiter_plants.pipeline_builder import PipelineBuilder
 
 
 def pipeline():
