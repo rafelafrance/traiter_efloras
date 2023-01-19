@@ -4,9 +4,9 @@ import re
 from bs4 import BeautifulSoup
 from traiter.const import FLAGS
 
-import downloader
-from ..patterns import term_patterns
+from .. import downloader
 from ..pylib import util
+from junk.patterns import term_patterns
 
 TAXON_RE = re.compile(r"Accepted Name", flags=re.IGNORECASE)
 

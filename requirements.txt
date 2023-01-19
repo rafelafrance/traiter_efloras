@@ -1,9 +1,0 @@
-beautifulsoup4
-duckdb
-Jinja2
-regex
-lxml
-pandas
-selenium
-spacy
-numpy

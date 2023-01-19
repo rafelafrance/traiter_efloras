@@ -8,6 +8,7 @@ class TestColor(unittest.TestCase):
     """Test the plant color trait parser."""
 
     def test_color_01(self):
+        self.maxDiff = None
         self.assertEqual(
             test(
                 """hypanthium green or greenish yellow,
@@ -15,20 +16,25 @@ class TestColor(unittest.TestCase):
             """
             ),
             [
-                {"part": "hypanthium", "trait": "part", "start": 0, "end": 10},
+                {
+                    "flower_part": "hypanthium",
+                    "trait": "flower_part",
+                    "start": 0,
+                    "end": 10,
+                },
                 {
                     "color": "green",
                     "trait": "color",
                     "start": 11,
                     "end": 16,
-                    "part": "hypanthium",
+                    "flower_part": "hypanthium",
                 },
                 {
                     "color": "green-yellow",
                     "trait": "color",
                     "start": 20,
                     "end": 35,
-                    "part": "hypanthium",
+                    "flower_part": "hypanthium",
                 },
                 {
                     "color": "purple-spotted",
@@ -36,7 +42,7 @@ class TestColor(unittest.TestCase):
                     "trait": "color",
                     "start": 45,
                     "end": 63,
-                    "part": "hypanthium",
+                    "flower_part": "hypanthium",
                 },
                 {
                     "color": "purple-spotted",
@@ -45,7 +51,7 @@ class TestColor(unittest.TestCase):
                     "start": 65,
                     "end": 86,
                     "location": "distal",
-                    "part": "hypanthium",
+                    "flower_part": "hypanthium",
                 },
                 {
                     "location": "distal",
