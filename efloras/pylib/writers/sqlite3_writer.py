@@ -6,12 +6,12 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..pylib import const
+from .. import const
 
 
-def sqlite3_db(args, rows):
+def write(args, rows):
     """Write data to a duck_db."""
-    path = Path(args.sqlite3)
+    path = Path(args.out_sqlite3)
 
     if args.clear_db:
         path.unlink(missing_ok=True)

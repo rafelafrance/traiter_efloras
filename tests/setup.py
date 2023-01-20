@@ -1,4 +1,3 @@
-"""Setup for all tests."""
 from traiter.util import shorten
 
 from efloras.pylib.pipeline import pipeline

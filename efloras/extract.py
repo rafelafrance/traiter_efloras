@@ -1,56 +1,39 @@
 #!/usr/bin/env python3
-"""Parse efloras treatments."""
 import argparse
 import sys
 import textwrap
 from copy import deepcopy
+from pathlib import Path
 
-import efloras.pylib.util as util
-from efloras.pylib.pipeline import pipeline
-from efloras.pylib.util import get_family_flora_ids
-from efloras.readers.efloras import efloras_reader
-from efloras.writers.csv_ import csv_writer
-from efloras.writers.data import biluo_writer
-from efloras.writers.data import iob_writer
-from efloras.writers.data import ner_writer
-from efloras.writers.html_ import html_writer
-from efloras.writers.sqlite3_db import sqlite3_db
+import pylib.util as util
+from pylib.pipeline import pipeline
+from pylib.readers.efloras import efloras_reader
+from pylib.writers import csv_writer
+from pylib.writers import html_writer
+from pylib.writers import sqlite3_writer
 
 
 def main(args):
-    """Perform actions based on the arguments."""
-    nlp = pipeline()
-
     families = get_efloras_families(args)
 
     rows = efloras_reader(args, families)
+    rows = sorted(rows, key=lambda r: (r.get("flora_id"), r["family"], r["taxon"]))
 
+    nlp = pipeline()
     for row in rows:
         row["doc"] = nlp(row["text"])
 
-    if args.csv_file:
+    if args.out_csv:
         copied = deepcopy(rows)
-        csv_writer(args, copied)
+        csv_writer.write(args, copied)
 
-    if args.html_file:
+    if args.out_html:
         copied = deepcopy(rows)
-        html_writer(args, copied)
+        html_writer.write(args, copied)
 
-    if args.ner_file:
+    if args.out_sqlite3:
         copied = deepcopy(rows)
-        ner_writer(args, copied)
-
-    if args.iob_file:
-        copied = deepcopy(rows)
-        iob_writer(args, copied)
-
-    if args.biluo_file:
-        copied = deepcopy(rows)
-        biluo_writer(args, copied)
-
-    if args.sqlite3:
-        copied = deepcopy(rows)
-        sqlite3_db(args, copied)
+        sqlite3_writer.write(args, copied)
 
 
 def get_efloras_families(args):
@@ -69,7 +52,7 @@ def get_efloras_families(args):
 
 def check_family_flora_ids(args, families):
     """Validate family and flora ID combinations."""
-    combos = get_family_flora_ids(args, families)
+    combos = util.get_family_flora_ids(args, families)
 
     flora = {i: False for i in args.flora_id}
     fams = {f: False for f in args.family}
@@ -152,44 +135,22 @@ def parse_args():
     )
 
     arg_parser.add_argument(
-        "--html-file",
+        "--out-html",
         "-H",
-        type=argparse.FileType("w"),
+        type=Path,
         help="""Output the results to this HTML file.""",
     )
 
     arg_parser.add_argument(
-        "--sqlite3", "-S", help="""Output to this sqlite3 database."""
+        "--out-sqlite3", "-S", help="""Output to this sqlite3 database."""
     )
 
     arg_parser.add_argument(
-        "--csv-file",
+        "--out-csv",
         "-C",
-        type=argparse.FileType("w"),
+        type=Path,
+        metavar="PATH",
         help="""Output the results to this CSV file.""",
-    )
-
-    arg_parser.add_argument(
-        "--ner-file",
-        "-N",
-        type=argparse.FileType("a"),
-        help="""Append formatted NER training data to this file.""",
-    )
-
-    arg_parser.add_argument(
-        "--iob-file",
-        "-I",
-        type=argparse.FileType("a"),
-        help="""Append formatted training data in IOB format
-            to this file.""",
-    )
-
-    arg_parser.add_argument(
-        "--biluo-file",
-        "-B",
-        type=argparse.FileType("a"),
-        help="""Append formatted training data in BILUO format
-            to this file.""",
     )
 
     arg_parser.add_argument(
@@ -197,12 +158,6 @@ def parse_args():
         "-l",
         action="store_true",
         help="""List families available to extract and exit.""",
-    )
-
-    arg_parser.add_argument(
-        "--clear-db",
-        action="store_true",
-        help="""Clear the duck_db before writing to it.""",
     )
 
     args = arg_parser.parse_args()
@@ -216,17 +171,6 @@ def parse_args():
         args.flora_id = [int(i) for i in args.flora_id]
     else:
         args.flora_id = [1]
-
-    if not (
-        args.csv_file
-        or args.html_file
-        or args.ner_file
-        or args.iob_file
-        or args.biluo_file
-        or args.sqlite3
-        or args.duckdb
-    ):
-        setattr(args, "csv_file", sys.stdout)
 
     return args
 

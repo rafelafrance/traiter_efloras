@@ -3,12 +3,19 @@ import re
 
 from bs4 import BeautifulSoup
 from traiter.const import FLAGS
+from traiter_plants.patterns.term_patterns import PARTS_SET
+from traiter_plants.patterns.term_patterns import TERMS
 
-from .. import downloader
-from ..pylib import util
-from junk.patterns import term_patterns
+from .. import util
 
-TAXON_RE = re.compile(r"Accepted Name", flags=re.IGNORECASE)
+TAXON_TITLE = "Accepted Name"
+
+# Used to filter paragraphs in the source documents.
+PARA_RE = sorted(
+    " ".join(t["pattern"].split()) for t in TERMS if t["label"] in PARTS_SET
+)
+PARA_RE = f"({'|'.join(PARA_RE)})"
+PARA_RE = re.compile(PARA_RE, flags=re.IGNORECASE)
 
 
 def efloras_reader(args, families):
@@ -27,11 +34,11 @@ def efloras_reader(args, families):
         flora_id = int(flora_id)
         family = families[(family_name, flora_id)]
         taxa = get_family_tree(family)
-        root = downloader.treatment_dir(flora_id, family["family"])
+        root = util.treatment_dir(flora_id, family["family"])
         for path in root.glob("*.html"):
             text = get_treatment(path)
-            text = get_traits(text)
-            taxon_id = downloader.get_taxon_id(path)
+            text = get_traits_para(text)
+            taxon_id = util.get_taxon_id(path)
 
             # Must have a taxon name
             if not taxa.get(taxon_id):
@@ -58,19 +65,18 @@ def efloras_reader(args, families):
 
 
 def get_family_tree(family):
-    """Get all taxa for the all of the families."""
+    """Get all taxa for the all the families."""
     taxa = {}
-    tree_dir = downloader.tree_dir(family["flora_id"], family["family"])
+    tree_dir = util.tree_dir(family["flora_id"], family["family"])
     for path in tree_dir.glob("*.html"):
-
         with open(path) as in_file:
             page = in_file.read()
 
         soup = BeautifulSoup(page, features="lxml")
 
-        for link in soup.findAll("a", attrs={"title": TAXON_RE}):
+        for link in soup.findAll("a", attrs={"title": TAXON_TITLE}):
             href = link.attrs["href"]
-            taxon_id = downloader.get_taxon_id(href)
+            taxon_id = util.get_taxon_id(href)
             taxa[taxon_id] = link.text
 
     return taxa
@@ -84,7 +90,7 @@ def get_treatment(path):
     return soup.find(id="panelTaxonTreatment")
 
 
-def get_traits(treatment):
+def get_traits_para(treatment):
     """Find the trait paragraph in the treatment."""
     if not treatment:
         return ""
@@ -92,7 +98,7 @@ def get_traits(treatment):
     high = 0
     for para in treatment.find_all("p"):
         text = " ".join(para.get_text().split())
-        unique = set(term_patterns.PARA_RE.findall(text))
+        unique = set(PARA_RE.findall(text))
         if len(unique) > high:
             best = " ".join(para.get_text().split())
             high = len(unique)

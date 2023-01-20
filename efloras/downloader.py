@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Download files from efloras web site."""
+"""Download files from efloras website."""
 import argparse
 import os
 import random
@@ -15,11 +15,12 @@ import pandas as pd
 import regex
 from bs4 import BeautifulSoup
 from lxml import html
+from pylib import const
+from pylib import util
 
-import efloras.pylib.const
-import efloras.pylib.util
-from efloras.pylib.const import DATA_DIR
-from efloras.pylib.const import SITE
+from efloras.pylib.util import get_taxon_id
+from efloras.pylib.util import treatment_dir
+from efloras.pylib.util import tree_dir
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -34,7 +35,7 @@ ERROR_RETRY = 10
 TIMEOUT = 30
 socket.setdefaulttimeout(TIMEOUT)
 
-FAMILY_DIR = DATA_DIR / "efloras_families"
+FAMILY_DIR = const.DATA_DIR / "efloras_families"
 
 EFLORAS_FAMILIES = FAMILY_DIR / "eFloras_family_list.csv"
 TAXON_RE = re.compile(r"Accepted Name", flags=re.IGNORECASE)
@@ -91,7 +92,7 @@ def update_families():
                 {
                     "flora_id": flora_id,
                     "taxon_id": get_taxon_id(href),
-                    "link": f"{SITE}/{href}",
+                    "link": f"{const.SITE}/{href}",
                     "family": link.text,
                     "flora_name": floras[flora_id],
                 }
@@ -99,12 +100,12 @@ def update_families():
 
     df = pd.DataFrame(families)
     df = df.sort_values(by=["flora_id", "family"])
-    df.to_csv(efloras.pylib.const.EFLORAS_FAMILIES, index=None)
+    df.to_csv(const.EFLORAS_FAMILIES, index=False)
 
 
 def download_families(flora_id):
     """Get the families for the flora."""
-    base_url = f"{SITE}/browse.aspx?flora_id={flora_id}"
+    base_url = f"{const.SITE}/browse.aspx?flora_id={flora_id}"
     path = FAMILY_DIR / f"flora_id={flora_id}_page=1.html"
     urllib.request.urlretrieve(base_url, path)
 
@@ -129,7 +130,7 @@ def download_families(flora_id):
 
 def download_floras():
     """Get the floras from the main page."""
-    url = SITE
+    url = const.SITE
     path = FAMILY_DIR / "home_page.html"
     urllib.request.urlretrieve(url, path)
 
@@ -176,7 +177,9 @@ def get_treatments(flora_id, family_name, page):
 def get_treatment(flora_id, family_name, taxon_id):
     """Get one treatment file in the tree."""
     path = treatment_file(flora_id, family_name, taxon_id)
-    url = f"{SITE}/florataxon.aspx" f"?flora_id={flora_id}" f"&taxon_id={taxon_id}"
+    url = (
+        f"{const.SITE}/florataxon.aspx" f"?flora_id={flora_id}" f"&taxon_id={taxon_id}"
+    )
 
     print(f"Treatment: {url}")
 
@@ -218,7 +221,11 @@ def tree_page(family_name, flora_id, taxon_id, parents, page_no=1):
 
     path = tree_file(flora_id, family_name, taxon_id, page_no)
 
-    url = f"{SITE}/browse.aspx" f"?flora_id={flora_id}" f"&start_taxon_id={taxon_id}"
+    url = (
+        f"{const.SITE}/browse.aspx"
+        f"?flora_id={flora_id}"
+        f"&start_taxon_id={taxon_id}"
+    )
     if page_no > 1:
         url += f"&page={page_no}"
 
@@ -298,13 +305,6 @@ def search_families(args, families):
             )
 
 
-def get_taxon_id(href):
-    """Given a link or file name return a taxon ID."""
-    href = str(href)
-    taxon_id_re = re.compile(r"taxon_id[=_](\d+)")
-    return int(taxon_id_re.search(href)[1])
-
-
 def get_flora_id(href):
     """Given a link or file name return a flora ID."""
     href = str(href)
@@ -324,28 +324,12 @@ def tree_file(flora_id, family_name, taxon_id, page_no=1):
     return root / taxon_file(taxon_id, page_no)
 
 
-def family_dir(flora_id, family_name):
-    """Build the family directory name."""
-    taxon_dir = f"{family_name}_{flora_id}"
-    return DATA_DIR / "eFloras" / taxon_dir
-
-
 def taxon_file(taxon_id, page_no=1):
     """Build the taxon file name."""
     file_name = f"taxon_id_{taxon_id}.html"
     if page_no > 1:
         file_name = f"taxon_id_{taxon_id}_{page_no}.html"
     return file_name
-
-
-def tree_dir(flora_id, family_name):
-    """Build the family tree directory name."""
-    return family_dir(flora_id, family_name) / "tree"
-
-
-def treatment_dir(flora_id, family_name):
-    """Build the treatment directory name."""
-    return family_dir(flora_id, family_name) / "treatments"
 
 
 def parse_args(flora_ids):
@@ -403,7 +387,7 @@ def parse_args(flora_ids):
 
 
 if __name__ == "__main__":
-    FAMILIES = efloras.pylib.util.get_families()
-    FLORA_IDS = efloras.pylib.util.get_flora_ids()
+    FAMILIES = util.get_families()
+    FLORA_IDS = util.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
     main(ARGS, FAMILIES, FLORA_IDS)

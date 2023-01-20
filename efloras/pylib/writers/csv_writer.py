@@ -1,15 +1,12 @@
-"""Write the output to a CSV file."""
 from collections import defaultdict
 
 import pandas as pd
+from traiter_plants.patterns import term_patterns as terms
 
-from ..pylib import util
+from .. import util
 
 
-def csv_writer(args, rows):
-    """Output the data."""
-    rows = sorted(rows, key=lambda r: (r["flora_id"], r["family"], r["taxon"]))
-
+def write(args, rows):
     for row in rows:
         row["raw_traits"] = [e._.data for e in row["doc"].ents]
         del row["doc"]
@@ -17,7 +14,8 @@ def csv_writer(args, rows):
 
     df = pd.DataFrame(rows)
     df["raw_traits"] = None
-    df.to_csv(args.csv_file, index=False)
+
+    df.to_csv(args.out_csv, index=False)
 
 
 def build_columns(row):
@@ -27,7 +25,7 @@ def build_columns(row):
 
     columns = defaultdict(list)
     for trait in row["raw_traits"]:
-        if trait["trait"] in ("part", "subpart"):
+        if trait["trait"] in terms.PARTS_SET:
             continue
         if "part" not in trait:
             continue

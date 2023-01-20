@@ -14,10 +14,7 @@ BORDERS = cycle([f"b{i}" for i in range(COLOR_COUNT)])
 SKIPS = {"start", "end", "trait", "part", "subpart"}
 
 
-def html_writer(args, rows):
-    """Output the data."""
-    rows = sorted(rows, key=lambda r: (r.get("flora_id"), r["family"], r["taxon"]))
-
+def write(args, rows):
     for row in rows:
         row["traits"] = [e._.data for e in row["doc"].ents]
 
@@ -29,14 +26,16 @@ def html_writer(args, rows):
         row["traits"] = format_traits(row, classes)
 
     env = Environment(
-        loader=FileSystemLoader("./efloras/writers/templates"), autoescape=True
+        loader=FileSystemLoader("./efloras/pylib/writers/templates"), autoescape=True
     )
 
     template = env.get_template("html_.html").render(
         now=datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M"), rows=rows
     )
-    args.html_file.write(template)
-    args.html_file.close()
+
+    with open(args.out_html, "w") as html_file:
+        html_file.write(template)
+        html_file.close()
 
 
 def build_classes(rows):

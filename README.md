@@ -12,19 +12,19 @@ I should be able to extract: (Colors correspond to the text above.)
 ## Terms
 Essentially, we are finding relevant terms in the text (NER) and then linking them (Entity Linking). There are 5 types of terms:
 1. The traits themselves: These are things like color, size, shape, woodiness, etc. They are either a measurement, count, or a member of a controlled vocabulary.
-1. Plant parts: Things like leaves, branches, roots, seeds, etc. These have traits. So they must be linked to them.
-1. Plant subparts: Things like hairs, pores, margins, veins, etc. Leaves can have hairs and so can seeds. They also have traits and will be linked to them, but they must also be linked to a part to have any meaning.
-1. Sex: Plants exhibit sexual dimorphism, so we to note which part/subpart/trait notation is associated with which sex.
-1. Other text: Things like conjunctions, punctuation, etc. Although they are not recorded, they are often important for parsing and linking of terms.
+2. Plant parts: Things like leaves, branches, roots, seeds, etc. These have traits. So they must be linked to them.
+3. Plant subparts: Things like hairs, pores, margins, veins, etc. Leaves can have hairs and so can seeds. They also have traits and will be linked to them, but they must also be linked to a part to have any meaning.
+4. Sex: Plants exhibit sexual dimorphism, so we to note which part/subpart/trait notation is associated with which sex.
+5Other text: Things like conjunctions, punctuation, etc. Although they are not recorded, they are often important for parsing and linking of terms.
 
 ## Multiple methods for parsing
 1. Rule based parsing. Most machine learning models require a substantial training dataset. I use this method to bootstrap the training data. If machine learning methods fail, I can fall back to this.
-1. Machine learning models. (In progress)
+2. Machine learning models. (In progress)
 
 ## Rule-based parsing strategy
 1. I label terms using Spacy's phrase and rule-based matchers.
-1. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
-1. Finally, I associate traits with plant parts.
+2. Then I match terms using rule-based matchers repeatedly until I have built up a recognizable trait like: color, size, count, etc.
+3. Finally, I associate traits with plant parts.
 
 For example, given the text: `Petiole 1-2 cm.`:
 - I recognize vocabulary terms like:

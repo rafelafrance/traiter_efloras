@@ -1,9 +1,9 @@
-"""Misc. utils."""
 import csv
+import re
 from datetime import datetime
 from itertools import product
 
-from ..pylib import const
+from . import const
 
 CONVERT = {
     "cm": 10.0,
@@ -66,3 +66,24 @@ def get_flora_ids():
 def get_family_flora_ids(args, families):
     """Get family and flora ID combinations."""
     return [c for c in product(args.family, args.flora_id) if c in families]
+
+
+def get_taxon_id(href):
+    """Given a link or file name return a taxon ID."""
+    href = str(href)
+    taxon_id_re = re.compile(r"taxon_id[=_](\d+)")
+    return int(taxon_id_re.search(href)[1])
+
+
+def treatment_dir(flora_id, family_name):
+    return family_dir(flora_id, family_name) / "treatments"
+
+
+def tree_dir(flora_id, family_name):
+    return family_dir(flora_id, family_name) / "tree"
+
+
+def family_dir(flora_id, family_name):
+    """Build the family directory name."""
+    taxon_dir = f"{family_name}_{flora_id}"
+    return const.DATA_DIR / "eFloras" / taxon_dir
