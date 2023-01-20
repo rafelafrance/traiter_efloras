@@ -29,7 +29,7 @@ def write(args, rows):
         loader=FileSystemLoader("./efloras/pylib/writers/templates"), autoescape=True
     )
 
-    template = env.get_template("html_.html").render(
+    template = env.get_template("html_writer.html").render(
         now=datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M"), rows=rows
     )
 
@@ -152,3 +152,9 @@ def trait_label(trait, sep=" "):
     label = label.replace("-", "")
     label = label.replace("indumentum" + sep + "surface", "indumentum")
     return label
+
+
+def get_class(label, classes):
+    if label not in classes:
+        classes[label] = next(BACKGROUNDS)
+    return classes[label]

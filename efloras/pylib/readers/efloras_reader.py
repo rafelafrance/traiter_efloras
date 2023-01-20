@@ -18,7 +18,7 @@ PARA_RE = f"({'|'.join(PARA_RE)})"
 PARA_RE = re.compile(PARA_RE, flags=re.IGNORECASE)
 
 
-def efloras_reader(args, families):
+def reader(args, families):
     """Perform the parsing."""
     families_flora = util.get_family_flora_ids(args, families)
     flora_ids = util.get_flora_ids()

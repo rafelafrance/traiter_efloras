@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pylib.util as util
 from pylib.pipeline import pipeline
-from pylib.readers.efloras import efloras_reader
+from pylib.readers import efloras_reader
 from pylib.writers import csv_writer
 from pylib.writers import html_writer
 from pylib.writers import sqlite3_writer
@@ -16,7 +16,7 @@ from pylib.writers import sqlite3_writer
 def main(args):
     families = get_efloras_families(args)
 
-    rows = efloras_reader(args, families)
+    rows = efloras_reader.reader(args, families)
     rows = sorted(rows, key=lambda r: (r.get("flora_id"), r["family"], r["taxon"]))
 
     nlp = pipeline()
