@@ -1,14 +1,29 @@
-"""Parse eFloras html pages."""
 import re
+from dataclasses import dataclass
+from dataclasses import field
 
 from bs4 import BeautifulSoup
+from plants.patterns.term_patterns import PARTS_SET
+from plants.patterns.term_patterns import TERMS
 from traiter.const import FLAGS
-from traiter_plants.patterns.term_patterns import PARTS_SET
-from traiter_plants.patterns.term_patterns import TERMS
 
 from .. import util
 
 TAXON_TITLE = "Accepted Name"
+
+
+@dataclass
+class Row:
+    family: str
+    flora_id: int
+    flora_name: str
+    taxon: str
+    taxon_id: int
+    link: str
+    path: str
+    text: str
+    traits: list = field(default_factory=list)
+
 
 # Used to filter paragraphs in the source documents.
 PARA_RE = sorted(
@@ -49,16 +64,16 @@ def reader(args, families):
                 continue
 
             rows.append(
-                {
-                    "family": family["family"],
-                    "flora_id": flora_id,
-                    "flora_name": flora_ids[flora_id],
-                    "taxon": taxa[taxon_id],
-                    "taxon_id": taxon_id,
-                    "link": treatment_link(flora_id, taxon_id),
-                    "path": path,
-                    "text": text if text else "",
-                }
+                Row(
+                    family=family["family"],
+                    flora_id=flora_id,
+                    flora_name=flora_ids[flora_id],
+                    taxon=taxa[taxon_id],
+                    taxon_id=taxon_id,
+                    link=treatment_link(flora_id, taxon_id),
+                    path=path,
+                    text=text if text else "",
+                )
             )
 
     return rows

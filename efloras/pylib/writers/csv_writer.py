@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 import pandas as pd
-from traiter_plants.patterns import term_patterns as terms
+from plants.patterns import term_patterns as terms
 
 from .. import util
 

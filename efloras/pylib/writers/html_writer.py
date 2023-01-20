@@ -1,160 +1,84 @@
-"""Write output to an HTML file."""
-from collections import defaultdict
-from datetime import datetime
-from html import escape
-from itertools import cycle
+import html
+import itertools
 
-from jinja2 import Environment
-from jinja2 import FileSystemLoader
+from plants.writers import html_writer as phtml
+from plants.writers import writer_utils as wutils
+from tqdm import tqdm
 
-COLOR_COUNT = 14
-BACKGROUNDS = cycle([f"c{i}" for i in range(COLOR_COUNT)])
-BORDERS = cycle([f"b{i}" for i in range(COLOR_COUNT)])
+from .. import consts
 
 SKIPS = {"start", "end", "trait", "part", "subpart"}
 
 
 def write(args, rows):
-    for row in rows:
-        row["traits"] = [e._.data for e in row["doc"].ents]
+    css_classes = phtml.CssClasses()
+    formatted = []
 
-    classes = build_classes(rows)
+    for row in tqdm(rows):
+        text = format_text(row, css_classes)
+        traits = format_traits(row, css_classes)
+        formatted.append(phtml.Formatted(text, traits))
 
-    for row in rows:
-        row["raw_text"] = row["text"]
-        row["text"] = format_text(row, classes)
-        row["traits"] = format_traits(row, classes)
-
-    env = Environment(
-        loader=FileSystemLoader("./efloras/pylib/writers/templates"), autoescape=True
-    )
-
-    template = env.get_template("html_writer.html").render(
-        now=datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M"), rows=rows
-    )
-
-    with open(args.out_html, "w") as html_file:
-        html_file.write(template)
-        html_file.close()
+    phtml.write_template(args, consts.ROOT_DIR, "efloras", formatted)
 
 
-def build_classes(rows):
-    """Make tags for HTML text color highlighting.
-
-    Tag keys are the trait name and if it's an open or close tag.
-    For example:
-        (trait_name, is_open) -> <span class="css_class">
-        (trait_name, not_open) -> </span>
-    """
-    backgrounds = {}
-    borders = {}
-
-    tags = {
-        "part": "bold",
-        "subpart": "bold-italic",
-    }
-
-    for row in rows:
-        for trait in row["traits"]:
-            if trait["trait"] in {"part", "subpart"}:
-                continue
-            if "part" not in trait:
-                continue
-            name = trait_label(trait, "_")
-            name_parts = name.split("_")
-            bg, border = name_parts[0], name_parts[-1]
-            if bg not in backgrounds:
-                backgrounds[bg] = next(BACKGROUNDS)
-            if border not in borders:
-                borders[border] = next(BORDERS)
-            classes = f"{backgrounds[bg]} {borders[border]} c{backgrounds[bg]}"
-            tags[name] = classes
-    return tags
-
-
-def format_traits(row, classes):
-    """Format the traits for HTML."""
-    new_dict = {}
-
-    # Group by trait name
-    groups = defaultdict(list)
-    for trait in row["traits"]:
-        if "part" not in trait:
-            continue
-        if trait["trait"] not in {"part", "subpart"}:
-            label = trait_label(trait, "_")
-            groups[label].append(trait)
-    groups = dict(sorted(groups.items(), key=lambda i: i[0]))
-
-    # Format each trait group
-    for name, traits in groups.items():
-        label = name.replace("_", " ")
-        span = f'<span class="{classes[name]}">{label}</span>'
-
-        # Format each trait within a trait group
-        new_traits = []
-        for trait in traits:
-            text = row["raw_text"][trait["start"] : trait["end"]]
-            trait = ", ".join(
-                f'<span title="{text}">{k}:&nbsp;{v}</span>'
-                for k, v in trait.items()
-                if k not in SKIPS
-            )
-            new_traits.append(trait)
-        new_dict[span] = "<br/>".join(new_traits)
-
-    return new_dict
-
-
-def format_text(row, classes):
-    """Colorize and format the text for HTML."""
-    text = row["raw_text"]
+def format_text(row, css_classes):
+    """Wrap traits in the text with spans that can be formatted with CSS."""
     frags = []
-
     prev = 0
-    for trait in row["traits"]:
-        if "part" not in trait:
-            continue
-        if trait["trait"] == "part":
-            label = trait["part"]
-            name = "part"
-        elif trait["trait"] == "subpart":
-            label = f"{trait['part']} {trait['subpart']}"
-            name = "subpart"
-        else:
-            label = trait_label(trait)
-            name = trait_label(trait, "_")
 
+    for trait in row.traits:
         start = trait["start"]
         end = trait["end"]
-        title = ", ".join(f"{k} = {v}" for k, v in trait.items() if k not in SKIPS)
-        title = f"{label}: {title}" if title else label
+
         if prev < start:
-            frags.append(escape(text[prev:start]))
-        frags.append(f'<span class="{classes[name]}" title="{title}">')
-        frags.append(escape(text[start:end]))
+            frags.append(html.escape(row.text[prev:start]))
+
+        label = wutils.get_label(trait)
+        cls = css_classes[label]
+
+        title = ", ".join(
+            f"{k}:&nbsp;{v}" for k, v in trait.items() if k not in wutils.TITLE_SKIPS
+        )
+
+        frags.append(f'<span class="{cls}" title="{title}">')
+        frags.append(html.escape(row.text[start:end]))
         frags.append("</span>")
         prev = end
 
-    if len(text) > prev:
-        frags.append(text[prev:])
+    if len(row.text) > prev:
+        frags.append(html.escape(row.text[prev:]))
 
-    return "".join(frags)
-
-
-def trait_label(trait, sep=" "):
-    """Generate a label for the trait."""
-    label = [trait["part"]]
-    if "subpart" in trait:
-        label.append(trait["subpart"])
-    label.append(trait["trait"])
-    label = sep.join(label)
-    label = label.replace("-", "")
-    label = label.replace("indumentum" + sep + "surface", "indumentum")
-    return label
+    text = "".join(frags)
+    return text
 
 
-def get_class(label, classes):
-    if label not in classes:
-        classes[label] = next(BACKGROUNDS)
-    return classes[label]
+def format_traits(row, css_classes):
+    traits = []
+
+    sortable = []
+    for trait in row.traits:
+        label = wutils.get_label(trait)
+        title = row.text[trait["start"] : trait["end"]]
+        if trait["trait"] not in wutils.DO_NOT_SHOW:
+            sortable.append(phtml.SortableTrait(label, trait["start"], trait, title))
+
+    sortable = sorted(sortable)
+
+    for label, grouped in itertools.groupby(sortable, key=lambda x: x.label):
+        cls = css_classes[label]
+        label = f'<span class="{cls}">{label}</span>'
+        trait_list = []
+        for trait in grouped:
+            fields = ", ".join(
+                f'<span title="{trait.title}">{k}:&nbsp;{v}</span>'
+                for k, v in trait.trait.items()
+                if k not in wutils.TRAIT_SKIPS
+            )
+            if fields:
+                trait_list.append(fields)
+
+        if trait_list:
+            traits.append(phtml.Trait(label, "<br/>".join(trait_list)))
+
+    return traits

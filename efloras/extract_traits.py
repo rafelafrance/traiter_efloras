@@ -17,11 +17,12 @@ def main(args):
     families = get_efloras_families(args)
 
     rows = efloras_reader.reader(args, families)
-    rows = sorted(rows, key=lambda r: (r.get("flora_id"), r["family"], r["taxon"]))
+    rows = sorted(rows, key=lambda r: (r.flora_id, r.family, r.taxon))
 
     nlp = pipeline()
     for row in rows:
-        row["doc"] = nlp(row["text"])
+        doc = nlp(row.text)
+        row.traits = [e._.data for e in doc.ents]
 
     if args.out_csv:
         copied = deepcopy(rows)
