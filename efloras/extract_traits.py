@@ -5,12 +5,12 @@ import textwrap
 from copy import deepcopy
 from pathlib import Path
 
-import pylib.util as util
+from pylib import util
 from pylib.pipeline import pipeline
 from pylib.readers import efloras_reader
 from pylib.writers import csv_writer
-from pylib.writers import html_writer
 from pylib.writers import sqlite3_writer
+from pylib.writers.html_writer import HtmlWriter
 
 
 def main(args):
@@ -30,7 +30,8 @@ def main(args):
 
     if args.out_html:
         copied = deepcopy(rows)
-        html_writer.write(args, copied)
+        writer = HtmlWriter(args.out_html)
+        writer.write(copied)
 
     if args.out_sqlite3:
         copied = deepcopy(rows)

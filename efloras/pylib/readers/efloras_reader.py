@@ -5,6 +5,7 @@ from dataclasses import field
 from bs4 import BeautifulSoup
 from plants.patterns.term_patterns import PARTS_SET
 from plants.patterns.term_patterns import TERMS
+from tqdm import tqdm
 from traiter.const import FLAGS
 
 from .. import util
@@ -13,7 +14,7 @@ TAXON_TITLE = "Accepted Name"
 
 
 @dataclass
-class Row:
+class EflorasRow:
     family: str
     flora_id: int
     flora_name: str
@@ -45,7 +46,7 @@ def reader(args, families):
 
     rows = []
 
-    for family_name, flora_id in families_flora:
+    for family_name, flora_id in tqdm(families_flora):
         flora_id = int(flora_id)
         family = families[(family_name, flora_id)]
         taxa = get_family_tree(family)
@@ -64,7 +65,7 @@ def reader(args, families):
                 continue
 
             rows.append(
-                Row(
+                EflorasRow(
                     family=family["family"],
                     flora_id=flora_id,
                     flora_name=flora_ids[flora_id],

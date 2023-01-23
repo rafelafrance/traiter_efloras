@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from itertools import product
 
-from . import consts
+from . import const
 
 CONVERT = {
     "cm": 10.0,

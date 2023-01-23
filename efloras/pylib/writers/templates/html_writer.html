@@ -53,18 +53,18 @@
           {{ row.taxon }}
         </a>
       </td>
-      <td class="text">{{ row.text | safe }}</td>
+      <td class="text">{{ row.formatted_text | safe }}</td>
     <tr class="term closed" data-taxon-id="{{ row.taxon_id }}">
       <td></td>
       <td></td>
       <td class="sub-header">Trait Label</td>
       <td class="sub-header">Trait Data</td>
     </tr>
-      {% for label, trait in row.traits.items() %}
+      {% for trait in row.formatted_traits %}
       <tr class="term closed" data-taxon-id="{{ row.taxon_id }}">
         <td colspan="2"></td>
-        <td>{{ label | safe }}</td>
-        <td>{{ trait | safe }}</td>
+        <td>{{ trait.label | safe }}</td>
+        <td>{{ trait.data | safe }}</td>
       </tr>
       {% endfor %}
     {% endfor %}

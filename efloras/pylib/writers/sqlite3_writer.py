@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from .. import consts
+from .. import const
 
 
 def write(args, rows):

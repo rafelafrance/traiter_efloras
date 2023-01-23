@@ -15,7 +15,7 @@ import pandas as pd
 import regex
 from bs4 import BeautifulSoup
 from lxml import html
-from pylib import consts
+from pylib import const
 from pylib import util
 
 from efloras.pylib.util import get_taxon_id

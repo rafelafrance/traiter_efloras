@@ -1,84 +1,32 @@
-import html
-import itertools
-
-from plants.writers import html_writer as phtml
-from plants.writers import writer_utils as wutils
+from plants.writers.html_writer import HtmlWriter as BaseWriter
 from tqdm import tqdm
 
-from .. import consts
-
-SKIPS = {"start", "end", "trait", "part", "subpart"}
-
-
-def write(args, rows):
-    css_classes = phtml.CssClasses()
-    formatted = []
-
-    for row in tqdm(rows):
-        text = format_text(row, css_classes)
-        traits = format_traits(row, css_classes)
-        formatted.append(phtml.Formatted(text, traits))
-
-    phtml.write_template(args, consts.ROOT_DIR, "efloras", formatted)
+from .. import const
+from .html_writer_row import HtmlWriterRow
 
 
-def format_text(row, css_classes):
-    """Wrap traits in the text with spans that can be formatted with CSS."""
-    frags = []
-    prev = 0
-
-    for trait in row.traits:
-        start = trait["start"]
-        end = trait["end"]
-
-        if prev < start:
-            frags.append(html.escape(row.text[prev:start]))
-
-        label = wutils.get_label(trait)
-        cls = css_classes[label]
-
-        title = ", ".join(
-            f"{k}:&nbsp;{v}" for k, v in trait.items() if k not in wutils.TITLE_SKIPS
+class HtmlWriter(BaseWriter):
+    def __init__(self, out_path):
+        super().__init__(
+            template_dir=f"{const.ROOT_DIR}/efloras/pylib/writers/templates",
+            out_path=out_path,
         )
 
-        frags.append(f'<span class="{cls}" title="{title}">')
-        frags.append(html.escape(row.text[start:end]))
-        frags.append("</span>")
-        prev = end
-
-    if len(row.text) > prev:
-        frags.append(html.escape(row.text[prev:]))
-
-    text = "".join(frags)
-    return text
-
-
-def format_traits(row, css_classes):
-    traits = []
-
-    sortable = []
-    for trait in row.traits:
-        label = wutils.get_label(trait)
-        title = row.text[trait["start"] : trait["end"]]
-        if trait["trait"] not in wutils.DO_NOT_SHOW:
-            sortable.append(phtml.SortableTrait(label, trait["start"], trait, title))
-
-    sortable = sorted(sortable)
-
-    for label, grouped in itertools.groupby(sortable, key=lambda x: x.label):
-        cls = css_classes[label]
-        label = f'<span class="{cls}">{label}</span>'
-        trait_list = []
-        for trait in grouped:
-            fields = ", ".join(
-                f'<span title="{trait.title}">{k}:&nbsp;{v}</span>'
-                for k, v in trait.trait.items()
-                if k not in wutils.TRAIT_SKIPS
+    def write(self, efloras_rows, in_file_name=""):
+        for efloras_row in tqdm(efloras_rows):
+            text = self.format_text(efloras_row)
+            traits = self.format_traits(efloras_row)
+            self.formatted.append(
+                HtmlWriterRow(
+                    formatted_text=text,
+                    formatted_traits=traits,
+                    family=efloras_row.family,
+                    flora_id=efloras_row.flora_id,
+                    taxon=efloras_row.taxon,
+                    taxon_id=efloras_row.taxon_id,
+                    link=efloras_row.link,
+                    path=efloras_row.path,
+                )
             )
-            if fields:
-                trait_list.append(fields)
 
-        if trait_list:
-            traits.append(phtml.Trait(label, "<br/>".join(trait_list)))
-
-    return traits
+        self.write_template(in_file_name)
