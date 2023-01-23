@@ -24,6 +24,6 @@ def pipeline():
     pipe.add_link_taxa_like_pipe()
     # pipe.add_delete_unlinked_pipe()
 
-    # pipe.add_delete_partial_traits_pipe(name="delete_taxa", partial_traits=["taxon"])
+    pipe.add_delete_partial_traits_pipe(name="delete_taxa", partial_traits=["taxon"])
 
     return pipe

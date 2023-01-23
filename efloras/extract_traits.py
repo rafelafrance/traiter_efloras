@@ -5,9 +5,8 @@ import textwrap
 from copy import deepcopy
 from pathlib import Path
 
-from pylib import util
 from pylib.pipeline import pipeline
-from pylib.readers import efloras_reader
+from pylib.readers import efloras_reader as reader
 from pylib.writers import csv_writer
 from pylib.writers import sqlite3_writer
 from pylib.writers.html_writer import HtmlWriter
@@ -16,7 +15,7 @@ from pylib.writers.html_writer import HtmlWriter
 def main(args):
     families = get_efloras_families(args)
 
-    rows = efloras_reader.reader(args, families)
+    rows = reader.reader(args, families)
     rows = sorted(rows, key=lambda r: (r.flora_id, r.family, r.taxon))
 
     nlp = pipeline()
@@ -40,7 +39,7 @@ def main(args):
 
 def get_efloras_families(args):
     """Handle eFloras extractions"""
-    families = {k: v for k, v in util.get_families().items() if v["count"]}
+    families = {k: v for k, v in reader.get_families().items() if v["count"]}
 
     if not check_family_flora_ids(args, families):
         sys.exit(1)
@@ -54,7 +53,7 @@ def get_efloras_families(args):
 
 def check_family_flora_ids(args, families):
     """Validate family and flora ID combinations."""
-    combos = util.get_family_flora_ids(args, families)
+    combos = reader.get_family_flora_ids(args, families)
 
     flora = {i: False for i in args.flora_id}
     fams = {f: False for f in args.family}
@@ -127,7 +126,7 @@ def parse_args():
             can put in anything that matches a taxon name.""",
     )
 
-    flora_ids = util.get_flora_ids()
+    flora_ids = reader.get_flora_ids()
     arg_parser.add_argument(
         "--flora-id",
         "-e",

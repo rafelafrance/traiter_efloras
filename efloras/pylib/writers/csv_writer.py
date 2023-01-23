@@ -1,92 +1,73 @@
 from collections import defaultdict
 
-import pandas as pd
 from plants.patterns import term_patterns as terms
-
-from .. import util
-
-
-def write(args, rows):
-    for row in rows:
-        row["raw_traits"] = [e._.data for e in row["doc"].ents]
-        del row["doc"]
-        build_columns(row)
-
-    df = pd.DataFrame(rows)
-    df["raw_traits"] = None
-
-    df.to_csv(args.out_csv, index=False)
+from plants.writers import csv_writer as base_writer
 
 
-def build_columns(row):
-    """Expand values into separate columns."""
-    extras = set(""" sex location group """.split())
-    skips = extras | {"start", "end"}
+class CsvWriter(base_writer.CsvWriter):
+    @staticmethod
+    def sort_columns(df):
+        first = """
+            family flora_id flora_name taxon taxon_id link path text raw_traits
+            """.split()
+        rest = sorted(c for c in df.columns if c not in first)
+        columns = first + rest
 
-    columns = defaultdict(list)
-    for trait in row["raw_traits"]:
-        if trait["trait"] in terms.PARTS_SET:
-            continue
-        if "part" not in trait:
-            continue
+        df = df[columns]
 
+        return df
+
+    def format_row(self, row):
+        csv_row = {
+            "family": row.family,
+            "flora_id": row.flora_id,
+            "flora_name": row.flora_name,
+            "taxon": row.taxon,
+            "taxon_id": row.taxon_id,
+            "link": row.link,
+            "path": row.path,
+            "text": row.text,
+            "raw_traits": row.traits,
+        }
+
+        by_header = defaultdict(list)
+        for trait in row.traits:
+            if trait["trait"] in terms.PARTS_SET:
+                continue
+
+            key_set = set(trait.keys())
+
+            if not (terms.PARTS_SET & key_set):
+                continue
+
+            base_header = self.base_column_header(trait)
+
+            self.group_values_by_header(by_header, trait, base_header)
+
+        return csv_row
+
+    @staticmethod
+    def base_column_header(trait):
         if "subpart" in trait:
             label = f'{trait["part"]}_{trait["subpart"]}_{trait["trait"]}'
+        elif "subpart_suffix" in trait:
+            subpart = trait["subpart_suffix"].removeprefix("-")
+            label = f'{trait["part"]}_{subpart}_{trait["trait"]}'
         else:
             label = f'{trait["part"]}_{trait["trait"]}'
-        trait = {
-            k: v for k, v in trait.items() if k not in ("part", "subpart", "trait")
-        }
-        header = sorted(v for k, v in trait.items() if k in extras)
-        header = ".".join([label] + header)
-        value = {k: v for k, v in trait.items() if k not in skips}
-        columns[header].append(value)
+        return label
 
-    for header, value_list in columns.items():
-        keys = set()
-        all_strings = True
-        for data in value_list:
-            for key, value in data.items():
-                keys.add(key)
-                all_strings &= isinstance(value, str)
+    @staticmethod
+    def group_values_by_header(by_header, trait, base_header):
+        extras = sorted(v for k, v in trait.items() if k in base_writer.EXTRAS)
+        unnumbered_header = "_".join([base_header] + extras)
+        trait = {k: v for k, v in trait.items() if k not in base_writer.SKIP}
+        by_header[unnumbered_header].append(trait)
 
-        if len(keys) == 1 and all_strings:
-            value = {v[k] for v in value_list for k in v.keys()}
-            row[header] = ", ".join(sorted(value))
-        elif header.endswith("_size"):
-            extract_sizes(row, header, value_list)
-        else:
-            extract_traits(row, header, value_list)
-
-    return row
-
-
-def extract_traits(row, header, value_list):
-    """Extract non-size & non-value list traits."""
-    for i, extract in enumerate(value_list, 1):
-        for field, value in extract.items():
-            key = f"{header}.{i}.{field}"
-            row[key] = value
-
-
-def extract_sizes(row, header, value_list):
-    """Normalize size traits."""
-    for i, extract in enumerate(value_list, 1):
-
-        length_units = extract.get("length_units", extract.get("width_units"))
-        width_units = extract.get("width_units", extract.get("length_units"))
-
-        for field, value in extract.items():
-            key = f"{header}.{i}.{field}"
-            parts = field.split("_")
-            if parts[0] in ("trait", "part", "subpart"):
-                continue
-            if len(parts) > 1 and parts[1] == "units":
-                row[key] = value
-            elif parts[0] == "length":
-                row[key] = util.convert(value, length_units)
-            elif parts[0] == "width":
-                row[key] = util.convert(value, width_units)
-            elif parts[0].endswith("units"):
-                units = f"{parts[0]}_units"
-                row[key] = util.convert(value, extract.get(units))
+    @staticmethod
+    def number_columns(by_header, csv_row):
+        for unnumbered_header, trait_list in by_header.items():
+            for i, trait in enumerate(trait_list):
+                for key, value in trait.items():
+                    header = f"{unnumbered_header}.{i}.{key}"
+                    csv_row[header] = value

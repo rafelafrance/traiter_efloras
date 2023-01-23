@@ -1,8 +1,20 @@
+from dataclasses import dataclass
+
 from plants.writers.html_writer import HtmlWriter as BaseWriter
+from plants.writers.html_writer import HtmlWriterRow as BaseHtmlWriterRow
 from tqdm import tqdm
 
 from .. import const
-from .html_writer_row import HtmlWriterRow
+
+
+@dataclass(kw_only=True)
+class HtmlWriterRow(BaseHtmlWriterRow):
+    family: str
+    flora_id: int
+    taxon: str
+    taxon_id: int
+    link: str
+    path: str
 
 
 class HtmlWriter(BaseWriter):
