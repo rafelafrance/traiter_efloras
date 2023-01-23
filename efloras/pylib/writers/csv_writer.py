@@ -7,11 +7,10 @@ from plants.writers import csv_writer as base_writer
 class CsvWriter(base_writer.CsvWriter):
     @staticmethod
     def sort_columns(df):
-        first = """
-            family flora_id flora_name taxon taxon_id link path text raw_traits
-            """.split()
-        rest = sorted(c for c in df.columns if c not in first)
-        columns = first + rest
+        first = """ family flora_id flora_name taxon taxon_id link path """.split()
+        last = """ text raw_traits """.split()
+        rest = sorted(c for c in df.columns if c not in first + last)
+        columns = first + rest + last
 
         df = df[columns]
 
@@ -40,21 +39,23 @@ class CsvWriter(base_writer.CsvWriter):
             if not (terms.PARTS_SET & key_set):
                 continue
 
-            base_header = self.base_column_header(trait)
+            base_header = self.base_column_header(trait, key_set)
 
             self.group_values_by_header(by_header, trait, base_header)
+            self.number_columns(by_header, csv_row)
 
         return csv_row
 
     @staticmethod
-    def base_column_header(trait):
+    def base_column_header(trait, key_set):
+        part = (terms.PARTS_SET & key_set).pop()
         if "subpart" in trait:
-            label = f'{trait["part"]}_{trait["subpart"]}_{trait["trait"]}'
+            label = f'{part}_{trait["subpart"]}_{trait["trait"]}'
         elif "subpart_suffix" in trait:
             subpart = trait["subpart_suffix"].removeprefix("-")
-            label = f'{trait["part"]}_{subpart}_{trait["trait"]}'
+            label = f'{part}_{subpart}_{trait["trait"]}'
         else:
-            label = f'{trait["part"]}_{trait["trait"]}'
+            label = f'{part}_{trait["trait"]}'
         return label
 
     @staticmethod
@@ -67,7 +68,7 @@ class CsvWriter(base_writer.CsvWriter):
     @staticmethod
     def number_columns(by_header, csv_row):
         for unnumbered_header, trait_list in by_header.items():
-            for i, trait in enumerate(trait_list):
+            for i, trait in enumerate(trait_list, 1):
                 for key, value in trait.items():
                     header = f"{unnumbered_header}.{i}.{key}"
                     csv_row[header] = value

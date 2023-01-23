@@ -7,8 +7,8 @@ from pathlib import Path
 
 from pylib.pipeline import pipeline
 from pylib.readers import efloras_reader as reader
-from pylib.writers import csv_writer
 from pylib.writers import sqlite3_writer
+from pylib.writers.csv_writer import CsvWriter
 from pylib.writers.html_writer import HtmlWriter
 
 
@@ -25,7 +25,8 @@ def main(args):
 
     if args.out_csv:
         copied = deepcopy(rows)
-        csv_writer.write(args, copied)
+        writer = CsvWriter(args.out_csv)
+        writer.write(copied)
 
     if args.out_html:
         copied = deepcopy(rows)
