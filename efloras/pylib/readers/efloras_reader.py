@@ -26,7 +26,7 @@ class EflorasRow:
     link: str
     path: str
     text: str
-    traits: list = field(default_factory=list)
+    traits: list[dict] = field(default_factory=list)
 
 
 # Used to filter paragraphs in the source documents.

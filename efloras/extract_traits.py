@@ -2,12 +2,10 @@
 import argparse
 import sys
 import textwrap
-from copy import deepcopy
 from pathlib import Path
 
 from pylib.pipeline import pipeline
 from pylib.readers import efloras_reader as reader
-from pylib.writers import sqlite3_writer
 from pylib.writers.csv_writer import CsvWriter
 from pylib.writers.html_writer import HtmlWriter
 
@@ -24,22 +22,15 @@ def main(args):
         row.traits = [e._.data for e in doc.ents]
 
     if args.out_csv:
-        copied = deepcopy(rows)
         writer = CsvWriter(args.out_csv)
-        writer.write(copied)
+        writer.write(rows)
 
     if args.out_html:
-        copied = deepcopy(rows)
         writer = HtmlWriter(args.out_html)
-        writer.write(copied)
-
-    if args.out_sqlite3:
-        copied = deepcopy(rows)
-        sqlite3_writer.write(args, copied)
+        writer.write(rows)
 
 
 def get_efloras_families(args):
-    """Handle eFloras extractions"""
     families = {k: v for k, v in reader.get_families().items() if v["count"]}
 
     if not check_family_flora_ids(args, families):
@@ -53,7 +44,6 @@ def get_efloras_families(args):
 
 
 def check_family_flora_ids(args, families):
-    """Validate family and flora ID combinations."""
     combos = reader.get_family_flora_ids(args, families)
 
     flora = {i: False for i in args.flora_id}
@@ -77,7 +67,6 @@ def check_family_flora_ids(args, families):
 
 
 def print_families(families):
-    """Display a list of all families."""
     template = "{:<20} {:>8} {:>8} {:<30}  {:<20} {:<20} {:>8}"
 
     print(
@@ -107,7 +96,6 @@ def print_families(families):
 
 
 def parse_args():
-    """Process command-line arguments."""
     description = """Parse data from flora website."""
     arg_parser = argparse.ArgumentParser(
         description=textwrap.dedent(description), fromfile_prefix_chars="@"
@@ -141,10 +129,6 @@ def parse_args():
         "-H",
         type=Path,
         help="""Output the results to this HTML file.""",
-    )
-
-    arg_parser.add_argument(
-        "--out-sqlite3", "-S", help="""Output to this sqlite3 database."""
     )
 
     arg_parser.add_argument(
