@@ -5,9 +5,6 @@
 <meta charset="utf-8" />
 <title>Traiter</title>
 <style>
-{% include 'html_writer.css' -%}
-</style>
-<style>
 {% include 'plant_templates/html_writer.css' -%}
 </style>
 </head>
@@ -54,6 +51,7 @@
         </a>
       </td>
       <td class="text">{{ row.formatted_text | safe }}</td>
+    </tr>
     <tr class="term closed" data-taxon-id="{{ row.taxon_id }}">
       <td></td>
       <td></td>

@@ -1,8 +1,0 @@
-tr {
-  animation: fadein 1s;
-}
-
-tr.closed {
-  animation: fadeout 1s;
-  display: none;
-}
