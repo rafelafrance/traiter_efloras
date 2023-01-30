@@ -22,7 +22,7 @@ def main(args):
         row.traits = [e._.data for e in doc.ents]
 
     if args.out_csv:
-        writer = CsvWriter(args.out_csv)
+        writer = CsvWriter(args.out_csv, args.csv_min)
         writer.write(rows)
 
     if args.out_html:
@@ -137,6 +137,15 @@ def parse_args():
         type=Path,
         metavar="PATH",
         help="""Output the results to this CSV file.""",
+    )
+
+    arg_parser.add_argument(
+        "--csv-min",
+        type=int,
+        default=3,
+        metavar="MIN",
+        help="""Only output to the CSV only if the trait has at least this many records.
+            (default: %(default)s)""",
     )
 
     arg_parser.add_argument(
