@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from plants.patterns.term_patterns import PARTS_SET
 from plants.patterns.term_patterns import TERMS
 from tqdm import tqdm
-from traiter.const import FLAGS
+from traiter.const import RE_FLAGS
 
 from .. import const
 
@@ -63,7 +63,7 @@ def reader(args, families):
                 continue
 
             # Filter on the taxon name
-            if genera and not re.search(genera, taxa[taxon_id], flags=FLAGS):
+            if genera and not re.search(genera, taxa[taxon_id], flags=RE_FLAGS):
                 continue
 
             rows.append(

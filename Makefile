@@ -3,25 +3,27 @@
 
 VENV=.venv
 PYTHON=./$(VENV)/bin/python3.11
+PIP_INSTALL=$(PYTHON) -m pip install
+SPACY_MODEL=$(PYTHON) -m spacy download en_core_web_sm
 
 test:
 	$(PYTHON) -m unittest discover
 
 install: venv
 	source $(VENV)/bin/activate
-	$(PYTHON) -m pip install -U pip setuptools wheel
-	$(PYTHON) -m pip install .
-	$(PYTHON) -m pip install git+https://github.com/rafelafrance/traiter.git@master#egg=traiter
-	$(PYTHON) -m pip install git+https://github.com/rafelafrance/traiter_plants.git@master#egg=traiter_plants
-	$(PYTHON) -m spacy download en_core_web_sm
+	$(PIP_INSTALL) -U pip setuptools wheel
+	$(PIP_INSTALL) .
+	$(PIP_INSTALL) git+https://github.com/rafelafrance/traiter.git@master#egg=traiter
+	$(PIP_INSTALL) git+https://github.com/rafelafrance/traiter_plants.git@master#egg=traiter_plants
+	$(SPACY_MODEL)
 
 dev: venv
 	source $(VENV)/bin/activate
-	$(PYTHON) -m pip install -U pip setuptools wheel
-	$(PYTHON) -m pip install -e .[dev]
-	$(PYTHON) -m pip install -e ../traiter
-	$(PYTHON) -m pip install -e ../traiter_plants
-	$(PYTHON) -m spacy download en_core_web_sm
+	$(PIP_INSTALL) -U pip setuptools wheel
+	$(PIP_INSTALL) -e .[dev]
+	$(PIP_INSTALL) -e ../traiter
+	$(PIP_INSTALL) -e ../traiter_plants
+	$(SPACY_MODEL)
 	pre-commit install
 
 venv:
