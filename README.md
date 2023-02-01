@@ -40,7 +40,8 @@ For example, given the text: `Petiole 1-2 cm.`:
 There are, of course, complications and subtleties not outlined above, but you should get the gist of what is going on here.
 
 ## Install
-You will need to have Python 3.11 (or later) installed. You can install the requirements into your python environment like so:
+You will need to have Python 3.11 (or later) installed.
+You can install the requirements into your python environment like so:
 ```
 git clone https://github.com/rafelafrance/traiter_efloras.git
 cd traiter_efloras
