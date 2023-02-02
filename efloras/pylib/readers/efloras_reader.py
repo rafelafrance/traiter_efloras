@@ -6,8 +6,8 @@ from datetime import datetime
 from itertools import product
 
 from bs4 import BeautifulSoup
-from plants.patterns.term_patterns import PARTS_SET
-from plants.patterns.term_patterns import TERMS
+from plants.pylib.patterns.term_patterns import PARTS_SET
+from plants.pylib.patterns.term_patterns import TERMS
 from tqdm import tqdm
 from traiter.const import RE_FLAGS
 

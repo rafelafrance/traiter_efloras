@@ -1,4 +1,4 @@
-from plants.pipeline_builder import PipelineBuilder
+from plants.pylib.pipeline_builder import PipelineBuilder
 
 
 def pipeline():

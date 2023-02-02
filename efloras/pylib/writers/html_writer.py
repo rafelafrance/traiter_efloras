@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from plants.writers.html_writer import HtmlWriter as BaseWriter
-from plants.writers.html_writer import HtmlWriterRow as BaseHtmlWriterRow
+from plants.pylib.writers.html_writer import HtmlWriter as BaseWriter
+from plants.pylib.writers.html_writer import HtmlWriterRow as BaseHtmlWriterRow
 from tqdm import tqdm
 
 from .. import const
