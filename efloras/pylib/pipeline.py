@@ -11,6 +11,7 @@ def pipeline():
     pipe.add_numeric_traits_pipe()
     pipe.add_part_locations_pipe()
     pipe.add_taxa_pipe()
+    pipe.add_taxon_plus_pipe()
     pipe.add_taxon_like_pipe()
     pipe.add_group_traits_pipe()
     pipe.add_delete_partial_traits_pipe()
