@@ -5,9 +5,10 @@ import textwrap
 from pathlib import Path
 
 from pylib.pipeline import pipeline
-from pylib.readers import efloras_reader as reader
-from pylib.writers.csv_writer import CsvWriter
-from pylib.writers.html_writer import HtmlWriter
+
+from efloras.readers import efloras_reader as reader
+from efloras.writers import CsvWriter
+from efloras.writers import HtmlWriter
 
 
 def main(args):

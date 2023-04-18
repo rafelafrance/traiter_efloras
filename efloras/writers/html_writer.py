@@ -4,7 +4,7 @@ from plants.pylib.writers.html_writer import HtmlWriter as BaseWriter
 from plants.pylib.writers.html_writer import HtmlWriterRow as BaseHtmlWriterRow
 from tqdm import tqdm
 
-from .. import const
+from efloras.pylib import const
 
 
 @dataclass(kw_only=True)

@@ -11,7 +11,7 @@ from plants.pylib.patterns.term_patterns import TERMS
 from tqdm import tqdm
 from traiter.const import RE_FLAGS
 
-from .. import const
+from efloras.pylib import const
 
 TAXON_TITLE = "Accepted Name"
 

@@ -1,20 +1,22 @@
-from traiter.util import shorten
+"""Setup for all tests."""
+from traiter.pylib.util import shorten
 
-from efloras.pylib.pipeline import pipeline
+from efloras.pylib import pipeline
 
-NLP = pipeline()  # Singleton for testing
+PIPELINE = pipeline.build()
+
+# from plants.pylib import const
+# PIPELINE = pipeline.build(const.MODEL_PATH)
+# PIPELINE = pipeline.load(const.MODEL_PATH)
 
 
 def test(text: str) -> list[dict]:
     """Find entities in the doc."""
     text = shorten(text)
-    doc = NLP(text)
+    doc = PIPELINE(text)
     traits = [e._.data for e in doc.ents]
 
     # from pprint import pp
     # pp(traits, compact=True)
-
-    # from spacy import displacy
-    # displacy.serve(doc, options={'collapse_punct': False, 'compact': True})
 
     return traits
