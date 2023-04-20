@@ -6,14 +6,14 @@ from datetime import datetime
 from itertools import product
 
 from bs4 import BeautifulSoup
-from plants.pylib.patterns.term_patterns import PARTS_SET
-from plants.pylib.patterns.term_patterns import TERMS
+from plants.pylib.traits.part.part_action import PART_LABELS
 from tqdm import tqdm
-from traiter.const import RE_FLAGS
 
 from efloras.pylib import const
 
 TAXON_TITLE = "Accepted Name"
+
+PARTS_SET = set(PART_LABELS)
 
 
 @dataclass
@@ -30,10 +30,7 @@ class EflorasRow:
 
 
 # Used to filter paragraphs in the source documents.
-PARA_RE = sorted(
-    " ".join(t["pattern"].split()) for t in TERMS if t["label"] in PARTS_SET
-)
-PARA_RE = f"({'|'.join(PARA_RE)})"
+PARA_RE = f"({'|'.join(PART_LABELS)})"
 PARA_RE = re.compile(PARA_RE, flags=re.IGNORECASE)
 
 
@@ -63,7 +60,7 @@ def reader(args, families):
                 continue
 
             # Filter on the taxon name
-            if genera and not re.search(genera, taxa[taxon_id], flags=RE_FLAGS):
+            if genera and not re.search(genera, taxa[taxon_id], flags=re.IGNORECASE):
                 continue
 
             rows.append(

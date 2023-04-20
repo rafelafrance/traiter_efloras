@@ -4,11 +4,11 @@ import sys
 import textwrap
 from pathlib import Path
 
-from pylib.pipeline import pipeline
+from pylib import pipeline
 
-from efloras.readers import efloras_reader as reader
-from efloras.writers import CsvWriter
-from efloras.writers import HtmlWriter
+from efloras.pylib.readers import efloras_reader as reader
+from efloras.pylib.writers.csv_writer import CsvWriter
+from efloras.pylib.writers.html_writer import HtmlWriter
 
 
 def main(args):
@@ -17,7 +17,7 @@ def main(args):
     rows = reader.reader(args, families)
     rows = sorted(rows, key=lambda r: (r.flora_id, r.family, r.taxon))
 
-    nlp = pipeline()
+    nlp = pipeline.build()
     for row in rows:
         doc = nlp(row.text)
         row.traits = [e._.data for e in doc.ents]

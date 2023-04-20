@@ -17,10 +17,10 @@ from bs4 import BeautifulSoup
 from lxml import html
 from pylib import const
 
-import efloras.readers.efloras_reader
-from efloras.readers import get_taxon_id
-from efloras.readers import treatment_dir
-from efloras.readers import tree_dir
+import efloras.pylib.readers.efloras_reader
+from efloras.pylib.readers.efloras_reader import get_taxon_id
+from efloras.pylib.readers.efloras_reader import treatment_dir
+from efloras.pylib.readers.efloras_reader import tree_dir
 
 # Don't hit the site too hard
 SLEEP_MID = 15
@@ -387,7 +387,7 @@ def parse_args(flora_ids):
 
 
 if __name__ == "__main__":
-    FAMILIES = efloras.readers.efloras_reader.get_families()
-    FLORA_IDS = efloras.readers.efloras_reader.get_flora_ids()
+    FAMILIES = efloras.pylib.readers.efloras_reader.get_families()
+    FLORA_IDS = efloras.pylib.readers.efloras_reader.get_flora_ids()
     ARGS = parse_args(FLORA_IDS)
     main(ARGS, FAMILIES, FLORA_IDS)
