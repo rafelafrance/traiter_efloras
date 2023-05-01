@@ -8,7 +8,7 @@ version = "0.3.0"
 description = ""
 license = {file = "LICENSE"}
 authors = [{name="Raphael LaFrance", email="rafelafrance@proton.me"}]
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "Jinja2",
     "beautifulsoup4",
@@ -26,15 +26,6 @@ optional-dependencies.dev = [
     "ipyparallel",
     "ipython",
     "isort",
-    "jupyter",
-    "jupyter_nbextensions_configurator",
-    "jupyterlab",
-    "jupyterlab-code-formatter",
-    "jupyterlab-drawio",
-    "jupyterlab-git",
-    "jupyterlab-lsp",
-    "jupyterlab-spellchecker",
-    "nbdime",
     "neovim",
     "pre-commit",
     "pre-commit-hooks",
