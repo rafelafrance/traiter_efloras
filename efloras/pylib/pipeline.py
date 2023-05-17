@@ -19,8 +19,8 @@ from traiter.pylib.pipes import tokenizer
 from traiter.pylib.traits import color
 from traiter.pylib.traits import date_
 from traiter.pylib.traits import elevation
+from traiter.pylib.traits import geocoordinates
 from traiter.pylib.traits import habitat
-from traiter.pylib.traits import lat_long
 
 
 def build(model_path=None):
@@ -39,7 +39,7 @@ def build(model_path=None):
     date_.build(nlp)
     elevation.build(nlp)
     habitat.build(nlp)
-    lat_long.build(nlp)
+    geocoordinates.build(nlp)
 
     habit.build(nlp)
     margin.build(nlp)
